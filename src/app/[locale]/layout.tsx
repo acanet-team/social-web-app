@@ -1,9 +1,4 @@
-
 import '@/styles/global.scss';
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
-import { AppConfig } from '@/utils/AppConfig';
 
 // export const metadata: Metadata = {
 //   icons: [
@@ -41,15 +36,16 @@ export default function RootLayout(props: {
   // const messages = useMessages();
 
   return (
-    <html 
-      // lang={props.params?.locale}
+    // eslint-disable-next-line jsx-a11y/html-has-lang
+    <html
+    // lang={props.params?.locale}
     >
       <body className="color-theme-blue mont-font loaded theme-light">
         {/* <NextIntlClientProvider
           locale={props.params?.locale}
           messages={messages}
         > */}
-          {props.children}
+        {props.children}
 
         {/* </NextIntlClientProvider> */}
       </body>

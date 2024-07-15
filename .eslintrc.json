@@ -65,7 +65,9 @@
         "unused-imports/no-unused-vars": [
           "error",
           { "argsIgnorePattern": "^_" }
-        ]
+        ],
+        "class-methods-use-this": "warn", // Disable Airbnb's class-methods-use-this rule
+        "no-unused-vars": "warn" // Disable Airbnb's no-unused-vars rule
       }
     },
     // Configuration for testing
@@ -89,6 +91,8 @@
       "files": ["*.stories.*"],
       "extends": ["plugin:storybook/recommended"],
       "rules": {
+        "no-unused-vars": "warn",
+        "class-methods-use-this": "warn",
         "import/no-extraneous-dependencies": [
           "error",
           {

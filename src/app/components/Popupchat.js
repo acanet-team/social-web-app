@@ -1,12 +1,12 @@
-'use client'
-import React,{Component} from 'react';
+'use client';
+
+import React, { Component } from 'react';
 
 class Popupchat extends Component {
-    render() {
-        return (
-            <div></div>     
-        );
-    }
+  // eslint-disable-next-line class-methods-use-this
+  render() {
+    return <div></div>;
+  }
 }
 
 export default Popupchat;

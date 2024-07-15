@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import axios from "axios";
+import { useState, useCallback } from 'react';
+import axios from 'axios';
 
 const useAxios = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,20 +11,20 @@ const useAxios = () => {
     try {
       const response = await axios({
         url: fetchConfig.url,
-        method: fetchConfig.method ? fetchConfig.method : "GET",
+        method: fetchConfig.method ? fetchConfig.method : 'GET',
         headers: fetchConfig.header ? fetchConfig.header : {},
         data: fetchConfig.body ? JSON.stringify(fetchConfig.body) : null,
-        withCredentials: true
-      })
+        withCredentials: true,
+      });
 
       if (!response.ok) {
-        throw new Error("Request failed!");
+        throw new Error('Request failed!');
       }
 
       const data = await response.json();
       dataHandleFn(data);
     } catch (err) {
-      setError(err.message || "Something went wrong!");
+      setError(err.message || 'Something went wrong!');
     }
     setIsLoading(false);
   }, []);

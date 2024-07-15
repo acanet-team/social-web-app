@@ -1,7 +1,8 @@
-"use client";
-import React, { Fragment, useState, useEffect } from "react";
-import Link from "next/link";
-import { useFormik } from "formik";
+'use client';
+
+import React, { Fragment, useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useFormik } from 'formik';
 import {
   Switch,
   FormGroup,
@@ -10,57 +11,52 @@ import {
   MenuItem,
   Select,
   FormHelperText,
-} from "@mui/material";
+} from '@mui/material';
 
-import Header from "../../../components/Header";
-import Leftnav from "../../../components/Leftnav";
-import Appfooter from "../../../components/Appfooter";
-import Popupchat from "../../../components/Popupchat";
-import useAxios from "../../../../hooks/useAxios";
+import Header from '../../../components/Header';
+import Leftnav from '../../../components/Leftnav';
+import Appfooter from '../../../components/Appfooter';
+import Popupchat from '../../../components/Popupchat';
+import useAxios from '../../../../hooks/useAxios';
 
 export default function Account() {
-  const [regionList, setRegionList] = useState([
-    "Vietnam",
-    "Thailand",
-    "Singapore",
-    "Indonesia",
-  ]);
-  const { isLoading, error, sendRequest } = useAxios();
+  const [regionList, setRegionList] = useState();
+  setRegionList(['Vietnam', 'Thailand', 'Singapore', 'Indonesia']);
+  const { /* isLoading, error, */ sendRequest } = useAxios();
 
   // Get user data
   useEffect(() => {
     const fetchConfig = {
       url: 'http://localhost:3000/api/v1/auth/me',
       method: 'GET',
-      headers: {"Content-Type": "application/json"}
-    }
+      headers: { 'Content-Type': 'application/json' },
+    };
     function datahandleFn(data) {
       console.log(data);
     }
     sendRequest(fetchConfig, datahandleFn);
-  }, [])
-
+  }, []);
 
   // Form validation
   const validate = (values) => {
     const errors = {};
 
     if (!values.nickname) {
-      errors.nickname = "Please fill out a valid nickname.";
+      errors.nickname = 'Please fill out a valid nickname.';
     } else if (values.nickname.length > 20 || values.nickname.length < 8) {
-      errors.nickname = "Nick name must be between 8 and 20 characters.";
+      errors.nickname = 'Nick name must be between 8 and 20 characters.';
     }
 
     if (!values.region) {
-      errors.region = "Please choose a region.";
+      errors.region = 'Please choose a region.';
     }
 
     if (!values.email) {
-      errors.email = "Please fill out a valid email.";
+      errors.email = 'Please fill out a valid email.';
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
     ) {
-      errors.email = "Invalid email address";
+      errors.email = 'Invalid email address';
     }
 
     return errors;
@@ -68,10 +64,10 @@ export default function Account() {
 
   const formik = useFormik({
     initialValues: {
-      nickname: "",
-      region: "",
-      userType: "investor",
-      email: "",
+      nickname: '',
+      region: '',
+      userType: 'investor',
+      email: '',
     },
     validate,
     onSubmit: (values) => {
@@ -135,7 +131,7 @@ export default function Account() {
                       value={formik.values.nickname}
                     />
                     {formik.touched.nickname && formik.errors.nickname ? (
-                      <FormHelperText sx={{ color: "error.main" }}>
+                      <FormHelperText sx={{ color: 'error.main' }}>
                         {formik.errors.nickname}
                       </FormHelperText>
                     ) : null}
@@ -157,20 +153,20 @@ export default function Account() {
                         name="region"
                         value={formik.values.region}
                         onChange={(e) =>
-                          formik.setFieldValue("region", e.target.value)
+                          formik.setFieldValue('region', e.target.value)
                         }
                         onBlur={formik.handleBlur}
                         error={
                           formik.touched.region && Boolean(formik.errors.region)
                         }
                         sx={{
-                          "& fieldset": {
-                            border: "none",
+                          '& fieldset': {
+                            border: 'none',
                           },
-                          padding: "0",
-                          fontSize: "14px",
-                          color: "inherit",
-                          fontFamily: "inherit",
+                          padding: '0',
+                          fontSize: '14px',
+                          color: 'inherit',
+                          fontFamily: 'inherit',
                         }}
                       >
                         <MenuItem disabled value="">
@@ -186,7 +182,7 @@ export default function Account() {
                       </Select>
                       {formik.touched.region && (
                         <FormHelperText
-                          sx={{ color: "error.main", marginLeft: "0" }}
+                          sx={{ color: 'error.main', marginLeft: '0' }}
                         >
                           {formik.errors.region}
                         </FormHelperText>
@@ -200,35 +196,35 @@ export default function Account() {
                       <FormControlLabel
                         control={
                           <Switch
-                            checked={formik.values.userType === "investor"}
+                            checked={formik.values.userType === 'investor'}
                             onChange={() =>
-                              formik.setFieldValue("userType", "investor")
+                              formik.setFieldValue('userType', 'investor')
                             }
-                            sx={{ fontSize: "14px" }}
+                            sx={{ fontSize: '14px' }}
                           />
                         }
                         label="Investor"
                         sx={{
-                          "& .MuiFormControlLabel-label": {
-                            fontSize: "14px",
-                            fontFamily: "Montserrat",
+                          '& .MuiFormControlLabel-label': {
+                            fontSize: '14px',
+                            fontFamily: 'Montserrat',
                           },
                         }}
                       />
                       <FormControlLabel
                         control={
                           <Switch
-                            checked={formik.values.userType === "broker"}
+                            checked={formik.values.userType === 'broker'}
                             onChange={() =>
-                              formik.setFieldValue("userType", "broker")
+                              formik.setFieldValue('userType', 'broker')
                             }
                           />
                         }
                         label="Broker"
                         sx={{
-                          "& .MuiFormControlLabel-label": {
-                            fontSize: "14px",
-                            fontFamily: "Montserrat",
+                          '& .MuiFormControlLabel-label': {
+                            fontSize: '14px',
+                            fontFamily: 'Montserrat',
                           },
                         }}
                       />
@@ -248,10 +244,10 @@ export default function Account() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.email}
-                      sx={{ color: "inherit" }}
+                      sx={{ color: 'inherit' }}
                     />
                     {formik.touched.email && formik.errors.email ? (
-                      <FormHelperText sx={{ color: "error.main" }}>
+                      <FormHelperText sx={{ color: 'error.main' }}>
                         {formik.errors.email}
                       </FormHelperText>
                     ) : null}

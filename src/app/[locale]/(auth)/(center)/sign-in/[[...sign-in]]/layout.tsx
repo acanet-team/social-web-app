@@ -1,6 +1,9 @@
-import React from 'react';
+'use client';
 
-export default function Login() {
+import type { NextPage } from 'next';
+import { signIn } from 'next-auth/react';
+
+const LoginPage: NextPage = () => {
   return (
     <div className="main-wrap">
       <div className="nav-header border-0 bg-transparent shadow-none">
@@ -8,8 +11,21 @@ export default function Login() {
           <a href="/">
             <i className="feather-zap text-success display1-size me-2 ms-0" />
             <span className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current">
-              Sociala.{' '}
+              Acanet.{' '}
             </span>{' '}
+          </a>
+          <a
+            hidden={false}
+            href="/sign-in"
+            className="header-btn d-none d-lg-block bg-dark fw-500 font-xsss w100 lh-20 ms-auto rounded-xl p-3 text-center text-white"
+          >
+            Login
+          </a>
+          <a
+            href="/sign-in"
+            className="header-btn d-none d-lg-block fw-500 font-xsss w100 lh-20 ms-2 rounded-xl bg-current p-3 text-center text-white"
+          >
+            Register
           </a>
           <button
             className="nav-menu me-0 ms-auto"
@@ -17,60 +33,30 @@ export default function Login() {
             type="button"
             aria-label="Menu"
           />
-
-          <a
-            href="/login"
-            className="header-btn d-none d-lg-block bg-dark fw-500 font-xsss w100 lh-20 ms-auto rounded-xl p-3 text-center text-white"
-          >
-            Login
-          </a>
-          <a
-            href="/register"
-            className="header-btn d-none d-lg-block fw-500 font-xsss w100 lh-20 ms-2 rounded-xl bg-current p-3 text-center text-white"
-          >
-            Register
-          </a>
         </div>
       </div>
       <div className="row">
         <div
           className="col-xl-5 d-none d-xl-block vh-100 bg-image-cover bg-no-repeat p-0"
           style={{
-            backgroundImage: `url("https://via.placeholder.com/800x950.png")`,
+            backgroundImage: `url("assets/images/login-bg.jpg")`,
           }}
         />
         <div className="col-xl-7 vh-100 align-items-center d-flex rounded-3 overflow-hidden bg-white">
           <div className="card login-card me-auto ms-auto border-0 shadow-none">
             <div className="card-body rounded-0 text-left">
               <h2 className="fw-700 display1-size display2-md-size mb-3">
-                Login into <br />
-                your account
+                Sign in with <br />
+                your social account
               </h2>
-
-              <div className="col-sm-12 p-0 text-left">
-                <div className="form-group mb-1">
-                  <a
-                    href="/login"
-                    className="form-control style2-input fw-600 bg-dark border-0 p-0 text-center text-white "
-                  >
-                    Login
-                  </a>
-                </div>
-                <h6 className="text-grey-500 font-xsss fw-500 lh-32 my-0">
-                  Dont have account{' '}
-                  <a href="/register" className="fw-700 ms-1">
-                    Register
-                  </a>
-                </h6>
-              </div>
               <div className="col-sm-12 mt-2 p-0 text-center">
-                <h6 className="d-inline-block fw-500 font-xsss text-grey-500 mb-3 bg-white">
-                  Or, Sign in with your social account{' '}
-                </h6>
                 <div className="form-group mb-1">
-                  <a
-                    href="/register"
-                    className="form-control style2-input fw-600 bg-facebook mb-2 border-0 p-0 text-left text-white"
+                  <button
+                    type="button"
+                    aria-label="Sign in with Google"
+                    title="Sign in with Google"
+                    className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
+                    onClick={() => signIn('google')}
                   >
                     <img
                       src="assets/images/icon-1.png"
@@ -78,12 +64,15 @@ export default function Login() {
                       className="w40 mb-1 me-5 ms-2"
                     />{' '}
                     Sign in with Google
-                  </a>
+                  </button>
                 </div>
                 <div className="form-group mb-1">
-                  <a
-                    href="/register"
+                  <button
+                    type="button"
+                    aria-label="Sign in with Facebook"
+                    title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
+                    onClick={() => signIn('facebook')}
                   >
                     <img
                       src="assets/images/icon-3.png"
@@ -91,7 +80,7 @@ export default function Login() {
                       className="w40 mb-1 me-5 ms-2"
                     />{' '}
                     Sign in with Facebook
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -100,4 +89,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;
