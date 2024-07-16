@@ -52,3 +52,5 @@ local
 
 # Sentry Config File
 .sentryclirc
+package-lock.json
+yarn.lock

@@ -19,3 +19,13 @@ export const getI18nPath = (url: string, locale: string) => {
 
   return `/${locale}${url}`;
 };
+
+export const removePropertiesEmpty = (object: any) => {
+  const objectToProcess = { ...object };
+  for (const key of Object.keys(objectToProcess)) {
+    if (objectToProcess[key] === '') {
+      delete objectToProcess[key];
+    }
+  }
+  return objectToProcess;
+};
