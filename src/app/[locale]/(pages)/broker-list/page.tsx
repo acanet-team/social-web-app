@@ -1,11 +1,7 @@
 'use client';
-import React, { Component, Fragment } from 'react';
-import Header from '../../../components/Header';
-import Leftnav from '../../../components/Leftnav';
-import Rightchat from '../../../components/Rightchat';
-import Pagetitle from '../../../components/Pagetitle';
-import Appfooter from '../../../components/Appfooter';
-import Popupchat from '../../../components/Popupchat';
+import React, { Fragment } from 'react';
+import Pagetitle from '@/app/components/Pagetitle';
+import Image from 'next/image';
 
 const memberList = [
   {

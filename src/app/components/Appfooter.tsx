@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import Link from 'next/link';
 import React from 'react';
 

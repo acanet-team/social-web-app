@@ -1,19 +1,15 @@
 'use client';
 
 import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
-import { useFormik } from 'formik';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import Appfooter from '@/app/components/Appfooter';
-import Header from '@/app/components/Header';
-import Leftnav from '@/app/components/Leftnav';
-import Popupchat from '@/app/components/Popupchat';
-import useAxios from '@/hooks/useAxios';
-import useAuthStore from '@/store/auth';
 import { ToastContainer, toast, type ToastOptions } from 'react-toastify';
 import styles from '@/styles/modules/account.module.scss';
-import type { AxiosError } from 'axios';
+import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
+import type { AxiosError } from 'axios';
+import { useFormik } from 'formik';
+import Link from 'next/link';
+import useAxios from '@/hooks/useAxios';
+import useAuthStore from '@/store/auth';
 import Image from 'next/image';
 
 interface FormValues {
