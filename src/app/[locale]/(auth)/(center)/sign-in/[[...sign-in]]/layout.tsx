@@ -6,7 +6,6 @@ import useAuthStore from '@/store/auth';
 import { useEffect } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-localStorage.setItem('theme', 'theme-light');
 const LoginPage: NextPage = () => {
   const login = useAuthStore((state: any) => state.login);
   const { data: session } = useSession();
