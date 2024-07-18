@@ -159,9 +159,6 @@ export default function Account() {
 
   return (
     <>
-      <Header />
-      <Leftnav />
-
       <div className="main-content bg-lightblue theme-dark-bg right-chat-active">
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
@@ -183,8 +180,8 @@ export default function Account() {
                           src={
                             photo || 'https://via.placeholder.com/300x300.png'
                           }
-                          width={40}
-                          height={40}
+                          width={100}
+                          height={100}
                           alt="avatar"
                           className="shadow-sm rounded-3 w-100"
                         />
@@ -337,9 +334,6 @@ export default function Account() {
           </div>
         </div>
       </div>
-
-      <Popupchat />
-      <Appfooter />
     </>
   );
 }
