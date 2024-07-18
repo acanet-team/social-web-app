@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import ReactPlayer from 'react-player';
-import Header from '../components/Header';
+import Header from '../../../../../../../../components/Header';
 import Leftnav from '../components/Leftnav';
 import Rightchat from '../components/Rightchat';
 import Load from '../components/Load';

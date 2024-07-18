@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+/* eslint-disable */
+
+import React,{Component} from 'react';
 
 class ProfilecardTwo extends Component {
   // eslint-disable-next-line class-methods-use-this

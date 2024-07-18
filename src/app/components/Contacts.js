@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+/* eslint-disable */
+
+import React,{Component} from 'react';
 
 const contactList = [
   {

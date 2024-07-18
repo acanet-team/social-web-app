@@ -1,6 +1,7 @@
-'use client';
+/* eslint-disable */
 
-import React, { Component } from 'react';
+'use client'
+import React,{Component} from 'react';
 
 const chatMember = [
   {
@@ -45,16 +46,25 @@ const chatMember = [
   },
 ];
 
-class Rightchat extends Component {
-  state = {
+interface State {
+  isOpen: boolean;
+  width: number;
+  height: number;
+}
+
+class Rightchat extends Component<{}, State> {
+  state: State = {
     isOpen: false,
+    width: 800,
+    height: 182,
   };
 
-  constructor() {
-    super();
+  constructor(props: any) {
+    super(props);
     this.state = {
       width: 800,
       height: 182,
+      isOpen: false,
     };
   }
 

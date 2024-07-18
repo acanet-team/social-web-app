@@ -10,8 +10,11 @@ class Register extends Component {
             <div className="nav-top w-100">
               <a href="/">
                 <i className="feather-zap text-success display1-size me-2 ms-0"></i>
-                <span className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">
-                  Sociala.{' '}
+                <span
+                  id="site-logo"
+                  className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0"
+                >
+                  Acanet{' '}
                 </span>{' '}
               </a>
               <button className="nav-menu me-0 ms-auto"></button>

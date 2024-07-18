@@ -1,31 +1,31 @@
 'use client';
 
 import type { NextPage } from 'next';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
+import useAuthStore from '@/store/auth';
+import { useEffect } from 'react';
 
 const LoginPage: NextPage = () => {
+  const login = useAuthStore((state: any) => state.login);
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session) {
+      login(null, session);
+    }
+  }, [session]);
+
   return (
     <div className="main-wrap">
       <div className="nav-header border-0 bg-transparent shadow-none">
         <div className="nav-top w-100">
-          <a href="/">
+          <a href="/" className="me-auto">
             <i className="feather-zap text-success display1-size me-2 ms-0" />
-            <span className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current">
+            <span
+              id="site-logo"
+              className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"
+            >
               Acanet.{' '}
             </span>{' '}
-          </a>
-          <a
-            hidden={false}
-            href="/sign-in"
-            className="header-btn d-none d-lg-block bg-dark fw-500 font-xsss w100 lh-20 ms-auto rounded-xl p-3 text-center text-white"
-          >
-            Login
-          </a>
-          <a
-            href="/sign-in"
-            className="header-btn d-none d-lg-block fw-500 font-xsss w100 lh-20 ms-2 rounded-xl bg-current p-3 text-center text-white"
-          >
-            Register
           </a>
           <button
             className="nav-menu me-0 ms-auto"

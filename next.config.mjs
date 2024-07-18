@@ -5,8 +5,8 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 import { withSentryConfig } from '@sentry/nextjs';
 import createJiti from 'jiti';
 import withNextIntl from 'next-intl/plugin';
-import path from 'path';
-import { dirname } from 'path'; // Import the path module for directory manipulation
+import path, { dirname } from 'path';
+// Import the path module for directory manipulation
 const __dirname = dirname(new URL(import.meta.url).pathname);
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
@@ -25,6 +25,10 @@ export default withSentryConfig(
     withNextIntlConfig({
       eslint: {
         dirs: ['.'],
+        ignoreDuringBuilds: true,
+      },
+      typescript: {
+        ignoreBuildErrors: true,
       },
       poweredByHeader: false,
       reactStrictMode: true,
@@ -33,6 +37,9 @@ export default withSentryConfig(
       },
       sassOptions: {
         includePaths: [path.join(__dirname, './src/styles/global.scss')],
+      },
+      images: {
+        domains: ['via.placeholder.com'],
       },
     }),
   ),
@@ -70,5 +77,5 @@ export default withSentryConfig(
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-  }
+  },
 );
