@@ -6,8 +6,7 @@ import NextAuth from 'next-auth';
 import FacebookProvider from 'next-auth/providers/facebook';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { request } from '@/utils/api/axios';
-import API_URL from '@/utils/api/url';
+import httpClient from '@/api';
 import { removePropertiesEmpty } from '@/utils/Helpers';
 
 const options: NextAuthOptions = {
@@ -34,20 +33,22 @@ const options: NextAuthOptions = {
       }
 
       try {
-        const res = await request({
-          method: 'POST',
-          url: `${API_URL.AUTH}/${account?.provider}/login`,
+        const res = await httpClient.post<{
+          token: string;
+          tokenExpires: number;
+        }>({
+          url: 'login',
           data: removePropertiesEmpty(data),
         });
-        cookies().set('acanet_token', res.data.token, {
-          maxAge: res.data.tokenExpires,
+        cookies().set('acanet_token', res.token, {
+          maxAge: res.tokenExpires,
           httpOnly: true,
           secure: true,
           sameSite: 'lax',
           domain: process.env.NEXT_PUBLIC_APP_URL,
-          expires: new Date(res.data.tokenExpires),
+          expires: new Date(res.tokenExpires),
         });
-        return res.data;
+        return res;
       } catch (err) {
         // console.log(err);
         return token;
