@@ -67,7 +67,10 @@
           { "argsIgnorePattern": "^_" }
         ],
         "class-methods-use-this": "warn", // Disable Airbnb's class-methods-use-this rule
-        "no-unused-vars": "warn" // Disable Airbnb's no-unused-vars rule
+        "no-unused-vars": "warn", // Disable Airbnb's no-unused-vars rule
+        "@typescript-eslint/no-shadow": "off",
+        "no-param-reassign": "off",
+        "@typescript-eslint/no-use-before-define": "off"
       }
     },
     // Configuration for testing

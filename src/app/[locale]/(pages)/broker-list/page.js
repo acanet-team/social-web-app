@@ -1,4 +1,4 @@
-'use clientçgit ';
+'use client';
 
 import React, { Component, Fragment } from 'react';
 import Header from '../../../components/Header';

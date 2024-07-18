@@ -1,6 +1,7 @@
 'use client';
 
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 
 const LoginPage: NextPage = () => {
@@ -58,8 +59,10 @@ const LoginPage: NextPage = () => {
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
                     onClick={() => signIn('google')}
                   >
-                    <img
-                      src="assets/images/icon-1.png"
+                    <Image
+                      width={20}
+                      height={20}
+                      src="/assets/images/icon-1.png"
                       alt="icon"
                       className="w40 mb-1 me-5 ms-2"
                     />{' '}
