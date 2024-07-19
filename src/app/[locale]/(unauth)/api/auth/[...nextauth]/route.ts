@@ -5,9 +5,12 @@ import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
 import FacebookProvider from 'next-auth/providers/facebook';
 import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 import httpClient from '@/api';
 import { removePropertiesEmpty } from '@/utils/Helpers';
+import { getMe } from '@/api/auth';
+import { User } from '@clerk/nextjs/server';
 
 const options: NextAuthOptions = {
   providers: [
@@ -22,9 +25,9 @@ const options: NextAuthOptions = {
   ],
   secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
-    async jwt(params) {
+    async signIn({ account }) {
       const data: { accessToken?: string; idToken?: string } = {};
-      const { account, token } = params;
+
       if (account?.provider === 'google') {
         data.idToken = account.id_token;
       }
@@ -37,31 +40,27 @@ const options: NextAuthOptions = {
           token: string;
           tokenExpires: number;
         }>({
-          url: 'login',
+          url: `/v1/auth/${account?.provider}/login`,
           data: removePropertiesEmpty(data),
         });
-        cookies().set('acanet_token', res.token, {
-          maxAge: res.tokenExpires,
-          httpOnly: true,
-          secure: true,
-          sameSite: 'lax',
-          domain: process.env.NEXT_PUBLIC_APP_URL,
-          expires: new Date(res.tokenExpires),
+
+        cookies().set('accessToken', res.token, {
+          path: '/', // Set path to '/' to send cookie in all requests
+          maxAge: 30 * 24 * 60 * 60, // 30 days
+          // domain: process.env.NEXT_PUBLIC_API_DOMAIN,
+          httpOnly: false,
+          secure: false,
         });
-        return res;
+
+        return true;
       } catch (err) {
-        // console.log(err);
-        return token;
+        return false;
       }
     },
-    async session(params) {
-      const { session, token } = params;
-      Object.assign(session, token);
-      return session;
-    },
   },
+
   pages: {
-    signIn: '/account',
+    signIn: '/sign-in',
     signOut: '/sign-out',
     error: '/error',
   },

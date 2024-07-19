@@ -49,7 +49,7 @@ export default function RootLayout(props: {
   return (
     <SessionProvider>
       <html lang={props.params.locale}>
-        <body className="color-theme-blue nunito-font loaded theme-dark">
+        <body className="color-theme-blue nunito-font loaded theme-light">
           <NextIntlClientProvider
             locale={props.params.locale}
             messages={messages}

@@ -16,8 +16,6 @@ class HttpClient {
 
   isKeepRequest = false;
 
-  accessToken = '';
-
   requestInstance: {
     [key: string]: AbortController;
   } = {};
@@ -233,7 +231,7 @@ const createAxios = (config: AxiosRequestConfig) => {
     },
 
     function (error) {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         // TODO handle
       }
       // Any status codes that falls outside the range of 2xx cause this function to trigger
