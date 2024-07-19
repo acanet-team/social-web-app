@@ -44,7 +44,7 @@ const options: NextAuthOptions = {
           data: removePropertiesEmpty(data),
         });
 
-        cookies().set('accessToken', res.token, {
+        cookies().set('acanet_token', res.token, {
           path: '/', // Set path to '/' to send cookie in all requests
           maxAge: 30 * 24 * 60 * 60, // 30 days
           // domain: process.env.NEXT_PUBLIC_API_DOMAIN,
