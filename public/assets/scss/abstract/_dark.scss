@@ -3,10 +3,10 @@
 
 
 .theme-dark {
-    background-color: #100C28;
+    background-color: var(--theme-color);
 
     .middle-sidebar-header,
-    .middle-sidebar-right-content,.nav-header,.navigation {background-color: #293145 !important; box-shadow:none !important;}
+    .middle-sidebar-right-content,.nav-header,.navigation {background-color: var(--theme-color) !important; box-shadow:none !important;}
     .navigation .nav-content ul li:not(.logo) a span {color: #ddd;}
     .navigation .nav-top a i {  background-color: transparent !important;}
     .scroll-bar::-webkit-scrollbar,
@@ -22,7 +22,7 @@
 
     .input-file + .js-labelFile.btn-tertiary,
     .modal-popup-chat .modal-popup-wrap,
-    .theme-dark-bg {background-color: #1a2236 !important;}
+    .theme-dark-bg {background-color: var(--theme-color) !important;}
     .theme-light-bg {background-color: #132977 !important;}
     .theme-white-bg {background-color: #eee !important;}
 
@@ -41,7 +41,7 @@
     .form-group.bg-white {border:0 !important;background-color: #1a2236 !important;}
     .main-content .left-sidebar .left-sidebar-content .left-sidebar-header,
     .main-content .left-sidebar .left-sidebar-content .left-sidebar-bottom,
-    .main-content .left-sidebar .left-sidebar-content {background-color: #293145 !important;}
+    .main-content .left-sidebar .left-sidebar-content {background-color: var(--theme-color) !important;}
     
     .apexcharts-datalabel-value {fill:#eee;}
 
@@ -58,7 +58,7 @@
     .search-wrapper,
     .accordion .card .card-body,
     .accordion .card .card-header,
-    .form-div {background-color: #293145;}
+    .form-div {background-color: var(--theme-color);}
 
     .header-wrapper .logo {color: lightsteelblue;}
     

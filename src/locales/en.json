@@ -50,7 +50,11 @@
   },
   "SignIn": {
     "meta_title": "Sign in",
-    "meta_description": "Seamlessly sign in to your account with our user-friendly login process."
+    "meta_description": "Seamlessly sign in to your account with our user-friendly login process.",
+    "sign_in_with": "Sign in with",
+    "your_social_account": "Your social account",
+    "sign_in_with_google": "Sign in with Google",
+    "sign_in_with_facebook": "Sign in with Facebook"
   },
   "SignUp": {
     "meta_title": "Sign up",
@@ -67,5 +71,9 @@
     "dashboard_link": "Dashboard",
     "user_profile_link": "Manage your account",
     "sign_out": "Sign out"
+  },
+  "BrokerList": {
+    "broker_title": "Broker List",
+    "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
   }
 }

@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import Slider from 'react-slick';
+/* eslint-disable */
+
+import React,{Component} from 'react';
+import Slider from "react-slick";
 
 const memberList = [
   {

@@ -24,7 +24,7 @@ import Layout from '../../layout';
 
 export default function Home() {
   return (
-    <Layout>
+    <Layout params={{ locale: 'en' }}>
       <Header />
       <Leftnav />
       <Rightchat />

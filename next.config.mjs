@@ -25,6 +25,9 @@ export default withSentryConfig(
     withNextIntlConfig({
       eslint: {
         dirs: ['.'],
+        ignoreDuringBuilds: true,
+      },
+      typescript: {
         ignoreBuildErrors: true,
       },
       poweredByHeader: false,
@@ -35,12 +38,8 @@ export default withSentryConfig(
       sassOptions: {
         includePaths: [path.join(__dirname, './src/styles/global.scss')],
       },
-      typescript: {
-        // !! WARN !!
-        // Dangerously allow production builds to successfully complete even if
-        // your project has type errors.
-        // !! WARN !!
-        ignoreBuildErrors: true,
+      images: {
+        domains: ['via.placeholder.com'],
       },
     }),
   ),

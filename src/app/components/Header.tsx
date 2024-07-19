@@ -29,8 +29,11 @@ class Header extends Component {
         <div className="nav-top">
           <Link href="/">
             <i className="feather-zap text-success display2-size me-3 ms-0"></i>
-            <span className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">
-              Sociala.{' '}
+            <span
+              id="site-logo"
+              className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0"
+            >
+              Acanet{' '}
             </span>{' '}
           </Link>
           <Link
@@ -60,7 +63,7 @@ class Header extends Component {
             <input
               type="text"
               placeholder="Start typing to search.."
-              className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg"
+              className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350" // remove theme-dark-bg
             />
           </div>
         </form>
@@ -328,14 +331,14 @@ class Header extends Component {
                 className="form-control border-0"
                 placeholder="Search..."
               />
-              <i className="input-icon">
+              {/* <i className="input-icon">
                 <ion-icon
                   name="search-outline"
                   role="img"
                   className="md hydrated"
                   aria-label="search outline"
                 ></ion-icon>
-              </i>
+              </i> */}
               <span className="ms-1 mt-1 d-inline-block close searchbox-close">
                 <i className="ti-close font-xs" onClick={this.toggleActive}></i>
               </span>

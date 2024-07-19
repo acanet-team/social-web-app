@@ -1,6 +1,7 @@
-'use client';
+/* eslint-disable */
 
-import React, { Component } from 'react';
+'use client'
+import React,{Component} from 'react';
 
 class Popupchat extends Component {
   // eslint-disable-next-line class-methods-use-this

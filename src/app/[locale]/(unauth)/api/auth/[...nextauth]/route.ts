@@ -50,7 +50,7 @@ const options: NextAuthOptions = {
         });
         return res;
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         return token;
       }
     },
@@ -61,7 +61,7 @@ const options: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/sign-in',
+    signIn: '/account',
     signOut: '/sign-out',
     error: '/error',
   },

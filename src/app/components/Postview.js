@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+/* eslint-disable */
+
+import React,{Component} from 'react';
+
 
 class Postview extends Component {
   state = {

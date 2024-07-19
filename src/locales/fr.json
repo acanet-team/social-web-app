@@ -50,7 +50,11 @@
   },
   "SignIn": {
     "meta_title": "Se connecter",
-    "meta_description": "Connectez-vous à votre compte avec facilité."
+    "meta_description": "Connectez-vous à votre compte avec facilité.",
+    "sign_in_with": "Se connecter avec",
+    "your_social_account": "Votre compte social",
+    "sign_in_with_google": "Connectez-vous avec Google",
+    "sign_in_with_facebook": "Connectez-vous avec Facebook"
   },
   "SignUp": {
     "meta_title": "S'inscrire",
