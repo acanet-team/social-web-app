@@ -91,6 +91,7 @@
     .middle-sidebar-bottom {
 	    // overflow: scroll;
 	    width: 100%;
+      height: 100%;
 	    padding: 20px 0px 10px 0px;
 	    
 	    @include media-breakpoint-up(xl) {

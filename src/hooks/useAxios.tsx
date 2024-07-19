@@ -19,7 +19,7 @@ const useAxios = () => {
       try {
         const response = await axios({
           baseURL:
-            process.env.NEXT_SERVER_API_DOMAIN ?? 'http://localhost:3000',
+            process.env.NEXT_SERVER_API_DOMAIN ?? 'http://localhost:3001',
           url: fetchConfig.url,
           method: fetchConfig.method ? fetchConfig.method : 'GET',
           headers: fetchConfig.headers ? fetchConfig.headers : {},

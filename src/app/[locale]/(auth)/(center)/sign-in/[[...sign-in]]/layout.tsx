@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import { signIn, useSession } from 'next-auth/react';
 import useAuthStore from '@/store/auth';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 const LoginPage: NextPage = () => {
   const login = useAuthStore((state: any) => state.login);
@@ -12,7 +13,7 @@ const LoginPage: NextPage = () => {
     if (session) {
       login(null, session);
     }
-  }, [session]);
+  }, [session, login]);
 
   return (
     <div className="main-wrap">
@@ -59,8 +60,8 @@ const LoginPage: NextPage = () => {
                     onClick={() => signIn('google')}
                   >
                     <Image
-                      width={20}
-                      height={20}
+                      width={40}
+                      height={40}
                       src="/assets/images/icon-1.png"
                       alt="icon"
                       className="w40 mb-1 me-5 ms-2"
@@ -76,9 +77,11 @@ const LoginPage: NextPage = () => {
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
                     onClick={() => signIn('facebook')}
                   >
-                    <img
-                      src="assets/images/icon-3.png"
+                    <Image
+                      src="/assets/images/icon-3.png"
                       alt="icon"
+                      width={40}
+                      height={40}
                       className="w40 mb-1 me-5 ms-2"
                     />{' '}
                     Sign in with Facebook

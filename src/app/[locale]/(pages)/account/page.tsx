@@ -8,14 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import type { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import Link from 'next/link';
-import useAxios from '@/hooks/useAxios';
 import useAuthStore from '@/store/auth';
 import Image from 'next/image';
+import { createProfileRequest } from '@/api/user';
 
 interface FormValues {
   nickName: string;
   location: string;
-  isBroker: Boolean;
+  isBroker: string;
   email: string;
 }
 interface FormErrors {
@@ -36,7 +36,6 @@ export default function Account() {
     'Singapore',
     'Indonesia',
   ]);
-  const { sendRequest } = useAxios();
   const { email, nickName, photo } = useAuthStore((state: any) => state.user);
 
   // Toast notification
@@ -96,7 +95,7 @@ export default function Account() {
     initialValues: {
       nickName: '',
       location: '',
-      isBroker: false,
+      isBroker: '0',
       email: '',
     },
     validate,
@@ -107,32 +106,17 @@ export default function Account() {
       values.location = values.location?.toLowerCase().trim();
       values.email = values.email?.toLowerCase().trim();
       // @ts-ignore
-      values.isBroker = values.isBroker === 'true' ? true : false;
+      values.isBroker = values.isBroker === '1' ? true : false;
 
-      const fetchConfig = {
-        url: 'api/v1/user-profile',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          accept: 'application/json',
-        },
-        data: values,
-        withCredentials: true,
-      };
-      function datahandleFn(response: any) {
-        console.log(response);
-        console.log(response.status);
-        if (response.status === 201) {
-          const successMessage = 'Your profile has been updated.';
-          throwToast(successMessage, 'success');
-        }
-        console.log(values);
+      try {
+        // call api
+        await createProfileRequest(values);
+        const successMessage = 'Your profile has been updated.';
+        throwToast(successMessage, 'success');
         // Save data in auth store
         createProfile(null, values);
-      }
-      try {
-        await sendRequest(fetchConfig, datahandleFn);
       } catch (err) {
+        console.log(err);
         const errors = err as AxiosError;
         let errorMessage = '';
         const errorCode = (errors?.response?.data as any)?.errorCode;
@@ -149,6 +133,8 @@ export default function Account() {
           setFieldError('nickName', errorMessage);
           throwToast(errorMessage, 'error');
         }
+      } finally {
+        // stop loading
       }
     },
   });
@@ -295,17 +281,21 @@ export default function Account() {
                         type="radio"
                         name="isBroker"
                         id="investor"
-                        value="false"
+                        value="0"
                         defaultChecked
-                        onChange={formik.handleChange}
+                        onChange={(e) =>
+                          formik.setFieldValue('isBroker', e.target.value)
+                        }
                       />
                       <label htmlFor="investor">Investor</label>
                       <input
                         type="radio"
                         name="isBroker"
                         id="broker"
-                        value="true"
-                        onChange={formik.handleChange}
+                        value="1"
+                        onChange={(e) =>
+                          formik.setFieldValue('isBroker', e.target.value)
+                        }
                       />
                       <label htmlFor="broker">Broker</label>
                     </div>
