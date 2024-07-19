@@ -1,1 +1,8 @@
-{}
+{
+  "SignIn": {
+    "sign_in_with_google": "ลงชื่อเข้าใช้งานด้วย Google",
+    "sign_in_with_facebook": "เข้าสู่ระบบด้วย Facebook",
+    "your_social_account": "บัญชีโซเชียลของคุณ",
+    "sign_in_with": "เข้าสู่ระบบด้วย"
+  }
+}

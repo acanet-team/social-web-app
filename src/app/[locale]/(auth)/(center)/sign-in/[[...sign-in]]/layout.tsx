@@ -5,7 +5,7 @@ import { signIn, useSession } from 'next-auth/react';
 import useAuthStore from '@/store/auth';
 import { useEffect } from 'react';
 import Image from 'next/image';
-
+import { useTranslations } from 'next-intl';
 const LoginPage: NextPage = () => {
   const login = useAuthStore((state: any) => state.login);
   const { data: session } = useSession();
@@ -14,6 +14,8 @@ const LoginPage: NextPage = () => {
       login(null, session);
     }
   }, [session, login]);
+
+  const t = useTranslations('SignIn');
 
   return (
     <div className="main-wrap">
@@ -40,15 +42,15 @@ const LoginPage: NextPage = () => {
         <div
           className="col-xl-5 d-none d-xl-block vh-100 bg-image-cover bg-no-repeat p-0"
           style={{
-            backgroundImage: `url("assets/images/login-bg.jpg")`,
+            backgroundImage: `url("../assets/images/login-bg.jpg")`,
           }}
         />
         <div className="col-xl-7 vh-100 align-items-center d-flex rounded-3 overflow-hidden bg-white">
           <div className="card login-card me-auto ms-auto border-0 shadow-none">
             <div className="card-body rounded-0 text-left">
               <h2 className="fw-700 display1-size display2-md-size mb-3">
-                Sign in with <br />
-                your social account
+                {t('sign_in_with')} <br />
+                {t('your_social_account')}
               </h2>
               <div className="col-sm-12 mt-2 p-0 text-center">
                 <div className="form-group mb-1">
@@ -66,7 +68,7 @@ const LoginPage: NextPage = () => {
                       alt="icon"
                       className="w40 mb-1 me-5 ms-2"
                     />{' '}
-                    Sign in with Google
+                    {t('sign_in_with_google')}
                   </button>
                 </div>
                 <div className="form-group mb-1">
@@ -84,7 +86,7 @@ const LoginPage: NextPage = () => {
                       height={40}
                       className="w40 mb-1 me-5 ms-2"
                     />{' '}
-                    Sign in with Facebook
+                    {t('sign_in_with_facebook')}
                   </button>
                 </div>
               </div>
