@@ -6,6 +6,7 @@ import useAuthStore from '@/store/auth';
 import { useEffect } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+
 const LoginPage: NextPage = () => {
   const login = useAuthStore((state: any) => state.login);
   const { data: session } = useSession();
@@ -21,13 +22,21 @@ const LoginPage: NextPage = () => {
     <div className="main-wrap">
       <div className="nav-header border-0 bg-transparent shadow-none">
         <div className="nav-top w-100">
-          <a href="/" className="me-auto">
-            <i className="feather-zap text-success display1-size me-2 ms-0" />
+          <a
+            href="/"
+            className="me-auto d-flex justify-content-center align-items-center"
+          >
             <span
               id="site-logo"
               className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"
             >
-              Acanet.{' '}
+              <Image
+                src="/assets/images/logo/logo-horizontal-white.png"
+                width={220}
+                height={60}
+                style={{ width: 'auto', height: '60px' }}
+                alt="logo"
+              />
             </span>{' '}
           </a>
           <button

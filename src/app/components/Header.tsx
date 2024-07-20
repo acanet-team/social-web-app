@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import Link from 'next/link';
-
+import Image from 'next/image';
 import Darkbutton from './Darkbutton';
 
 class Header extends Component {
@@ -25,15 +25,23 @@ class Header extends Component {
     const notiClass = `${this.state.isNoti ? ' show' : ''}`;
 
     return (
-      <div className="nav-header bg-white shadow-xs border-0">
+      <div className="nav-header shadow-xs border-0">
         <div className="nav-top">
-          <Link href="/">
-            <i className="feather-zap text-success display2-size me-3 ms-0"></i>
+          <Link
+            href="/"
+            className="d-flex justify-content-center align-items-center"
+          >
             <span
               id="site-logo"
               className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0"
             >
-              Acanet{' '}
+              <Image
+                src="/assets/images/logo/logo-horizontal-white.png"
+                width={220}
+                height={60}
+                style={{ width: 'auto', height: '60px' }}
+                alt="logo"
+              />
             </span>{' '}
           </Link>
           <Link

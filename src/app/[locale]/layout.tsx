@@ -4,12 +4,11 @@ import SessionProvider from '@/utils/api/SessionProvider';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { AppConfig } from '@/utils/AppConfig';
-import type { Metadata } from 'next';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Popupchat from '../components/Popupchat';
-import Appfooter from '../components/Appfooter';
+import type { Metadata } from 'next';
 
 // export const metadata: Metadata = {
 //   icons: [
@@ -54,11 +53,7 @@ export default function RootLayout(props: {
             locale={props.params.locale}
             messages={messages}
           >
-            {/* <Header />
-            <Leftnav /> */}
             {props.children}
-            {/* <Popupchat />
-            <Appfooter /> */}
           </NextIntlClientProvider>
         </body>
       </html>

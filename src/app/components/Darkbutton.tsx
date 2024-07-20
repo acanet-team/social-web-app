@@ -14,20 +14,25 @@ const DarkMode = () => {
   }, [theme]);
 
   const switchTheme = (e: any) => {
+    console.log(e.target);
     if (theme === 'theme-dark') {
       document.body.classList.replace('theme-dark', 'theme-light');
-      e.target.classList.remove(clickedClass);
+      const el = e.target.closest('.theme-btn');
+      el.classList.remove(clickedClass);
+      setTheme('theme-light');
       localStorage.setItem("theme", "theme-light");
     } else {
       document.body.classList.replace('theme-light', 'theme-dark');
-      e.target.classList.add(clickedClass);
+      const el = e.target.closest('.theme-btn');
+      el.classList.add(clickedClass);
+      setTheme('theme-dark');
       localStorage.setItem("theme", "theme-dark");
     }
   };
 
   return (
     <span
-      className={`pointer p-2 text-center ms-3 menu-icon chat-active-btn ${theme === "theme-dark" ? clickedClass : ""}`}
+      className={`theme-btn pointer pe-auto p-2 text-center ms-3 menu-icon chat-active-btn ${theme === "theme-dark" ? clickedClass : ""}`}
       onClick={(e) => switchTheme(e)}
     >
       <i className="feather-moon font-xl text-current"></i>

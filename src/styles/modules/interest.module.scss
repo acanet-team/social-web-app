@@ -1,0 +1,22 @@
+#interest {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+#interest button,
+#interest .btn-unselected {
+  background-color: #fff;
+  border-radius: 18px;
+}
+
+#interest button:hover {
+  background-color: var(--theme-color-shade);
+  color: #fff;
+  box-shadow: 0px 0px 2px 2px var(--theme-color-shade);
+}
+
+#interest .btn-selected {
+  background-color: var(--theme-color-shade);
+  color: #fff;
+}
+

@@ -6,6 +6,7 @@ import React,{Component} from 'react';
 class Postview extends Component {
   state = {
     isOpen: false,
+    isActive: false,
   };
 
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });

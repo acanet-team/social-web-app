@@ -11,6 +11,8 @@ import Link from 'next/link';
 import useAuthStore from '@/store/auth';
 import Image from 'next/image';
 import { createProfileRequest } from '@/api/user';
+import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface FormValues {
   nickName: string;
@@ -26,7 +28,9 @@ interface FormErrors {
 }
 
 export default function Account() {
+  const router = useRouter();
   const { createProfile } = useAuthStore((state: any) => state.createProfile);
+
   useEffect(() => {
     useAuthStore.persist.rehydrate();
   }, []);
@@ -135,6 +139,8 @@ export default function Account() {
         }
       } finally {
         // stop loading
+        // Router.push("/interest");
+        router.push('/interest');
       }
     },
   });
@@ -209,7 +215,7 @@ export default function Account() {
                       }
                     >
                       <Select
-                        className="form-control"
+                        className="form-control d-flex align-items-center"
                         labelId="location"
                         id="location"
                         name="location"
@@ -226,9 +232,11 @@ export default function Account() {
                           '& fieldset': {
                             border: 'none',
                           },
-                          padding: '0',
-                          fontSize: '16px',
-                          color: '#fff',
+                          '& .MuiInputBase-input': {
+                            padding: '0 !important',
+                            fontSize: '16px',
+                            color: '#fff !important',
+                          },
                         }}
                       >
                         <MenuItem disabled value="">
