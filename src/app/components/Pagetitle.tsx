@@ -27,7 +27,7 @@ export default async function Pagetitle(props: any) {
             <i className="ti-search font-xss"></i>
             <input
               type="text"
-              className="form-control text-grey-500 mb-0 bg-greylight theme-dark-bg border-0"
+              className={`${styles['page-title__search']} form-control text-grey-500 mb-0 bg-greylight theme-dark-bg border-0`}
               placeholder="Search here."
             />
           </div>

@@ -32,8 +32,9 @@ const DarkMode = () => {
 
   return (
     <span
-      className={`theme-btn pointer pe-auto p-2 text-center ms-3 menu-icon chat-active-btn ${theme === "theme-dark" ? clickedClass : ""}`}
+      className={`theme-btn pointer p-2 text-center ms-3 menu-icon chat-active-btn ${theme === "theme-dark" ? clickedClass : ""}`}
       onClick={(e) => switchTheme(e)}
+      style={{cursor: 'pointer'}}
     >
       <i className="feather-moon font-xl text-current"></i>
     </span>
