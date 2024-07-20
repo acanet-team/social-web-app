@@ -11,7 +11,6 @@ import Link from 'next/link';
 import useAuthStore from '@/store/auth';
 import Image from 'next/image';
 import { createProfileRequest } from '@/api/user';
-import Router from 'next/router';
 import { useRouter } from 'next/navigation';
 
 interface FormValues {
@@ -284,7 +283,10 @@ export default function Account() {
 
                     {/* eslint-disable-next-line */}
                     <label className="fw-600 mt-3 mb-1">User type</label>
-                    <div id={styles['profile-radio']}>
+                    <div
+                      id={styles['profile-radio']}
+                      className="profile-radio-btn"
+                    >
                       <input
                         type="radio"
                         name="isBroker"
