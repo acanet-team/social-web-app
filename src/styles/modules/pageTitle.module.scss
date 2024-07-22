@@ -1,8 +1,13 @@
-.title {
+#header-title .page-title {
   font-size: 32px;
   letter-spacing: -3%;
+  color: var(--theme-color);
 }
-.intro {
-  font-size: 15px;
-  color: #f8f9fa9a;
+
+#header-title .page-intro {
+  font-size: 14px;
+}
+
+#page-title__search {
+  background-color: #ddd;
 }

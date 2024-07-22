@@ -75,5 +75,9 @@
   "BrokerList": {
     "broker_title": "Broker List",
     "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
+  },
+  "Interest": {
+    "interest_title": "What are you interested in?",
+    "interest_description": "Select some topics you are interested in to help personalize your experience."
   }
 }

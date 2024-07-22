@@ -14,7 +14,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.8em;
-  border: 1px solid var(--theme-color-shade);
+  border: 1px solid var(--theme-color-tint);
   padding: 5px 10px;
   border-radius: 0.5em;
 }
@@ -23,7 +23,7 @@
   content: "";
   height: 15px;
   width: 15px;
-  border: 1px solid var(--theme-color-shade);
+  border: 1px solid var(--theme-color-tint);
   border-radius: 50%;
 }
 
@@ -35,9 +35,11 @@
 }
 
 #profile-radio input[type="radio"]:checked + label {
-  background-color: var(--theme-color-shade);
+  background-color: var(--theme-color-tint);
   color: #ffffff;
 }
+
+
 
 #profile-btn {
   display: block !important;

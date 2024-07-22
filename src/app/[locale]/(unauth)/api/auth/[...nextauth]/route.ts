@@ -26,6 +26,8 @@ const options: NextAuthOptions = {
   secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
     async signIn({ account }) {
+      console.log(account);
+
       const data: { accessToken?: string; idToken?: string } = {};
 
       if (account?.provider === 'google') {
