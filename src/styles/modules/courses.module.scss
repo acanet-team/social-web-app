@@ -1,0 +1,37 @@
+.group-price {
+  display: flex;
+  direction: row;
+  align-items: end;
+  gap: 4px;
+}
+.group {
+  display: flex;
+  direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.group-child {
+  display: flex;
+  direction: row;
+  align-items: center;
+  border-right: 1px solid #fff; 
+  padding-right:8px;
+  gap:4px;
+}
+
+.group-child:last-child {
+  border-right: none; 
+}
+.enrolled {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(to right, rgba(255, 255, 0, 0.7), rgba(255, 255, 0, 0.6));
+  padding: 2px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: flex;
+  direction: row;
+  align-items: center;
+  gap: 4px;
+}
