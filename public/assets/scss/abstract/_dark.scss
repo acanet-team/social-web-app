@@ -28,11 +28,7 @@
 
     ul.list-inline .list-inline-item.border-bottom {border-bottom: 0 !important;}
 
-
-
     .form-control {background-color: #333 !important;   border-color:var(--theme-color); }
-
-
     
     .dropdown-menu-settings:after {border-color: transparent transparent #1a2236 transparent;}
     .bg-transparent-card {background:transparent !important;}
@@ -44,7 +40,6 @@
     .main-content .left-sidebar .left-sidebar-content {background-color: var(--theme-color) !important;}
     
     .apexcharts-datalabel-value {fill:#eee;}
-
 
     .form-group label,
     .text-dark {color: #eee !important;} 
@@ -100,4 +95,41 @@
 
 .theme-dark .header-wrapper .logo .light {display: none;}
 .theme-dark .header-wrapper .logo .dark {display: inline-block;}
+.theme-dark .middle-sidebar-header,
+.theme-dark .middle-sidebar-right-content,
+.theme-dark .nav-header,
+.theme-dark .navigation {
+  background-color: #1a1237 !important;
+  box-shadow: none !important;
+}
+.theme-dark .input-file + .js-labelFile.btn-tertiary,
+.theme-dark .modal-popup-chat .modal-popup-wrap,
+.theme-dark .theme-dark-bg {
+  // background-color: #1a2236 !important;
+  background-color: var(--theme-color) !important;
+}
+.theme-dark .create-profile .form-control {
+  // background-color: #454545 !important;
+  background-color: hsl(249, 37%, 22%) !important;
+  border-color: hsl(0, 0%, 70%);
+}
+.theme-dark .dropdown-menu-settings,
+.theme-dark .main-content {
+  // broker 1
+  // background-color: #1a2236;
+  background-color: #0f0c26;
+}
 
+.theme-dark .profile-radio-btn label:before,
+.theme-dark .profile-radio-btn label,
+.theme-dark .profile-radio-btn label:before {
+  border: 1px solid var(--theme-color-shade) !important;
+}
+
+#profile-radio input[type="radio"]:checked + label {
+  background-color: var(--theme-color-tint) !important;
+}
+
+.theme-dark input[type="radio"]:checked + label {
+  background-color: var(--theme-color-shade) !important;
+}

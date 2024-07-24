@@ -1,0 +1,31 @@
+#interest {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+#interest .btn-selected {
+  background-color: var(--theme-color-tint);
+  color: #fff !important;
+}
+
+#interest button,
+.interest-options .btn-unselected {
+  border: 1px solid var(--theme-color-tint);
+  border-radius: 18px;
+  color: var(--theme-color-tint);
+}
+
+#interest p {
+  color: var(--theme-color-text-secondary);
+}
+
+.interest-options button:hover {
+  background-color: var(--theme-color-tint);
+  color: #fff;
+  box-shadow: 0px 0px 1px 1px var(--theme-color-tint);
+}
+
+:global(.theme-dark) #interest .btn-selected {
+  background-color: var(--theme-color-shade) !important;
+  color: #fff !important;
+}

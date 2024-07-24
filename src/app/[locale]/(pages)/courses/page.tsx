@@ -1,8 +1,15 @@
 'use client';
 import React, { Fragment, useState } from 'react';
 import styles from '@/styles/modules/courses.module.scss';
+import Pagetitle from '@/app/components/Pagetitle';
+import { useTranslations } from 'next-intl';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 export default function Courses() {
+  const t = useTranslations('CoursesList');
+  const [pagination, setPagination] = useState<number>(1);
+  const [curPage, setCurPage] = useState<number>(1);
   const [coursesList, setCoursesList] = useState([
     {
       id: 1,
@@ -16,7 +23,7 @@ export default function Courses() {
     {
       id: 2,
       nameCourse:
-        'AI Revolution: Harnessing the Power of Artificial Intelligence',
+        'Robotics and Automation: Revolutionizing Industries through Intelligent Machines',
       author: 'Kristin Watson',
       imgCourse: 'assets/images/imgCourse.png',
       imgAuthor: 'assets/images/imgAuthor.png',
@@ -41,16 +48,20 @@ export default function Courses() {
       price: '$24',
     },
   ]);
+
+  const onChangePageHandler = (page: number) => {
+    setCurPage(page);
+  };
+
   return (
     <Fragment>
       <div className="main-content right-chat-active">
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left pe-0">
-            <h1 className="font-xxl">Courses</h1>
-            <p className="font-xsss mb--2">
-              Every request ID is meticulously recorded in this log. For more
-              details, please review them carefully.
-            </p>
+            <Pagetitle
+              title={t('course_title')}
+              intro={t('course_description')}
+            />
             <div className="row">
               <div className="col-12">
                 <div className="row ps-2 pe-2">
@@ -60,34 +71,42 @@ export default function Courses() {
                       <div key={index} className="col-md-4 col-sm-6 col-xs-12">
                         <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-4">
                           <div className="position-relative ">
-                            <img
-                              src={course.imgCourse}
-                              alt="courses"
-                              className="w__100 h160 object-cover"
-                            />
-                            <div className={styles['enrolled']}>
+                            <picture>
                               <img
-                                src={`assets/images/star-01.png`}
-                                alt="star"
-                                className="shadow-sm w16 "
+                                src={course.imgCourse}
+                                alt="courses"
+                                className="w__100 h160 object-cover"
                               />
+                            </picture>
+                            <div className={styles['enrolled']}>
+                              <picture>
+                                <img
+                                  src={`assets/images/star-01.png`}
+                                  alt="star"
+                                  className="shadow-sm w16 "
+                                />
+                              </picture>
                               <div className="text-black fw-700">
                                 453 enrolled
                               </div>
                             </div>
                           </div>
                           <div className="p-3">
-                            <p className="font-xss">{course.nameCourse}</p>
+                            <p className={styles['truncate']}>
+                              {course.nameCourse}
+                            </p>
                             <div className={styles['group-price']}>
                               <p className="font-xssss">Price</p>
                               <p className="fw-700 font-xs">{course.price}</p>
                             </div>
                             <div className={styles['group']}>
-                              <img
-                                src={course.imgAuthor}
-                                alt="courses"
-                                className="bg-white rounded-circle shadow-xss w35"
-                              />
+                              <picture>
+                                <img
+                                  src={course.imgAuthor}
+                                  alt="courses"
+                                  className="bg-white rounded-circle shadow-xss w35"
+                                />
+                              </picture>
                               <div>
                                 <p className="font-xsss m-0">{course.author}</p>
                                 <div className={styles['group']}>
@@ -125,6 +144,22 @@ export default function Courses() {
                 </div>
               </div>
             </div>
+
+            <Stack spacing={2}>
+              <Pagination
+                count={pagination}
+                variant="outlined"
+                color="secondary"
+                onClick={(e) =>
+                  onChangePageHandler(
+                    parseInt(e.currentTarget.textContent || '1', 10),
+                  )
+                }
+                sx={{
+                  '.MuiPagination-ul': { 'justify-content': 'center' },
+                }}
+              />
+            </Stack>
           </div>
         </div>
       </div>

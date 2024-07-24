@@ -11,6 +11,7 @@ import Link from 'next/link';
 import useAuthStore from '@/store/auth';
 import Image from 'next/image';
 import { createProfileRequest } from '@/api/user';
+import { useRouter } from 'next/navigation';
 
 interface FormValues {
   nickName: string;
@@ -26,7 +27,9 @@ interface FormErrors {
 }
 
 export default function Account() {
+  const router = useRouter();
   const { createProfile } = useAuthStore((state: any) => state.createProfile);
+
   useEffect(() => {
     useAuthStore.persist.rehydrate();
   }, []);
@@ -135,13 +138,15 @@ export default function Account() {
         }
       } finally {
         // stop loading
+        // Router.push("/interest");
+        router.push('/interest');
       }
     },
   });
 
   return (
     <>
-      <div className="main-content bg-lightblue theme-dark-bg right-chat-active">
+      <div className="create-profile main-content bg-lightblue theme-dark-bg right-chat-active">
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="middle-wrap">
@@ -209,7 +214,7 @@ export default function Account() {
                       }
                     >
                       <Select
-                        className="form-control"
+                        className="form-control d-flex align-items-center"
                         labelId="location"
                         id="location"
                         name="location"
@@ -226,9 +231,11 @@ export default function Account() {
                           '& fieldset': {
                             border: 'none',
                           },
-                          padding: '0',
-                          fontSize: '16px',
-                          color: '#fff',
+                          '& .MuiInputBase-input': {
+                            padding: '0 !important',
+                            fontSize: '16px',
+                            color: '#fff !important',
+                          },
                         }}
                       >
                         <MenuItem disabled value="">
@@ -276,7 +283,10 @@ export default function Account() {
 
                     {/* eslint-disable-next-line */}
                     <label className="fw-600 mt-3 mb-1">User type</label>
-                    <div id={styles['profile-radio']}>
+                    <div
+                      id={styles['profile-radio']}
+                      className="profile-radio-btn"
+                    >
                       <input
                         type="radio"
                         name="isBroker"
@@ -308,7 +318,7 @@ export default function Account() {
                     <button
                       type="submit"
                       id={styles['profile-btn']}
-                      className="bg-current text-center text-white fw-600 p-3 w175 rounded-3 border-0 d-inline-block mt-5"
+                      className="main-btn bg-current text-center text-white fw-600 p-3 w175 rounded-3 border-0 d-inline-block mt-5"
                     >
                       Save
                     </button>

@@ -32,13 +32,13 @@ const TabOne = [
 ];
 
 class Profilephoto extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tab1: 0,
-      isOpen: false,
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     tab1: 0,
+  //     isOpen: false,
+  //   };
+  // }
 
   render() {
     const { tab1, isOpen } = this.state;
@@ -57,7 +57,7 @@ class Profilephoto extends Component {
               <div className="col-6 mb-1 p-1" key={index}>
                 {isOpen && (
                   <Lightbox
-                    mainSrc={TabOne[tab1].bigImage}
+                    mainSrc={TabOne[tab1]?.bigImage ?? ''}
                     onCloseRequest={() => this.setState({ isOpen: false })}
                     onMovePrevRequest={() =>
                       this.setState({

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import Image from 'next/image';
 
 class Register extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -8,13 +9,21 @@ class Register extends Component {
         <div className="main-wrap">
           <div className="nav-header bg-transparent shadow-none border-0">
             <div className="nav-top w-100">
-              <a href="/">
-                <i className="feather-zap text-success display1-size me-2 ms-0"></i>
+              <a
+                href="/"
+                className="d-flex justify-content-center align-items-center"
+              >
                 <span
                   id="site-logo"
                   className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0"
                 >
-                  Acanet{' '}
+                  <Image
+                    src="/assets/images/logo/logo-horizontal-white.png"
+                    width={220}
+                    height={60}
+                    style={{ width: 'auto', height: '60px' }}
+                    alt="logo"
+                  />
                 </span>{' '}
               </a>
               <button className="nav-menu me-0 ms-auto"></button>
