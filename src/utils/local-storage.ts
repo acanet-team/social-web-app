@@ -3,10 +3,14 @@ export const setLocalStorage = (name: string, value: string) => {
 };
 
 export const getLocalStorage = (name: string) => {
-  const initialValue = localStorage.getItem(name) || '';
-  if (typeof initialValue === 'string') {
-    const value = JSON.parse(initialValue);
-    return value;
+  const initialValue = localStorage.getItem(name) || "";
+  if (typeof initialValue === "string") {
+    try {
+      const value = JSON.parse(initialValue);
+      return value;
+    } catch (err) {
+      console.log(err);
+    }
   }
   return initialValue;
 };

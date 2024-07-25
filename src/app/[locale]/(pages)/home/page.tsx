@@ -1,38 +1,60 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
-import Header from '../../../components/Header';
-import Leftnav from '../../../components/Leftnav';
-import Rightchat from '../../../components/Rightchat';
-import Appfooter from '../../../components/Appfooter';
-import Popupchat from '../../../components/Popupchat';
-
-import Friends from '../../../components/Friends';
-import Contacts from '../../../components/Contacts';
-import Group from '../../../components/Group';
-import Events from '../../../components/Events';
-import Createpost from '../../../components/Createpost';
-import Memberslider from '../../../components/Memberslider';
-import Friendsilder from '../../../components/Friendsilder';
-import Storyslider from '../../../components/Storyslider';
-import Postview from '../../../components/Postview';
-import Load from '../../../components/Load';
-import Profilephoto from '../../../components/Profilephoto';
-// eslint-disable-next-line import/extensions
-import Layout from '../../layout';
+import Appfooter from "@/app/components/Appfooter";
+import Createpost from "@/app/components/Createpost";
+import Memberslider from "@/app/components/Memberslider";
+import Friendsilder from "@/app/components/Friendsilder";
+import Storyslider from "@/app/components/TopBrokers";
+import Postview from "@/app/components/Postview";
+import Load from "@/app/components/Load";
+import styles from "@/styles/modules/home.module.scss";
+import NavLink from "@/app/components/NavLink";
+import Layout from "../layout";
+import Link from "next/link";
+import Popupchat from "../../../components/Popupchat";
+import Contacts from "@/app/components/Contacts";
 
 export default function Home() {
+  const [posts, setPosts] = useState<Object[]>([]);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const onClickForYouHandler = () => {
+    console.log("fetching for-you feed");
+    // setPosts()
+  };
+  const onClickSuggestionHandler = () => {
+    console.log("fetching suggestion feed");
+    // setPosts()
+  };
+
+  useEffect(() => {
+    // Fetch for-you feed
+    // setPosts()
+  }, []);
   return (
-    <Layout params={{ locale: 'en' }}>
-      <Header />
-      <Leftnav />
-      <Rightchat />
-      <div className="main-content right-chat-active">
+    <Layout>
+      <div className="main-content right-chat-active" id={styles.home}>
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="row feed-body">
               <div className="col-xl-8 col-xxl-9 col-lg-8">
+                <div className={styles["home-tabs"]}>
+                  <NavLink
+                    className={`${styles["tab-active"]} d-flex justify-content-center`}
+                    href="/home?tab=you"
+                    onClick={onClickForYouHandler}
+                  >
+                    For you
+                  </NavLink>
+                  <NavLink
+                    className={`${styles["tab-active"]} d-flex justify-content-center`}
+                    href="/home?tab=sugesstion"
+                    onClick={onClickSuggestionHandler}
+                  >
+                    Suggestion
+                  </NavLink>
+                </div>
                 <Storyslider />
                 <Createpost />
                 <Postview
@@ -85,17 +107,16 @@ export default function Home() {
                 <Load />
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-                <Friends />
                 <Contacts />
-                <Group />
-                <Events />
-                <Profilephoto />
+                {/* <Group /> */}
+                {/* <Events />
+                <Profilephoto /> */}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Popupchat />
+      {/* <Popupchat /> */}
       <Appfooter />
     </Layout>
   );

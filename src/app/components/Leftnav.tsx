@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 export default function Leftnav() {
   return (
@@ -10,50 +10,51 @@ export default function Leftnav() {
         <div className="nav-content">
           <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
             <div className="nav-caption fw-600 font-xssss text-grey-500">
-              <span>New </span>Feeds
+              <span>Newsfeed</span>
+              <ul className="mb-1 top-content">
+                <li className="logo d-none d-xl-block d-lg-block"></li>
+                <li>
+                  <Link href="/home" className="nav-content-bttn open-font">
+                    <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
+
+                    <span>Newsfeed</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/broker-list"
+                    className="nav-content-bttn open-font"
+                  >
+                    <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
+                    <span>Brokersss</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/defaultstorie"
+                    className="nav-content-bttn open-font"
+                  >
+                    <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
+                    <span>Courses</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/defaultgroup"
+                    className="nav-content-bttn open-font"
+                  >
+                    <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
+                    <span>Messages</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/userpage" className="nav-content-bttn open-font">
+                    <i className="feather-settings btn-round-md bg-primary-gradiant me-3"></i>
+                    <span>Settings</span>
+                  </Link>
+                </li>
+              </ul>
             </div>
-            <ul className="mb-1 top-content">
-              <li className="logo d-none d-xl-block d-lg-block"></li>
-              <li>
-                <Link href="/home" className="nav-content-bttn open-font">
-                  <i className="feather-tv btn-round-md bg-blue-gradiant me-3"></i>
-                  <span>Newsfeed</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/defaultbadge"
-                  className="nav-content-bttn open-font"
-                >
-                  <i className="feather-award btn-round-md bg-red-gradiant me-3"></i>
-                  <span>Badges</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/defaultstorie"
-                  className="nav-content-bttn open-font"
-                >
-                  <i className="feather-globe btn-round-md bg-gold-gradiant me-3"></i>
-                  <span>Explore Stories</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/defaultgroup"
-                  className="nav-content-bttn open-font"
-                >
-                  <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
-                  <span>Popular Groups</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/userpage" className="nav-content-bttn open-font">
-                  <i className="feather-user btn-round-md bg-primary-gradiant me-3"></i>
-                  <span>Author Profile </span>
-                </Link>
-              </li>
-            </ul>
           </div>
 
           <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">

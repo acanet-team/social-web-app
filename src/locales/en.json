@@ -78,6 +78,9 @@
   },
   "Interest": {
     "interest_title": "What are you interested in?",
-    "interest_description": "Select some topics you are interested in to help personalize your experience."
+    "interest_description": "Select at least 1 topic you are interested in to help personalize your experience."
+  },
+  "TopBrokers": {
+    "top_broker_title": "Top Brokers"
   }
 }

@@ -1,14 +1,14 @@
-import '@/styles/global.scss';
+import "@/styles/global.scss";
 
-import SessionProvider from '@/utils/api/SessionProvider';
-import { notFound } from 'next/navigation';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
-import { AppConfig } from '@/utils/AppConfig';
-import { config } from '@fortawesome/fontawesome-svg-core';
-import '@fortawesome/fontawesome-svg-core/styles.css';
+import SessionProvider from "@/utils/api/SessionProvider";
+import { notFound } from "next/navigation";
+import { NextIntlClientProvider, useMessages } from "next-intl";
+import { AppConfig } from "@/utils/AppConfig";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 // export const metadata: Metadata = {
 //   icons: [

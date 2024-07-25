@@ -155,9 +155,6 @@ body {
 	.main-content {padding-right: 	290px;}
 }
 
-
-
-
 @media (min-width: 1400px) {
 	.middle-sidebar-left {padding-right: 0px; padding-left: 20px; }
 }
@@ -168,7 +165,6 @@ body {
 	    
 	}
 }
-
 
 @media (max-width: 992px){
 	.navigation	 {left: auto; right:-320px;}
