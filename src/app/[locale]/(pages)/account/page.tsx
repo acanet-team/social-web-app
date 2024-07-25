@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
-import { ToastContainer, toast, type ToastOptions } from 'react-toastify';
-import styles from '@/styles/modules/account.module.scss';
-import React, { useEffect, useState } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
-import type { AxiosError } from 'axios';
-import { useFormik } from 'formik';
-import Link from 'next/link';
-import useAuthStore from '@/store/auth';
-import Image from 'next/image';
-import { createProfileRequest } from '@/api/user';
-import { useRouter } from 'next/navigation';
+import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
+import { ToastContainer, toast, type ToastOptions } from "react-toastify";
+import styles from "@/styles/modules/account.module.scss";
+import React, { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import type { AxiosError } from "axios";
+import { useFormik } from "formik";
+import Link from "next/link";
+import useAuthStore from "@/store/auth";
+import Image from "next/image";
+import { createProfileRequest } from "@/api/user";
+import { useRouter } from "next/navigation";
 
 interface FormValues {
   nickName: string;
   location: string;
-  isBroker: string;
+  isBroker: Boolean;
   email: string;
 }
 interface FormErrors {
@@ -34,17 +34,17 @@ export default function Account() {
     useAuthStore.persist.rehydrate();
   }, []);
   const [locationList, setRegionList] = useState([
-    'Vietnam',
-    'Thailand',
-    'Singapore',
-    'Indonesia',
+    "Vietnam",
+    "Thailand",
+    "Singapore",
+    "Indonesia",
   ]);
   const { email, nickName, photo } = useAuthStore((state: any) => state.user);
 
   // Toast notification
   const throwToast = (message: string, notiType: string) => {
     const notiConfig: ToastOptions = {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 4000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -54,9 +54,9 @@ export default function Account() {
     };
 
     const notify = () => {
-      if (message !== '' && notiType === 'success') {
+      if (message !== "" && notiType === "success") {
         toast.success(message, notiConfig);
-      } else if (message !== '' && notiType === 'error') {
+      } else if (message !== "" && notiType === "error") {
         toast.error(message, notiConfig);
       }
     };
@@ -68,26 +68,26 @@ export default function Account() {
   const validate = (values: FormValues) => {
     const errors: FormErrors = {};
     if (!values.location) {
-      errors.location = 'Please choose a location.';
+      errors.location = "Please choose a location.";
     }
     if (values.isBroker === null) {
-      errors.isBroker = 'Please choose the user type.';
+      errors.isBroker = "Please choose the user type.";
     }
 
     if (!nickName) {
       if (!values.nickName) {
-        errors.nickName = 'Please fill out a valid nickname.';
+        errors.nickName = "Please fill out a valid nickname.";
       } else if (values.nickName.length > 20 || values.nickName.length < 8) {
-        errors.nickName = 'Nick name must be between 8 and 20 characters.';
+        errors.nickName = "Nick name must be between 8 and 20 characters.";
       }
     }
     if (!email) {
       if (!values.email) {
-        errors.email = 'Please fill out a valid email.';
+        errors.email = "Please fill out a valid email.";
       } else if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
       ) {
-        errors.email = 'Invalid email address';
+        errors.email = "Invalid email address";
       }
     }
 
@@ -96,10 +96,10 @@ export default function Account() {
 
   const formik = useFormik({
     initialValues: {
-      nickName: '',
-      location: '',
-      isBroker: '0',
-      email: '',
+      nickName: "",
+      location: "",
+      isBroker: false,
+      email: "",
     },
     validate,
     onSubmit: async (values, { setFieldError }) => {
@@ -108,38 +108,35 @@ export default function Account() {
       values.nickName = values.nickName?.toLowerCase().trim();
       values.location = values.location?.toLowerCase().trim();
       values.email = values.email?.toLowerCase().trim();
-      // @ts-ignore
-      values.isBroker = values.isBroker === '1' ? true : false;
+      values.isBroker = values.isBroker === true ? true : false;
 
       try {
-        // call api
         await createProfileRequest(values);
-        const successMessage = 'Your profile has been updated.';
-        throwToast(successMessage, 'success');
+        const successMessage = "Your profile has been updated.";
+        throwToast(successMessage, "success");
         // Save data in auth store
         createProfile(null, values);
+        router.push("/interest");
       } catch (err) {
         console.log(err);
         const errors = err as AxiosError;
-        let errorMessage = '';
-        const errorCode = (errors?.response?.data as any)?.errorCode;
-        if (errorCode === 'ER1018') {
-          errorMessage = 'Nickname already exists.';
-          setFieldError('nickName', errorMessage);
-          throwToast(errorMessage, 'error');
-        } else if (errorCode === 'ER3013') {
+        let errorMessage = "";
+        const errorCode = (errors?.response?.data as any)?.code;
+        if (errorCode === "ER1018") {
+          errorMessage = "Nickname already exists.";
+          setFieldError("nickName", errorMessage);
+          throwToast(errorMessage, "error");
+        } else if (errorCode === "ER3013") {
           errorMessage = "You're not a whitelisted broker.";
-          setFieldError('isBroker', errorMessage);
-          throwToast(errorMessage, 'error');
-        } else if (errorCode === 'ER1010') {
-          errorMessage = 'User profile already existed.';
-          setFieldError('nickName', errorMessage);
-          throwToast(errorMessage, 'error');
+          setFieldError("isBroker", errorMessage);
+          throwToast(errorMessage, "error");
+        } else if (errorCode === "ER1010") {
+          errorMessage = "User profile already existed.";
+          setFieldError("nickName", errorMessage);
+          throwToast(errorMessage, "error");
         }
       } finally {
         // stop loading
-        // Router.push("/interest");
-        router.push('/interest');
       }
     },
   });
@@ -165,7 +162,7 @@ export default function Account() {
                       <figure className="avatar ms-auto me-auto mb-0 mt-2 w100">
                         <Image
                           src={
-                            photo || 'https://via.placeholder.com/300x300.png'
+                            photo || "https://via.placeholder.com/300x300.png"
                           }
                           width={100}
                           height={100}
@@ -198,7 +195,7 @@ export default function Account() {
                       disabled={nickName ? true : false}
                     />
                     {formik.touched.nickName && formik.errors.nickName ? (
-                      <FormHelperText sx={{ color: 'error.main' }}>
+                      <FormHelperText sx={{ color: "error.main" }}>
                         {formik.errors.nickName}
                       </FormHelperText>
                     ) : null}
@@ -220,7 +217,7 @@ export default function Account() {
                         name="location"
                         value={formik.values.location}
                         onChange={(e) =>
-                          formik.setFieldValue('location', e.target.value)
+                          formik.setFieldValue("location", e.target.value)
                         }
                         onBlur={formik.handleBlur}
                         error={
@@ -228,13 +225,13 @@ export default function Account() {
                           Boolean(formik.errors.location)
                         }
                         sx={{
-                          '& fieldset': {
-                            border: 'none',
+                          "& fieldset": {
+                            border: "none",
                           },
-                          '& .MuiInputBase-input': {
-                            padding: '0 !important',
-                            fontSize: '16px',
-                            color: '#fff !important',
+                          "& .MuiInputBase-input": {
+                            padding: "0 !important",
+                            fontSize: "16px",
+                            color: "#fff !important",
                           },
                         }}
                       >
@@ -254,7 +251,7 @@ export default function Account() {
                       </Select>
                       {formik.touched.location && (
                         <FormHelperText
-                          sx={{ color: 'error.main', marginLeft: '0' }}
+                          sx={{ color: "error.main", marginLeft: "0" }}
                         >
                           {formik.errors.location}
                         </FormHelperText>
@@ -276,7 +273,7 @@ export default function Account() {
                       disabled={email ? true : false}
                     />
                     {formik.touched.email && formik.errors.email ? (
-                      <FormHelperText sx={{ color: 'error.main' }}>
+                      <FormHelperText sx={{ color: "error.main" }}>
                         {formik.errors.email}
                       </FormHelperText>
                     ) : null}
@@ -284,17 +281,17 @@ export default function Account() {
                     {/* eslint-disable-next-line */}
                     <label className="fw-600 mt-3 mb-1">User type</label>
                     <div
-                      id={styles['profile-radio']}
+                      id={styles["profile-radio"]}
                       className="profile-radio-btn"
                     >
                       <input
                         type="radio"
                         name="isBroker"
                         id="investor"
-                        value="0"
+                        value="false"
                         defaultChecked
                         onChange={(e) =>
-                          formik.setFieldValue('isBroker', e.target.value)
+                          formik.setFieldValue("isBroker", false)
                         }
                       />
                       <label htmlFor="investor">Investor</label>
@@ -302,22 +299,23 @@ export default function Account() {
                         type="radio"
                         name="isBroker"
                         id="broker"
-                        value="1"
-                        onChange={(e) =>
-                          formik.setFieldValue('isBroker', e.target.value)
-                        }
+                        value="true"
+                        onChange={(e) => formik.setFieldValue("isBroker", true)}
                       />
                       <label htmlFor="broker">Broker</label>
                     </div>
                     {formik.errors.isBroker ? (
-                      <FormHelperText sx={{ color: 'error.main' }}>
-                        {formik.errors.isBroker}
+                      <FormHelperText sx={{ color: "error.main" }}>
+                        {JSON.stringify(formik.errors.isBroker).replace(
+                          /^"|"$/g,
+                          "",
+                        )}
                       </FormHelperText>
                     ) : null}
 
                     <button
                       type="submit"
-                      id={styles['profile-btn']}
+                      id={styles["profile-btn"]}
                       className="main-btn bg-current text-center text-white fw-600 p-3 w175 rounded-3 border-0 d-inline-block mt-5"
                     >
                       Save

@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import Darkbutton from './Darkbutton';
-import { getLocalStorage } from '@/utils/local-storage';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import Darkbutton from "./Darkbutton";
+import { getLocalStorage } from "@/utils/local-storage";
 
 export default function Header() {
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
-  const [curTheme, setCurTheme] = useState('theme-dark');
+  const [curTheme, setCurTheme] = useState("theme-dark");
 
-  const navClass = `${isOpen ? ' nav-active' : ''}`;
-  const buttonClass = `${isOpen ? ' active' : ''}`;
-  const searchClass = `${isActive ? ' show' : ''}`;
-  const notiClass = `${isNoti ? ' show' : ''}`;
+  const navClass = `${isOpen ? " nav-active" : ""}`;
+  const buttonClass = `${isOpen ? " active" : ""}`;
+  const searchClass = `${isActive ? " show" : ""}`;
+  const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      const theme = getLocalStorage('theme');
-      console.log(theme);
-      setCurTheme(theme);
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    // const handleStorageChange = () => {
+    //   const theme = getLocalStorage("theme");
+    //   setCurTheme(theme);
+    //   console.log(theme);
+    // };
+    // window.addEventListener("storage", handleStorageChange);
+    // return () => {
+    //   window.removeEventListener("storage", handleStorageChange);
+    // };
   }, []);
 
   return (
@@ -34,7 +34,7 @@ export default function Header() {
       <div className="nav-top">
         <Link
           href="/"
-          className="d-flex justify-content-center align-items-center"
+          className="d-flex justify-content-left align-items-center"
         >
           <span
             id="site-logo"
@@ -42,25 +42,29 @@ export default function Header() {
           >
             <Image
               src={
-                curTheme === 'theme-dark'
-                  ? '/assets/images/logo/logo-horizontal-white.png'
-                  : '/assets/images/logo/logo-horizontal-dark.png'
+                curTheme === "theme-dark"
+                  ? "/assets/images/logo/logo-horizontal-white.png"
+                  : "/assets/images/logo/logo-horizontal-dark.png"
               }
+              width={220}
+              height={55}
+              style={{ width: "auto", height: "55px" }}
+              alt="logo"
+            />
+            {/* <Image
+              src={'/assets/images/logo/logo-horizontal-white.png'}
               width={220}
               height={60}
               style={{ width: 'auto', height: '60px' }}
               alt="logo"
-            />
-          </span>{' '}
+            /> */}
+          </span>{" "}
         </Link>
         <Link
           href="/defaultmessage"
           className="mob-menu ms-auto me-2 chat-active-btn"
         >
           <i className="feather-message-circle text-grey-900 font-sm btn-round-md bg-greylight"></i>
-        </Link>
-        <Link href="/defaultvideo" className="mob-menu me-2">
-          <i className="feather-video text-grey-900 font-sm btn-round-md bg-greylight"></i>
         </Link>
         <span
           onClick={() => toggleActive((prevState) => !prevState)}
@@ -80,40 +84,63 @@ export default function Header() {
           <input
             type="text"
             placeholder="Start typing to search.."
-            className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350"
+            className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w400"
           />
         </div>
       </form>
-      <Link
+      {/* <Link
         href="/home"
         className="p-2 text-center ms-3 menu-icon center-menu-icon"
       >
-        <i className="feather-home font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i>
-      </Link>
-      <Link
-        href="/defaultstorie"
-        className="p-2 text-center ms-0 menu-icon center-menu-icon"
-      >
-        <i className="feather-zap font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i>
-      </Link>
-      <Link
-        href="/defaultvideo"
-        className="p-2 text-center ms-0 menu-icon center-menu-icon"
-      >
-        <i className="feather-video font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i>
+        <i className="feather-home font-lg text-grey-500 "></i>
+        <div className={curTheme === "theme-dark" ? "text-white" : "text-dark"}>
+          Newsfeed
+        </div>
       </Link>
       <Link
         href="/defaultgroup"
         className="p-2 text-center ms-0 menu-icon center-menu-icon"
       >
-        <i className="feather-user font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i>
+        <i className="feather-user font-lg text-grey-500"></i>
+        <div
+          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
+        >
+          Brokers
+        </div>
+      </Link>
+      <Link
+        href="/defaultstorie"
+        className="p-2 text-center ms-0 menu-icon center-menu-icon"
+      >
+        <i className="feather-zap font-lg text-grey-500 "></i>
+        <div
+          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
+        >
+          Courses
+        </div>
       </Link>
       <Link
         href="/shop2"
         className="p-2 text-center ms-0 menu-icon center-menu-icon"
       >
-        <i className="feather-shopping-bag font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 "></i>
+        <i className="feather-shopping-bag font-lg text-grey-500 "></i>
+        <div
+          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
+        >
+          Messages
+        </div>
       </Link>
+      <Link
+        href="/shop2"
+        className="p-2 text-center ms-0 menu-icon center-menu-icon"
+      >
+        <i className="feather-shopping-bag font-lg text-grey-500 "></i>
+        <div
+          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
+        >
+          Settings
+        </div>
+      </Link> */}
 
       <span
         className={`p-2 pointer text-center ms-auto menu-icon ${notiClass}`}
@@ -121,41 +148,30 @@ export default function Header() {
         data-bs-toggle="dropdown"
         aria-expanded="false"
         onClick={() => toggleisNoti((prevState) => !prevState)}
-      ></span>
+      >
+        <span className="dot-count bg-warning"></span>
+        <i className="feather-bell font-xl text-current"></i>
+      </span>
       <div
         className={`dropdown-menu p-4 right-0 rounded-xxl border-0 shadow-lg ${notiClass}`}
         aria-labelledby="dropdownMenu3"
       >
-        <h4 className="fw-700 font-xss mb-4">Notification</h4>
+        <h4 className="fw-700 font-xss mb-4 pe-auto">Notification</h4>
+        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+          {/* Notification content */}
+        </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
             src="/assets/images/user.png"
-            alt="user"
             width={40}
             height={40}
-            className="w40 position-absolute left-0"
-          />
-          <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Hendrix Stamp{' '}
-            <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {' '}
-              3 min
-            </span>
-          </h5>
-          <h6 className="text-grey-500 fw-500 font-xssss lh-4">
-            There are many variations of pass..
-          </h6>
-        </div>
-        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          <img
-            src="assets/images/user.png"
             alt="user"
             className="w40 position-absolute left-0"
           />
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Goria Coast{' '}
+            Goria Coast{" "}
             <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {' '}
+              {" "}
               2 min
             </span>
           </h5>
@@ -165,15 +181,17 @@ export default function Header() {
         </div>
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          <img
-            src="assets/images/user.png"
+          <Image
+            src="/assets/images/user.png"
             alt="user"
+            width={40}
+            height={40}
             className="w40 position-absolute left-0"
           />
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Surfiya Zakir{' '}
+            Surfiya Zakir{" "}
             <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {' '}
+              {" "}
               1 min
             </span>
           </h5>
@@ -182,15 +200,17 @@ export default function Header() {
           </h6>
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
-          <img
-            src="assets/images/user.png"
+          <Image
+            src="/assets/images/user.png"
             alt="user"
+            width={40}
+            height={40}
             className="w40 position-absolute left-0"
           />
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Victor Exrixon{' '}
+            Victor Exrixon{" "}
             <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {' '}
+              {" "}
               30 sec
             </span>
           </h5>
@@ -201,7 +221,13 @@ export default function Header() {
       </div>
       <Darkbutton />
       <Link href="/defaultsettings" className="p-0 ms-3 menu-icon">
-        <img src="assets/images/user.png" alt="user" className="w40 mt--1" />
+        <Image
+          src="/assets/images/user.png"
+          alt="user"
+          width={40}
+          height={40}
+          className="w40 mt--1"
+        />
       </Link>
 
       <nav className={`navigation scroll-bar ${navClass}`}>
@@ -215,17 +241,18 @@ export default function Header() {
                 <li className="logo d-none d-xl-block d-lg-block"></li>
                 <li>
                   <Link href="/home" className="nav-content-bttn open-font">
-                    <i className="feather-tv btn-round-md bg-blue-gradiant me-3"></i>
+                    <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
+
                     <span>Newsfeed</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/defaultbadge"
+                    href="/broker-list"
                     className="nav-content-bttn open-font"
                   >
-                    <i className="feather-award btn-round-md bg-red-gradiant me-3"></i>
-                    <span>Badges</span>
+                    <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
+                    <span>Brokers</span>
                   </Link>
                 </li>
                 <li>
@@ -233,8 +260,8 @@ export default function Header() {
                     href="/defaultstorie"
                     className="nav-content-bttn open-font"
                   >
-                    <i className="feather-globe btn-round-md bg-gold-gradiant me-3"></i>
-                    <span>Explore Stories</span>
+                    <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
+                    <span>Courses</span>
                   </Link>
                 </li>
                 <li>
@@ -243,19 +270,19 @@ export default function Header() {
                     className="nav-content-bttn open-font"
                   >
                     <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
-                    <span>Popular Groups</span>
+                    <span>Messages</span>
                   </Link>
                 </li>
                 <li>
                   <Link href="/userpage" className="nav-content-bttn open-font">
-                    <i className="feather-user btn-round-md bg-primary-gradiant me-3"></i>
-                    <span>Author Profile </span>
+                    <i className="feather-settings btn-round-md bg-primary-gradiant me-3"></i>
+                    <span>Settings</span>
                   </Link>
                 </li>
               </ul>
             </div>
 
-            <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">
+            {/* <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">
               <div className="nav-caption fw-600 font-xssss text-grey-500">
                 <span>More </span>Pages
               </div>
@@ -298,7 +325,7 @@ export default function Header() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
             <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
               <div className="nav-caption fw-600 font-xssss text-grey-500">
                 <span></span> Account

@@ -1,0 +1,24 @@
+#home .home-tabs {
+  width: 100%;
+}
+
+#home .home-tabs a {
+  display: inline-block;
+  width: 50%;
+  opacity: 0.6;
+  background-color: var(--theme-color) !important;
+  color: #fff !important;
+  border: none !important;
+  border-bottom: 0.3px solid #dddddd8f !important;
+  position: relative;
+}
+
+#home .home-tabs a:hover {
+  background-color: #1a123789;
+}
+
+#home .home-tabs a > * {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+}

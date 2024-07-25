@@ -1,5 +1,5 @@
-import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import axios from 'axios';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 import type {
   ApiRequestParams,
@@ -7,7 +7,7 @@ import type {
   BaseResponse,
   GetRequestParams,
   PostRequestParams,
-} from './model';
+} from "./model";
 
 class HttpClient {
   instance: AxiosInstance;
@@ -35,21 +35,21 @@ class HttpClient {
 
   cancelRequest = (requestId: string, isTimeoutCancel?: boolean) => {
     console.log(`cancelRequest from ${requestId}`);
-    console.log('requestId', this.requestInstance[requestId]);
+    console.log("requestId", this.requestInstance[requestId]);
     if (this.requestInstance[requestId]) {
       this.requestInstance[requestId]?.abort();
 
       delete this.requestInstance[requestId];
 
       if (isTimeoutCancel) {
-        showErrorMessage('Request Timeout!');
+        showErrorMessage("Request Timeout!");
       }
     }
   };
 
   fetchApi = <T>({ method, config }: ApiRequestParams): BaseApiResponse<T> => {
     const {
-      url = '',
+      url = "",
       isKeepRequest = this.isKeepRequest,
       headers: customHeaders = {},
       isHandleError = true,
@@ -74,7 +74,7 @@ class HttpClient {
           url,
           headers: customHeaders,
           signal: controller.signal,
-          withCredentials: true,
+          //withCredentials: true,
           ...otherConfig,
         })
         .then((response) => {
@@ -82,7 +82,7 @@ class HttpClient {
         })
 
         .catch((err) => {
-          if (err.code !== 'ERR_CANCELED' && isHandleError) {
+          if (err.code !== "ERR_CANCELED" && isHandleError) {
             handleError(err);
           }
           reject(err);
@@ -102,7 +102,7 @@ class HttpClient {
 
   get = <T>({ url, config, params }: GetRequestParams): BaseApiResponse<T> => {
     return this.fetchApi<T>({
-      method: 'GET',
+      method: "GET",
       config: {
         ...(config || {}),
         url,
@@ -113,7 +113,7 @@ class HttpClient {
 
   post = <T>({ url, config, data }: PostRequestParams): BaseApiResponse<T> => {
     return this.fetchApi<T>({
-      method: 'POST',
+      method: "POST",
 
       config: {
         ...(config || {}),
@@ -125,7 +125,7 @@ class HttpClient {
 
   patch = <T>({ url, config, data }: PostRequestParams): BaseApiResponse<T> => {
     return this.fetchApi<T>({
-      method: 'PATCH',
+      method: "PATCH",
 
       config: {
         ...(config || {}),
@@ -137,7 +137,7 @@ class HttpClient {
 
   put = <T>({ url, config, data }: PostRequestParams): BaseApiResponse<T> => {
     return this.fetchApi<T>({
-      method: 'PUT',
+      method: "PUT",
 
       config: {
         ...(config || {}),
@@ -153,7 +153,7 @@ class HttpClient {
     params,
   }: GetRequestParams): BaseApiResponse<T> => {
     return this.fetchApi<T>({
-      method: 'DELETE',
+      method: "DELETE",
 
       config: {
         ...(config || {}),
@@ -165,13 +165,13 @@ class HttpClient {
 }
 
 const showErrorMessage = (m: string) => {
-  console.log('error message', m);
+  console.log("error message", m);
 };
 
 export const handleError = (error: AxiosError<{ message: string }>) => {
   const msg = error.response?.data?.message;
   showErrorMessage(
-    msg || error.message || 'Something went wrong, please try again',
+    msg || error.message || "Something went wrong, please try again",
   );
 
   // TODO captureException
@@ -199,7 +199,7 @@ export const handleError = (error: AxiosError<{ message: string }>) => {
 
 const createAxios = (config: AxiosRequestConfig) => {
   const axiosInstance = axios.create({
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
 
     ...config,
   });
@@ -209,7 +209,7 @@ const createAxios = (config: AxiosRequestConfig) => {
     async function (config) {
       // Do something before request is sent
 
-      if (config.url?.startsWith('/')) {
+      if (config.url?.startsWith("/")) {
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
         config.url = API_URL + config.url;
