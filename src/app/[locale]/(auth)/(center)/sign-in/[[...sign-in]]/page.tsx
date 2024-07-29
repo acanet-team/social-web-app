@@ -1,31 +1,45 @@
-'use client';
+"use client";
 
-import type { NextPage } from 'next';
-import { signIn } from 'next-auth/react';
-import useAuthStore from '@/store/auth';
-import { useEffect } from 'react';
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import Button from '@/app/components/Button';
-import { getMe } from '@/api/auth';
+import { getMe } from "@/api/auth";
+import { useAccessTokenStore } from "@/store/accessToken";
+import useAuthStore from "@/store/auth";
+import { getLocalStorage } from "@/utils/local-storage";
+import type { NextPage } from "next";
+import { signIn, useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const LoginPage: NextPage = () => {
-  // useEffect(() => {
-  //   if (session) {
-  //     login(null, session);
-  //   }
-  // }, [session, login]);
+  const t = useTranslations("SignIn");
+  const [curTheme, setCurTheme] = useState("theme-dark");
+  const { data: session } = useSession() as any;
+  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
+  const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => getMe().then(), 5000);
+    const handleStorageChange = () => {
+      const theme = getLocalStorage("theme");
+      setCurTheme(theme);
+      console.log(theme);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  const t = useTranslations('SignIn');
-
-  const onSignIn = async (provider: 'facebook' | 'google') => {
-    const res = await signIn(provider, { redirect: false });
-    console.log('acanet', res);
-  };
+  useEffect(() => {
+    if (session) {
+      setAccessToken(session.token);
+      if (!session.isProfile) {
+        router.push("/account");
+      } else {
+        router.push("/");
+      }
+    }
+  }, [session, setAccessToken]);
 
   return (
     <div className="main-wrap">
@@ -37,8 +51,18 @@ const LoginPage: NextPage = () => {
               id="site-logo"
               className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"
             >
-              Acanet.{' '}
-            </span>{' '}
+              <Image
+                src={
+                  curTheme === "theme-dark"
+                    ? "/assets/images/logo/logo-horizontal-white.png"
+                    : "/assets/images/logo/logo-horizontal-dark.png"
+                }
+                width={220}
+                height={60}
+                style={{ width: "auto", height: "60px" }}
+                alt="logo"
+              />
+            </span>
           </a>
           <button
             className="nav-menu me-0 ms-auto"
@@ -59,8 +83,8 @@ const LoginPage: NextPage = () => {
           <div className="card login-card me-auto ms-auto border-0 shadow-none">
             <div className="card-body rounded-0 text-left">
               <h2 className="fw-700 display1-size display2-md-size mb-3">
-                {t('sign_in_with')} <br />
-                {t('your_social_account')}
+                {t("sign_in_with")} <br />
+                {t("your_social_account")}
               </h2>
               <div className="col-sm-12 mt-2 p-0 text-center">
                 <div className="form-group mb-1">
@@ -69,7 +93,7 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Google"
                     title="Sign in with Google"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
-                    onClick={() => onSignIn('google')}
+                    onClick={() => signIn("google")}
                   >
                     <Image
                       width={40}
@@ -77,8 +101,8 @@ const LoginPage: NextPage = () => {
                       src="/assets/images/icon-1.png"
                       alt="icon"
                       className="w40 mb-1 me-5 ms-2"
-                    />{' '}
-                    {t('sign_in_with_google')}
+                    />{" "}
+                    {t("sign_in_with_google")}
                   </button>
                 </div>
                 <div className="form-group mb-1">
@@ -87,7 +111,7 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Facebook"
                     title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-facebook border-0 p-0 text-left text-white "
-                    onClick={() => onSignIn('facebook')}
+                    onClick={() => signIn("facebook")}
                   >
                     <Image
                       src="/assets/images/icon-3.png"
@@ -95,8 +119,8 @@ const LoginPage: NextPage = () => {
                       width={40}
                       height={40}
                       className="w40 mb-1 me-5 ms-2"
-                    />{' '}
-                    {t('sign_in_with_facebook')}
+                    />{" "}
+                    {t("sign_in_with_facebook")}
                   </button>
                 </div>
               </div>
