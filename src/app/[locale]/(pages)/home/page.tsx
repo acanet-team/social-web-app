@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import Appfooter from "@/app/components/Appfooter";
-import Createpost from "@/app/components/Createpost";
+import CreatePost from "@/app/components/Createpost";
 import Memberslider from "@/app/components/Memberslider";
 import Friendsilder from "@/app/components/Friendsilder";
 import Storyslider from "@/app/components/TopBrokers";
@@ -15,6 +15,8 @@ import Layout from "../layout";
 import Link from "next/link";
 import Popupchat from "../../../components/Popupchat";
 import Contacts from "@/app/components/Contacts";
+import { useTranslations } from "next-intl";
+import useAuthStore from "@/store/auth";
 
 export default function Home() {
   const [posts, setPosts] = useState<Object[]>([]);
@@ -27,11 +29,13 @@ export default function Home() {
     console.log("fetching suggestion feed");
     // setPosts()
   };
-
+const tCreatePost = useTranslations("CreatePost");
   useEffect(() => {
     // Fetch for-you feed
     // setPosts()
   }, []);
+
+  const { email, nickName, photo } = useAuthStore((state: any) => state.user);
   return (
     <Layout>
       <div className="main-content right-chat-active" id={styles.home}>
@@ -43,20 +47,24 @@ export default function Home() {
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
                     href="/home?tab=you"
-                    onClick={onClickForYouHandler}
-                  >
+                    onClick={onClickForYouHandler}>
                     For you
                   </NavLink>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
                     href="/home?tab=sugesstion"
-                    onClick={onClickSuggestionHandler}
-                  >
+                    onClick={onClickSuggestionHandler}>
                     Suggestion
                   </NavLink>
                 </div>
                 <Storyslider />
-                <Createpost />
+                <CreatePost
+                  placeholder={tCreatePost("Whats_on_your_mind")}
+                  avatarUrl={photo}
+                  liveVideo={tCreatePost("live_Video")}
+                  photoVideo={tCreatePost("Photo_Video")}
+                  createPost={tCreatePost("create_Post")}
+                />
                 <Postview
                   id="32"
                   postvideo=""

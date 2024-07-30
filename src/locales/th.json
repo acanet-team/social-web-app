@@ -4,5 +4,11 @@
     "sign_in_with_facebook": "เข้าสู่ระบบด้วย Facebook",
     "your_social_account": "บัญชีโซเชียลของคุณ",
     "sign_in_with": "เข้าสู่ระบบด้วย"
+  },
+  "CreatePost": {
+    "live_Video": "วิดีโอสด",
+    "create_Post": "สร้างโพสต์",
+    "Photo_Video": "ภาพถ่าย/วิดีโอ",
+    "Whats_on_your_mind": "คุณกำลังคิดอะไรอยู่?"
   }
 }

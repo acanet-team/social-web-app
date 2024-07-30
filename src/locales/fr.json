@@ -71,5 +71,11 @@
     "dashboard_link": "Tableau de bord",
     "user_profile_link": "Gérer votre compte",
     "sign_out": "Se déconnecter"
+  },
+  "CreatePost": {
+    "live_Video": "Vidéo en direct",
+    "create_Post": "Créer un message",
+    "Photo_Video": "Photo/Vidéo",
+    "Whats_on_your_mind": "Qu'est-ce qui préoccupe votre esprit?"
   }
 }

@@ -4,5 +4,11 @@
     "sign_in_with_facebook": "Đăng nhập bằng facebook",
     "your_social_account": "tài khoản xã hội của bạn",
     "sign_in_with": "Đăng nhập bằng"
+  },
+  "CreatePost": {
+    "live_Video": "Video trực tiếp",
+    "create_Post": "Tạo bài đăng",
+    "Photo_Video": "Ảnh/Video",
+    "Whats_on_your_mind": "Bạn đang nghĩ gì vậy?"
   }
 }

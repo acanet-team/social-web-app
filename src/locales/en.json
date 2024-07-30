@@ -82,5 +82,11 @@
   },
   "TopBrokers": {
     "top_broker_title": "Top Brokers"
+  },
+  "CreatePost": {
+    "Whats_on_your_mind": "What's on your mind?",
+    "Photo_Video": "Photo/Video",
+    "live_Video": "Live Video",
+    "create_Post": "Create Post"
   }
 }
