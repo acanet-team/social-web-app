@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import Image from 'next/image';
+import React, { Component, Fragment } from "react";
+import Image from "next/image";
 
 class Register extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -11,7 +11,7 @@ class Register extends Component {
             <div className="nav-top w-100">
               <a
                 href="/"
-                className="d-flex justify-content-center align-items-center"
+                className="d-flex justify-content-start align-items-center"
               >
                 <span
                   id="site-logo"
@@ -20,11 +20,11 @@ class Register extends Component {
                   <Image
                     src="/assets/images/logo/logo-horizontal-white.png"
                     width={220}
-                    height={60}
-                    style={{ width: 'auto', height: '60px' }}
+                    height={55}
+                    style={{ width: "auto", height: "55px" }}
                     alt="logo"
                   />
-                </span>{' '}
+                </span>{" "}
               </a>
               <button className="nav-menu me-0 ms-auto"></button>
 
@@ -112,7 +112,7 @@ class Register extends Component {
                       </a>
                     </div>
                     <h6 className="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">
-                      Already have account{' '}
+                      Already have account{" "}
                       <a href="/login" className="fw-700 ms-1">
                         Login
                       </a>

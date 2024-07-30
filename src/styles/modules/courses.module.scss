@@ -8,7 +8,9 @@
   display: flex;
   direction: row;
   align-items: center;
+  justify-content: left;
   gap: 8px;
+  margin-bottom: 4px;
 }
 .group-child {
   display: flex;
@@ -44,4 +46,38 @@
   max-height: 3em; 
   line-height: 1.5em;
   font-size: font-xss;
+}
+.bgCard {
+  border-radius: 12px;
+  border: 1px solid #FFFFFF4D
+}
+.dropdown-button {
+  border-bottom: 1px solid #ffffff4d;
+  border-top: 1px solid #ffffff4d;
+  display: flex;
+  direction: row;
+  align-items: center;
+  justify-content:space-between;
+}
+.group-label {
+  display: flex;
+  direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.group-child-label {
+  display: flex;
+  direction: row;
+  align-items: center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+.group-price-ba {
+  display: flex;
+  direction: row;
+  align-items: start;
+  gap: 16px;
+}
+.time-discount {
+  color: #F53D49 !important;
 }

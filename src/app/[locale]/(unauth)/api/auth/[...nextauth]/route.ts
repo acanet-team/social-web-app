@@ -1,26 +1,26 @@
-import 'dotenv/config';
+import "dotenv/config";
 
-import { cookies } from 'next/headers';
-import type { NextAuthOptions } from 'next-auth';
-import NextAuth from 'next-auth';
-import FacebookProvider from 'next-auth/providers/facebook';
-import GoogleProvider from 'next-auth/providers/google';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { cookies } from "next/headers";
+import type { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
+import FacebookProvider from "next-auth/providers/facebook";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-import httpClient from '@/api';
-import { removePropertiesEmpty } from '@/utils/Helpers';
-import { getMe } from '@/api/auth';
-import { User } from '@clerk/nextjs/server';
+import httpClient from "@/api";
+import { removePropertiesEmpty } from "@/utils/Helpers";
+import { getMe } from "@/api/auth";
+import { User } from "@clerk/nextjs/server";
 
 const options: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID ?? '',
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? '',
+      clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
     }),
   ],
   secret: process.env.NEXT_AUTH_SECRET,
@@ -30,10 +30,10 @@ const options: NextAuthOptions = {
 
       const data: { accessToken?: string; idToken?: string } = {};
 
-      if (account?.provider === 'google') {
+      if (account?.provider === "google") {
         data.idToken = account.id_token;
       }
-      if (account?.provider === 'facebook') {
+      if (account?.provider === "facebook") {
         data.accessToken = account.access_token;
       }
 
@@ -46,8 +46,8 @@ const options: NextAuthOptions = {
           data: removePropertiesEmpty(data),
         });
 
-        cookies().set('acanet_token', res.token, {
-          path: '/', // Set path to '/' to send cookie in all requests
+        cookies().set("acanet_token", res.token, {
+          path: "/", // Set path to '/' to send cookie in all requests
           maxAge: 30 * 24 * 60 * 60, // 30 days
           // domain: process.env.NEXT_PUBLIC_API_DOMAIN,
           httpOnly: false,
@@ -62,9 +62,9 @@ const options: NextAuthOptions = {
   },
 
   pages: {
-    signIn: '/sign-in',
-    signOut: '/sign-out',
-    error: '/error',
+    signIn: "/sign-in",
+    signOut: "/sign-out",
+    error: "/error",
   },
 };
 

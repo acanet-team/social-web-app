@@ -37,7 +37,6 @@
   .h6,
   label,
   input,
-  p,
   fieldset {
     color: #fff !important;
   }
@@ -49,8 +48,8 @@
   }
   button {
     color: var(--theme-color-shade) !important;
-    background-color: #fff !important;
-    border: 1px solid var(--theme-color-shade) !important;
+    background-color: #fff;
+    border: 1px solid var(--theme-color-shade);
   } 
   .theme-btn {
     color: #fff;
@@ -152,6 +151,9 @@
 }
 .text-yellow {
   color: #ffde00 !important;
+}
+.text-blue {
+  color: #2A66F4 !important;
 }
 
 .bg-black-08 {

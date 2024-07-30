@@ -93,6 +93,8 @@
 	    width: 100%;
       height: 100%;
 	    padding: 20px 0px 10px 0px;
+      display: flex;
+      flex-direction: column;
 	    
 	    @include media-breakpoint-up(xl) {
 	    	@include webkit-box();

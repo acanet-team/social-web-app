@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import type { NextPage } from 'next';
-import { signIn, useSession } from 'next-auth/react';
-import useAuthStore from '@/store/auth';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { getLocalStorage } from '@/utils/local-storage';
+import type { NextPage } from "next";
+import { signIn, useSession } from "next-auth/react";
+import useAuthStore from "@/store/auth";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { getLocalStorage } from "@/utils/local-storage";
 
 const LoginPage: NextPage = () => {
-  const t = useTranslations('SignIn');
+  const t = useTranslations("SignIn");
   const login = useAuthStore((state: any) => state.login);
-  const [curTheme, setTheme] = useState();
+  const [curTheme, setCurTheme] = useState("theme-dark");
   const { data: session } = useSession();
   useEffect(() => {
     if (session) {
@@ -20,9 +20,16 @@ const LoginPage: NextPage = () => {
   }, [session, login]);
 
   useEffect(() => {
-    const theme = getLocalStorage('theme');
-    setTheme(theme);
-  }, [curTheme]);
+    const handleStorageChange = () => {
+      const theme = getLocalStorage("theme");
+      setCurTheme(theme);
+      console.log(theme);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <div className="main-wrap">
@@ -38,13 +45,13 @@ const LoginPage: NextPage = () => {
             >
               <Image
                 src={
-                  curTheme === 'dark-theme'
-                    ? '/assets/aegims/logo/logo-horizontal-white.png'
-                    : '/assets/aegims/logo/logo-horizontal-dark.png'
+                  curTheme === "theme-dark"
+                    ? "/assets/images/logo/logo-horizontal-white.png"
+                    : "/assets/images/logo/logo-horizontal-dark.png"
                 }
                 width={220}
                 height={60}
-                style={{ width: 'auto', height: '60px' }}
+                style={{ width: "auto", height: "60px" }}
                 alt="logo"
               />
             </span>
@@ -68,8 +75,8 @@ const LoginPage: NextPage = () => {
           <div className="card login-card me-auto ms-auto border-0 shadow-none">
             <div className="card-body rounded-0 text-left">
               <h2 className="fw-700 display1-size display2-md-size mb-3">
-                {t('sign_in_with')} <br />
-                {t('your_social_account')}
+                {t("sign_in_with")} <br />
+                {t("your_social_account")}
               </h2>
               <div className="col-sm-12 mt-2 p-0 text-center">
                 <div className="form-group mb-1">
@@ -78,7 +85,7 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Google"
                     title="Sign in with Google"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
-                    onClick={() => signIn('google')}
+                    onClick={() => signIn("google")}
                   >
                     <Image
                       width={40}
@@ -86,8 +93,8 @@ const LoginPage: NextPage = () => {
                       src="/assets/images/icon-1.png"
                       alt="icon"
                       className="w40 mb-1 me-5 ms-2"
-                    />{' '}
-                    {t('sign_in_with_google')}
+                    />{" "}
+                    {t("sign_in_with_google")}
                   </button>
                 </div>
                 <div className="form-group mb-1">
@@ -96,7 +103,7 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Facebook"
                     title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
-                    onClick={() => signIn('facebook')}
+                    onClick={() => signIn("facebook")}
                   >
                     <Image
                       src="/assets/images/icon-3.png"
@@ -104,8 +111,8 @@ const LoginPage: NextPage = () => {
                       width={40}
                       height={40}
                       className="w40 mb-1 me-5 ms-2"
-                    />{' '}
-                    {t('sign_in_with_facebook')}
+                    />{" "}
+                    {t("sign_in_with_facebook")}
                   </button>
                 </div>
               </div>

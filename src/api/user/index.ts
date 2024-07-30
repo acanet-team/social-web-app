@@ -1,29 +1,49 @@
-import type { ZodNumber } from 'zod';
-import httpClient from '../index';
+import httpClient from "../index";
 
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJpbnZlc3RvciIsIl9fZW50aXR5IjoiUm9sZUVudGl0eSJ9LCJzZXNzaW9uSWQiOjI1NywiaWF0IjoxNzIxNzk0ODAyLCJleHAiOjE3MjIzOTk2MDJ9.L4QVbAQIoovogrIY3JJawT3XKToxwYr8UJp0IwwSpGI";
 export const createProfileRequest = (values: any) => {
   return httpClient.post({
-    url: '/v1/user-profile',
+    url: "/v1/user-profile",
     data: values,
+    config: {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
   });
 };
 
 export const createGetBrokersRequest = (page: number, take: number) => {
   return httpClient.get({
-    url: `/v1/users?type='broker'&page=${page}&take=${take}`,
+    url: `/v1/users?type=broker&page=${page}&take=${take}`,
+    config: {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
   });
 };
 
 export const createGetAllTopicsRequest = (page: number, take: number) => {
   return httpClient.get({
     url: `/v1/interest-topic?page=${page}&take=${take}&sort={"orderBy":"topic_name","order":"ASC"}`,
+    config: {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
   });
-  // try {
-  //   const res = await httpClient.get({
-  //     url: `/v1/interest-topic?page=${page}&take=${take}&sort={"orderBy":"topic_name","order":"ASC"}`,
-  //   });
-  //   return res;
-  // } catch (err) {
-  //   console.log(err);
-  // }
+};
+
+export const subscribeTopicsRequest = (values: string[]) => {
+  return httpClient.post({
+    url: "/v1/interest-topic/subscribe",
+    data: { interestTopicIds: values },
+    config: {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
+  });
 };
