@@ -1,71 +1,71 @@
-import React, { Component, Fragment } from 'react';
-import Slider from 'react-slick';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Slider from "react-slick";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 const productList = [
   {
-    imageUrl: 'product.png',
-    name: 'Textured Sleeveless Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Textured Sleeveless Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Adjustable Shoulder Straps',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Adjustable Shoulder Straps",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Neck Strappy Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Neck Strappy Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Scoop-Neck Strappy',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Scoop-Neck Strappy",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Textured Sleeveless Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Textured Sleeveless Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Adjustable Shoulder Straps',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Adjustable Shoulder Straps",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Neck Strappy Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Neck Strappy Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Scoop-Neck Strappy',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Scoop-Neck Strappy",
+    price: "449",
   },
 ];
 
@@ -109,7 +109,7 @@ class ShopTwo extends Component {
                                     TRENDING
                                   </h4>
                                   <h2 className="fw-300 display1-size display2-md-size lh-2 text-grey-900">
-                                    New Arrival Buds <br />{' '}
+                                    New Arrival Buds <br />{" "}
                                     <b className="fw-700">Collection</b>
                                   </h2>
                                   <p className="fw-500 text-grey-500 lh-26 font-xssss pe-lg-5">
@@ -146,7 +146,7 @@ class ShopTwo extends Component {
                                     TRENDING
                                   </h4>
                                   <h2 className="fw-300 display1-size display2-md-size lh-2 text-white">
-                                    New Arrival Buds <br />{' '}
+                                    New Arrival Buds <br />{" "}
                                     <b className="fw-700">Collection</b>
                                   </h2>
                                   <p className="fw-500 text-grey-100 lh-26 font-xssss pe-lg-5">

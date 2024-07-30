@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Cart extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -24,7 +24,7 @@ class Cart extends Component {
                       <div className="card p-md-5 p-4 bg-primary-gradiant rounded-3 shadow-xss bg-pattern border-0 overflow-hidden">
                         <div className="bg-pattern-div"></div>
                         <h2 className="display2-size display2-md-size fw-700 text-white mb-0 mt-0">
-                          Cart{' '}
+                          Cart{" "}
                           <span className="fw-700 ls-3 text-grey-200 font-xsssss mt-2 d-block">
                             4 PRODUCT FOUND
                           </span>
@@ -119,7 +119,7 @@ class Cart extends Component {
                                     href="/cart"
                                     className="text-grey-900 fw-600 font-xsss"
                                   >
-                                    {' '}
+                                    {" "}
                                     Jogging trousers
                                   </a>
                                 </h3>
@@ -175,7 +175,7 @@ class Cart extends Component {
                                     href="/cart"
                                     className="text-grey-900 fw-600 font-xsss"
                                   >
-                                    {' '}
+                                    {" "}
                                     Grey blue leather backpack
                                   </a>
                                 </h3>

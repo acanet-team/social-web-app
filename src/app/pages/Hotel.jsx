@@ -1,56 +1,56 @@
-import React, { Component, Fragment } from 'react';
-import GoogleMapReact from 'google-map-react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Pagetitle from '../components/Pagetitle';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import GoogleMapReact from "google-map-react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Pagetitle from "../components/Pagetitle";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const hotelList = [
   {
-    imageUrl: 'product.png',
-    title: 'Montana Hotel',
-    location: '323 Geldenfe Ave Park, Flodia City',
-    price: '320',
-    feature: 'feature',
+    imageUrl: "product.png",
+    title: "Montana Hotel",
+    location: "323 Geldenfe Ave Park, Flodia City",
+    price: "320",
+    feature: "feature",
   },
   {
-    imageUrl: 'product.png',
-    title: 'Himalayan Wind Horse',
-    location: '323 Geldenfe Ave Park, Flodia City',
-    price: '140',
-    feature: '',
+    imageUrl: "product.png",
+    title: "Himalayan Wind Horse",
+    location: "323 Geldenfe Ave Park, Flodia City",
+    price: "140",
+    feature: "",
   },
   {
-    imageUrl: 'product.png',
-    title: 'Hotel Sonar Bangla',
-    location: '323 Geldenfe Ave Park, Flodia City',
-    price: '160',
-    feature: 'feature',
+    imageUrl: "product.png",
+    title: "Hotel Sonar Bangla",
+    location: "323 Geldenfe Ave Park, Flodia City",
+    price: "160",
+    feature: "feature",
   },
   {
-    imageUrl: 'product.png',
-    title: 'House Pool Party',
-    location: '323 Geldenfe Ave Park, Flodia City',
-    price: '350',
-    feature: 'feature',
+    imageUrl: "product.png",
+    title: "House Pool Party",
+    location: "323 Geldenfe Ave Park, Flodia City",
+    price: "350",
+    feature: "feature",
   },
   {
-    imageUrl: 'product.png',
-    title: 'Silver Star Boutique',
-    location: '323 Geldenfe Ave Park, Flodia City',
-    price: '520',
-    feature: '',
+    imageUrl: "product.png",
+    title: "Silver Star Boutique",
+    location: "323 Geldenfe Ave Park, Flodia City",
+    price: "520",
+    feature: "",
   },
   {
-    imageUrl: 'product.png',
-    title: 'Crown Retreat Hotel',
-    location: '323 Geldenfe Ave Park, Flodia City',
-    price: '99',
-    feature: 'feature',
+    imageUrl: "product.png",
+    title: "Crown Retreat Hotel",
+    location: "323 Geldenfe Ave Park, Flodia City",
+    price: "99",
+    feature: "feature",
   },
 ];
 
@@ -74,7 +74,7 @@ class Hotel extends Component {
           <div className="middle-sidebar-bottom">
             <div
               className="middle-sidebar-left pe-0"
-              style={{ maxWidth: '100%' }}
+              style={{ maxWidth: "100%" }}
             >
               <div className="row">
                 <div className="col-xl-6 chat-left scroll-bar">
@@ -91,7 +91,7 @@ class Hotel extends Component {
                               Featured
                             </span>
                           ) : (
-                            ''
+                            ""
                           )}
                           <div className="card-image w-100 mb-3">
                             <a
@@ -116,7 +116,7 @@ class Hotel extends Component {
                               </a>
                             </h4>
                             <h6 className="font-xsssss text-grey-500 fw-600 mt-0 mb-2">
-                              {' '}
+                              {" "}
                               {value.location}
                             </h6>
                             <div className="star d-block w-100 text-left mt-0">
@@ -148,24 +148,24 @@ class Hotel extends Component {
                             </div>
                             <div className="mt-4 w-100"></div>
                             <h5 className="mt-3 d-inline-block font-xssss fw-600 text-grey-500 me-2">
-                              <i className="btn-round-sm bg-greylight ti-ruler-pencil text-grey-500 me-1"></i>{' '}
+                              <i className="btn-round-sm bg-greylight ti-ruler-pencil text-grey-500 me-1"></i>{" "}
                               200 sq
                             </h5>
                             <h5 className="mt-3 d-inline-block font-xssss fw-600 text-grey-500 me-2">
-                              <i className="btn-round-sm bg-greylight ti-rss-alt text-grey-500 me-1"></i>{' '}
+                              <i className="btn-round-sm bg-greylight ti-rss-alt text-grey-500 me-1"></i>{" "}
                               WiFi
                             </h5>
                             <h5 className="mt-3 d-inline-block font-xssss fw-600 text-grey-500">
-                              <i className="btn-round-sm bg-greylight ti-credit-card text-grey-500 me-1"></i>{' '}
+                              <i className="btn-round-sm bg-greylight ti-credit-card text-grey-500 me-1"></i>{" "}
                               Card
                             </h5>
                             <div className="clearfix"></div>
                             <span className="font-lg fw-700 mt-0 pe-3 ls-2 lh-32 d-inline-block text-success float-left">
-                              <span className="font-xsssss">$</span>{' '}
-                              {value.price}{' '}
+                              <span className="font-xsssss">$</span>{" "}
+                              {value.price}{" "}
                               <span className="font-xsssss text-grey-500">
                                 / mo
-                              </span>{' '}
+                              </span>{" "}
                             </span>
                             <a
                               href="/defaulthoteldetails"
@@ -182,7 +182,7 @@ class Hotel extends Component {
 
                 <div className="col-xl-6 ps-0 d-none d-xl-block">
                   <div className="card w-100 border-0 shadow-none rounded-3 border-0 mb-4 overflow-hidden ">
-                    <div style={{ height: '86vh', width: '100%' }}>
+                    <div style={{ height: "86vh", width: "100%" }}>
                       <GoogleMapReact
                         defaultCenter={this.props.center}
                         defaultZoom={this.props.zoom}

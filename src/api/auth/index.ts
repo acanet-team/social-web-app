@@ -1,11 +1,5 @@
-import httpClient from '../index';
-
-export const logout = () => {
-  httpClient.get({ url: 'auth/logout' });
-};
+import httpClient from "../index";
 
 export const getMe = () => {
-  return httpClient.get({
-    url: '/v1/auth/me',
-  });
+  return httpClient.get("/v1/auth/me");
 };

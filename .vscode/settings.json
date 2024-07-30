@@ -40,6 +40,5 @@
   },
   "[css]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  },
-  "i18n-ally.sourceLanguage": "en"
+  }
 }

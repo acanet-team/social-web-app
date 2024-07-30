@@ -4,8 +4,10 @@
   "scripts": {
     "dev:spotlight": "spotlight-sidecar",
     "dev:next": "next dev",
-    "dev": "run-p dev:*",
-    "build": "next build",
+    "dev": "cp .env.dev .env && run-p dev:*",
+    "sit": "cp .env.sit .env && run-p dev:*",
+    "build": "cp .env.sit .env && next build",
+    "build:sit": "next build",
     "start": "next start",
     "build-stats": "cross-env ANALYZE=true npm run build",
     "clean": "rimraf .next .swc out coverage",

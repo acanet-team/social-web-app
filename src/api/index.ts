@@ -1,251 +1,188 @@
-import type { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
-import axios from "axios";
+import { useAccessTokenStore } from "@/store/accessToken";
 
-import type {
-  ApiRequestParams,
-  BaseApiResponse,
-  BaseResponse,
-  GetRequestParams,
-  PostRequestParams,
-} from "./model";
+interface IHttpOptions {
+  url: string;
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  body?: { [key: string]: unknown };
+  contentType?: "json" | "multi-form";
+  query?: { [key: string]: unknown };
+  headers?: Headers;
+  responseType?:
+    | "json"
+    | "text"
+    | "formData"
+    | "clone"
+    | "blob"
+    | "arrayBuffer";
+  credentials?: "omit" | "same-origin" | "include";
+  timeout?: number;
+  retry?: number;
+  returnRaw?: boolean;
+  rawError?: boolean;
+  autoQuery?: boolean;
+}
 
 class HttpClient {
-  instance: AxiosInstance;
+  fetch = async <T>(config: IHttpOptions): Promise<T> => {
+    const {
+      method,
+      body,
+      contentType = "json",
+      responseType = "json",
+      headers: headersInit,
+      url: originUrl,
+      credentials = "same-origin",
+      timeout = 0,
+      retry = 0,
+      rawError = true,
+      /**
+       * @deprecated This param has no effect on avoiding stateful service on SSR. Consumers need to explicitly pass their hostname and language
+       */
+      // eslint-disable-next-line
+      autoQuery = false,
+    } = config;
+    const headers = !headersInit ? new Headers() : headersInit;
+    let url: string = "";
+    if (originUrl.startsWith("/")) {
+      url = process.env.NEXT_PUBLIC_API_URL + originUrl;
+    } else {
+      url = originUrl;
+    }
 
-  isCheckAuth = true;
+    if (typeof config.query === "object") {
+      let q = "";
+      Object.entries(config.query).forEach(([key, value]) => {
+        q = q ? q + `&${key}=${value}` : `?${key}=${value}`;
+      });
+      url += q;
+    }
 
-  isKeepRequest = false;
-
-  requestInstance: {
-    [key: string]: AbortController;
-  } = {};
-
-  constructor(config: AxiosRequestConfig) {
-    this.instance = createAxios(config);
-  }
-
-  initTokenCancel = (
-    requestId: string,
-    abortInstance: AbortController,
-  ): void => {
-    this.requestInstance[requestId] = abortInstance;
-  };
-
-  // Cancel request
-
-  cancelRequest = (requestId: string, isTimeoutCancel?: boolean) => {
-    console.log(`cancelRequest from ${requestId}`);
-    console.log("requestId", this.requestInstance[requestId]);
-    if (this.requestInstance[requestId]) {
-      this.requestInstance[requestId]?.abort();
-
-      delete this.requestInstance[requestId];
-
-      if (isTimeoutCancel) {
-        showErrorMessage("Request Timeout!");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formData =
+      contentType === "multi-form" ? new FormData() : (null as any);
+    if (contentType === "multi-form" && body) {
+      Object.keys(body).forEach((key) => {
+        if (body[key] !== null) {
+          formData.append(key, body[key]);
+        }
+      });
+    } else {
+      if (!headers.get("Accept")) {
+        headers.append("Accept", "application/json");
+      }
+      if (!headers.get("Content-Type")) {
+        headers.append("Content-Type", "application/json");
       }
     }
-  };
 
-  fetchApi = <T>({ method, config }: ApiRequestParams): BaseApiResponse<T> => {
-    const {
-      url = "",
-      isKeepRequest = this.isKeepRequest,
-      headers: customHeaders = {},
-      isHandleError = true,
-      requestId = `${url}-${new Date().getTime()}`,
-      ...otherConfig
-    } = config;
+    const accessToken = useAccessTokenStore.getState().accessToken;
+    if (accessToken) {
+      headers.append("Authorization", `Bearer ${accessToken}`);
+    }
 
-    const timeout = process.env.NEXT_PUBLIC_REQUEST_TIMEOUT;
-
+    const reqOptions: Pick<IHttpOptions, "method" | "headers"> & {
+      body?: string | FormData;
+    } = {
+      method,
+      headers,
+    };
+    if (contentType === "multi-form") {
+      reqOptions.body = formData;
+    } else if (typeof body === "object") {
+      reqOptions.body = JSON.stringify(body);
+    }
+    const requestTimeout = timeout
+      ? timeout
+      : Number(process.env.NEXT_PUBLIC_REQUEST_TIMEOUT);
     const controller = new AbortController();
-    this.initTokenCancel(requestId, controller);
-    const cancelTimeout = isKeepRequest
-      ? null
-      : setTimeout(() => {
-          this.cancelRequest(requestId, true);
-        }, Number(timeout));
-
-    return new Promise((resolve, reject) => {
-      this.instance
-        .request<BaseResponse<T>>({
-          method,
-          url,
-          headers: customHeaders,
-          signal: controller.signal,
-          //withCredentials: true,
-          ...otherConfig,
-        })
-        .then((response) => {
-          resolve(response.data as never);
-        })
-
-        .catch((err) => {
-          if (err.code !== "ERR_CANCELED" && isHandleError) {
-            handleError(err);
-          }
-          reject(err);
-        })
-
-        .finally(() => {
-          if (this.requestInstance[requestId]) {
-            delete this.requestInstance[requestId];
-          }
-
-          if (cancelTimeout) {
-            clearTimeout(cancelTimeout);
-          }
-        });
-    });
+    const timeoutId = setTimeout(() => controller.abort(), requestTimeout);
+    return fetch(url, {
+      ...reqOptions,
+      credentials,
+      signal: controller.signal,
+    })
+      .then(async (res) => {
+        if (res.status === 202) {
+          return res;
+        }
+        if (res.status === 204) {
+          return null;
+        }
+        if (rawError && res.status === 401) {
+          return Promise.reject(res);
+        }
+        const result = await res[responseType]();
+        if (res.ok) {
+          return result;
+        }
+        if (retry > 0) {
+          return this.fetch({ ...config, retry: retry - 1 });
+        }
+        if (rawError) {
+          return Promise.reject({ ...result, statusCode: res.status });
+        }
+        // TODO handle error
+        throw new Error(result.message || "Something went wrong", {});
+      })
+      .catch((error) => {
+        // TODO handle error
+        throw error;
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
+      });
   };
 
-  get = <T>({ url, config, params }: GetRequestParams): BaseApiResponse<T> => {
-    return this.fetchApi<T>({
-      method: "GET",
-      config: {
-        ...(config || {}),
-        url,
-        params,
-      },
-    });
+  get = <T>(
+    url: string,
+    options?: Omit<IHttpOptions, "url" | "method" | "body" | "contentType">,
+  ) => {
+    return this.fetch<T>({ ...options, method: "GET", url } as IHttpOptions);
   };
 
-  post = <T>({ url, config, data }: PostRequestParams): BaseApiResponse<T> => {
-    return this.fetchApi<T>({
+  post = <_U, T>(
+    url: string,
+    body: any,
+    options?: Omit<IHttpOptions, "url" | "method" | "body">,
+  ) => {
+    return this.fetch<T>({
+      ...options,
       method: "POST",
-
-      config: {
-        ...(config || {}),
-        url,
-        data,
-      },
-    });
+      url,
+      body,
+    } as IHttpOptions);
   };
 
-  patch = <T>({ url, config, data }: PostRequestParams): BaseApiResponse<T> => {
-    return this.fetchApi<T>({
-      method: "PATCH",
-
-      config: {
-        ...(config || {}),
-        url,
-        data,
-      },
-    });
-  };
-
-  put = <T>({ url, config, data }: PostRequestParams): BaseApiResponse<T> => {
-    return this.fetchApi<T>({
+  put = <U, T>(
+    url: string,
+    body: U,
+    options?: Omit<IHttpOptions, "url" | "method" | "body">,
+  ) => {
+    return this.fetch<T>({
+      ...options,
       method: "PUT",
-
-      config: {
-        ...(config || {}),
-        url,
-        data,
-      },
-    });
+      url,
+      body,
+    } as IHttpOptions);
   };
 
-  delete = <T>({
-    url,
-    config,
-    params,
-  }: GetRequestParams): BaseApiResponse<T> => {
-    return this.fetchApi<T>({
-      method: "DELETE",
+  patch = <U, T>(
+    url: string,
+    body: U,
+    options?: Omit<IHttpOptions, "url" | "method" | "body">,
+  ) => {
+    return this.fetch<T>({
+      ...options,
+      method: "PATCH",
+      url,
+      body,
+    } as IHttpOptions);
+  };
 
-      config: {
-        ...(config || {}),
-        url,
-        params,
-      },
-    });
+  delete = <T>(url: string, options: Omit<IHttpOptions, "method" | "url">) => {
+    return this.fetch<T>({ ...options, method: "DELETE", url } as IHttpOptions);
   };
 }
 
-const showErrorMessage = (m: string) => {
-  console.log("error message", m);
-};
-
-export const handleError = (error: AxiosError<{ message: string }>) => {
-  const msg = error.response?.data?.message;
-  showErrorMessage(
-    msg || error.message || "Something went wrong, please try again",
-  );
-
-  // TODO captureException
-
-  // if (error.response) {
-
-  //   // The request was made and the server responded with a status code
-
-  //   // that falls out of the range of 2xx
-
-  // } else if (error.request) {
-
-  //   // The request was made but no response was received
-
-  //   // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-
-  //   // http.ClientRequest in node.js
-
-  // } else {
-
-  //   // Something happened in setting up the request that triggered an Error
-
-  // }
-};
-
-const createAxios = (config: AxiosRequestConfig) => {
-  const axiosInstance = axios.create({
-    headers: { "Content-Type": "application/json" },
-
-    ...config,
-  });
-
-  axiosInstance.interceptors.request.use(
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    async function (config) {
-      // Do something before request is sent
-
-      if (config.url?.startsWith("/")) {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-        config.url = API_URL + config.url;
-      }
-
-      return config;
-    },
-
-    function (error) {
-      // Do something with request error
-
-      return Promise.reject(error);
-    },
-  );
-
-  axiosInstance.interceptors.response.use(
-    function (response) {
-      return response;
-    },
-
-    function (error) {
-      if (error.response?.status === 401) {
-        // TODO handle
-      }
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-
-      // Do something with response error
-
-      return Promise.reject(error);
-    },
-
-    { synchronous: true },
-  );
-
-  return axiosInstance;
-};
-
-const httpClient = new HttpClient({});
+const httpClient = new HttpClient();
 export default httpClient;

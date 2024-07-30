@@ -1,17 +1,17 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
-import Profiledetail from '../components/Profiledetail';
-import Profilephoto from '../components/Profilephoto';
-import ProfilecardOne from '../components/ProfilecardOne';
-import Createpost from '../components/Createpost';
-import Events from '../components/Events';
-import Postview from '../components/Postview';
-import Load from '../components/Load';
+import Profiledetail from "../components/Profiledetail";
+import Profilephoto from "../components/Profilephoto";
+import ProfilecardOne from "../components/ProfilecardOne";
+import Createpost from "../components/Createpost";
+import Events from "../components/Events";
+import Postview from "../components/Postview";
+import Load from "../components/Load";
 
 class Grouppage extends Component {
   // eslint-disable-next-line class-methods-use-this

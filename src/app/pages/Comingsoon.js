@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
 
 class Comingsoon extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -21,24 +21,24 @@ class Comingsoon extends Component {
                   <div className="card-body rounded-0 text-left pt-md-5  ps-0 pe-0">
                     <div className="timer w-100 mb-3 bg-grey-time">
                       <div className="time-count">
-                        <span className="text-time">04</span>{' '}
+                        <span className="text-time">04</span>{" "}
                         <span className="text-day">Day</span>
-                      </div>{' '}
+                      </div>{" "}
                       <div className="time-count">
-                        <span className="text-time">04</span>{' '}
-                        <span className="text-day">Hours</span>{' '}
-                      </div>{' '}
+                        <span className="text-time">04</span>{" "}
+                        <span className="text-day">Hours</span>{" "}
+                      </div>{" "}
                       <div className="time-count">
-                        <span className="text-time">39</span>{' '}
-                        <span className="text-day">Min</span>{' '}
-                      </div>{' '}
+                        <span className="text-time">39</span>{" "}
+                        <span className="text-day">Min</span>{" "}
+                      </div>{" "}
                       <div className="time-count">
-                        <span className="text-time">13</span>{' '}
-                        <span className="text-day">Sec</span>{' '}
-                      </div>{' '}
+                        <span className="text-time">13</span>{" "}
+                        <span className="text-day">Sec</span>{" "}
+                      </div>{" "}
                     </div>
                     <h2 className="fw-700 text-grey-900 display3-size display4-md-size lh-2">
-                      We&apos;re under{' '}
+                      We&apos;re under{" "}
                       <span className="text-primary">construction.</span> Check
                       back for an update soon.
                     </h2>

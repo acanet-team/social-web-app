@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
+import React, { Component, Fragment } from "react";
+import Link from "next/link";
 
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Payment extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -34,7 +34,7 @@ class Payment extends Component {
                       <div className="col-lg-5">
                         <div className="col-lg-12 ps-0">
                           <h4 className="mb-4 font-lg fw-700 mont-font mb-5">
-                            Saved Card{' '}
+                            Saved Card{" "}
                           </h4>
                         </div>
                         <div className="cleafrfix"></div>
@@ -61,7 +61,7 @@ class Payment extends Component {
                               </div>
                               <div className="card border-0 shadow-none p-0 bg-transparent-card text-left w-100 mt-auto">
                                 <h4 className="text-grey-900 font-sm fw-700 mont-font mb-3 text-dark-color">
-                                  $ 5960.00{' '}
+                                  $ 5960.00{" "}
                                   <span className="d-block fw-500 text-grey-500 font-xssss mt-1 text-dark-color">
                                     Debit Card
                                   </span>
@@ -94,7 +94,7 @@ class Payment extends Component {
                               </div>
                               <div className="card bg-transparent border-0 bg-transparent-card shadow-none p-0 text-left w-100 mt-auto">
                                 <h4 className="text-white font-sm fw-700 mont-font mb-3">
-                                  $ 5960.00{' '}
+                                  $ 5960.00{" "}
                                   <span className="d-block fw-500 text-white font-xssss mt-1">
                                     Debit Card
                                   </span>
@@ -127,7 +127,7 @@ class Payment extends Component {
                               </div>
                               <div className="card bg-transparent border-0 bg-transparent-card shadow-none p-0 text-left w-100 mt-auto">
                                 <h4 className="text-white mb-3 font-sm fw-700 mont-font">
-                                  $ 2260.00{' '}
+                                  $ 2260.00{" "}
                                   <span className="d-block fw-500 text-grey-300 font-xssss mt-1">
                                     Debit Card
                                   </span>
@@ -169,7 +169,7 @@ class Payment extends Component {
                               </div>
                               <div className="card border-0 bg-transparent-card shadow-none p-0 text-left w-100 mt-auto">
                                 <h4 className="text-grey-900 font-sm fw-700 mont-font text-dark-color">
-                                  **** **** **** 2234{' '}
+                                  **** **** **** 2234{" "}
                                   <span className="d-block fw-500 text-grey-500 font-xssss mt-0 mb-3 text-dark-color">
                                     Credit Card
                                   </span>

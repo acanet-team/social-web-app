@@ -1,48 +1,48 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Pagetitle from '../components/Pagetitle';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
-import Load from '../components/Load';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Pagetitle from "../components/Pagetitle";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
+import Load from "../components/Load";
 
 const groupList = [
   {
-    imageUrl: 'user.png',
-    name: 'Aliqa Macale',
-    email: 'support@gmail.com',
-    bgImage: 'group.png',
+    imageUrl: "user.png",
+    name: "Aliqa Macale",
+    email: "support@gmail.com",
+    bgImage: "group.png",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Hendrix Stamp',
-    email: 'support@gmail.com',
-    bgImage: 'group.png',
+    imageUrl: "user.png",
+    name: "Hendrix Stamp",
+    email: "support@gmail.com",
+    bgImage: "group.png",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Stephen Grider',
-    email: 'support@gmail.com',
-    bgImage: 'group.png',
+    imageUrl: "user.png",
+    name: "Stephen Grider",
+    email: "support@gmail.com",
+    bgImage: "group.png",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Mohannad Zitoun',
-    email: 'support@gmail.com',
-    bgImage: 'group.png',
+    imageUrl: "user.png",
+    name: "Mohannad Zitoun",
+    email: "support@gmail.com",
+    bgImage: "group.png",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Aliqa Macale',
-    email: 'support@gmail.com',
-    bgImage: 'group.png',
+    imageUrl: "user.png",
+    name: "Aliqa Macale",
+    email: "support@gmail.com",
+    bgImage: "group.png",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Surfiya Zakir',
-    email: 'support@gmail.com',
-    bgImage: 'group.png',
+    imageUrl: "user.png",
+    name: "Surfiya Zakir",
+    email: "support@gmail.com",
+    bgImage: "group.png",
   },
 ];
 
