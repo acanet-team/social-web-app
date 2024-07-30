@@ -1,70 +1,70 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 const productList = [
   {
-    imageUrl: 'product.png',
-    name: 'Textured Sleeveless Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Textured Sleeveless Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Adjustable Shoulder Straps',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Adjustable Shoulder Straps",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Neck Strappy Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Neck Strappy Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Scoop-Neck Strappy',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Scoop-Neck Strappy",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Butler Stool Ladder',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Butler Stool Ladder",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Textured Sleeveless Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Textured Sleeveless Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Adjustable Shoulder Straps',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Adjustable Shoulder Straps",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Neck Strappy Camisole',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Neck Strappy Camisole",
+    price: "449",
   },
   {
-    imageUrl: 'product.png',
-    name: 'Scoop-Neck Strappy',
-    price: '449',
+    imageUrl: "product.png",
+    name: "Scoop-Neck Strappy",
+    price: "449",
   },
 ];
 
@@ -87,7 +87,7 @@ class ShopOne extends Component {
                       <div className="card p-md-5 p-4 bg-primary-gradiant rounded-3 shadow-xss bg-pattern border-0 overflow-hidden">
                         <div className="bg-pattern-div"></div>
                         <h2 className="display2-size display2-md-size fw-700 text-white mb-0 mt-0">
-                          Shop{' '}
+                          Shop{" "}
                           <span className="fw-700 ls-3 text-grey-200 font-xsssss mt-2 d-block">
                             32 PRODUCT FOUND
                           </span>
@@ -100,7 +100,7 @@ class ShopOne extends Component {
                         32 Product found
                       </h4>
                       <select className="searchCat float-right sort">
-                        {' '}
+                        {" "}
                         <option value="">Default Sorting</option>
                         <option value="151781441596 ">Fashion</option>
                         <option value="139119624252 ">- Men</option>

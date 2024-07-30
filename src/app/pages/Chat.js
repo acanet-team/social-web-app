@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Chat extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -18,7 +18,7 @@ class Chat extends Component {
           <div className="middle-sidebar-bottom">
             <div
               className="middle-sidebar-left pe-0"
-              style={{ maxWidth: '100%' }}
+              style={{ maxWidth: "100%" }}
             >
               <div className="row">
                 <div className="col-lg-12 position-relative">
@@ -126,7 +126,7 @@ class Chat extends Component {
                           </div>
                           <div
                             className="message-wrap"
-                            style={{ marginBottom: '90px' }}
+                            style={{ marginBottom: "90px" }}
                           >
                             Hey mate! How are things going ?
                           </div>
@@ -137,7 +137,7 @@ class Chat extends Component {
                   </div>
                   <div
                     className="chat-bottom dark-bg p-3 shadow-none theme-dark-bg"
-                    style={{ width: '98%' }}
+                    style={{ width: "98%" }}
                   >
                     <form className="chat-form">
                       <button className="bg-grey float-left">

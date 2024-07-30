@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 
 import {
   Accordion,
@@ -6,12 +6,12 @@ import {
   AccordionItemHeading,
   AccordionItemPanel,
   AccordionItemButton,
-} from 'react-accessible-accordion';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+} from "react-accessible-accordion";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Helpbox extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -35,7 +35,7 @@ class Helpbox extends Component {
                   >
                     <div
                       className="card-body p-md-5 p-4 text-center"
-                      style={{ backgroundColor: 'rgba(0,85,255,0.8)' }}
+                      style={{ backgroundColor: "rgba(0,85,255,0.8)" }}
                     >
                       <h2 className="fw-700 display2-size text-white display2-md-size lh-2">
                         Welcome to the Sociala Commuinity!
@@ -44,7 +44,7 @@ class Helpbox extends Component {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Morbi nulla dolor, ornare at commodo non, feugiat non
                         nisi. Phasellus faucibus mollis pharetra. Proin blandit
-                        ac massa sed rhoncus{' '}
+                        ac massa sed rhoncus{" "}
                       </p>
                       <div className="form-group w-lg-75 mt-4 border-light border p-1 bg-white rounded-3 ms-auto me-auto">
                         <div className="row">
@@ -73,7 +73,7 @@ class Helpbox extends Component {
                   <div className="card w-100 border-0 shadow-none bg-transparent mt-5">
                     <Accordion
                       className="accodion-style--1 accordion"
-                      preExpanded={'0'}
+                      preExpanded={"0"}
                     >
                       <AccordionItem className="card shadow-xss">
                         <AccordionItemHeading className="card-header">

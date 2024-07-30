@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?

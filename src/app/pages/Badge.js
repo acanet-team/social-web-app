@@ -1,85 +1,85 @@
-'use client';
+"use client";
 
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Pagetitle from '../components/Pagetitle';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Pagetitle from "../components/Pagetitle";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 const badgeList = [
   {
-    imageUrl: 'user.png',
-    name: 'Aliqa Macale',
-    email: 'support@gmail.com',
-    connections: '55.7k',
-    follower: '105k',
-    following: '71k',
-    badge1: 'top-student.svg',
-    badge2: 'onfire.svg',
-    badge3: '',
-    badge4: 'fast-graduate.svg',
+    imageUrl: "user.png",
+    name: "Aliqa Macale",
+    email: "support@gmail.com",
+    connections: "55.7k",
+    follower: "105k",
+    following: "71k",
+    badge1: "top-student.svg",
+    badge2: "onfire.svg",
+    badge3: "",
+    badge4: "fast-graduate.svg",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Hendrix Stamp',
-    email: 'support@gmail.com',
-    connections: '55.7k',
-    follower: '105k',
-    following: '71k',
-    badge1: 'top-student.svg',
-    badge2: 'onfire.svg',
-    badge3: 'challenge-medal.svg',
-    badge4: 'fast-graduate.svg',
+    imageUrl: "user.png",
+    name: "Hendrix Stamp",
+    email: "support@gmail.com",
+    connections: "55.7k",
+    follower: "105k",
+    following: "71k",
+    badge1: "top-student.svg",
+    badge2: "onfire.svg",
+    badge3: "challenge-medal.svg",
+    badge4: "fast-graduate.svg",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Stephen Grider',
-    email: 'support@gmail.com',
-    connections: '55.7k',
-    follower: '105k',
-    following: '71k',
-    badge1: '',
-    badge2: 'onfire.svg',
-    badge3: 'challenge-medal.svg',
-    badge4: 'fast-graduate.svg',
+    imageUrl: "user.png",
+    name: "Stephen Grider",
+    email: "support@gmail.com",
+    connections: "55.7k",
+    follower: "105k",
+    following: "71k",
+    badge1: "",
+    badge2: "onfire.svg",
+    badge3: "challenge-medal.svg",
+    badge4: "fast-graduate.svg",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Mohannad Zitoun',
-    email: 'support@gmail.com',
-    connections: '55.7k',
-    follower: '105k',
-    following: '71k',
-    badge1: 'top-student.svg',
-    badge2: '',
-    badge3: 'challenge-medal.svg',
-    badge4: 'fast-graduate.svg',
+    imageUrl: "user.png",
+    name: "Mohannad Zitoun",
+    email: "support@gmail.com",
+    connections: "55.7k",
+    follower: "105k",
+    following: "71k",
+    badge1: "top-student.svg",
+    badge2: "",
+    badge3: "challenge-medal.svg",
+    badge4: "fast-graduate.svg",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Aliqa Macale',
-    email: 'support@gmail.com',
-    connections: '55.7k',
-    follower: '105k',
-    following: '71k',
-    badge1: 'top-student.svg',
-    badge2: 'onfire.svg',
-    badge3: 'challenge-medal.svg',
-    badge4: 'fast-graduate.svg',
+    imageUrl: "user.png",
+    name: "Aliqa Macale",
+    email: "support@gmail.com",
+    connections: "55.7k",
+    follower: "105k",
+    following: "71k",
+    badge1: "top-student.svg",
+    badge2: "onfire.svg",
+    badge3: "challenge-medal.svg",
+    badge4: "fast-graduate.svg",
   },
   {
-    imageUrl: 'user.png',
-    name: 'Surfiya Zakir',
-    email: 'support@gmail.com',
-    connections: '55.7k',
-    follower: '105k',
-    following: '71k',
-    badge1: 'top-student.svg',
-    badge2: 'onfire.svg',
-    badge3: 'challenge-medal.svg',
-    badge4: 'fast-graduate.svg',
+    imageUrl: "user.png",
+    name: "Surfiya Zakir",
+    email: "support@gmail.com",
+    connections: "55.7k",
+    follower: "105k",
+    following: "71k",
+    badge1: "top-student.svg",
+    badge2: "onfire.svg",
+    badge3: "challenge-medal.svg",
+    badge4: "fast-graduate.svg",
   },
 ];
 
@@ -113,7 +113,7 @@ class Badge extends Component {
                             </figure>
                             <div className="clearfix"></div>
                             <h4 className="fw-700 font-xss mt-3 mb-0">
-                              {value.name}{' '}
+                              {value.name}{" "}
                             </h4>
                             <p className="fw-500 font-xssss text-grey-500 mt-0 mb-3">
                               {value.email}
@@ -121,7 +121,7 @@ class Badge extends Component {
                             <ul className="d-flex align-items-center justify-content-center mt-1">
                               <li className="m-2">
                                 <h4 className="fw-700 font-sm">
-                                  {value.connections}{' '}
+                                  {value.connections}{" "}
                                   <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">
                                     Connections
                                   </span>
@@ -129,7 +129,7 @@ class Badge extends Component {
                               </li>
                               <li className="m-2">
                                 <h4 className="fw-700 font-sm">
-                                  {value.follower}{' '}
+                                  {value.follower}{" "}
                                   <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">
                                     Follower
                                   </span>
@@ -137,7 +137,7 @@ class Badge extends Component {
                               </li>
                               <li className="m-2">
                                 <h4 className="fw-700 font-sm">
-                                  {value.following}{' '}
+                                  {value.following}{" "}
                                   <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">
                                     Followings
                                   </span>
@@ -153,7 +153,7 @@ class Badge extends Component {
                                   />
                                 </li>
                               ) : (
-                                ''
+                                ""
                               )}
                               {value.badge2 ? (
                                 <li className="m-1">
@@ -163,7 +163,7 @@ class Badge extends Component {
                                   />
                                 </li>
                               ) : (
-                                ''
+                                ""
                               )}
                               {value.badge3 ? (
                                 <li className="m-1">
@@ -173,7 +173,7 @@ class Badge extends Component {
                                   />
                                 </li>
                               ) : (
-                                ''
+                                ""
                               )}
                               {value.badge4 ? (
                                 <li className="m-1">
@@ -183,7 +183,7 @@ class Badge extends Component {
                                   />
                                 </li>
                               ) : (
-                                ''
+                                ""
                               )}
                             </ul>
                             <a

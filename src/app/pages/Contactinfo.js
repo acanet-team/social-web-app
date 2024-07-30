@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
+import React, { Component, Fragment } from "react";
+import Link from "next/link";
 
-import GoogleMapReact from 'google-map-react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import GoogleMapReact from "google-map-react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -131,7 +131,7 @@ class Contactinfo extends Component {
                           <div className="col-lg-12">
                             <div
                               className="rounded-3 overflow-hidden mb-2"
-                              style={{ height: '250px', width: '100%' }}
+                              style={{ height: "250px", width: "100%" }}
                             >
                               <GoogleMapReact
                                 defaultCenter={this.props.center}

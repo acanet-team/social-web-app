@@ -1,53 +1,53 @@
-import React, { Component, Fragment } from 'react';
-import Slider from 'react-slick';
-import Lightbox from 'react-image-lightbox';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Slider from "react-slick";
+import Lightbox from "react-image-lightbox";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
-import 'react-image-lightbox/style.css';
+import "react-image-lightbox/style.css";
 
 const slideList = [
   {
-    imageUrl: 'hotel.png',
-    name: 'product-image ',
+    imageUrl: "hotel.png",
+    name: "product-image ",
   },
   {
-    imageUrl: 'hotel.png',
-    name: 'product-image ',
+    imageUrl: "hotel.png",
+    name: "product-image ",
   },
   {
-    imageUrl: 'hotel.png',
-    name: 'product-image ',
+    imageUrl: "hotel.png",
+    name: "product-image ",
   },
 ];
 
 const TabOne = [
   {
-    image: '01',
-    bigImage: 'assets/images/hotel.png',
+    image: "01",
+    bigImage: "assets/images/hotel.png",
   },
   {
-    image: '02',
-    bigImage: 'assets/images/hotel.png',
+    image: "02",
+    bigImage: "assets/images/hotel.png",
   },
   {
-    image: '03',
-    bigImage: 'assets/images/hotel.png',
+    image: "03",
+    bigImage: "assets/images/hotel.png",
   },
   {
-    image: '04',
-    bigImage: 'assets/images/hotel.png',
+    image: "04",
+    bigImage: "assets/images/hotel.png",
   },
   {
-    image: '05',
-    bigImage: 'assets/images/hotel.png',
+    image: "05",
+    bigImage: "assets/images/hotel.png",
   },
   {
-    image: '06',
-    bigImage: 'assets/images/hotel.png',
+    image: "06",
+    bigImage: "assets/images/hotel.png",
   },
 ];
 
@@ -158,15 +158,15 @@ class Hotelsingle extends Component {
                     </p>
                     <div className="clearfix"></div>
                     <h5 className="mt-4 mb-4 d-inline-block font-xssss fw-600 text-grey-500 me-2">
-                      <i className="btn-round-sm bg-greylight ti-ruler-pencil text-grey-500 me-1"></i>{' '}
+                      <i className="btn-round-sm bg-greylight ti-ruler-pencil text-grey-500 me-1"></i>{" "}
                       200 sq
                     </h5>
                     <h5 className="mt-4 mb-4 d-inline-block font-xssss fw-600 text-grey-500 me-2">
-                      <i className="btn-round-sm bg-greylight ti-rss-alt text-grey-500 me-1"></i>{' '}
+                      <i className="btn-round-sm bg-greylight ti-rss-alt text-grey-500 me-1"></i>{" "}
                       WiFi
                     </h5>
                     <h5 className="mt-4 mb-4 d-inline-block font-xssss fw-600 text-grey-500">
-                      <i className="btn-round-sm bg-greylight ti-credit-card text-grey-500 me-1"></i>{' '}
+                      <i className="btn-round-sm bg-greylight ti-credit-card text-grey-500 me-1"></i>{" "}
                       Card
                     </h5>
                     <div className="clearfix"></div>
@@ -181,7 +181,7 @@ class Hotelsingle extends Component {
                       href="/defaulthoteldetails"
                       className="btn-round-lg ms-2 d-inline-block rounded-3 bg-danger"
                     >
-                      <i className="feather-bookmark font-sm text-white"></i>{' '}
+                      <i className="feather-bookmark font-sm text-white"></i>{" "}
                     </a>
                     <a
                       href="/defaulthoteldetails"
@@ -249,14 +249,14 @@ class Hotelsingle extends Component {
                       that everyone will eventually need. I have made sure that
                       every detail of these techniques is recorded in the
                       videos! BUT you should be somewhat familiar with VBA since
-                      there are lots of coding examples in the course. <br />{' '}
+                      there are lots of coding examples in the course. <br />{" "}
                       There are MANY tips and tricks in this workshop that you
                       will not find an ANY of my other courses! <br /> I also
                       include a specific database design challenge from a
                       student and then go over the details of how I would handle
                       it. <br /> If you are willing to take the time to go
                       through this course you could easily be much more
-                      productive with Microsoft Access in just a few hours!{' '}
+                      productive with Microsoft Access in just a few hours!{" "}
                     </p>
                   </div>
 
@@ -553,7 +553,7 @@ class Hotelsingle extends Component {
                           <p className="comment-text lh-24 fw-500 font-xssss text-grey-500 mt-2">
                             Enjoyed this a lot and well done. We are an early
                             stage digitally native vertical brand, making travel
-                            bags.{' '}
+                            bags.{" "}
                           </p>
                         </div>
                       </div>
@@ -607,7 +607,7 @@ class Hotelsingle extends Component {
                           <p className="comment-text lh-24 fw-500 font-xssss text-grey-500 mt-2">
                             Enjoyed this a lot and well done. We are an early
                             stage digitally native vertical brand, making travel
-                            bags.{' '}
+                            bags.{" "}
                           </p>
                         </div>
                       </div>
@@ -661,7 +661,7 @@ class Hotelsingle extends Component {
                           <p className="comment-text lh-24 fw-500 font-xssss text-grey-500 mt-2">
                             Enjoyed this a lot and well done. We are an early
                             stage digitally native vertical brand, making travel
-                            bags.{' '}
+                            bags.{" "}
                           </p>
                         </div>
                       </div>
@@ -715,7 +715,7 @@ class Hotelsingle extends Component {
                           <p className="comment-text lh-24 fw-500 font-xssss text-grey-500 mt-2">
                             Enjoyed this a lot and well done. We are an early
                             stage digitally native vertical brand, making travel
-                            bags.{' '}
+                            bags.{" "}
                           </p>
                         </div>
                       </div>

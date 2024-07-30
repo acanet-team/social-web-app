@@ -46,7 +46,7 @@ export default function Interest() {
       return setError("Please choose at least 1 interest topic.");
     }
     try {
-      subscribeTopicsRequest(selectedOptions);
+      subscribeTopicsRequest({ interestTopicIds: selectedOptions });
       router.push("/broker-list");
     } catch (err) {
       console.log(err);

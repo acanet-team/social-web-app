@@ -53,7 +53,11 @@ export default function RootLayout(props: {
             locale={props.params.locale}
             messages={messages}
           >
+            {/* <Header />
+            <Leftnav /> */}
             {props.children}
+            {/* <Popupchat />
+            <Appfooter /> */}
           </NextIntlClientProvider>
         </body>
       </html>
