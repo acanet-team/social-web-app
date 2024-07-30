@@ -1,16 +1,12 @@
 import "dotenv/config";
 
-import { cookies } from "next/headers";
 import type { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
 
 import httpClient from "@/api";
 import { removePropertiesEmpty } from "@/utils/Helpers";
-import { getMe } from "@/api/auth";
-import { User } from "@clerk/nextjs/server";
 
 const options: NextAuthOptions = {
   providers: [
@@ -25,38 +21,47 @@ const options: NextAuthOptions = {
   ],
   secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
-    async signIn({ account }) {
-      console.log(account);
-
-      const data: { accessToken?: string; idToken?: string } = {};
-
-      if (account?.provider === "google") {
-        data.idToken = account.id_token;
-      }
+    async jwt({ token, account }) {
       if (account?.provider === "facebook") {
-        data.accessToken = account.access_token;
+        token.access_token = account.access_token;
+        token.provider = "facebook";
       }
+      if (account?.provider === "google") {
+        token.idToken = account.id_token;
+        token.provider = "google";
+      }
+      return token;
+    },
 
-      try {
-        const res = await httpClient.post<{
-          token: string;
-          tokenExpires: number;
-        }>({
-          url: `/v1/auth/${account?.provider}/login`,
-          data: removePropertiesEmpty(data),
-        });
+    async session({ session, token }: any) {
+      if ((token?.access_token || token.idToken) && !session.user?.id) {
+        const data: { accessToken?: string; idToken?: string } = {};
 
-        cookies().set("acanet_token", res.token, {
-          path: "/", // Set path to '/' to send cookie in all requests
-          maxAge: 30 * 24 * 60 * 60, // 30 days
-          // domain: process.env.NEXT_PUBLIC_API_DOMAIN,
-          httpOnly: false,
-          secure: false,
-        });
+        if (token?.provider === "google") {
+          data.idToken = token.id_token;
+        }
+        if (token?.provider === "facebook") {
+          data.accessToken = token.access_token;
+        }
 
-        return true;
-      } catch (err) {
-        return false;
+        try {
+          const res = await httpClient.post<any, any>(
+            `/v1/auth/${token?.provider}/login`,
+            removePropertiesEmpty(data),
+          );
+          console.log("ressssss", res);
+          session.user = {
+            ...res.data.user,
+            isBroker: res.data.isBroker,
+            isProfile: res.data.isProfile,
+          };
+          session.token = res.data.token;
+          return session;
+        } catch (err) {
+          return session;
+        }
+      } else {
+        return session;
       }
     },
   },
