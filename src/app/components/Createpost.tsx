@@ -28,7 +28,7 @@ interface CreatePostState {
   currentPage: number;
   isLoading: boolean;
   hasMore: boolean;
-  hasNextPage : boolean;
+  hasNextPage: boolean;
 }
 
 class CreatePost extends Component<CreatePostProps, CreatePostState> {
@@ -193,8 +193,13 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       photoVideo: photo_Video,
       createPost,
     } = this.props;
-    const { uploadedImages, showUploadForm, enlargedImage, showModal } =
-      this.state;
+    const {
+      uploadedImages,
+      showUploadForm,
+      enlargedImage,
+      showModal,
+      isLoading,
+    } = this.state;
     const menuClass = `${this.state.isOpen ? " show" : ""}`;
 
     return (
@@ -308,10 +313,13 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
                   </div>
                   <div className="modal-body">
                     <div ref={this.topicListRef} className="topic-list">
-                      {this.state.isLoading && (
-                        <div className="text-center">Loading...</div>
+                      {isLoading && (
+                        <div className="text-center">
+                          <span className="spinner-border spinner-border-sm me-2"></span>
+                          Loading...
+                        </div>
                       )}
-                      {this.state.topics.length === 0 && (
+                      {this.state.topics.length === 0 && !isLoading && (
                         <div className="text-center">No topics found.</div>
                       )}
                       <Select
