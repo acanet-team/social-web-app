@@ -7,7 +7,7 @@ export default function Login() {
       <div className="nav-header border-0 bg-transparent shadow-none">
         <div className="nav-top w-100">
           <a href="/">
-            <i className="feather-zap text-success display1-size me-2 ms-0" />
+            {/* <i className="feather-zap text-success display1-size me-2 ms-0" /> */}
             <span className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current">
               Sociala.{' '}
             </span>{' '}

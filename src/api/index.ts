@@ -1,6 +1,7 @@
 import { useAccessTokenStore } from "@/store/accessToken";
+import { BaseApiResponse, PostRequestParams, GetRequestParams } from "./model";
 
-interface IHttpOptions {
+export interface IHttpOptions {
   url: string;
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: { [key: string]: unknown };
@@ -136,7 +137,7 @@ class HttpClient {
   get = <T>(
     url: string,
     options?: Omit<IHttpOptions, "url" | "method" | "body" | "contentType">,
-  ) => {
+  ): BaseApiResponse<T> => {
     return this.fetch<T>({ ...options, method: "GET", url } as IHttpOptions);
   };
 
@@ -152,6 +153,14 @@ class HttpClient {
       body,
     } as IHttpOptions);
   };
+
+  // get = <T>({ url, params, options }: GetRequestParams): BaseApiResponse<T> => {
+  //   return this.fetch<T>({ ...options, method: "GET", url });
+  // };
+
+  // post = <T>({ url, body, options }: PostRequestParams): BaseApiResponse<T> => {
+  //   return this.fetch<T>({ ...options, method: "POST", url, body });
+  // };
 
   put = <U, T>(
     url: string,

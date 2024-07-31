@@ -1,7 +1,12 @@
-import Link from 'next/link';
-import React from 'react';
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import useAuthStore from "@/store/auth";
 
 export default function Appfooter() {
+  const session = useAuthStore((state) => state.session);
+  const photo = session.user.photo;
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
       <Link href="/home" className="nav-content-bttn nav-center">
@@ -17,9 +22,11 @@ export default function Appfooter() {
         <i className="feather-layers"></i>
       </Link>
       <Link href="/defaultsettings" className="nav-content-bttn">
-        <img
-          src="assets/images/female-profile.png"
+        <Image
+          src={photo ? photo : "/assets/images/user.png"}
           alt="user"
+          width={30}
+          height={40}
           className="w30 shadow-xss"
         />
       </Link>
