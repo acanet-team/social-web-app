@@ -38,7 +38,7 @@ const options: NextAuthOptions = {
         const data: { accessToken?: string; idToken?: string } = {};
 
         if (token?.provider === "google") {
-          data.idToken = token.id_token;
+          data.idToken = token.idToken;
         }
         if (token?.provider === "facebook") {
           data.accessToken = token.access_token;
@@ -58,7 +58,8 @@ const options: NextAuthOptions = {
           session.token = res.data.token;
           return session;
         } catch (err) {
-          return session;
+          console.log("err", err);
+          // return session;
         }
       } else {
         return session;

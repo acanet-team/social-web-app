@@ -34,7 +34,7 @@ const LoginPage: NextPage = () => {
     if (session) {
       setAccessToken(session.token);
       if (!session.isProfile) {
-        router.push("/account");
+        router.push("/home");
       } else {
         router.push("/");
       }

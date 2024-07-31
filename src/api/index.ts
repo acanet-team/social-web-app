@@ -62,8 +62,16 @@ class HttpClient {
       contentType === "multi-form" ? new FormData() : (null as any);
     if (contentType === "multi-form" && body) {
       Object.keys(body).forEach((key) => {
-        if (body[key] !== null) {
-          formData.append(key, body[key]);
+        if (key === "images") {
+          if (body[key] instanceof Array) {
+            body[key].forEach((image: File) => {
+              formData.append("images", image, image.name);
+            });
+          }
+        } else {
+          if (body[key] !== null) {
+            formData.append(key, body[key]);
+          }
         }
       });
     } else {
@@ -75,7 +83,7 @@ class HttpClient {
       }
     }
 
-    const accessToken = useAccessTokenStore.getState().accessToken;
+    const accessToken = useAccessTokenStore.getState().accessToken;    
     if (accessToken) {
       headers.append("Authorization", `Bearer ${accessToken}`);
     }

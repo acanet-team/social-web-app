@@ -1,5 +1,9 @@
+import { createNewPostRequest, getTopics } from "@/api/post";
 import Image from "next/image";
 import React, { Component } from "react";
+import style from "@/styles/modules/createpPost.module.scss";
+import { ToastContainer, toast, type ToastOptions } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface CreatePostProps {
   placeholder?: string;
@@ -15,6 +19,10 @@ interface CreatePostState {
   uploadedImages: File[];
   showUploadForm: boolean;
   enlargedImage: File | null;
+  topics: any[];
+  selectedTopic: string;
+  showModal: boolean;
+  interestTopicId: string;
 }
 
 class CreatePost extends Component<CreatePostProps, CreatePostState> {
@@ -26,7 +34,23 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       uploadedImages: [],
       showUploadForm: false,
       enlargedImage: null,
+      topics: [],
+      selectedTopic: "",
+      showModal: false,
+      interestTopicId: "",
     };
+  }
+
+  fetchTopics = async () => {
+    try {
+      const response = await getTopics();
+      if (response) {
+        console.log(response);
+        this.setState({ topics: response["data"]["docs"] });
+      }
+    } catch (error) {
+      console.error("Error fetching topics:", error);
+    }
   };
 
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
@@ -34,13 +58,10 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
     if (event.target.files) {
       const files = Array.from(event.target.files);
       this.setState({
-        uploadedImages: [...(files ?? this.state.uploadedImages)],
+        uploadedImages: [...this.state.uploadedImages, ...files],
       });
     }
   };
-  setFormattedContent = (even: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ postText: even.target.value });
-  }
   toggleUploadForm = () => {
     this.setState({ showUploadForm: !this.state.showUploadForm });
   };
@@ -56,8 +77,73 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
     this.setState({ enlargedImage: null });
   };
 
-  handleClickOutside = (event: MouseEvent) => {
-    this.closeEnlarge();
+  throwToast = (message: string, notiType: string) => {
+    const notiConfig: ToastOptions = {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    };
+
+    const notify = () => {
+      if (message !== "" && notiType === "success") {
+        toast.success(message, notiConfig);
+      } else if (message !== "" && notiType === "error") {
+        console.log("Please enter some text for your post.");
+        toast.error(message, notiConfig);
+      }
+    };
+
+    notify();
+  };
+
+  submitPost = async () => {
+    if (this.state.postText.trim() === "") {
+      this.throwToast("Please enter some text for your post.", "error");
+      return;
+    }
+
+    if (this.state.selectedTopic.trim() === "") {
+      this.throwToast("Please select a topic for your post.", "error");
+      return;
+    }
+
+    try {
+      await createNewPostRequest({
+        content: this.state.postText,
+        images: this.state.uploadedImages,
+        interestTopicId: this.state.selectedTopic,
+      });
+      this.setState({ showModal: false });
+      this.throwToast("Post created successfully!", "success");
+      this.setState({
+        postText: "",
+        uploadedImages: [],
+        selectedTopic: "",
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+    this.closeModal();
+  };
+  handleTopicChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ selectedTopic: event.target.value });
+  };
+
+  openModal = () => {
+    if (this.state.postText.trim() === "") {
+      this.throwToast("Please enter some text for your post.", "error");
+      return;
+    }
+    this.fetchTopics();
+    this.setState({ showModal: true });
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false, selectedTopic: "" });
   };
 
   render() {
@@ -68,13 +154,21 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       photoVideo: photo_Video,
       createPost,
     } = this.props;
-    const { isOpen, postText, uploadedImages, showUploadForm, enlargedImage } =
-      this.state;
+    const {
+      uploadedImages,
+      showUploadForm,
+      enlargedImage,
+      topics,
+      selectedTopic,
+      showModal,
+    } = this.state;
     const menuClass = `${this.state.isOpen ? " show" : ""}`;
 
     return (
       <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
-        <div className="card-body p-0 mt-3 position-relative">
+        <div
+          className="card-body p-0 mt-3 position-relative"
+          id={style["card-body"]}>
           <figure className="avatar position-absolute ms-2 mt-1 top-5">
             <img
               src={avatarUrl}
@@ -84,59 +178,57 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
           </figure>
           <textarea
             maxLength={5000}
-            onChange={() => {
-              this.setFormattedContent;
+            onChange={(event) => {
+              this.setState({ postText: event.target.value });
             }}
             name="message"
             className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
-            placeholder={`${placeholder}`}>
-          </textarea>
-          <div className="imagePreview">
+            placeholder={`${placeholder}`}></textarea>
+
+          <div className={style["imagePreview"]}>
             {uploadedImages.map((image, index) => (
-              <div key={index} className="previewImage">
+              <div key={index} className={style["previewImage"]}>
                 <Image
                   src={URL.createObjectURL(image)}
                   alt="Uploaded Image"
-                  className="previewImage"
+                  className={style["previewImage"]}
                   width={211}
                   height={211}
                   onClick={() => this.enlargeImage(image)}
                 />
                 <button
                   onClick={() => this.removeImage(index)}
-                  className="close-button">
-                  x
+                  className={style["close-button"]}>
+                  <span aria-hidden="true">&times;</span>
                 </button>
               </div>
             ))}
           </div>
         </div>
         {enlargedImage && (
-          <div className="enlarged-image-modal" onClick={this.closeEnlarge}>
+          <div
+            className={style["enlarged-image-modal"]}
+            onClick={this.closeEnlarge}>
             {" "}
             <div
-              className="enlarged-image-container"
+              className={style["enlarged-image-container"]}
               onClick={(e) => e.stopPropagation()}>
               <Image
                 src={URL.createObjectURL(enlargedImage)}
                 alt="Enlarged Image"
                 width={500}
                 height={500}
-                className="enlarged-preview-image"
+                className={style["enlarged-preview-image"]}
               />
-              <button onClick={this.closeEnlarge} className="close-enlarge">
-                x
+              <button
+                onClick={this.closeEnlarge}
+                className={style["close-enlarge"]}>
+                <span aria-hidden="true">&times;</span>
               </button>
             </div>
           </div>
         )}
         <div className="card-body d-flex p-0 mt-0">
-          <a
-            href="#video"
-            className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4">
-            <i className="font-md text-danger feather-video me-2"></i>
-            <span className="d-none-xs">{`${live_Video}`}</span>
-          </a>
           <label
             className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
             onClick={this.toggleUploadForm}>
@@ -150,72 +242,69 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
               id="imageUpload"
               hidden={!showUploadForm}
               max={20}
-              className="imageUploadInput"
+              className={style["imageUploadInput"]}
             />
           </label>
-          {/* <a
-            href="#activity"
-            className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4">
-            <i className="font-md text-warning feather-camera me-2"></i>
-            <span className="d-none-xs">Feeling/Activity</span>
-          </a> */}
           <div className={`ms-auto pointer ${menuClass}`}>
-            <a
-              href="/"
-              className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center">
+            <label
+              id="submit"
+              className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
+              onClick={this.openModal}>
               <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>
               {`${createPost}`}
-            </a>
+            </label>
           </div>
-          {/* <div
-            className={`ms-auto pointer ${menuClass}`}
-            id="dropdownMenu4"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            onClick={this.toggleOpen}>
-            <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss"></i>
-          </div>
-          <div
-            className={`dropdown-menu p-4 right-0 rounded-xxl border-0 shadow-lg ${menuClass}`}
-            aria-labelledby="dropdownMenu4">
-            <div className="card-body p-0 d-flex">
-              <i className="feather-bookmark text-grey-500 me-3 font-lg"></i>
-              <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4 pointer">
-                Save Link{" "}
-                <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">
-                  Add this to your saved items
-                </span>
-              </h4>
-            </div>
-            <div className="card-body p-0 d-flex mt-2">
-              <i className="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-              <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4 pointer">
-                Hide Post{" "}
-                <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">
-                  Save to your saved items
-                </span>
-              </h4>
-            </div>
-            <div className="card-body p-0 d-flex mt-2">
-              <i className="feather-alert-octagon text-grey-500 me-3 font-lg"></i>
-              <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4 pointer">
-                Hide all from Group{" "}
-                <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">
-                  Save to your saved items
-                </span>
-              </h4>
-            </div>
-            <div className="card-body p-0 d-flex mt-2">
-              <i className="feather-lock text-grey-500 me-3 font-lg"></i>
-              <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4 pointer">
-                Unfollow Group{" "}
-                <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">
-                  Save to your saved items
-                </span>
-              </h4>
-            </div>
-          </div> */}
         </div>
+
+        {showModal && (
+          <div>
+            <div className={style["overlay"]}></div>
+            <div className={style["modal-custom"]}>
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document">
+                <div className="modal-content theme-dark card">
+                  <div className="modal-header">
+                    <h1 className="modal-title">Select a Topic</h1>
+                    <button
+                      type="button"
+                      className={style["close"]}
+                      onClick={this.closeModal}>
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <select
+                      style={{ width: "-webkit-fill-available" }}
+                      value={selectedTopic}
+                      onChange={this.handleTopicChange}>
+                      <option value={"Select Topic"}>Select Topic</option>
+                      {topics.map((topic) => (
+                        <option key={topic.id} value={topic.id}>
+                          {topic.topicName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={this.closeModal}>
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={this.submitPost}>
+                      Save changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

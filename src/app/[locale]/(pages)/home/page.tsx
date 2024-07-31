@@ -13,14 +13,22 @@ import styles from "@/styles/modules/home.module.scss";
 import NavLink from "@/app/components/NavLink";
 import Layout from "../layout";
 import Link from "next/link";
-import Popupchat from "../../../components/Popupchat";
 import Contacts from "@/app/components/Contacts";
 import { useTranslations } from "next-intl";
-import useAuthStore from "@/store/auth";
+import { useSession } from "next-auth/react";
+import { getUserInfoRequest } from "@/api/user";
+import { useAccessTokenStore } from "@/store/accessToken";
+import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   const [posts, setPosts] = useState<Object[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [userInfo, setUserInfo] = useState<any>({});
+  const { data: session } = useSession() as any;
+  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
+  const router = useRouter();
+
   const onClickForYouHandler = () => {
     console.log("fetching for-you feed");
     // setPosts()
@@ -29,15 +37,22 @@ export default function Home() {
     console.log("fetching suggestion feed");
     // setPosts()
   };
-const tCreatePost = useTranslations("CreatePost");
+  const tCreatePost = useTranslations("CreatePost");
   useEffect(() => {
-    // Fetch for-you feed
-    // setPosts()
-  }, []);
+    if (session) {
+      setAccessToken(session.token);
+      if (!session.isProfile) {
+        router.push("/home");
+        setUserInfo(session.user);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [session, setAccessToken]);
 
-  const { email, nickName, photo } = useAuthStore((state: any) => state.user);
   return (
     <Layout>
+      <ToastContainer />
       <div className="main-content right-chat-active" id={styles.home}>
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
@@ -60,7 +75,7 @@ const tCreatePost = useTranslations("CreatePost");
                 <Storyslider />
                 <CreatePost
                   placeholder={tCreatePost("Whats_on_your_mind")}
-                  avatarUrl={photo}
+                  avatarUrl={userInfo?.photo?.path}
                   liveVideo={tCreatePost("live_Video")}
                   photoVideo={tCreatePost("Photo_Video")}
                   createPost={tCreatePost("create_Post")}

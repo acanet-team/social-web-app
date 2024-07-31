@@ -31,7 +31,7 @@ export default function Account() {
   const { createProfile } = useAuthStore((state: any) => state.createProfile);
 
   useEffect(() => {
-    useAuthStore.persist.rehydrate();
+    // useAuthStore.persist.rehydrate();
   }, []);
   const [locationList, setRegionList] = useState([
     "Vietnam",

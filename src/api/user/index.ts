@@ -47,3 +47,14 @@ export const subscribeTopicsRequest = (values: string[]) => {
     },
   });
 };
+
+export const getUserInfoRequest = (token: string) => {
+  const header = new Headers();
+  header.append("Authorization", "Bearer " + token ?? "");
+  return httpClient.get(
+    "/v1/auth/me",
+    {
+      headers: header,
+    },
+  );
+}
