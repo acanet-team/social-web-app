@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
+import React, { Component, Fragment } from "react";
+import Link from "next/link";
 
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Socialaccount extends Component {
   // eslint-disable-next-line class-methods-use-this

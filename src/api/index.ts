@@ -141,9 +141,9 @@ class HttpClient {
     return this.fetch<T>({ ...options, method: "GET", url } as IHttpOptions);
   };
 
-  post = <U, T>(
+  post = <_U, T>(
     url: string,
-    body: U,
+    body: any,
     options?: Omit<IHttpOptions, "url" | "method" | "body">,
   ) => {
     return this.fetch<T>({

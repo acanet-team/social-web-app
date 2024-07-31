@@ -80,6 +80,10 @@
     "interest_title": "What are you interested in?",
     "interest_description": "Select at least 1 topic you are interested in to help personalize your experience."
   },
+  "CoursesList": {
+    "course_title": "Courses",
+    "course_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
+  },
   "TopBrokers": {
     "top_broker_title": "Top Brokers"
   }

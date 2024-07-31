@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 
 import {
   Accordion,
@@ -6,12 +6,12 @@ import {
   AccordionItemHeading,
   AccordionItemPanel,
   AccordionItemButton,
-} from 'react-accessible-accordion';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+} from "react-accessible-accordion";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Emailopen extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -36,7 +36,7 @@ class Emailopen extends Component {
                         <div className="card dark-bg-transparent border-0 w-100 p-0 mb-3 shadow-none">
                           <div className="card-body p-0">
                             <h6 className="fw-600 text-grey-500 font-xsssss">
-                              Today, 16th September 2020, 11:45{' '}
+                              Today, 16th September 2020, 11:45{" "}
                             </h6>
                             <h2 className="font-sm text-grey-900 fw-600">
                               Meeting World
@@ -46,7 +46,7 @@ class Emailopen extends Component {
 
                         <Accordion
                           className="accodion-style--1 accordion"
-                          preExpanded={'0'}
+                          preExpanded={"0"}
                         >
                           <AccordionItem className="shadow-none mb-0 p-0 bg-transparent">
                             <AccordionItemHeading className="card-header ps-0 pt-0 pb-2 pe-0 bg-transparent">
@@ -59,7 +59,7 @@ class Emailopen extends Component {
                                   />
                                 </figure>
                                 <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">
-                                  Aenni Mirenda{' '}
+                                  Aenni Mirenda{" "}
                                 </span>
                                 <span class="font-xssss text-grey-500 pt-2 mt-1 ps-2 fw-600 mb-0 ms-auto">
                                   14.09.2020 12:23
@@ -76,7 +76,7 @@ class Emailopen extends Component {
                                 rate. <br />
                                 <br /> Regards,
                                 <br />
-                                Jessica{' '}
+                                Jessica{" "}
                               </p>
                               <textarea
                                 class="form-control mb-5 p-3 h100 bg-greylight lh-16"
@@ -96,7 +96,7 @@ class Emailopen extends Component {
                                   />
                                 </figure>
                                 <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">
-                                  Aenni Mirenda{' '}
+                                  Aenni Mirenda{" "}
                                 </span>
                                 <span class="font-xssss text-grey-500 pt-2 mt-1 ps-2 fw-600 mb-0 ms-auto">
                                   14.09.2020 12:23
@@ -113,7 +113,7 @@ class Emailopen extends Component {
                                 rate. <br />
                                 <br /> Regards,
                                 <br />
-                                Jessica{' '}
+                                Jessica{" "}
                               </p>
                               <textarea
                                 class="form-control mb-5 p-3 h100 bg-greylight lh-16"
@@ -133,7 +133,7 @@ class Emailopen extends Component {
                                   />
                                 </figure>
                                 <span class="font-xssss text-grey-700 pt-2 mt-1 ps-2 fw-700 mb-0 me-auto text-dark">
-                                  Aenni Mirenda{' '}
+                                  Aenni Mirenda{" "}
                                 </span>
                                 <span class="font-xssss text-grey-500 pt-2 mt-1 ps-2 fw-600 mb-0 ms-auto">
                                   14.09.2020 12:23
@@ -150,7 +150,7 @@ class Emailopen extends Component {
                                 rate. <br />
                                 <br /> Regards,
                                 <br />
-                                Jessica{' '}
+                                Jessica{" "}
                               </p>
                               <textarea
                                 class="form-control mb-5 p-3 h100 bg-greylight lh-16"
@@ -165,7 +165,7 @@ class Emailopen extends Component {
 
                     <div
                       className="chat-bottom dark-bg p-3 mb-3 border-top border-bottom bor-0 theme-dark-bg"
-                      style={{ width: '98%' }}
+                      style={{ width: "98%" }}
                     >
                       <form className="chat-form d-block overflow-hidden">
                         <button className="bg-dark border-0 btn-round-md float-left d-lg-block d-none">

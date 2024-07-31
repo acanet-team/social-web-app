@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
 
 class Notfound extends Component {
   // eslint-disable-next-line class-methods-use-this
