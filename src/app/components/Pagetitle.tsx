@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/styles/modules/pageTitle.module.scss";
 
-export default async function Pagetitle(props: any) {
+export default function Pagetitle(props: any) {
   // const t = useTranslations('BrokerList');
   //
   return (

@@ -5,12 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 import Darkbutton from "./Darkbutton";
 import { getLocalStorage } from "@/utils/local-storage";
+import useAuthStore from "@/store/auth";
 
 export default function Header() {
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-dark");
+  const session = useAuthStore((state) => state.session);
+  const photo = session.user.photo;
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;
@@ -18,15 +21,15 @@ export default function Header() {
   const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
-    // const handleStorageChange = () => {
-    //   const theme = getLocalStorage("theme");
-    //   setCurTheme(theme);
-    //   console.log(theme);
-    // };
-    // window.addEventListener("storage", handleStorageChange);
-    // return () => {
-    //   window.removeEventListener("storage", handleStorageChange);
-    // };
+    const handleStorageChange = () => {
+      const theme = getLocalStorage("theme");
+      setCurTheme(theme);
+      console.log(theme);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   return (
@@ -51,13 +54,6 @@ export default function Header() {
               style={{ width: "auto", height: "55px" }}
               alt="logo"
             />
-            {/* <Image
-              src={'/assets/images/logo/logo-horizontal-white.png'}
-              width={220}
-              height={60}
-              style={{ width: 'auto', height: '60px' }}
-              alt="logo"
-            /> */}
           </span>{" "}
         </Link>
         <Link
@@ -162,7 +158,7 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            src="/assets/images/user.png"
+            src={photo ? photo : "/assets/images/user.png"}
             width={40}
             height={40}
             alt="user"
@@ -182,7 +178,7 @@ export default function Header() {
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            src="/assets/images/user.png"
+            src={photo ? photo : "/assets/images/user.png"}
             alt="user"
             width={40}
             height={40}
@@ -201,7 +197,7 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
           <Image
-            src="/assets/images/user.png"
+            src={photo ? photo : "/assets/images/user.png"}
             alt="user"
             width={40}
             height={40}
@@ -222,7 +218,7 @@ export default function Header() {
       <Darkbutton />
       <Link href="/defaultsettings" className="p-0 ms-3 menu-icon">
         <Image
-          src="/assets/images/user.png"
+          src={photo ? photo : "/assets/images/user.png"}
           alt="user"
           width={40}
           height={40}

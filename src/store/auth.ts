@@ -1,63 +1,87 @@
 import { create } from "zustand";
 
-const useAuthStore = create((set) => ({
-  isLoggedIn: false,
-  nickName: null,
-  isFirstLogin: true,
-  isBroker: false,
-  user: {
-    id: null,
-    email: null,
-    provider: null,
-    socialId: null,
-    firstName: null,
-    lastName: null,
-    photo: null,
-    role: "investor",
-    status: "active",
-    referBy: null,
-    refCode: null,
-    phone: null,
-    location: null,
+export interface IUserSessionStore {
+  session: {
+    token: string | null;
+    user: {
+      isBroker: boolean;
+      isProfile: boolean;
+      nickName: string | null;
+      id: number | null;
+      email: string | null;
+      firstName: string | null;
+      lastName: string | null;
+      photo: string | null;
+      role: string | null;
+      status: string | null;
+      createdAt: string | null;
+      updatedAt: string | null;
+      deletedAt: string | null;
+      gender: string | null;
+      location: string | null;
+    };
+  };
+  createProfile: (session: any) => void;
+  updateProfile: (values: any) => void;
+  logout: () => void;
+}
+
+const useAuthStore = create<IUserSessionStore>((set) => ({
+  session: {
+    token: null,
+    user: {
+      isBroker: false,
+      isProfile: false,
+      nickName: null,
+      id: null,
+      email: null,
+      firstName: null,
+      lastName: null,
+      photo: null,
+      role: null,
+      status: null,
+      createdAt: null,
+      updatedAt: null,
+      deletedAt: null,
+      gender: null,
+      location: null,
+      phone: null,
+    },
   },
-  login: (state: any, session: any) =>
-    set(() => ({
-      isLoggedIn: true,
-      nickName: session?.nickName,
-      isFirstLogin: session?.isFirstLogin,
-      isBroker: session?.isBroker,
-      user: {
-        ...state?.user,
-        id: session?.user?.id,
-        email: session?.user?.email,
-        provider: session?.user?.provider,
-        socialId: session?.user?.socialId,
-        firstName: session?.user?.firstName,
-        lastName: session?.user?.lastName,
-        photo: session?.user?.photo?.path,
-        role: session?.user?.id,
-        status: "active",
-        referBy: session?.user?.referBy,
-        refCode: session?.user?.refCode,
-        phone: session?.user?.phone,
-      },
-    })),
-  logout: () =>
-    set(() => {
-      localStorage.removeItem("user-auth");
-      return { isLoggedIn: false, user: null };
+  createProfile: (session: any) =>
+    set((state) => {
+      return {
+        session: {
+          ...state.session,
+          token: session.token,
+          user: {
+            ...state.session.user,
+            id: session.user.id,
+            email: session.user.email,
+            photo: session.user.photo.path,
+            firstName: session.user.firstName,
+            lastName: session.user.lastName,
+            isBroker: session.user.isBroker,
+            isProfile: session.user.isProfile,
+            createdAt: session.user.createdAt,
+            role: session.user.role.name,
+            status: session.user.status.name,
+          },
+        },
+      };
     }),
-  createProfile: (state: any, values: any) =>
-    set(() => ({
-      ...state,
-      nickName: values.nickName,
-      isBroker: values.isBroker,
-      user: {
-        ...state.user,
-        location: values.location,
-        email: values.email,
+  updateProfile: (values: any) =>
+    set((state) => ({
+      session: {
+        ...state.session,
+        user: {
+          ...state.session.user,
+          nickName: values.nickName,
+          location: values.location,
+        },
       },
     })),
+  logout: () => set(() => ({})),
 }));
 
 export default useAuthStore;

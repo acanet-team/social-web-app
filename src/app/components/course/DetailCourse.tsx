@@ -77,8 +77,8 @@ export default function DetailCourse({ id }: Props) {
             <div className={styles["group"]}>
               <p className="m-0 font-xsss text-white">Created by</p>
               <Image
-                src={course?.imgAuthor}
-                alt={course?.author}
+                src={course?.imgAuthor ?? ""}
+                alt={course?.author ?? ""}
                 width={24}
                 height={24}
               />
@@ -147,8 +147,8 @@ export default function DetailCourse({ id }: Props) {
         <div className="col-4">
           <div className={`${styles["bgCard"]} card`}>
             <Image
-              src={course?.imgCourse}
-              alt={course?.nameCourse}
+              src={course?.imgCourse ?? ""}
+              alt={course?.nameCourse ?? ""}
               width={300}
               height={190}
               className="w__100 object-cover"

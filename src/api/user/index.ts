@@ -1,5 +1,15 @@
 import httpClient from "../index";
-import type { PaginationResponse } from "../model";
+import {
+  GetRequestParams,
+  type CreateProfileParams,
+  type AllBrokersResponse,
+  type PostRequestParams,
+  type Regions,
+  type subcribeTopicsParam,
+  type topicsResponse,
+} from "../model";
+import type { IUser } from "./model";
+import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 export const header = new Headers();
 
@@ -8,19 +18,23 @@ const token =
 
 export const createProfileRequest = (values: any) => {
   header.set("Authorization", "Bearer " + token);
-  return httpClient.post("/v1/user-profile", values, {
-    headers: header,
-  });
+  return httpClient.post<PostRequestParams<CreateProfileParams>, T>(
+    "/v1/user-profile",
+    values,
+    {
+      headers: header,
+    },
+  );
 };
 
 export const getRegionRequest = () => {
   header.set("Authorization", "Bearer " + token);
-  return httpClient.get("/v1/master-data/regions");
+  return httpClient.get<Regions>("/v1/master-data/regions");
 };
 
 export const createGetBrokersRequest = (page: number, take: number) => {
   header.set("Authorization", "Bearer " + token);
-  return httpClient.get(
+  return httpClient.get<AllBrokersResponse<IUser>>(
     `/v1/users?type=broker&page=${page}&take=${take}&sort=[{"orderBy":"followers_count","order":"DESC"}]`,
     {
       headers: header,
@@ -30,7 +44,7 @@ export const createGetBrokersRequest = (page: number, take: number) => {
 
 export const createGetAllTopicsRequest = (page: number, take: number) => {
   header.set("Authorization", "Bearer " + token);
-  return httpClient.get(
+  return httpClient.get<GetRequestParams<topicsResponse>>(
     `/v1/interest-topic?page=${page}&take=${take}&sort={"orderBy":"topic_name","order":"ASC"}`,
     {
       headers: header,
@@ -38,9 +52,13 @@ export const createGetAllTopicsRequest = (page: number, take: number) => {
   );
 };
 
-export const subscribeTopicsRequest = (values: { interestTopicIds: any[] }) => {
+export const subscribeTopicsRequest = (values: any) => {
   header.set("Authorization", "Bearer " + token);
-  return httpClient.post("/v1/interest-topic/subscribe", values, {
-    headers: header,
-  });
+  return httpClient.post<subcribeTopicsParam<T>, T>(
+    "/v1/interest-topic/subscribe",
+    values,
+    {
+      headers: header,
+    },
+  );
 };

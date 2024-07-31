@@ -1,4 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
+import { IHttpOptions } from "./index";
+import { IUser } from "./user/model";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?
@@ -19,33 +21,78 @@ export type ApiRequestParams = {
   config: RequestConfig;
 };
 
-export type GetRequestParams = {
+// export type GetRequestParams = {
+//   url: string;
+//   params?: unknown;
+//   config?: RequestConfig;
+// };
+
+// export type PostRequestParams = {
+//   url: string;
+//   body?: unknown;
+//   options?: RequestConfig;
+// };
+
+export type GetRequestParams<T> = {
   url: string;
-  params?: unknown;
-  config?: RequestConfig;
+  params?: T;
+  options?: Omit<IHttpOptions, "url" | "method" | "body" | "contentType">;
 };
 
-export type PostRequestParams = {
+export type PostRequestParams<T> = {
   url: string;
-  data?: unknown;
-  config?: RequestConfig;
+  body?: T;
+  options?: Omit<IHttpOptions, "url" | "method" | "body">;
+};
+
+export type CreateProfileParams = {
+  nickName: string;
+  region: string;
+  email: string;
+};
+
+export type subcribeTopicsParam<T> = {
+  interestTopicIds: T;
 };
 
 export type BaseResponse<T> = {
-  data: T;
-  code: number;
-  message: string;
+  status: number;
   success: boolean;
+  message: string;
+  data: T;
 };
 
 export type BaseApiResponse<T> = Promise<T>;
 
-export type PaginationResponse<T> = {
+export type AllBrokersResponse<T> = {
   code: number;
   message: string;
   success: boolean;
   data: {
-    records: T[];
-    total: number;
+    docs?: IUser[];
+    data?: IUser[];
+    meta: {
+      page: number;
+      totalPage: number;
+    };
+  };
+};
+
+export type topicsResponse = {
+  data: [{ id: string; topicName: string }];
+};
+
+export type Regions = {
+  status: number;
+  message: string;
+  data: {
+    key: string;
+    value: [
+      {
+        code: string;
+        name: string;
+      },
+    ];
+    type: string;
   };
 };

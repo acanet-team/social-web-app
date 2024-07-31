@@ -13,25 +13,62 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 /** @type {import('next').NextConfig} */
-export default bundleAnalyzer(
-  withNextIntlConfig({
-    eslint: {
-      dirs: ["."],
-      ignoreDuringBuilds: true,
-    },
-    typescript: {
-      ignoreBuildErrors: true,
-    },
-    poweredByHeader: false,
-    reactStrictMode: false,
-    experimental: {
-      serverComponentsExternalPackages: ["@electric-sql/pglite"],
-    },
-    sassOptions: {
-      includePaths: [path.join(__dirname, "./src/styles/global.scss")],
-    },
-    images: {
-      domains: ["via.placeholder.com"],
-    },
-  }),
+export default withSentryConfig(
+  bundleAnalyzer(
+    withNextIntlConfig({
+      eslint: {
+        dirs: ['.'],
+        ignoreDuringBuilds: true,
+      },
+      typescript: {
+        ignoreBuildErrors: true,
+      },
+      poweredByHeader: false,
+      reactStrictMode: false,
+      experimental: {
+        serverComponentsExternalPackages: ['@electric-sql/pglite'],
+      },
+      sassOptions: {
+        includePaths: [path.join(__dirname, './src/styles/global.scss')],
+      },
+      images: {
+        domains: ['via.placeholder.com', 'lh3.googleusercontent.com'],
+      },
+    }),
+  ),
+  {
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
+
+    // Suppresses source map uploading logs during build
+    silent: true,
+    // FIXME: Add your Sentry organization and project names
+    org: 'nextjs-boilerplate-org',
+    project: 'nextjs-boilerplate',
+  },
+  {
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
+
+    // Transpiles SDK to be compatible with IE11 (increases bundle size)
+    transpileClientSDK: true,
+
+    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+    tunnelRoute: '/monitoring',
+
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
+
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+
+    // Enables automatic instrumentation of Vercel Cron Monitors.
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // https://vercel.com/docs/cron-jobs
+    automaticVercelMonitors: true,
+  },
 );

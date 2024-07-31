@@ -4,5 +4,13 @@
     "sign_in_with_facebook": "Đăng nhập bằng facebook",
     "your_social_account": "tài khoản xã hội của bạn",
     "sign_in_with": "Đăng nhập bằng"
+  },
+  "BrokerList": {
+    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
+    "broker_title": "Danh sách môi giới"
+  },
+  "Interest": {
+    "interest_title": "Bạn quan tâm đến điều gì?",
+    "interest_description": "Chọn ít nhất 1 chủ đề bạn quan tâm để giúp cá nhân hóa trải nghiệm của bạn."
   }
 }
