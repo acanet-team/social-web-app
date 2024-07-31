@@ -1,9 +1,11 @@
 import { createNewPostRequest, getTopics } from "@/api/post";
 import Image from "next/image";
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 import style from "@/styles/modules/createpPost.module.scss";
-import { ToastContainer, toast, type ToastOptions } from "react-toastify";
+import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
+import { set } from "zod";
 
 interface CreatePostProps {
   placeholder?: string;
@@ -20,9 +22,13 @@ interface CreatePostState {
   showUploadForm: boolean;
   enlargedImage: File | null;
   topics: any[];
-  selectedTopic: string;
+  selectedTopic: any; // Use an object instead of string
   showModal: boolean;
   interestTopicId: string;
+  searchTerm: string;
+  currentPage: number;
+  isLoading: boolean;
+  hasMore: boolean;
 }
 
 class CreatePost extends Component<CreatePostProps, CreatePostState> {
@@ -35,21 +41,63 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       showUploadForm: false,
       enlargedImage: null,
       topics: [],
-      selectedTopic: "",
+      selectedTopic: null, // Initialize as null
       showModal: false,
       interestTopicId: "",
+      searchTerm: "",
+      currentPage: 1,
+      isLoading: false,
+      hasMore: true,
     };
+    this.topicListRef = React.createRef();
   }
 
-  fetchTopics = async () => {
+  topicListRef: React.RefObject<HTMLDivElement>;
+
+  fetchTopics = async (page = 1, search = "") => {
+    this.setState({ isLoading: true });
+
     try {
-      const response = await getTopics();
+      const response = await getTopics(page, search);
       if (response) {
-        console.log(response);
-        this.setState({ topics: response["data"]["docs"] });
+        const newTopics = response["data"]["docs"].map((topic) => ({
+          value: topic.id,
+          label: topic.topicName,
+        }));
+        const hasMore = newTopics.length > 0;
+        const uniqueTopics = [...this.state.topics, ...newTopics].filter(
+          (topic, index, self) =>
+            index === self.findIndex((t) => t.value === topic.value)
+        );
+        console.log("Unique topics:", uniqueTopics);
+
+        this.setState(() => ({
+          topics: uniqueTopics,
+          hasMore,
+          isLoading: false,
+        }));
       }
     } catch (error) {
       console.error("Error fetching topics:", error);
+      this.setState({ isLoading: false });
+    }
+  };
+
+  handleScroll = () => {
+    if (
+      this.topicListRef.current &&
+      this.topicListRef.current.scrollTop +
+        this.topicListRef.current.clientHeight >=
+        this.topicListRef.current.scrollHeight - 100 &&
+      !this.state.isLoading &&
+      this.state.hasMore
+    ) {
+      this.setState((prevState) => ({
+        currentPage: prevState.currentPage + 1,
+      }));
+      this.fetchTopics(this.state.currentPage, this.state.searchTerm);
+    } else {
+      console.log("No more topics to fetch.");
     }
   };
 
@@ -106,7 +154,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       return;
     }
 
-    if (this.state.selectedTopic.trim() === "") {
+    if (!this.state.selectedTopic) {
       this.throwToast("Please select a topic for your post.", "error");
       return;
     }
@@ -115,22 +163,23 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       await createNewPostRequest({
         content: this.state.postText,
         images: this.state.uploadedImages,
-        interestTopicId: this.state.selectedTopic,
+        interestTopicId: this.state.selectedTopic.value,
       });
       this.setState({ showModal: false });
       this.throwToast("Post created successfully!", "success");
       this.setState({
         postText: "",
         uploadedImages: [],
-        selectedTopic: "",
+        selectedTopic: null,
       });
     } catch (error) {
       console.log("error", error);
     }
     this.closeModal();
   };
-  handleTopicChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ selectedTopic: event.target.value });
+
+  handleTopicChange = (selectedOption: any) => {
+    this.setState({ selectedTopic: selectedOption });
   };
 
   openModal = () => {
@@ -143,7 +192,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
   };
 
   closeModal = () => {
-    this.setState({ showModal: false, selectedTopic: "" });
+    this.setState({ showModal: false, selectedTopic: null });
   };
 
   render() {
@@ -154,14 +203,8 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       photoVideo: photo_Video,
       createPost,
     } = this.props;
-    const {
-      uploadedImages,
-      showUploadForm,
-      enlargedImage,
-      topics,
-      selectedTopic,
-      showModal,
-    } = this.state;
+    const { uploadedImages, showUploadForm, enlargedImage, showModal } =
+      this.state;
     const menuClass = `${this.state.isOpen ? " show" : ""}`;
 
     return (
@@ -199,7 +242,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
                 <button
                   onClick={() => this.removeImage(index)}
                   className={style["close-button"]}>
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true">×</span>
                 </button>
               </div>
             ))}
@@ -223,7 +266,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
               <button
                 onClick={this.closeEnlarge}
                 className={style["close-enlarge"]}>
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">×</span>
               </button>
             </div>
           </div>
@@ -270,35 +313,49 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
                       type="button"
                       className={style["close"]}
                       onClick={this.closeModal}>
-                      <span aria-hidden="true">&times;</span>
+                      <span aria-hidden="true">×</span>
                     </button>
                   </div>
                   <div className="modal-body">
-                    <select
-                      style={{ width: "-webkit-fill-available" }}
-                      value={selectedTopic}
-                      onChange={this.handleTopicChange}>
-                      <option value={"Select Topic"}>Select Topic</option>
-                      {topics.map((topic) => (
-                        <option key={topic.id} value={topic.id}>
-                          {topic.topicName}
-                        </option>
-                      ))}
-                    </select>
+                    <div ref={this.topicListRef} className="topic-list">
+                      {this.state.isLoading && (
+                        <div className="text-center">Loading...</div>
+                      )}
+                      {this.state.topics.length === 0 && (
+                        <div className="text-center">No topics found.</div>
+                      )}
+                      <Select
+                        options={this.state.topics}
+                        value={this.state.selectedTopic}
+                        onChange={this.handleTopicChange}
+                        placeholder="Select a topic"
+                        isMulti={false}
+                        className={style["topic-select"]}
+                        onInputChange={(searchTerm) => {
+                          console.log("Search term:", searchTerm);
+
+                          if (searchTerm.trim() !== "") {
+                            this.setState({ searchTerm });
+                            this.fetchTopics(1, searchTerm);
+                          }
+                        }}
+                        onMenuScrollToBottom={this.handleScroll}
+                      />
+                    </div>
                   </div>
                   <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={this.closeModal}>
-                      Close
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={this.submitPost}>
-                      Save changes
-                    </button>
+                    <div>
+                      <label
+                        id="button"
+                        className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center ${
+                          style["right"]
+                        }`}
+                        onClick={this.submitPost}>
+                        {" "}
+                        <i className="btn-round-sm font-xs text-primary feather-save me-2 bg-greylight"></i>
+                        Save changes
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

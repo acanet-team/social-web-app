@@ -16,15 +16,18 @@ export const createNewPostRequest = (values: CreatePostRequest) => {
 interface GetTopicsResponse {
   data: {
     docs: {
-      _id: string;
-      topic_name: string;
+      topicName: any;
+      id: string;
     }[];
   };
 }
 
-export const getTopics = (): Promise<GetTopicsResponse> => {
+export const getTopics = (page: number, search: string): Promise<GetTopicsResponse> => {
+  let url = `/v1/interest-topic?order=DESC`;
+  page ? (url += `&page=${page}&take=20`) : null;
+  search ? (url += `&keyword=${search}`) : null;
   return httpClient.fetch({
-    url: "/v1/interest-topic",
+    url: url,
     method: "GET",
     contentType: "json",
   });

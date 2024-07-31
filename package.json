@@ -62,6 +62,7 @@
     "react-dom": "~18.2.0",
     "react-hook-form": "^7.52.0",
     "react-image-lightbox": "^5.1.4",
+    "react-select": "^5.8.0",
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.6",
