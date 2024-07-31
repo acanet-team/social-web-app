@@ -1,11 +1,10 @@
 import { createNewPostRequest, getTopics } from "@/api/post";
 import Image from "next/image";
-import React, { Component, useState, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import style from "@/styles/modules/createpPost.module.scss";
 import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
-import { set } from "zod";
 
 interface CreatePostProps {
   placeholder?: string;
@@ -22,13 +21,14 @@ interface CreatePostState {
   showUploadForm: boolean;
   enlargedImage: File | null;
   topics: any[];
-  selectedTopic: any; // Use an object instead of string
+  selectedTopic: any;
   showModal: boolean;
   interestTopicId: string;
   searchTerm: string;
   currentPage: number;
   isLoading: boolean;
   hasMore: boolean;
+  hasNextPage : boolean;
 }
 
 class CreatePost extends Component<CreatePostProps, CreatePostState> {
@@ -41,13 +41,14 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       showUploadForm: false,
       enlargedImage: null,
       topics: [],
-      selectedTopic: null, // Initialize as null
+      selectedTopic: null,
       showModal: false,
       interestTopicId: "",
       searchTerm: "",
       currentPage: 1,
       isLoading: false,
       hasMore: true,
+      hasNextPage: true,
     };
     this.topicListRef = React.createRef();
   }
@@ -69,35 +70,25 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
           (topic, index, self) =>
             index === self.findIndex((t) => t.value === topic.value)
         );
-        console.log("Unique topics:", uniqueTopics);
-
         this.setState(() => ({
           topics: uniqueTopics,
           hasMore,
           isLoading: false,
+          hasNextPage: response["data"]["meta"]["hasNextPage"],
         }));
       }
     } catch (error) {
-      console.error("Error fetching topics:", error);
+      this.throwToast("Error fetching topics.", "error");
       this.setState({ isLoading: false });
     }
   };
 
   handleScroll = () => {
-    if (
-      this.topicListRef.current &&
-      this.topicListRef.current.scrollTop +
-        this.topicListRef.current.clientHeight >=
-        this.topicListRef.current.scrollHeight - 100 &&
-      !this.state.isLoading &&
-      this.state.hasMore
-    ) {
+    if (this.state.hasNextPage) {
       this.setState((prevState) => ({
         currentPage: prevState.currentPage + 1,
       }));
       this.fetchTopics(this.state.currentPage, this.state.searchTerm);
-    } else {
-      console.log("No more topics to fetch.");
     }
   };
 
@@ -140,7 +131,6 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
       if (message !== "" && notiType === "success") {
         toast.success(message, notiConfig);
       } else if (message !== "" && notiType === "error") {
-        console.log("Please enter some text for your post.");
         toast.error(message, notiConfig);
       }
     };
@@ -173,7 +163,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
         selectedTopic: null,
       });
     } catch (error) {
-      console.log("error", error);
+      this.throwToast("Error creating post.", "error");
     }
     this.closeModal();
   };
@@ -332,8 +322,6 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
                         isMulti={false}
                         className={style["topic-select"]}
                         onInputChange={(searchTerm) => {
-                          console.log("Search term:", searchTerm);
-
                           if (searchTerm.trim() !== "") {
                             this.setState({ searchTerm });
                             this.fetchTopics(1, searchTerm);

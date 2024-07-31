@@ -19,6 +19,14 @@ interface GetTopicsResponse {
       topicName: any;
       id: string;
     }[];
+    meta: {
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      page: number;
+      take: number;
+      total: number;
+      totalPage: number;
+    };
   };
 }
 
