@@ -127,20 +127,33 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import Appfooter from "@/app/components/Appfooter";
-import Createpost from "@/app/components/Createpost";
+import CreatePost from "@/app/components/Createpost";
 import Memberslider from "@/app/components/Memberslider";
 import FetchBroker from "@/app/components/newsfeed/FetchBrokers";
 import Load from "@/app/components/WaveLoader";
 import styles from "@/styles/modules/home.module.scss";
 import Layout from "../layout";
 import Link from "next/link";
-import Popupchat from "../../../components/Popupchat";
 import Contacts from "@/app/components/Contacts";
 import FeedPosts from "@/app/components/newsfeed/FeedPosts";
 import FeedTabs from "@/app/components/newsfeed/FeedTabs";
 import NavLink from "@/app/components/NavLink";
+import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
+import { getUserInfoRequest } from "@/api/user";
+import { useAccessTokenStore } from "@/store/accessToken";
+import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
+import Postview from "@/app/components/newsfeed/Postview";
 
 export default function Home() {
+  const [posts, setPosts] = useState<Object[]>([]);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [userInfo, setUserInfo] = useState<any>({});
+  const { data: session } = useSession() as any;
+  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
+  const router = useRouter();
+
   const onClickForYouHandler = () => {
     console.log("fetching for-you feed");
     // setPosts()
@@ -150,12 +163,26 @@ export default function Home() {
     console.log("fetching suggestion feed");
     // setPosts()
   };
+  const tCreatePost = useTranslations("CreatePost");
+  useEffect(() => {
+    if (session) {
+      setAccessToken(session.token);
+      if (!session.isProfile) {
+        router.push("/home");
+        setUserInfo(session.user);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [session, setAccessToken]);
+
 
   const onClickTabHandler = (e: any) => {
     console.log(e.target);
   };
   return (
     <Layout>
+      <ToastContainer />
       <div className="main-content right-chat-active" id={styles.home}>
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
@@ -166,15 +193,13 @@ export default function Home() {
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
                     href="/home?tab=you"
-                    onClick={onClickForYouHandler}
-                  >
+                    onClick={onClickForYouHandler}>
                     For you
                   </NavLink>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
                     href="/home?tab=sugesstion"
-                    onClick={onClickSuggestionHandler}
-                  >
+                    onClick={onClickSuggestionHandler}>
                     Suggestion
                   </NavLink>
 
@@ -183,12 +208,16 @@ export default function Home() {
                     <Link href="/home?tab=sugesstion">Suggestion</Link>
                   </form> */}
                 </div>
-                {/* <FetchBroker /> */}
-                <Createpost />
-
+                {/* <FetchBroker /> */}{" "}
+                <CreatePost
+                  placeholder={tCreatePost("Whats_on_your_mind")}
+                  avatarUrl={userInfo?.photo?.path}
+                  liveVideo={tCreatePost("live_Video")}
+                  photoVideo={tCreatePost("Photo_Video")}
+                  createPost={tCreatePost("create_Post")}
+                />
                 {/* Generate posts */}
                 <FeedPosts />
-
                 <Load />
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">

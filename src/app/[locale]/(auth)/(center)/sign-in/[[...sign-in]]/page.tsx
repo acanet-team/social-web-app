@@ -36,7 +36,7 @@ const LoginPage: NextPage = () => {
       console.log(session);
       if (!session.isProfile) {
         createProfile(session);
-        router.push("/account");
+        router.push("/home");
       } else {
         router.push("/");
       }
