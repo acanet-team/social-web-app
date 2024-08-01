@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import Chart from 'react-apexcharts';
+import React, { Component, Fragment } from "react";
+import Chart from "react-apexcharts";
 
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Analytics extends Component {
   constructor(props) {
@@ -13,32 +13,32 @@ class Analytics extends Component {
 
     this.state = {
       labels: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ],
       series: [
         {
-          name: '',
+          name: "",
           data: [35, 66, 34, 56, 18, 35, 66, 34, 56, 18, 56, 18],
         },
         {
-          name: '',
+          name: "",
           data: [12, 34, 12, 11, 7, 12, 34, 12, 11, 7, 11, 7],
         },
       ],
       options: {
         chart: {
-          type: 'bar',
+          type: "bar",
           //   width:'100%',
           height: 250,
           stacked: true,
@@ -51,7 +51,7 @@ class Analytics extends Component {
             breakpoint: 480,
             options: {
               legend: {
-                position: 'bottom',
+                position: "bottom",
                 offsetX: -10,
                 offsetY: 0,
               },
@@ -121,7 +121,7 @@ class Analytics extends Component {
                     <div className="card-body d-flex p-0">
                       <i className="btn-round-lg d-inline-block me-3 bg-primary-gradiant feather-home font-md text-white"></i>
                       <h4 className="text-primary font-xl fw-700">
-                        2.3M{' '}
+                        2.3M{" "}
                         <span className="fw-500 mt-0 d-block text-grey-500 font-xssss">
                           day visiter
                         </span>
@@ -137,7 +137,7 @@ class Analytics extends Component {
                     <div className="card-body d-flex p-0">
                       <i className="btn-round-lg d-inline-block me-3 bg-secondary feather-lock font-md text-white"></i>
                       <h4 className="text-secondary font-xl fw-700">
-                        44.6K{' '}
+                        44.6K{" "}
                         <span className="fw-500 mt-0 d-block text-grey-500 font-xssss">
                           total user
                         </span>
@@ -153,7 +153,7 @@ class Analytics extends Component {
                     <div className="card-body d-flex p-0">
                       <i className="btn-round-lg d-inline-block me-3 bg-success feather-command font-md text-white"></i>
                       <h4 className="text-success font-xl fw-700">
-                        603{' '}
+                        603{" "}
                         <span className="fw-500 mt-0 d-block text-grey-500 font-xssss">
                           monthly sale
                         </span>
@@ -169,7 +169,7 @@ class Analytics extends Component {
                     <div className="card-body d-flex p-0">
                       <i className="btn-round-lg d-inline-block me-3 bg-warning feather-shopping-bag font-md text-white"></i>
                       <h4 className="text-warning font-xl fw-700">
-                        3M{' '}
+                        3M{" "}
                         <span className="fw-500 mt-0 d-block text-grey-500 font-xssss">
                           day visiter
                         </span>

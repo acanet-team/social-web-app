@@ -10,5 +10,13 @@
     "create_Post": "Tạo bài đăng",
     "Photo_Video": "Ảnh/Video",
     "Whats_on_your_mind": "Bạn đang nghĩ gì vậy?"
+  },
+  "BrokerList": {
+    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
+    "broker_title": "Danh sách môi giới"
+  },
+  "Interest": {
+    "interest_title": "Bạn quan tâm đến điều gì?",
+    "interest_description": "Chọn ít nhất 1 chủ đề bạn quan tâm để giúp cá nhân hóa trải nghiệm của bạn."
   }
 }

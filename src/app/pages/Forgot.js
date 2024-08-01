@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 
 class Forgot extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -11,8 +11,8 @@ class Forgot extends Component {
               <a href="/">
                 <i className="feather-zap text-success display1-size me-2 ms-0"></i>
                 <span className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">
-                  Sociala.{' '}
-                </span>{' '}
+                  Sociala.{" "}
+                </span>{" "}
               </a>
               <button className="nav-menu me-0 ms-auto"></button>
 

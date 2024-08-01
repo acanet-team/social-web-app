@@ -1,27 +1,27 @@
-import React, { Component, Fragment } from 'react';
-import Slider from 'react-slick';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Slider from "react-slick";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 const slideList = [
   {
-    imageUrl: 'product.png',
-    name: 'product-image ',
+    imageUrl: "product.png",
+    name: "product-image ",
   },
   {
-    imageUrl: 'product.png',
-    name: 'product-image ',
+    imageUrl: "product.png",
+    name: "product-image ",
   },
   {
-    imageUrl: 'product.png',
-    name: 'product-image ',
+    imageUrl: "product.png",
+    name: "product-image ",
   },
   {
-    imageUrl: 'product.png',
-    name: 'product-image ',
+    imageUrl: "product.png",
+    name: "product-image ",
   },
 ];
 
@@ -88,7 +88,7 @@ class Singleproduct extends Component {
                 <div className="col-lg-6  col-md-12 pad-top-lg-200 pad-bottom-lg-100 pad-top-100 pad-bottom-75 ps-md--5">
                   <h4 className="text-danger font-xssss fw-700 ls-2">DNMX</h4>
                   <h2 className="fw-700 text-grey-900 display1-size lh-3 porduct-title display2-md-size">
-                    {' '}
+                    {" "}
                     Camisole with Adjustable Straps
                   </h2>
                   <div className="star d-block w-100 text-left">
@@ -119,7 +119,7 @@ class Singleproduct extends Component {
                     />
                   </div>
                   <p className="review-link font-xssss fw-500 text-grey-500 lh-3">
-                    {' '}
+                    {" "}
                     2 customer review
                   </p>
                   <div className="clearfix"></div>
@@ -130,7 +130,7 @@ class Singleproduct extends Component {
                   </p>
 
                   <h6 className="display2-size fw-700 text-current ls-2 mb-2">
-                    <span className="font-xl">$</span>449{' '}
+                    <span className="font-xl">$</span>449{" "}
                     <span
                       className="font-xs text-grey-500"
                       style={{ textDecoration: `line-through` }}
@@ -140,21 +140,21 @@ class Singleproduct extends Component {
                   </h6>
                   <div className="timer bg-white mt-2 mb-0 w350 rounded-3">
                     <div className="time-count">
-                      <span className="text-time">03</span>{' '}
+                      <span className="text-time">03</span>{" "}
                       <span className="text-day">Day</span>
-                    </div>{' '}
+                    </div>{" "}
                     <div className="time-count">
-                      <span className="text-time">03</span>{' '}
-                      <span className="text-day">Hours</span>{' '}
-                    </div>{' '}
+                      <span className="text-time">03</span>{" "}
+                      <span className="text-day">Hours</span>{" "}
+                    </div>{" "}
                     <div className="time-count">
-                      <span className="text-time">55</span>{' '}
-                      <span className="text-day">Min</span>{' '}
-                    </div>{' '}
+                      <span className="text-time">55</span>{" "}
+                      <span className="text-day">Min</span>{" "}
+                    </div>{" "}
                     <div className="time-count">
-                      <span className="text-time">48</span>{' '}
-                      <span className="text-day">Sec</span>{' '}
-                    </div>{' '}
+                      <span className="text-time">48</span>{" "}
+                      <span className="text-day">Sec</span>{" "}
+                    </div>{" "}
                   </div>
                   <div className="clearfix"></div>
                   <form action="#" className="form--action mt-4 mb-3">

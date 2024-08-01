@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Live extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -18,7 +18,7 @@ class Live extends Component {
           <div className="middle-sidebar-bottom">
             <div
               className="middle-sidebar-left pe-0"
-              style={{ maxWidth: '100%' }}
+              style={{ maxWidth: "100%" }}
             >
               <div className="row">
                 <div className="col-xl-8 col-xxl-9 col-lg-8">

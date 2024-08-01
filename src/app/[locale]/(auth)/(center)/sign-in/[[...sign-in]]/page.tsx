@@ -2,7 +2,6 @@
 
 import { getMe } from "@/api/auth";
 import { useAccessTokenStore } from "@/store/accessToken";
-import useAuthStore from "@/store/auth";
 import { getLocalStorage } from "@/utils/local-storage";
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
@@ -10,11 +9,13 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import useAuthStore from "@/store/auth";
 
 const LoginPage: NextPage = () => {
   const t = useTranslations("SignIn");
   const [curTheme, setCurTheme] = useState("theme-dark");
   const { data: session } = useSession() as any;
+  const createProfile = useAuthStore((state) => state.createProfile);
   const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
   const router = useRouter();
 
@@ -22,7 +23,7 @@ const LoginPage: NextPage = () => {
     const handleStorageChange = () => {
       const theme = getLocalStorage("theme");
       setCurTheme(theme);
-      console.log(theme);
+      // console.log(theme);
     };
     window.addEventListener("storage", handleStorageChange);
     return () => {
@@ -32,8 +33,9 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      setAccessToken(session.token);
+      console.log(session);
       if (!session.isProfile) {
+        createProfile(session);
         router.push("/home");
       } else {
         router.push("/");
@@ -46,7 +48,6 @@ const LoginPage: NextPage = () => {
       <div className="nav-header border-0 bg-transparent shadow-none">
         <div className="nav-top w-100">
           <a href="/" className="me-auto">
-            <i className="feather-zap text-success display1-size me-2 ms-0" />
             <span
               id="site-logo"
               className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"

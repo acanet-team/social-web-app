@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
+import React, { Component, Fragment } from "react";
+import Link from "next/link";
 
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Settings extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -36,7 +36,7 @@ class Settings extends Component {
                               to="/accountinformation"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-primary-gradiant text-white feather-home font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-primary-gradiant text-white feather-home font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Acount Information
                               </h4>
@@ -48,7 +48,7 @@ class Settings extends Component {
                               to="/contactinformation"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-gold-gradiant text-white feather-map-pin font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-gold-gradiant text-white feather-map-pin font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Saved Address
                               </h4>
@@ -60,7 +60,7 @@ class Settings extends Component {
                               to="/socialaccount"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-red-gradiant text-white feather-twitter font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-red-gradiant text-white feather-twitter font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Social Acount
                               </h4>
@@ -78,7 +78,7 @@ class Settings extends Component {
                               to="/payment"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-mini-gradiant text-white feather-credit-card font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-mini-gradiant text-white feather-credit-card font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 My Cards
                               </h4>
@@ -90,7 +90,7 @@ class Settings extends Component {
                               to="/password"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-blue-gradiant text-white feather-inbox font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-blue-gradiant text-white feather-inbox font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Password
                               </h4>
@@ -108,7 +108,7 @@ class Settings extends Component {
                               to="/defaultnoti"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-gold-gradiant text-white feather-bell font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-gold-gradiant text-white feather-bell font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Notification
                               </h4>
@@ -120,7 +120,7 @@ class Settings extends Component {
                               href="/helpbox"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-primary-gradiant text-white feather-help-circle font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-primary-gradiant text-white feather-help-circle font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Help
                               </h4>
@@ -132,7 +132,7 @@ class Settings extends Component {
                               href="/login"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
-                              <i className="btn-round-md bg-red-gradiant text-white feather-lock font-md me-3"></i>{' '}
+                              <i className="btn-round-md bg-red-gradiant text-white feather-lock font-md me-3"></i>{" "}
                               <h4 className="fw-600 font-xsss mb-0 mt-0">
                                 Logout
                               </h4>

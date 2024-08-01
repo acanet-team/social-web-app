@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import Header from '../components/Header';
-import Leftnav from '../components/Leftnav';
-import Rightchat from '../components/Rightchat';
-import Appfooter from '../components/Appfooter';
-import Popupchat from '../components/Popupchat';
+import React, { Component, Fragment } from "react";
+import Header from "../components/Header";
+import Leftnav from "../components/Leftnav";
+import Rightchat from "../components/Rightchat";
+import Appfooter from "../components/Appfooter";
+import Popupchat from "../components/Popupchat";
 
 class Checkout extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -24,7 +24,7 @@ class Checkout extends Component {
                       <div className="card p-md-5 p-4 bg-primary-gradiant rounded-3 shadow-xss bg-pattern border-0 overflow-hidden">
                         <div className="bg-pattern-div"></div>
                         <h2 className="display2-size display2-md-size fw-700 text-white mb-0 mt-0">
-                          Checkout{' '}
+                          Checkout{" "}
                           <span className="fw-700 ls-3 text-grey-200 font-xsssss mt-2 d-block">
                             4 PRODUCT FOUND
                           </span>
@@ -38,7 +38,7 @@ class Checkout extends Component {
                       <div class="card bg-greyblue border-0 p-4 mb-5">
                         <p class="mb-0 mont-font font-xssss text-uppercase fw-600 text-grey-500">
                           <i class="fa fa-exclamation-circle"></i> Have A
-                          Coupon?{' '}
+                          Coupon?{" "}
                           <a
                             class="expand-btn text-grey-500 fw-700"
                             href="/checkoutcoupon_info"
