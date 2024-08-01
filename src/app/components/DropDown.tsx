@@ -16,15 +16,18 @@ interface Data {
   data: DropDownProp[] | undefined;
   totalLectures: number | undefined;
   totalCourseDuration: number | undefined;
+  theme: string;
 }
 
 export const DropDown: React.FC<Data> = ({
   data,
   totalLectures,
   totalCourseDuration,
+  theme,
 }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [openAll, setOpenAll] = useState(false);
+  const [curTheme, setCurTheme] = useState("theme-dark");
 
   const handleToggle = (index: number) => {
     if (openAll) return;
@@ -49,23 +52,23 @@ export const DropDown: React.FC<Data> = ({
     <>
       <div className={styles["group-child-label"]}>
         <div className={styles["group-label"]}>
-          <p className="m-0 text-white font-xssss">{data?.length} sections</p>
-          <p className="m-0 text-white font-xsssss">•</p>
-          <p className="m-0 text-white font-xssss">{totalLectures} lectures</p>
-          <p className="m-0 text-white font-xsssss">•</p>
-          <p className="m-0 text-white font-xssss">
+          <p className="m-0 font-xssss">{data?.length} sections</p>
+          <p className="m-0 font-xsssss">•</p>
+          <p className="m-0 font-xssss">{totalLectures} lectures</p>
+          <p className="m-0 font-xsssss">•</p>
+          <p className="m-0 font-xssss">
             {totalCourseDuration !== undefined
               ? formatCourseDuration(totalCourseDuration)
               : ""}{" "}
             total length
           </p>
         </div>
-        <p
+        <div
           className="text-blue font-xssss m-0 cursor-pointer"
           onClick={handleAllToggle}
         >
           Expand all sections
-        </p>
+        </div>
       </div>
       <div className={`${styles["bgCard"]} card`}>
         {data?.map((item, index) => (
@@ -77,27 +80,35 @@ export const DropDown: React.FC<Data> = ({
               <div className={styles["group-label"]}>
                 {openAll || openIndex === index ? (
                   <Image
-                    src={`/assets/images/icon-chev-up.png`}
+                    src={
+                      theme === "theme-dark"
+                        ? `/assets/icon/icon-chev-up-white.svg`
+                        : `/assets/icon/icon-chev-up-black.svg`
+                    }
                     width={10}
                     height={5}
                     alt="arrow up icon"
                   />
                 ) : (
                   <Image
-                    src={`/assets/images/icon-chev-down.png`}
+                    src={
+                      theme === "theme-dark"
+                        ? `/assets/icon/icon-chev-down-white.svg`
+                        : `/assets/icon/icon-chev-down-black.svg`
+                    }
                     width={10}
                     height={5}
                     alt="arrow down icon"
                   />
                 )}
-                <p className="m-0 text-white font-xss">{item.label}</p>
+                <p className="m-0 font-xss">{item.label}</p>
               </div>
               <div className={styles["group-label"]}>
-                <p className="m-0 text-white font-xsss">
+                <p className="m-0 font-xsss">
                   {item.childList.length} lectures
                 </p>
-                <p className="m-0 text-white font-xssss">•</p>
-                <p className="m-0 text-white font-xsss">
+                <p className="m-0 font-xssss">•</p>
+                <p className="m-0 font-xsss">
                   {formatCourseDuration(item.course_duration)}
                 </p>
               </div>
@@ -107,12 +118,16 @@ export const DropDown: React.FC<Data> = ({
                 {item.childList.map((child, idx) => (
                   <div key={idx} className={`${styles["group"]} px-4 py-2`}>
                     <Image
-                      src={`/assets/images/icon-course-video.png`}
+                      src={
+                        theme === "theme-dark"
+                          ? `/assets/icon/icon-video-white.svg`
+                          : `/assets/icon/icon-video-black.svg`
+                      }
                       width={14}
                       height={14}
                       alt="video icon"
                     />
-                    <p className="text-white m-0">{child.child}</p>
+                    <p className="m-0">{child.child}</p>
                   </div>
                 ))}
               </div>

@@ -14,7 +14,7 @@ const Rating: React.FC<RatingProps> = ({ rating }) => {
     <div className={styles.rating}>
       {stars.map((filled, index) => (
         <span key={index} className={filled ? styles.filled : styles.empty}>
-          ★
+          &#9733;
         </span>
       ))}
     </div>

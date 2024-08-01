@@ -8,15 +8,19 @@ import { useRouter } from "next/navigation";
 export default function ListCourses() {
   const router = useRouter();
 
+  const formatNumber = (number: number) => {
+    if (number < 1000) return number;
+    return `${(number / 1000).toFixed(1)}k`;
+  };
+
   return (
     <>
       <div className="row">
         <div className="col-12">
           <div className="row ps-2 pe-2">
-            {coursesList &&
-              coursesList.length > 0 &&
+            {coursesList?.length > 0 &&
               coursesList.map((course, index) => (
-                <div key={index} className="col-md-4 col-sm-6 col-xs-12">
+                <div key={index} className="col-md-4 col-sm-6 col-12">
                   <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-4">
                     <div className="position-relative ">
                       <Image
@@ -52,25 +56,17 @@ export default function ListCourses() {
                           className="bg-white rounded-circle shadow-xss w35"
                         />
                         <div>
-                          <p className="font-xsss m-0 text-white">
-                            {course.author}
-                          </p>
+                          <p className="font-xsss m-0">{course.author}</p>
                           <div className={styles["group"]}>
                             <div className={styles["group-child"]}>
-                              <p className="font-xssss m-0 fw-700 text-white">
-                                88.7k
+                              <p className="font-xssss m-0 fw-700 ">
+                                {formatNumber(88700)}
                               </p>
-                              <p className="font-xssss m-0 fw-200 text-white">
-                                followers
-                              </p>
+                              <p className="font-xssss m-0 fw-200">followers</p>
                             </div>
                             <div className={styles["group-child"]}>
-                              <p className="font-xssss m-0 fw-700 text-white">
-                                4.8/5
-                              </p>
-                              <p className="font-xssss m-0 fw-200 text-white">
-                                ratings
-                              </p>
+                              <p className="font-xssss m-0 fw-700">4.8/5</p>
+                              <p className="font-xssss m-0 fw-200">ratings</p>
                             </div>
                           </div>
                         </div>
@@ -82,7 +78,7 @@ export default function ListCourses() {
                           router.push(`/courses/investor/detail/${course.id}`)
                         }
                       >
-                        <p className="m-0 text-white">See more</p>
+                        <p className="m-0 ">See more</p>
                       </button>
                     </div>
                   </div>

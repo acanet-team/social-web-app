@@ -6,6 +6,7 @@ const DarkMode = () => {
   const [theme, setTheme] = useState<ThemeMode>("theme-dark");
 
   useEffect(() => {
+    localStorage.setItem("theme", "theme-dark");
     setTheme(localStorage.getItem("theme") as ThemeMode);
   }, []);
 
@@ -20,12 +21,16 @@ const DarkMode = () => {
       el.classList.remove(clickedClass);
       setTheme('theme-light');
       localStorage.setItem("theme", "theme-light");
+      const event = new CustomEvent("themeChange", { detail: "theme-light" });
+      window.dispatchEvent(event);
     } else {
       document.body.classList.replace('theme-light', 'theme-dark');
       const el = e.target.closest('.theme-btn');
       el.classList.add(clickedClass);
       setTheme('theme-dark');
       localStorage.setItem("theme", "theme-dark");
+      const event = new CustomEvent("themeChange", { detail: "theme-dark" });
+      window.dispatchEvent(event);
     }
   };
 

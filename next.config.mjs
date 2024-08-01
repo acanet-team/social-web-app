@@ -13,26 +13,25 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 /** @type {import('next').NextConfig} */
-export default 
-  bundleAnalyzer(
-    withNextIntlConfig({
-      eslint: {
-        dirs: ['.'],
-        ignoreDuringBuilds: true,
-      },
-      typescript: {
-        ignoreBuildErrors: true,
-      },
-      poweredByHeader: false,
-      reactStrictMode: false,
-      experimental: {
-        serverComponentsExternalPackages: ['@electric-sql/pglite'],
-      },
-      sassOptions: {
-        includePaths: [path.join(__dirname, './src/styles/global.scss')],
-      },
-      images: {
-        domains: ['via.placeholder.com', 'lh3.googleusercontent.com'],
-      },
-    }),
-  )
+export default bundleAnalyzer(
+  withNextIntlConfig({
+    eslint: {
+      dirs: ["."],
+      ignoreDuringBuilds: true,
+    },
+    typescript: {
+      ignoreBuildErrors: true,
+    },
+    poweredByHeader: false,
+    reactStrictMode: false,
+    experimental: {
+      serverComponentsExternalPackages: ["@electric-sql/pglite"],
+    },
+    sassOptions: {
+      includePaths: [path.join(__dirname, "./src/styles/global.scss")],
+    },
+    images: {
+      domains: ["via.placeholder.com", "lh3.googleusercontent.com"],
+    },
+  }),
+);
