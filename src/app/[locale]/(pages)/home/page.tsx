@@ -122,38 +122,34 @@
 //   );
 // }
 
-"use client";
-
-import React, { useCallback, useEffect, useState } from "react";
-
 import Appfooter from "@/app/components/Appfooter";
-import Createpost from "@/app/components/Createpost";
-import Memberslider from "@/app/components/Memberslider";
+import CreatePost from "@/app/components/Createpost";
+import NavLink from "@/app/components/NavLink";
+import FetchPosts from "@/app/components/newsfeed/FetchPosts";
 import FetchBroker from "@/app/components/newsfeed/FetchBrokers";
 import Load from "@/app/components/WaveLoader";
 import styles from "@/styles/modules/home.module.scss";
 import Layout from "../layout";
-import Link from "next/link";
-import Popupchat from "../../../components/Popupchat";
-import Contacts from "@/app/components/Contacts";
-import FeedPosts from "@/app/components/newsfeed/FeedPosts";
-import FeedTabs from "@/app/components/newsfeed/FeedTabs";
-import NavLink from "@/app/components/NavLink";
 
-export default function Home() {
-  const onClickForYouHandler = () => {
-    console.log("fetching for-you feed");
-    // setPosts()
-  };
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // const onClickForYouHandler = () => {
+  //   console.log("fetching for-you feed");
+  //   // setPosts()
+  // };
 
-  const onClickSuggestionHandler = () => {
-    console.log("fetching suggestion feed");
-    // setPosts()
-  };
+  // const onClickSuggestionHandler = () => {
+  //   console.log("fetching suggestion feed");
+  //   // setPosts()
+  // };
 
-  const onClickTabHandler = (e: any) => {
-    console.log(e.target);
-  };
+  // const onClickTabHandler = (e: any) => {
+  //   console.log(e.target);
+  // };
+
   return (
     <Layout>
       <div className="main-content right-chat-active" id={styles.home}>
@@ -163,7 +159,7 @@ export default function Home() {
               <div className="col-xl-8 col-xxl-9 col-lg-8">
                 {/* <FeedTabs onClickTab={onClickTabHandler} /> */}
                 <div className={styles["home-tabs"]}>
-                  <NavLink
+                  {/* <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
                     href="/home?tab=you"
                     onClick={onClickForYouHandler}
@@ -176,7 +172,7 @@ export default function Home() {
                     onClick={onClickSuggestionHandler}
                   >
                     Suggestion
-                  </NavLink>
+                  </NavLink> */}
 
                   {/* <form action={e => onClickTabHandler(e)}>
                     <Link href="/home?tab=you">For you</Link>
@@ -184,15 +180,17 @@ export default function Home() {
                   </form> */}
                 </div>
                 {/* <FetchBroker /> */}
-                <Createpost />
+                <CreatePost />
 
                 {/* Generate posts */}
-                <FeedPosts />
+                <FetchPosts
+                  postIdParams={searchParams.comments?.toString() || ""}
+                />
 
                 <Load />
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-                <Contacts />
+                {/* <Contacts /> */}
                 {/* <Group /> */}
                 {/* <Events />
                 <Profilephoto /> */}

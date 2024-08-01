@@ -22,7 +22,7 @@ export default async function InterestList() {
   const options = response.docs ?? response.data;
   const page = response.meta.page;
   const totalPage = response.meta.totalPage;
-  const TAKE = 20;
+  const take = response.meta.take;
 
   return (
     <>
@@ -48,7 +48,7 @@ export default async function InterestList() {
                   options={options}
                   page={page}
                   totalPage={totalPage}
-                  take={TAKE}
+                  take={take}
                 />
               </div>
             </div>

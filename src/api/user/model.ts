@@ -56,17 +56,17 @@ interface UserProfile {
 
 interface AdditionalData {}
 
-interface Role {
+export interface Role {
   id: number;
   name: string;
 }
 
-interface Status {
+export interface Status {
   id: number;
   name: string;
 }
 
-interface Photo {
+export interface Photo {
   id: string;
   path: string;
   mimetype: string;

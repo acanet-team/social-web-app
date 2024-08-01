@@ -1,0 +1,16 @@
+.content-container {
+  padding: 8px 15px;
+  background-color: var(--theme-color);
+}
+
+.comment-failed {
+  border: 1px solid red;
+  position: relative;
+}
+
+.comment-error__msg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 22px;
+}
