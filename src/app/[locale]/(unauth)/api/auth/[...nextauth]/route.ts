@@ -59,7 +59,7 @@ const options: NextAuthOptions = {
           return session;
         } catch (err) {
           console.log("err", err);
-          // return session;
+          return session;
         }
       } else {
         return session;
