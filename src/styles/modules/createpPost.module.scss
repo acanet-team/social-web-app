@@ -80,6 +80,7 @@
   }
 }
 .modal-custom {
+  border-radius: 15px;
   width: 100%;
   position: fixed;
   top: 50%;
@@ -88,7 +89,6 @@
   z-index: 1000;
   background-color: var(---theme-color);
   padding: 20px;
-  border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .overlay {
@@ -109,6 +109,7 @@
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+  border-radius: 15px;
 }
 
 .close {

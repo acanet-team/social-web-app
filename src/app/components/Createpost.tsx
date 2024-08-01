@@ -5,6 +5,7 @@ import style from "@/styles/modules/createpPost.module.scss";
 import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
+import "./yourCustomSelectStyles.css";
 
 interface CreatePostProps {
   placeholder?: string;
@@ -271,7 +272,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
             className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
             onClick={this.toggleUploadForm}>
             <i className="font-md text-success feather-image me-2"></i>
-            <span className="d-none-xs">{`${photo_Video}`}</span>
+            {/* <span className="d-none-xs">{`${photo_Video}`}</span> */}
             <input
               type="file"
               multiple
@@ -282,13 +283,14 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
               max={20}
               className={style["imageUploadInput"]}
             />
+            {`${photo_Video}`}
           </label>
           <div className={`ms-auto pointer ${menuClass}`}>
             <label
               id="submit"
               className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
               onClick={this.openModal}>
-              <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>
+              <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
               {`${createPost}`}
             </label>
           </div>
@@ -330,12 +332,25 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
                         isMulti={false}
                         className={style["topic-select"]}
                         onInputChange={(searchTerm) => {
-                          if (searchTerm.trim() !== "") {
-                            this.setState({ searchTerm });
-                            this.fetchTopics(1, searchTerm);
-                          }
+                          setTimeout(() => {
+                            if (searchTerm.trim() !== "") {
+                              this.setState({ searchTerm });
+                              this.fetchTopics(1, searchTerm);
+                            }
+                          }, 3000);
                         }}
                         onMenuScrollToBottom={this.handleScroll}
+                        styles={{
+                          control: (provided) => ({
+                            ...provided,
+                            borderRadius: "10px",
+                            boxShadow: "none",
+                          }),
+                          menu: (provided) => ({
+                            ...provided,
+                            borderRadius: "10px",
+                          }),
+                        }}
                       />
                     </div>
                   </div>
@@ -348,7 +363,7 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
                         }`}
                         onClick={this.submitPost}>
                         {" "}
-                        <i className="btn-round-sm font-xs text-primary feather-save me-2 bg-greylight"></i>
+                        <i className="btn-round-sm font-xs text-primary feather-save me-2"></i>
                         Save changes
                       </label>
                     </div>
