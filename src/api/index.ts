@@ -84,7 +84,7 @@ class HttpClient {
       }
     }
 
-    const accessToken = useAccessTokenStore.getState().accessToken;    
+    const accessToken = useAccessTokenStore.getState().accessToken;
     if (accessToken) {
       headers.append("Authorization", `Bearer ${accessToken}`);
     }

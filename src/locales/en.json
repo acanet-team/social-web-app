@@ -91,6 +91,14 @@
     "Whats_on_your_mind": "What's on your mind?",
     "Photo_Video": "Photo/Video",
     "live_Video": "Live Video",
-    "create_Post": "Create Post"
+    "create_Post": "Create Post",
+    "select_Topic": "Select Topic",
+    "no_topics": "No topics found.",
+    "loading_topics": "Loading topics...",
+    "please_enter_text": "Please enter some text for your post.",
+    "please_select_a_topic": "Please select a topic for your post.",
+    "post_create_success": "Post created successfully!",
+    "post_create_error": "Error creating post.",
+    "error_fetch_topic": "Error fetching topics."
   }
 }

@@ -1,63 +1,56 @@
+"use client";
 import { createNewPostRequest, getTopics } from "@/api/post";
 import Image from "next/image";
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import style from "@/styles/modules/createpPost.module.scss";
 import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import "./yourCustomSelectStyles.css";
+import { useTranslations } from "next-intl";
+import { useAccessTokenStore } from "@/store/accessToken";
+import { useSession } from "next-auth/react";
+import { IUserInfo, type IUserSession } from "@/api/user/model";
+import { useRouter } from "next/navigation";
 
-interface CreatePostProps {
-  placeholder?: string;
-  avatarUrl?: string;
-  liveVideo?: string;
-  photoVideo?: string;
-  createPost?: string;
-}
+const CreatePost = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [postText, setPostText] = useState("");
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [showUploadForm, setShowUploadForm] = useState(false);
+  const [enlargedImage, setEnlargedImage] = useState<File | null>(null);
+  const [topics, setTopics] = useState<{ value: string; label: any }[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [interestTopicId, setInterestTopicId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const router = useRouter();
+  const { data: sessionData } = useSession();
+  const t = useTranslations("CreatePost");
+  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
 
-interface CreatePostState {
-  isOpen: boolean;
-  postText: string;
-  uploadedImages: File[];
-  showUploadForm: boolean;
-  enlargedImage: File | null;
-  topics: any[];
-  selectedTopic: any;
-  showModal: boolean;
-  interestTopicId: string;
-  searchTerm: string;
-  currentPage: number;
-  isLoading: boolean;
-  hasMore: boolean;
-  hasNextPage: boolean;
-}
+  const topicListRef = useRef(null);
 
-class CreatePost extends Component<CreatePostProps, CreatePostState> {
-  constructor(props: CreatePostProps) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      postText: "",
-      uploadedImages: [],
-      showUploadForm: false,
-      enlargedImage: null,
-      topics: [],
-      selectedTopic: null,
-      showModal: false,
-      interestTopicId: "",
-      searchTerm: "",
-      currentPage: 1,
-      isLoading: false,
-      hasMore: true,
-      hasNextPage: true,
-    };
-    this.topicListRef = React.createRef();
-  }
+  useEffect(() => {
+    console.log(setAccessToken);
+    const session = sessionData as IUserSession;
+    if (session && session.user) {
+      setAccessToken(session.token);
+      setUserInfo(session.user as IUserInfo);
+      if (!session.user.isProfile) {
+        router.push("/account");
+      } else {
+        router.push("/home");
+      }
+    }
+  }, [sessionData, setAccessToken]);
 
-  topicListRef: React.RefObject<HTMLDivElement>;
-
-  fetchTopics = async (page = 1, search = "") => {
-    this.setState({ isLoading: true });
+  const fetchTopics = async (page = 1, search = "") => {
+    setIsLoading(true);
 
     try {
       const response = await getTopics(page, search);
@@ -66,58 +59,49 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
           value: topic.id,
           label: topic.topicName,
         }));
-        const hasMore = newTopics.length > 0;
-        const uniqueTopics = [...this.state.topics, ...newTopics].filter(
+        const uniqueTopics = [...topics, ...newTopics].filter(
           (topic, index, self) =>
-            index === self.findIndex((t) => t.value === topic.value)
+            index === self.findIndex((t) => t.value === topic.value),
         );
-        this.setState(() => ({
-          topics: uniqueTopics,
-          hasMore,
-          isLoading: false,
-          hasNextPage: response["data"]["meta"]["hasNextPage"],
-        }));
+        setTopics(uniqueTopics);
+        setIsLoading(false);
+        setHasNextPage(response["data"]["meta"]["hasNextPage"]);
       }
     } catch (error) {
-      this.throwToast("Error fetching topics.", "error");
-      this.setState({ isLoading: false });
+      throwToast(t("error_fetch_topic"), "error");
+      setIsLoading(false);
     }
   };
 
-  handleScroll = () => {
-    if (this.state.hasNextPage) {
-      this.setState((prevState) => ({
-        currentPage: prevState.currentPage + 1,
-      }));
-      this.fetchTopics(this.state.currentPage, this.state.searchTerm);
+  const handleScroll = () => {
+    if (hasNextPage) {
+      setCurrentPage((prevState) => prevState + 1);
+      fetchTopics(currentPage, searchTerm);
     }
   };
 
-  toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
-  handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files);
-      this.setState({
-        uploadedImages: [...this.state.uploadedImages, ...files],
-      });
+      setUploadedImages([...uploadedImages, ...files]);
     }
   };
-  toggleUploadForm = () => {
-    this.setState({ showUploadForm: !this.state.showUploadForm });
+  const toggleUploadForm = () => {
+    setShowUploadForm(!showUploadForm);
   };
-  removeImage = (index: number) => {
-    const newUploadedImages = [...this.state.uploadedImages];
+  const removeImage = (index: number) => {
+    const newUploadedImages = [...uploadedImages];
     newUploadedImages.splice(index, 1);
-    this.setState({ uploadedImages: newUploadedImages });
+    setUploadedImages(newUploadedImages);
   };
-  enlargeImage = (image: File) => {
-    this.setState({ enlargedImage: image });
+  const enlargeImage = (image: File) => {
+    setEnlargedImage(image);
   };
-  closeEnlarge = () => {
-    this.setState({ enlargedImage: null });
+  const closeEnlarge = () => {
+    setEnlargedImage(null);
   };
 
-  throwToast = (message: string, notiType: string) => {
+  const throwToast = (message: string, notiType: string) => {
     const notiConfig: ToastOptions = {
       position: "top-right",
       autoClose: 4000,
@@ -139,243 +123,229 @@ class CreatePost extends Component<CreatePostProps, CreatePostState> {
     notify();
   };
 
-  submitPost = async () => {
-    if (this.state.postText.trim() === "") {
-      this.throwToast("Please enter some text for your post.", "error");
+  const submitPost = async () => {
+    if (postText.trim() === "") {
+      throwToast(t("please_enter_text"), "error");
       return;
     }
 
-    if (!this.state.selectedTopic) {
-      this.throwToast("Please select a topic for your post.", "error");
+    if (!selectedTopic) {
+      throwToast(t("please_select_a_topic"), "error");
       return;
     }
 
     try {
       await createNewPostRequest({
-        content: this.state.postText,
-        images: this.state.uploadedImages,
-        interestTopicId: this.state.selectedTopic.value,
+        content: postText,
+        images: uploadedImages,
+        interestTopicId: interestTopicId,
       });
-      this.setState({ showModal: false });
-      this.throwToast("Post created successfully!", "success");
-      this.setState({
-        postText: "",
-        uploadedImages: [],
-        selectedTopic: null,
-      });
+      setShowModal(false);
+      throwToast(t("post_create_success"), "success");
+      setPostText("");
+      setUploadedImages([]);
+      setSelectedTopic(null);
     } catch (error) {
-      this.throwToast("Error creating post.", "error");
+      throwToast(t("post_create_error"), "error");
     }
-    this.closeModal();
+    closeModal();
   };
 
-  handleTopicChange = (selectedOption: any) => {
-    this.setState({ selectedTopic: selectedOption });
+  const handleTopicChange = (selectedOption: any) => {
+    setSelectedTopic(selectedOption);
+    setInterestTopicId(selectedOption.value);
   };
 
-  openModal = () => {
-    if (this.state.postText.trim() === "") {
-      this.throwToast("Please enter some text for your post.", "error");
+  const openModal = () => {
+    if (postText.trim() === "") {
+      throwToast(t("please_enter_text"), "error");
       return;
     }
-    this.fetchTopics();
-    this.setState({ showModal: true });
+    fetchTopics();
+    setShowModal(true);
   };
 
-  closeModal = () => {
-    this.setState({ showModal: false, selectedTopic: null });
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedTopic(null);
+    setInterestTopicId("");
   };
 
-  render() {
-    const {
-      placeholder,
-      avatarUrl,
-      liveVideo: live_Video,
-      photoVideo: photo_Video,
-      createPost,
-    } = this.props;
-    const {
-      uploadedImages,
-      showUploadForm,
-      enlargedImage,
-      showModal,
-      isLoading,
-    } = this.state;
-    const menuClass = `${this.state.isOpen ? " show" : ""}`;
+  const menuClass = `${isOpen ? " show" : ""}`;
 
-    return (
-      <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
-        <div
-          className="card-body p-0 mt-3 position-relative"
-          id={style["card-body"]}>
-          <figure className="avatar position-absolute ms-2 mt-1 top-5">
-            <img
-              src={avatarUrl}
-              alt="icon"
-              className="shadow-sm rounded-circle w30"
-            />
-          </figure>
-          <textarea
-            maxLength={5000}
-            onChange={(event) => {
-              this.setState({ postText: event.target.value });
-            }}
-            name="message"
-            className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
-            placeholder={`${placeholder}`}></textarea>
+  return (
+    <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
+      <div
+        className="card-body p-0 mt-3 position-relative"
+        id={style["card-body"]}
+      >
+        <figure className="avatar position-absolute ms-2 mt-1 top-5">
+          <img
+            src={userInfo?.photo?.path ?? "/assets/images/profile.png"}
+            alt="icon"
+            className="shadow-sm rounded-circle w30"
+          />
+        </figure>
+        <textarea
+          maxLength={5000}
+          onChange={(event) => {
+            setPostText(event.target.value);
+          }}
+          name="message"
+          className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
+          placeholder={t("Whats_on_your_mind")}
+        ></textarea>
 
-          <div className={style["imagePreview"]}>
-            {uploadedImages.map((image, index) => (
-              <div key={index} className={style["previewImage"]}>
-                <Image
-                  src={URL.createObjectURL(image)}
-                  alt="Uploaded Image"
-                  className={style["previewImage"]}
-                  width={211}
-                  height={211}
-                  onClick={() => this.enlargeImage(image)}
-                />
-                <button
-                  onClick={() => this.removeImage(index)}
-                  className={style["close-button"]}>
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-        {enlargedImage && (
-          <div
-            className={style["enlarged-image-modal"]}
-            onClick={this.closeEnlarge}>
-            {" "}
-            <div
-              className={style["enlarged-image-container"]}
-              onClick={(e) => e.stopPropagation()}>
+        <div className={style["imagePreview"]}>
+          {uploadedImages.map((image, index) => (
+            <div key={index} className={style["previewImage"]}>
               <Image
-                src={URL.createObjectURL(enlargedImage)}
-                alt="Enlarged Image"
-                width={500}
-                height={500}
-                className={style["enlarged-preview-image"]}
+                src={URL.createObjectURL(image)}
+                alt="Uploaded Image"
+                className={style["previewImage"]}
+                width={211}
+                height={211}
+                onClick={() => enlargeImage(image)}
               />
               <button
-                onClick={this.closeEnlarge}
-                className={style["close-enlarge"]}>
+                onClick={() => removeImage(index)}
+                className={style["close-button"]}
+              >
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-          </div>
-        )}
-        <div className="card-body d-flex p-0 mt-0">
-          <label
-            className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
-            onClick={this.toggleUploadForm}>
-            <i className="font-md text-success feather-image me-2"></i>
-            {/* <span className="d-none-xs">{`${photo_Video}`}</span> */}
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={this.handleImageUpload}
-              id="imageUpload"
-              hidden={!showUploadForm}
-              max={20}
-              className={style["imageUploadInput"]}
+          ))}
+        </div>
+      </div>
+      {enlargedImage && (
+        <div className={style["enlarged-image-modal"]} onClick={closeEnlarge}>
+          {" "}
+          <div
+            className={style["enlarged-image-container"]}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={URL.createObjectURL(enlargedImage)}
+              alt="Enlarged Image"
+              width={500}
+              height={500}
+              className={style["enlarged-preview-image"]}
             />
-            {`${photo_Video}`}
-          </label>
-          <div className={`ms-auto pointer ${menuClass}`}>
-            <label
-              id="submit"
-              className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
-              onClick={this.openModal}>
-              <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
-              {`${createPost}`}
-            </label>
+            <button onClick={closeEnlarge} className={style["close-enlarge"]}>
+              <span aria-hidden="true">×</span>
+            </button>
           </div>
         </div>
+      )}
+      <div className="card-body d-flex p-0 mt-0">
+        <label
+          className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
+          onClick={toggleUploadForm}
+        >
+          <i className="font-md text-success feather-image me-2"></i>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            id="imageUpload"
+            hidden={!showUploadForm}
+            max={20}
+            className={style["imageUploadInput"]}
+          />
+          {t("Photo_Video")}
+        </label>
+        <div className={`ms-auto pointer ${menuClass}`}>
+          <label
+            id="submit"
+            className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
+            onClick={openModal}
+          >
+            <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
+            {t("create_Post")}
+          </label>
+        </div>
+      </div>
 
-        {showModal && (
-          <div>
-            <div className={style["overlay"]}></div>
-            <div className={style["modal-custom"]}>
-              <div
-                className="modal-dialog modal-dialog-centered"
-                role="document">
-                <div className="modal-content theme-dark card">
-                  <div className="modal-header">
-                    <h1 className="modal-title">Select a Topic</h1>
-                    <button
-                      type="button"
-                      className={style["close"]}
-                      onClick={this.closeModal}>
-                      <span aria-hidden="true">×</span>
-                    </button>
+      {showModal && (
+        <div>
+          <div className={style["overlay"]}></div>
+          <div className={style["modal-custom"]}>
+            <div className="modal-dialog modal-dialog-centered" role="document">
+              <div className="modal-content theme-dark card">
+                <div className="modal-header">
+                  <h1 className="modal-title">{t("select_Topic")}</h1>
+                  <button
+                    type="button"
+                    className={style["close"]}
+                    onClick={closeModal}
+                  >
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <div ref={topicListRef} className="topic-list">
+                    {isLoading && (
+                      <div className="text-center">
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        {t("loading_topics")}
+                      </div>
+                    )}
+                    {topics.length === 0 && !isLoading && (
+                      <div className="text-center">{t("no_topics")}</div>
+                    )}
+                    <Select
+                      options={topics}
+                      value={selectedTopic}
+                      onChange={handleTopicChange}
+                      placeholder="Select a topic"
+                      isMulti={false}
+                      className={style["topic-select"]}
+                      onInputChange={(searchTerm) => {
+                        setTimeout(() => {
+                          if (searchTerm.trim() !== "") {
+                            setSearchTerm(searchTerm);
+                            fetchTopics(1, searchTerm);
+                          }
+                        }, 3000);
+                      }}
+                      onMenuScrollToBottom={handleScroll}
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          borderRadius: "10px",
+                          boxShadow: "none",
+                        }),
+                        menu: (provided) => ({
+                          ...provided,
+                          borderRadius: "10px",
+                        }),
+                      }}
+                    />
                   </div>
-                  <div className="modal-body">
-                    <div ref={this.topicListRef} className="topic-list">
-                      {isLoading && (
-                        <div className="text-center">
-                          <span className="spinner-border spinner-border-sm me-2"></span>
-                          Loading...
-                        </div>
-                      )}
-                      {this.state.topics.length === 0 && !isLoading && (
-                        <div className="text-center">No topics found.</div>
-                      )}
-                      <Select
-                        options={this.state.topics}
-                        value={this.state.selectedTopic}
-                        onChange={this.handleTopicChange}
-                        placeholder="Select a topic"
-                        isMulti={false}
-                        className={style["topic-select"]}
-                        onInputChange={(searchTerm) => {
-                          setTimeout(() => {
-                            if (searchTerm.trim() !== "") {
-                              this.setState({ searchTerm });
-                              this.fetchTopics(1, searchTerm);
-                            }
-                          }, 3000);
-                        }}
-                        onMenuScrollToBottom={this.handleScroll}
-                        styles={{
-                          control: (provided) => ({
-                            ...provided,
-                            borderRadius: "10px",
-                            boxShadow: "none",
-                          }),
-                          menu: (provided) => ({
-                            ...provided,
-                            borderRadius: "10px",
-                          }),
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="modal-footer">
-                    <div>
-                      <label
-                        id="button"
-                        className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center ${
-                          style["right"]
-                        }`}
-                        onClick={this.submitPost}>
-                        {" "}
-                        <i className="btn-round-sm font-xs text-primary feather-save me-2"></i>
-                        Save changes
-                      </label>
-                    </div>
+                </div>
+                <div className="modal-footer">
+                  <div>
+                    <label
+                      id="button"
+                      className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center ${
+                        style["right"]
+                      }`}
+                      onClick={submitPost}
+                    >
+                      {" "}
+                      <i className="btn-round-sm font-xs text-primary feather-save me-2"></i>
+                      {t("create_Post")}
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    );
-  }
-}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default CreatePost;

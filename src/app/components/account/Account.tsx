@@ -32,6 +32,8 @@ export default function Account(props: { regions: any[] }) {
     (state: IUserSessionStore) => state,
   );
   // console.log(session);
+  const lastName = session.user.lastName || "";
+  const firstName = session.user.firstName || "";
   const email = session.user.email;
   const photo = session.user.photo;
   const nickName = session.user.nickName;
@@ -150,10 +152,12 @@ export default function Account(props: { regions: any[] }) {
                 className="shadow-sm rounded-3 w-100"
               />
             </figure>
-            <h2 className="fw-700 font-sm text-grey-900 mt-3">Surfiya Zakir</h2>
-            <h4 className="text-grey-500 fw-500 mb-3 font-xsss mb-4">
+            <h2 className="fw-700 font-sm text-grey-900 mt-3">
+              {firstName + lastName}
+            </h2>
+            {/* <h4 className="text-grey-500 fw-500 mb-3 font-xsss mb-4">
               Brooklyn
-            </h4>
+            </h4> */}
           </div>
         </div>
 

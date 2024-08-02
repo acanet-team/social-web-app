@@ -6,9 +6,12 @@ import { NextIntlClientProvider, useMessages } from "next-intl";
 import { AppConfig } from "@/utils/AppConfig";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 config.autoAddCss = false;
 
 import type { Metadata } from "next";
+import { ToastContainer } from "react-toastify";
 
 // export const metadata: Metadata = {
 //   icons: [
@@ -53,6 +56,7 @@ export default function RootLayout(props: {
             locale={props.params.locale}
             messages={messages}
           >
+            <ToastContainer />
             {/* <Header />
             <Leftnav /> */}
             {props.children}

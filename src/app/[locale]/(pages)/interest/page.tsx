@@ -20,9 +20,7 @@ export default async function InterestList() {
   const response = await fetchTopics();
   console.log(response);
   const options = response.docs ?? response.data;
-  const page = response.meta.page;
-  const totalPage = response.meta.totalPage;
-  const TAKE = 20;
+  const { page, totalPage, take } = response.meta;
 
   return (
     <>
@@ -48,7 +46,7 @@ export default async function InterestList() {
                   options={options}
                   page={page}
                   totalPage={totalPage}
-                  take={TAKE}
+                  take={take}
                 />
               </div>
             </div>

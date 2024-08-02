@@ -56,17 +56,17 @@ interface UserProfile {
 
 interface AdditionalData {}
 
-interface Role {
+export interface Role {
   id: number;
   name: string;
 }
 
-interface Status {
+export interface Status {
   id: number;
   name: string;
 }
 
-interface Photo {
+export interface Photo {
   id: string;
   path: string;
   mimetype: string;
@@ -75,4 +75,25 @@ interface Photo {
   ownerId: number;
   courseId: number;
   category: string;
+}
+export interface IUserInfo {
+  id: number | null;
+  email: string;
+  provider: string;
+  socialId: string;
+  firstName: string;
+  lastName: string;
+  photo: Photo;
+  role: Role;
+  status: Status;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isBroker: boolean;
+  isProfile: boolean;
+}
+export interface IUserSession {
+  user?: IUserInfo;
+  expires: string;
+  token: string;
 }

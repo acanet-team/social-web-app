@@ -21,14 +21,16 @@ export default function Header() {
   const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
-    const handleStorageChange = () => {
+    const handleThemeChange = () => {
       const theme = getLocalStorage("theme");
-      setCurTheme(theme);
-      console.log(theme);
+      if (theme) setCurTheme(theme);
     };
-    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("themeChange", handleThemeChange as EventListener);
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener(
+        "themeChange",
+        handleThemeChange as EventListener,
+      );
     };
   }, []);
 

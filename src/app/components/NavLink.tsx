@@ -1,3 +1,4 @@
+"use client";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "@/styles/modules/navLink.module.scss";
@@ -7,21 +8,16 @@ interface NavLinkProps {
   href: string;
   children: React.ReactNode;
   className: string;
-  onClick: MouseEventHandler<HTMLDivElement>;
 }
 
-const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
+const NavLink = ({ href, children, className }: NavLinkProps) => {
   const router = useSearchParams();
   const currentTab = router.get("tab") || "you";
   const isActive = `/home?tab=${currentTab}` === href;
-  console.log(href);
 
   return (
     <Link href={href}>
-      <div
-        className={`${className} ${isActive ? styles["tab-active"] : ""}`}
-        onClick={onClick}
-      >
+      <div className={`${className} ${isActive ? styles["tab-active"] : ""}`}>
         {children}
       </div>
     </Link>

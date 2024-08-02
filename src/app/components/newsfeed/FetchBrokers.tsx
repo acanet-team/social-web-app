@@ -1,9 +1,10 @@
-import React from "react";
+"use client";
+import React, { useEffect, useMemo, useState } from "react";
 import Slider from "react-slick";
+import { createGetBrokersRequest } from "@/api/user";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { createGetBrokersRequest } from "@/api/user";
-import TopBrokers from "./TopBrokers";
+import { TopBrokers } from "./TopBrokers";
 
 const getTopBrokers = async () => {
   try {
@@ -15,12 +16,23 @@ const getTopBrokers = async () => {
   }
 };
 
-export default async function FetchBrokers() {
-  const data = await getTopBrokers();
-  const topBrokers = data.docs || data.data || [];
-  console.log(topBrokers);
+export const FetchBrokers = () => {
+  const [brokers, setBrokers] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchBrokers = async () => {
+      const data = await getTopBrokers();
+      const topBrokers = data.docs || data.data || [];
+      setBrokers(topBrokers);
+      console.log(topBrokers);
+    };
+
+    fetchBrokers();
+  }, []);
+
+  const memoizedBrokers = useMemo(() => brokers, [brokers]);
+
   const brokersettings = {
-    arrows: true,
+    arrows: false,
     dots: false,
     infinite: false,
     speed: 300,
@@ -32,8 +44,8 @@ export default async function FetchBrokers() {
   return (
     <div>
       <Slider {...brokersettings}>
-        {topBrokers?.length > 0 &&
-          topBrokers.map((b, index) => (
+        {memoizedBrokers?.length > 0 &&
+          memoizedBrokers.map((b, index) => (
             <TopBrokers
               key={b.userId}
               photoUrl={b.photoUrl}
@@ -45,4 +57,4 @@ export default async function FetchBrokers() {
       </Slider>
     </div>
   );
-}
+};

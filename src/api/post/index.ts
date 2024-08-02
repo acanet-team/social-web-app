@@ -30,7 +30,10 @@ interface GetTopicsResponse {
   };
 }
 
-export const getTopics = (page: number, search: string): Promise<GetTopicsResponse> => {
+export const getTopics = (
+  page: number,
+  search: string,
+): Promise<GetTopicsResponse> => {
   let url = `/v1/interest-topic?order=DESC`;
   page ? (url += `&page=${page}&take=20`) : null;
   search ? (url += `&keyword=${search}`) : null;

@@ -73,6 +73,7 @@ export default function Interests(props: {
     }
   };
 
+  // Inifite scrolling
   const onScrollHandler = () => {
     if (list.current) {
       const { scrollTop, scrollHeight, clientHeight } = list.current;
@@ -102,15 +103,16 @@ export default function Interests(props: {
         id={styles["interest-container"]}
         className="interest-options card-body p-lg-5 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-3 mb-5"
       >
-        {options.map((option) => (
-          <button
-            key={option.id}
-            onClick={(e) => toggleSelection(e, option.id)}
-            className="btn"
-          >
-            {option.topicName}
-          </button>
-        ))}
+        {options?.length > 0 &&
+          options.map((option) => (
+            <button
+              key={option.id}
+              onClick={(e) => toggleSelection(e, option.id)}
+              className="btn"
+            >
+              {option.topicName}
+            </button>
+          ))}
       </div>
 
       {error && <div className="mx-auto dark-error-text">{error}</div>}
