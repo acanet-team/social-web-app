@@ -1,7 +1,7 @@
 import React from "react";
 import FeedPosts from "./FeedPosts";
-import FetchComments from "./FetchComments";
 import { getPosts } from "@/api/newsfeed/index";
+import { FetchComments } from "./FetchComments";
 
 const fetchPosts = async () => {
   try {
@@ -13,16 +13,19 @@ const fetchPosts = async () => {
     return { data: [], meta: { page: 1, totalPage: 1 } };
   }
 };
-export default async function FetchPosts(props: { postIdParams: string }) {
-  const res = await fetchPosts();
-  const posts = res?.data?.docs || [];
-  console.log(posts);
+/* eslint-disable react/display-name */
+export const FetchPosts = React.memo(
+  async (props: { postIdParams: string }) => {
+    const res = await fetchPosts();
+    const posts = res?.data?.docs || [];
+    console.log(posts);
 
-  return (
-    <div>
-      <FeedPosts posts={posts}>
-        <FetchComments postId={props.postIdParams} />
-      </FeedPosts>
-    </div>
-  );
-}
+    return (
+      <div>
+        <FeedPosts posts={posts}>
+          <FetchComments postId={props.postIdParams} />
+        </FeedPosts>
+      </div>
+    );
+  },
+);

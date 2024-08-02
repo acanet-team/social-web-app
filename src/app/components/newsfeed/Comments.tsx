@@ -1,137 +1,226 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/comments.module.scss";
 import CommentView from "./CommentView";
 import useAuthStore from "@/store/auth";
 import Image from "next/image";
-import { postComment } from "@/api/newsfeed";
 import WaveLoader from "../WaveLoader";
-import { ReactDOM } from "@spotlightjs/spotlight";
-import { comment } from "postcss";
+import { postComment, getComments, deleteComment } from "@/api/newsfeed";
+import CustomModal from "../Modal";
 
-export default function Comments(props: {
-  comments: any[];
-  page: number;
-  totalPage: number;
-  take: number;
-  postId: string;
-}) {
-  const [comments, setComments] = useState<any[]>(props.comments);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const commentRef = useRef<HTMLTextAreaElement>(null);
-  const commentListRef = useRef<HTMLDivElement>(null);
-  const session = useAuthStore((state) => state.session);
-  const avatar = session.user.photo || "/assets/images/user.png";
-  const nickName = session.user.nickName || "Me";
-  console.log(comments);
+/* eslint-disable react/display-name */
+export const Comments = React.memo(
+  (props: {
+    comments: any[];
+    page: number;
+    totalPage: number;
+    take: number;
+    postId: string;
+  }) => {
+    const [comments, setComments] = useState<any[]>(props.comments);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [totalPage, setTotalPage] = useState<number>(props.totalPage);
+    const [page, setPage] = useState<number>(1);
+    const [commentId, setCommentId] = useState<string>();
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const commentRef = useRef<HTMLTextAreaElement>(null);
+    const commentListRef = useRef<HTMLDivElement>(null);
+    const session = useAuthStore((state) => state.session);
+    const avatar = session.user.photo || "/assets/images/user.png";
+    const nickName = session.user.nickName || "Me";
 
-  const onEnterPress = (e: any) => {
-    if (e.keyCode == 13 && e.shiftKey == false) {
-      e.preventDefault();
-      onPostCommentHandler();
-    }
-  };
-  const onPostCommentHandler = async () => {
-    const content = commentRef?.current?.value;
-    const randomKey = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    let newComment = {
-      id: randomKey,
-      createdAt: new Date(),
-      updatedAt: null,
-      deletedAt: null,
-      content: content,
-      childrenCount: 0,
-      createBy: {
-        id: 0,
-        firstName: session.user.firstName,
-        lastName: session.user.lastName,
-        photo: {
-          path: avatar,
-        },
-        role: {
-          id: 0,
-          name: "investor",
-        },
-        refCode: "string",
-        nickName: nickName,
-      },
-      post: {},
-      parent: "string",
-      children: ["string"],
-    };
-    console.log(content);
-    if (content) {
+    // Fetch comments ---------------------
+    const fetchComments = async () => {
       try {
-        const values = { content: content, postId: props.postId };
         setIsLoading(true);
-        await postComment(values);
-        setComments((prevState) => [newComment, ...prevState]);
+        const response: any = await getComments(page, props.take, props.postId);
+        // console.log(response);
+        setComments((prevState) =>
+          response.data.docs
+            ? [...prevState, ...response.data.docs]
+            : [...prevState, ...response.data.data],
+        );
+        setTotalPage(response.data.meta.totalPage);
+        return response.data;
       } catch (err) {
-        setComments((prevState) => [
-          { ...newComment, status: "failed" },
-          ...prevState,
-        ]);
         console.log(err);
       } finally {
         setIsLoading(false);
-        if (commentRef.current) {
-          commentRef.current.value = "";
+      }
+    };
+
+    const onScrollHandler = () => {
+      if (commentListRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } =
+          commentListRef.current;
+        if (scrollTop + clientHeight === scrollHeight && !isLoading) {
+          setPage((prevState) => prevState + 1);
+          fetchComments();
         }
       }
-    }
-  };
+    };
 
-  return (
-    <div className={`${styles["comment-container"]} pt-4 mt-4 font-xsss`}>
-      <div
-        className="text-white d-flex flex-column gap-2 overflow-auto"
-        ref={commentListRef}
-      >
-        {comments?.length === 0 && (
-          <div className="text-center">No comment found.</div>
-        )}
-        {comments?.length > 0 &&
-          comments.map((comment) => (
-            <CommentView
-              key={comment.id}
-              photo={comment.createBy}
-              nickName={comment.createBy.nickName}
-              content={comment.content}
-              status={comment.status}
-              createdAt={comment.createdAt}
-            />
-          ))}
-      </div>
-      {isLoading && <WaveLoader />}
-      <div className="d-flex gap-2 align-items-center w-100">
-        <Image
-          src={avatar}
-          width={35}
-          height={35}
-          className="rounded-circle"
-          alt={nickName ?? ""}
-        />
+    useEffect(() => {
+      const currentList = commentListRef.current;
+      if (currentList && page < totalPage) {
+        currentList.addEventListener("scroll", onScrollHandler);
+      }
+      return () => {
+        if (currentList) {
+          currentList.removeEventListener("scroll", onScrollHandler);
+        }
+      };
+    }, [page, totalPage]);
+
+    // Post a comment ---------------------
+    const onEnterPress = (e: any) => {
+      if (e.keyCode == 13 && e.shiftKey == false) {
+        e.preventDefault();
+        onPostCommentHandler();
+      }
+    };
+
+    const onPostCommentHandler = async () => {
+      const content = commentRef?.current?.value;
+      const randomKey = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      let newComment = {
+        id: randomKey,
+        createdAt: new Date(),
+        updatedAt: null,
+        deletedAt: null,
+        content: content,
+        childrenCount: 0,
+        createBy: {
+          id: 0,
+          firstName: session.user.firstName,
+          lastName: session.user.lastName,
+          photo: {
+            path: avatar,
+          },
+          role: {
+            id: 0,
+            name: "investor",
+          },
+          refCode: "string",
+          nickName: nickName,
+        },
+        post: {},
+        parent: "string",
+        children: ["string"],
+      };
+
+      if (content) {
+        try {
+          const values = { content: content, postId: props.postId };
+          setIsLoading(true);
+          await postComment(values);
+          setComments((prevState) => [newComment, ...prevState]);
+        } catch (err) {
+          setComments((prevState) => [
+            { ...newComment, status: "failed" },
+            ...prevState,
+          ]);
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+          if (commentRef.current) {
+            commentRef.current.value = "";
+          }
+        }
+      }
+    };
+
+    // Delete a comment --------------------
+    const handleCancel = useCallback(() => {
+      setShowModal(false);
+    }, []);
+
+    const onChooseDelete = useCallback((id: string) => {
+      setShowModal(true);
+      setCommentId(id);
+    }, []);
+
+    const onProceedDelete = useCallback(async () => {
+      setShowModal(false);
+      // Call server to delete comment
+      try {
+        if (commentId) {
+          await deleteComment(commentId);
+          // Remove comment from DOM
+          setComments((prevState) =>
+            prevState.filter((comment) => comment.id !== commentId),
+          );
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      // Delete comment from DOM
+    }, [commentId]);
+
+    return (
+      <div className={`${styles["comment-container"]} pt-4 mt-4 font-xsss`}>
         <div
-          className={`${styles["comment-input"]} d-flex align-items-center w-100 mt-3 rounded-xxl bg-light`}
+          className={`${styles["comment-content__container"]} text-white d-flex flex-column overflow-auto`}
+          ref={commentListRef}
         >
-          <textarea
-            id="comment"
-            className="p-3 rounded-xxl border-none bg-light"
-            placeholder="Write a comment"
-            name="comment"
-            rows={2}
-            ref={commentRef}
-          />
-          <button
-            onClick={onPostCommentHandler}
-            onKeyDown={(e) => onEnterPress(e)}
-            className="border-0 bg-transparent"
-            disabled={isLoading}
-          >
-            <i className="bi bi-send text-dark h2 m-0 pe-3"></i>
-          </button>
+          {comments?.length === 0 && (
+            <div className="text-center">No comment found.</div>
+          )}
+          {comments?.length > 0 &&
+            comments.map((comment) => (
+              <CommentView
+                key={comment.id}
+                id={comment.id}
+                photo={comment.createBy}
+                nickName={comment.createBy.nickName}
+                content={comment.content}
+                status={comment.status}
+                createdAt={comment.createdAt}
+                onClickDelete={onChooseDelete}
+              />
+            ))}
         </div>
+        {isLoading && <WaveLoader />}
+        <div className="d-flex gap-2 align-items-center w-100">
+          <Image
+            src={avatar}
+            width={35}
+            height={35}
+            className="rounded-circle"
+            alt={nickName ?? ""}
+          />
+          <div
+            className={`${styles["comment-input"]} d-flex align-items-center w-100 mt-3 rounded-xxl bg-light`}
+          >
+            <textarea
+              id="comment"
+              className="p-3 rounded-xxl border-none bg-light"
+              placeholder="Write a comment"
+              name="comment"
+              rows={2}
+              ref={commentRef}
+              onKeyDown={(e) => onEnterPress(e)}
+            />
+            <button
+              type="submit"
+              onClick={onPostCommentHandler}
+              className="border-0 bg-transparent"
+              disabled={isLoading}
+            >
+              <i className="bi bi-send text-dark h2 m-0 pe-3"></i>
+            </button>
+          </div>
+        </div>
+
+        {/* Delete modal */}
+        {showModal && (
+          <CustomModal
+            message="Are you sure you want to proceed?"
+            onCancel={handleCancel}
+            onOk={onProceedDelete}
+          />
+        )}
       </div>
-    </div>
-  );
-}
+    );
+  },
+);

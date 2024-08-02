@@ -1,6 +1,7 @@
 import { getComments } from "@/api/newsfeed";
-import Comments from "./Comments";
 import { commentArr } from "@/app/fakeData/comments";
+import React from "react";
+import { Comments } from "./Comments";
 
 const fetchComments = async (postId: string) => {
   try {
@@ -23,7 +24,8 @@ const fetchComments = async (postId: string) => {
   }
 };
 
-export default async function FetchComments(props: { postId: string }) {
+/* eslint-disable react/display-name */
+export const FetchComments = React.memo(async (props: { postId: string }) => {
   console.log("postId", props.postId, "end");
   const response = await fetchComments(props.postId);
   // const comments = response.data ?? response.docs ?? [];
@@ -43,4 +45,4 @@ export default async function FetchComments(props: { postId: string }) {
       />
     </div>
   );
-}
+});

@@ -42,3 +42,10 @@ export const postComment = (values: { content: string; postId: string }) => {
     headers: header,
   });
 };
+
+export const deleteComment = (commentId: string) => {
+  header.set("Authorization", "Bearer " + token);
+  return httpClient.delete(`/v1/comment/${commentId}`, {
+    headers: header,
+  });
+};

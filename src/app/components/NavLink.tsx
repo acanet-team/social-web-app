@@ -8,10 +8,9 @@ interface NavLinkProps {
   href: string;
   children: React.ReactNode;
   className: string;
-  onClick: MouseEventHandler<HTMLDivElement>;
 }
 
-const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
+const NavLink = ({ href, children, className }: NavLinkProps) => {
   const router = useSearchParams();
   const currentTab = router.get("tab") || "you";
   const isActive = `/home?tab=${currentTab}` === href;
@@ -19,10 +18,7 @@ const NavLink = ({ href, children, className, onClick }: NavLinkProps) => {
 
   return (
     <Link href={href}>
-      <div
-        className={`${className} ${isActive ? styles["tab-active"] : ""}`}
-        onClick={onClick}
-      >
+      <div className={`${className} ${isActive ? styles["tab-active"] : ""}`}>
         {children}
       </div>
     </Link>

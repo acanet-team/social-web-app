@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import styles from "@/styles/modules/postView.module.scss";
 import { likeRequest } from "@/api/newsfeed";
-import FetchComments from "./FetchComments";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 
