@@ -26,7 +26,6 @@ const CreatePost = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [userInfo, setUserInfo] = useState<IUserInfo>();
   const router = useRouter();
@@ -60,13 +59,11 @@ const CreatePost = () => {
           value: topic.id,
           label: topic.topicName,
         }));
-        const hasMore = newTopics.length > 0;
         const uniqueTopics = [...topics, ...newTopics].filter(
           (topic, index, self) =>
             index === self.findIndex((t) => t.value === topic.value)
         );
         setTopics(uniqueTopics);
-        setHasMore(hasMore);
         setIsLoading(false);
         setHasNextPage(response["data"]["meta"]["hasNextPage"]);
       }
@@ -141,7 +138,7 @@ const CreatePost = () => {
       await createNewPostRequest({
         content: postText,
         images: uploadedImages,
-        interestTopicId: selectedTopic,
+        interestTopicId: interestTopicId,
       });
       setShowModal(false);
       throwToast(t("post_create_success"), "success");
@@ -156,6 +153,7 @@ const CreatePost = () => {
 
   const handleTopicChange = (selectedOption: any) => {
     setSelectedTopic(selectedOption);
+    setInterestTopicId(selectedOption.value);
   };
 
   const openModal = () => {
@@ -170,6 +168,7 @@ const CreatePost = () => {
   const closeModal = () => {
     setShowModal(false);
     setSelectedTopic(null);
+    setInterestTopicId("");
   };
 
   const menuClass = `${isOpen ? " show" : ""}`;
@@ -239,7 +238,6 @@ const CreatePost = () => {
           className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
           onClick={toggleUploadForm}>
           <i className="font-md text-success feather-image me-2"></i>
-          {/* <span className="d-none-xs">{`${photo_Video}`}</span> */}
           <input
             type="file"
             multiple
