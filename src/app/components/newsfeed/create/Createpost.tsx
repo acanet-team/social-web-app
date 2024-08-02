@@ -1,24 +1,23 @@
 "use client";
 import { createNewPostRequest, getTopics } from "@/api/post";
-import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import style from "@/styles/modules/createpPost.module.scss";
 import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
-import "./yourCustomSelectStyles.css";
+import "./CustomSelectStyles.css";
 import { useTranslations } from "next-intl";
 import { useAccessTokenStore } from "@/store/accessToken";
 import { useSession } from "next-auth/react";
 import { IUserInfo, type IUserSession } from "@/api/user/model";
 import { useRouter } from "next/navigation";
+import ImagePreview from "./ImagePreview";
 
 const CreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [postText, setPostText] = useState("");
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [showUploadForm, setShowUploadForm] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<File | null>(null);
   const [topics, setTopics] = useState<{ value: string; label: any }[]>([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -88,17 +87,6 @@ const CreatePost = () => {
   };
   const toggleUploadForm = () => {
     setShowUploadForm(!showUploadForm);
-  };
-  const removeImage = (index: number) => {
-    const newUploadedImages = [...uploadedImages];
-    newUploadedImages.splice(index, 1);
-    setUploadedImages(newUploadedImages);
-  };
-  const enlargeImage = (image: File) => {
-    setEnlargedImage(image);
-  };
-  const closeEnlarge = () => {
-    setEnlargedImage(null);
   };
 
   const throwToast = (message: string, notiType: string) => {
@@ -180,7 +168,7 @@ const CreatePost = () => {
         id={style["card-body"]}>
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
           <img
-            src={userInfo?.photo?.path ?? "/assets/images/profile.png"}
+            src={userInfo?.photo?.path ?? "/assets/images/user.png"}
             alt="icon"
             className="shadow-sm rounded-circle w30"
           />
@@ -194,7 +182,7 @@ const CreatePost = () => {
           className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
           placeholder={t("Whats_on_your_mind")}></textarea>
 
-        <div className={style["imagePreview"]}>
+        {/* <div className={style["imagePreview"]}>
           {uploadedImages.map((image, index) => (
             <div key={index} className={style["previewImage"]}>
               <Image
@@ -212,9 +200,9 @@ const CreatePost = () => {
               </button>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
-      {enlargedImage && (
+      {/* {enlargedImage && (
         <div className={style["enlarged-image-modal"]} onClick={closeEnlarge}>
           {" "}
           <div
@@ -232,7 +220,11 @@ const CreatePost = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
+      <ImagePreview
+        uploadedImages={uploadedImages}
+        setUploadedImages={setUploadedImages}
+      />
       <div className="card-body d-flex p-0 mt-0">
         <label
           className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"

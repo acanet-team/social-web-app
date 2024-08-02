@@ -55,6 +55,10 @@
   position: relative;
   object-fit: cover;
   border-radius: 15px;
+  width: auto;
+  height: auto;
+  max-width: 80%;
+  max-height: 100vh;
 }
 .close-enlarge {
   position: absolute;
@@ -81,14 +85,14 @@
 }
 .modal-custom {
   border-radius: 15px;
-  width: 100%;
+  width: -webkit-fill-available;
+  min-width: max-content;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: var(---theme-color);
-  padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .overlay {

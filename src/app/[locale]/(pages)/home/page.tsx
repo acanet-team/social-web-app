@@ -1,5 +1,5 @@
 import Appfooter from "@/app/components/Appfooter";
-import CreatePost from "@/app/components/Createpost";
+import CreatePost from "@/app/components/newsfeed/create/Createpost";
 import NavLink from "@/app/components/NavLink";
 import Load from "@/app/components/WaveLoader";
 import styles from "@/styles/modules/home.module.scss";
