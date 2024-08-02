@@ -7,6 +7,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import httpClient from "@/api";
 import { removePropertiesEmpty } from "@/utils/Helpers";
+import { cookies } from "next/headers";
 
 const options: NextAuthOptions = {
   providers: [
@@ -34,6 +35,10 @@ const options: NextAuthOptions = {
     },
 
     async session({ session, token }: any) {
+      const jwtToken = cookies().get('accessToken');
+      if(jwtToken) {
+        return session
+      }
       if ((token?.access_token || token.idToken) && !session.user?.id) {
         const data: { accessToken?: string; idToken?: string } = {};
 
@@ -49,13 +54,15 @@ const options: NextAuthOptions = {
             `/v1/auth/${token?.provider}/login`,
             removePropertiesEmpty(data),
           );
-          console.log("ressssss", res);
+          cookies().set('accessToken', res.data.token)
+
           session.user = {
             ...res.data.user,
             isBroker: res.data.isBroker,
             isProfile: res.data.isProfile,
           };
           session.token = res.data.token;
+          console.log('bbbbbbbbbbbbbbb', session)
           return session;
         } catch (err) {
           console.log("err", err);

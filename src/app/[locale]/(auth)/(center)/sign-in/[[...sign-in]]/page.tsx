@@ -16,7 +16,6 @@ const LoginPage: NextPage = () => {
   const [curTheme, setCurTheme] = useState("theme-dark");
   const { data: session } = useSession() as any;
   const createProfile = useAuthStore((state) => state.createProfile);
-  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,6 +29,17 @@ const LoginPage: NextPage = () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (session) {
+      createProfile(session);
+      if (!session.user.isProfile) {
+        router.push("/account");
+      } else {
+        router.push("/home");
+      }
+    }
+  }, [session]);
 
   return (
     <div className="main-wrap">

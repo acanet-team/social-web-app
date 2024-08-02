@@ -7,8 +7,6 @@ import Account from "@/app/components/account/Account";
 const getRegions = async () => {
   try {
     const response = await getRegionRequest();
-    console.log("res", response);
-
     return response;
   } catch (err) {
     console.log(err);

@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import httpClient from "../index";
 import {
   GetRequestParams,
@@ -17,18 +18,15 @@ const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJpbnZlc3RvciIsIl9fZW50aXR5IjoiUm9sZUVudGl0eSJ9LCJzZXNzaW9uSWQiOjE4NjIsImlhdCI6MTcyMjU4NTMwMywiZXhwIjoxNzIyNTg2MjAzfQ.ILqB5QjnVrZpa1NwVSeRiIb8RZNiw162sfOPXuYPW3E";
 
 export const createProfileRequest = (values: any) => {
-  header.set("Authorization", "Bearer " + token);
+  // header.set("Authorization", "Bearer " + token);
   return httpClient.post<PostRequestParams<CreateProfileParams>, T>(
     "/v1/user-profile",
     values,
-    {
-      headers: header,
-    },
   );
 };
 
 export const getRegionRequest = () => {
-  header.set("Authorization", "Bearer " + token);
+  // header.set("Authorization", "Bearer " + token);
   return httpClient.get<Regions>("/v1/master-data/regions");
 };
 
@@ -38,8 +36,7 @@ export const createGetBrokersRequest = (page: number, take: number) => {
   );
 };
 
-export const createGetAllTopicsRequest = (page: number, take: number) => {
-  header.set("Authorization", "Bearer " + token);
+export const createGetAllTopicsRequest = (page: number, take: number, header: Headers) => {
   return httpClient.get<GetRequestParams<topicsResponse>>(
     `/v1/interest-topic?page=${page}&take=${take}&sort={"orderBy":"topic_name","order":"ASC"}`,
     {

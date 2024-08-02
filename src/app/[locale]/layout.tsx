@@ -1,22 +1,16 @@
 import "@/styles/global.scss";
 
 import SessionProvider from "@/utils/api/SessionProvider";
-import { notFound, useRouter } from "next/navigation";
-import { NextIntlClientProvider, useMessages } from "next-intl";
 import { AppConfig } from "@/utils/AppConfig";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { NextIntlClientProvider, useMessages } from "next-intl";
+import { notFound } from "next/navigation";
 
 config.autoAddCss = false;
 
-import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
-import useAuthStore from "@/store/auth";
-import { useAccessTokenStore } from "@/store/accessToken";
-import Session from "../components/auth/Session";
 
 // export const metadata: Metadata = {
 //   icons: [
@@ -52,7 +46,6 @@ export default function RootLayout(props: {
 
   // Using internationalization in Client Components
   const messages = useMessages();
-  const { data: session } = useSession() as any;
 
   return (
     <SessionProvider>
@@ -63,10 +56,9 @@ export default function RootLayout(props: {
             messages={messages}
           >
             <ToastContainer />
-            <Session />
             {/* <Header />
             <Leftnav /> */}
-            {session && props.children}
+            {props.children}
             {/* <Popupchat />
             <Appfooter /> */}
           </NextIntlClientProvider>
