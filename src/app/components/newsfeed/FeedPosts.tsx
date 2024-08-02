@@ -79,6 +79,7 @@ export default function FeedPosts(props: {
             <Postview
               id={p.id}
               user={p.user.firstName + " " + p.user.lastName}
+              userId={p.user.userId}
               avatar={p.user.photo.path || "/assets/images/user.png"}
               content={p.content}
               assets={p.assets}
