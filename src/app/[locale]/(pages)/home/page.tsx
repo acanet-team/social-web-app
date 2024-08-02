@@ -5,10 +5,10 @@ import Load from "@/app/components/WaveLoader";
 import styles from "@/styles/modules/home.module.scss";
 import Layout from "../layout";
 import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
-import { FetchPosts } from "@/app/components/newsfeed/FetchPosts";
+import { ForYou } from "@/app/components/newsfeed/ForYou";
 import React from "react";
-import ForYou from "@/app/components/newsfeed/ForYou";
-import Suggestion from "@/app/components/newsfeed/Suggestion";
+import Contacts from "@/app/components/Contacts";
+import { Suggestion } from "@/app/components/newsfeed/Suggestion";
 
 const Home = async ({
   searchParams,
@@ -18,13 +18,11 @@ const Home = async ({
   console.log(searchParams);
   const renderPosts = () => {
     if (searchParams.tab === "suggestion") {
-      return <Suggestion />;
-    } else if (searchParams.tab === "you") {
-      return <ForYou />;
+      return (
+        <Suggestion postIdParams={searchParams?.comments?.toString() || ""} />
+      );
     }
-    return (
-      <FetchPosts postIdParams={searchParams?.comments?.toString() || ""} />
-    );
+    return <ForYou postIdParams={searchParams?.comments?.toString() || ""} />;
   };
 
   return (
@@ -57,11 +55,9 @@ const Home = async ({
                 <FetchPosts
                   postIdParams={searchParams.comments?.toString() || ""}
                 /> */}
-
-                <Load />
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-                {/* <Contacts /> */}
+                <Contacts />
                 {/* <Group /> */}
                 {/* <Events />
                 <Profilephoto /> */}

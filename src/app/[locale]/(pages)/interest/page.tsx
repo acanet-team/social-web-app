@@ -20,9 +20,7 @@ export default async function InterestList() {
   const response = await fetchTopics();
   console.log(response);
   const options = response.docs ?? response.data;
-  const page = response.meta.page;
-  const totalPage = response.meta.totalPage;
-  const take = response.meta.take;
+  const { page, totalPage, take } = response.meta;
 
   return (
     <>

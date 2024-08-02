@@ -113,7 +113,8 @@ export const Comments = React.memo(
         try {
           const values = { content: content, postId: props.postId };
           setIsLoading(true);
-          await postComment(values);
+          // Call api to post the comment
+          // await postComment(values);
           setComments((prevState) => [newComment, ...prevState]);
         } catch (err) {
           setComments((prevState) => [

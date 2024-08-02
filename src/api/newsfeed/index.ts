@@ -7,7 +7,7 @@ import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 export const header = new Headers();
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJpbnZlc3RvciIsIl9fZW50aXR5IjoiUm9sZUVudGl0eSJ9LCJzZXNzaW9uSWQiOjM2OCwiaWF0IjoxNzIxOTY5OTAwLCJleHAiOjE3MjI1NzQ3MDB9.Ee9_InUTVKLSuiHX-QxJqyheD32DVUDhlxOpOCE5vKg";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJpbnZlc3RvciIsIl9fZW50aXR5IjoiUm9sZUVudGl0eSJ9LCJzZXNzaW9uSWQiOjE4NjIsImlhdCI6MTcyMjU4NTMwMywiZXhwIjoxNzIyNTg2MjAzfQ.ILqB5QjnVrZpa1NwVSeRiIb8RZNiw162sfOPXuYPW3E";
 
 export const likeRequest = (values: any) => {
   header.set("Authorization", "Bearer " + token);
@@ -28,8 +28,9 @@ export const getComments = (page: number, take: number, postId: string) => {
 
 export const getPosts = (page: number, take: number, type: string) => {
   header.set("Authorization", "Bearer " + token);
+  console.log("calling api to get posts");
   return httpClient.get(
-    `/v1/post?page=${page}&take=${take}&type=${type}&sort=[{"orderBy":"createdAt","order":"DESC"}]`,
+    `/v1/post?page=${page}&take=${take}&newsFeedType=${type}`,
     {
       headers: header,
     },

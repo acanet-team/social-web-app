@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import styles from "@/styles/modules/commentView.module.scss";
+import { TimeSinceDate } from "@/utils/time-since-date";
 
 export default function CommentView(props: {
   id: string;
@@ -15,26 +16,7 @@ export default function CommentView(props: {
   const { id, photo, nickName, content, status, createdAt, onClickDelete } =
     props;
   const [openSettings, setOpenSettings] = useState<boolean>(false);
-  const postDate = new Date(createdAt);
-  const timeSincePostDate = new Date().getTime() - postDate.getTime();
-
-  // Calculate the time passed in different units
-  const minutes = Math.floor(timeSincePostDate / (1000 * 60));
-  const hours = Math.floor(timeSincePostDate / (1000 * 60 * 60));
-  const days = Math.floor(timeSincePostDate / (1000 * 60 * 60 * 24));
-  const weeks = Math.floor(timeSincePostDate / (1000 * 60 * 60 * 24 * 7));
-
-  // Determine the most appropriate unit to display
-  let timePassed;
-  if (weeks > 0) {
-    timePassed = `${weeks} week${weeks > 1 ? "s" : ""} ago`;
-  } else if (days > 0) {
-    timePassed = `${days} day${days > 1 ? "s" : ""} ago`;
-  } else if (hours > 0) {
-    timePassed = `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  } else {
-    timePassed = `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-  }
+  const timePassed = TimeSinceDate(createdAt);
 
   const onClickSettings = () => {
     setOpenSettings((open) => !open);

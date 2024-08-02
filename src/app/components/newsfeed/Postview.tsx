@@ -5,35 +5,37 @@ import styles from "@/styles/modules/postView.module.scss";
 import { likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
+import { TimeSinceDate } from "@/utils/time-since-date";
 
 export default function Postview(props: {
-  user: string;
-  time: string;
-  des: string;
-  avatar: string;
-  postimage: string;
-  postvideo: string;
   id: number;
+  user: string;
+  avatar: string;
+  content: string;
+  assets: string;
   like: number;
   comment: number;
   children: React.ReactNode;
+  createdAt: string;
+  // des: string;
 }) {
   const {
-    user,
-    time,
-    des,
-    avatar,
-    postimage,
-    postvideo,
     id,
+    user,
+    avatar,
+    content,
+    assets,
     like = 0,
     comment = 0,
+    createdAt,
+    // time,
+    // des,
     children,
   } = props;
   // const [isOpen, toggleOpen] = useState<boolean>(false);
   // const menuClass = `${isOpen ? " show" : ""}`;
+  const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
-  // const [postId, setPostId] = useState<string>(id);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -97,7 +99,7 @@ export default function Postview(props: {
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
           <Image
-            src={`/assets/images/${avatar}`}
+            src={avatar}
             width={45}
             height={45}
             alt="avater"
@@ -107,14 +109,14 @@ export default function Postview(props: {
         <h4 className="fw-700 text-grey-900 font-xsss mt-1">
           {user}
           <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-            {time}
+            {createdAt ? TimeSinceDate(createdAt) : ""}
           </span>
         </h4>
         <div className="ms-auto pointer">
           <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xsss"></i>
         </div>
       </div>
-      {postvideo ? (
+      {/* {postvideo ? (
         <div className="card-body p-0 mb-3 rounded-3 overflow-hidden uttam-die">
           <a href="/defaultvideo" className="video-btn">
             <video autoPlay loop className="float-right w-100">
@@ -124,16 +126,27 @@ export default function Postview(props: {
         </div>
       ) : (
         ""
-      )}
-      <div className="card-body p-0 me-lg-5">
+      )} */}
+      <div className="card-body p-0 ms-1 me-lg-5">
         <p className="fw-500 text-grey-500 lh-26 font-xsss w-100 mb-2">
-          {des}
-          <a href="/defaultvideo" className="fw-600 text-primary ms-2">
-            See more
-          </a>
+          {expandPost
+            ? content
+            : content.length > 150
+              ? content.substring(0, 150) + "..."
+              : content}
+          {expandPost ? (
+            ""
+          ) : (
+            <span
+              className={styles["expand-btn"]}
+              onClick={() => setExpandPost(true)}
+            >
+              See more
+            </span>
+          )}
         </p>
       </div>
-      {postimage ? (
+      {/* {assets ? (
         <div className="card-body d-block p-0 mb-3">
           <div className="row ps-2 pe-2">
             <div className="col-sm-12 p-1">
@@ -147,7 +160,7 @@ export default function Postview(props: {
         </div>
       ) : (
         ""
-      )}
+      )} */}
       <div className="card-body d-flex p-0">
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
@@ -163,7 +176,7 @@ export default function Postview(props: {
           {like < 2 ? "Like" : "Likes"}
         </div>
         <div
-          className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"
+          className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
           onClick={() => onShowCommentHandler(id.toString())}
         >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
@@ -261,7 +274,6 @@ export default function Postview(props: {
         </div> */}
       </div>
       {/* All comments */}
-      {/* {openComments && <FetchComments postId={postId} />} */}
       {openComments && children}
     </div>
   );

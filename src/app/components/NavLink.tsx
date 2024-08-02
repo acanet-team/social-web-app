@@ -14,7 +14,6 @@ const NavLink = ({ href, children, className }: NavLinkProps) => {
   const router = useSearchParams();
   const currentTab = router.get("tab") || "you";
   const isActive = `/home?tab=${currentTab}` === href;
-  console.log(href);
 
   return (
     <Link href={href}>
