@@ -10,6 +10,7 @@ import { TimeSinceDate } from "@/utils/time-since-date";
 export default function Postview(props: {
   id: number;
   user: string;
+  userId: string;
   avatar: string;
   content: string;
   assets: string;
@@ -36,6 +37,7 @@ export default function Postview(props: {
   // const menuClass = `${isOpen ? " show" : ""}`;
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
+  const [openSettings, setOpenSettings] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -92,6 +94,8 @@ export default function Postview(props: {
       }
     }
   };
+
+  const onClickSetting = () => {};
   return (
     <div
       className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3`}
@@ -112,8 +116,11 @@ export default function Postview(props: {
             {createdAt ? TimeSinceDate(createdAt) : ""}
           </span>
         </h4>
-        <div className="ms-auto pointer">
-          <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xsss"></i>
+        <div
+          className="ms-auto pointer"
+          onClick={() => setOpenSettings((open) => !open)}
+        >
+          <i className="bi bi-three-dots h1"></i>
         </div>
       </div>
       {/* {postvideo ? (

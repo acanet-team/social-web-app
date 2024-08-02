@@ -35,19 +35,19 @@ const CreatePost = () => {
 
   const topicListRef = useRef(null);
 
-  useEffect(() => {
-    console.log(setAccessToken);
-    const session = sessionData as IUserSession;
-    if (session && session.user) {
-      setAccessToken(session.token);
-      setUserInfo(session.user as IUserInfo);
-      if (!session.user.isProfile) {
-        router.push("/account");
-      } else {
-        router.push("/home");
-      }
-    }
-  }, [sessionData, setAccessToken]);
+  // useEffect(() => {
+  //   console.log(setAccessToken);
+  //   const session = sessionData as IUserSession;
+  //   if (session && session.user) {
+  //     setAccessToken(session.token);
+  //     setUserInfo(session.user as IUserInfo);
+  //     if (!session.user.isProfile) {
+  //       router.push("/account");
+  //     } else {
+  //       router.push("/home");
+  //     }
+  //   }
+  // }, [sessionData, setAccessToken]);
 
   const fetchTopics = async (page = 1, search = "") => {
     setIsLoading(true);

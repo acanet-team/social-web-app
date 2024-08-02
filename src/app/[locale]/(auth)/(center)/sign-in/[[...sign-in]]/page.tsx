@@ -31,18 +31,6 @@ const LoginPage: NextPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (session) {
-      createProfile(session);
-      // console.log(session);
-      if (!session.user.isProfile) {
-        router.push("/home");
-      } else {
-        router.push("/home");
-      }
-    }
-  }, [session, setAccessToken]);
-
   return (
     <div className="main-wrap">
       <div className="nav-header border-0 bg-transparent shadow-none">

@@ -33,12 +33,8 @@ export const getRegionRequest = () => {
 };
 
 export const createGetBrokersRequest = (page: number, take: number) => {
-  header.set("Authorization", "Bearer " + token);
   return httpClient.get<AllBrokersResponse<IUser>>(
     `/v1/users?type=broker&page=${page}&take=${take}&sort=[{"orderBy":"followers_count","order":"DESC"}]`,
-    {
-      headers: header,
-    },
   );
 };
 
