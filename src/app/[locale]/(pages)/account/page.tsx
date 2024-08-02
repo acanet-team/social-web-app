@@ -1,6 +1,5 @@
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
-import type { AxiosError } from "axios";
 import Link from "next/link";
 import { getRegionRequest } from "@/api/user";
 import Account from "@/app/components/account/Account";

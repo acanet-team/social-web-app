@@ -76,3 +76,24 @@ export interface Photo {
   courseId: number;
   category: string;
 }
+export interface IUserInfo {
+  id: number | null;
+  email: string;
+  provider: string;
+  socialId: string;
+  firstName: string;
+  lastName: string;
+  photo: Photo;
+  role: Role;
+  status: Status;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isBroker: boolean;
+  isProfile: boolean;
+}
+export interface IUserSession {
+  user?: IUserInfo;
+  expires: string;
+  token: string;
+}
