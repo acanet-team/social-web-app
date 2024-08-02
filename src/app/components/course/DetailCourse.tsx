@@ -1,12 +1,13 @@
 "use client";
 import { coursesList } from "@/app/fakeData/data-investor-course";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/courses.module.scss";
 import DropDown from "../DropDown";
 import Rating from "../Ratings";
 import RichTextView from "../RichTextView";
 import type { Course } from "@/api/course";
+import useTheme from "@/app/hooks/useTheme";
 
 interface Props {
   id: number;
@@ -15,43 +16,30 @@ interface Props {
 export default function DetailCourse({ id }: Props) {
   const [course, setCourse] = useState<Course | null>(null);
   const numericId = Number(id);
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "theme-dark",
-  );
-
-  useEffect(() => {
-    const handleThemeChange = () => {
-      const storedTheme = localStorage.getItem("theme");
-      if (storedTheme) {
-        setTheme(storedTheme);
-        // document.body.classList.replace(theme, storedTheme);
-      }
-    };
-    window.addEventListener("themeChange", handleThemeChange as EventListener);
-    return () => {
-      window.removeEventListener(
-        "themeChange",
-        handleThemeChange as EventListener,
-      );
-    };
-  }, [theme]);
+  const theme = useTheme();
 
   useEffect(() => {
     const findCourse = coursesList.find((data) => data.id === numericId);
     setCourse(findCourse || null);
   }, [numericId]);
 
-  const totalLectures =
-    course?.couseContent?.reduce(
-      (acc, item) => acc + item.childList.length,
-      0,
-    ) || 0;
+  const totalLectures = useMemo(
+    () =>
+      course?.couseContent?.reduce(
+        (acc, item) => acc + item.childList.length,
+        0,
+      ) || 0,
+    [course?.couseContent],
+  );
 
-  const totalCourseDuration =
-    course?.couseContent?.reduce(
-      (acc, item) => acc + item.course_duration,
-      0,
-    ) || 0;
+  const totalCourseDuration = useMemo(
+    () =>
+      course?.couseContent?.reduce(
+        (acc, item) => acc + item.course_duration,
+        0,
+      ) || 0,
+    [course?.couseContent],
+  );
 
   return (
     <>
