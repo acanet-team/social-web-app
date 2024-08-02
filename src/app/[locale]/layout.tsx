@@ -11,6 +11,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 config.autoAddCss = false;
 
 import type { Metadata } from "next";
+import { ToastContainer } from "react-toastify";
 
 // export const metadata: Metadata = {
 //   icons: [
@@ -53,8 +54,8 @@ export default function RootLayout(props: {
         <body className="color-theme-blue nunito-font loaded theme-dark">
           <NextIntlClientProvider
             locale={props.params.locale}
-            messages={messages}
-          >
+            messages={messages}>
+            <ToastContainer />
             {/* <Header />
             <Leftnav /> */}
             {props.children}

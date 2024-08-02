@@ -1,0 +1,25 @@
+.react-select__control {
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.react-select__single-value {
+  padding-left: 10px !important;
+}
+
+.react-select__dropdown-indicator {
+  padding-right: 10px !important;
+}
+
+.react-select__menu {
+  border-radius: 10px !important;
+}
+
+.react-select__option--is-selected {
+  background-color: #f0f0f0 !important;
+}
+
+.react-select__option {
+  padding: 5px 10px !important;
+  border-bottom: 1px solid #eee !important;
+}

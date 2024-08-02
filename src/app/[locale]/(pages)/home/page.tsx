@@ -38,14 +38,12 @@ const Home = async ({
                   {/* Tab display */}
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=you"
-                  >
+                    href="/home?tab=you">
                     For you
                   </NavLink>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=suggestion"
-                  >
+                    href="/home?tab=suggestion">
                     Suggestion
                   </NavLink>
                 </div>

@@ -71,5 +71,34 @@
     "dashboard_link": "Tableau de bord",
     "user_profile_link": "Gérer votre compte",
     "sign_out": "Se déconnecter"
+  },
+  "CreatePost": {
+    "live_Video": "Vidéo en direct",
+    "create_Post": "Créer un message",
+    "Photo_Video": "Photo/Vidéo",
+    "Whats_on_your_mind": "Qu'est-ce qui préoccupe votre esprit?",
+    "select_Topic": "Sélectionnez un sujet",
+    "no_topics": "Aucun sujet trouvé.",
+    "loading_topics": "Chargement des sujets...",
+    "please_select_a_topic": "Veuillez sélectionner un sujet pour votre message.",
+    "please_enter_text": "Veuillez saisir du texte pour votre message.",
+    "post_create_success": "Post créé avec succès !",
+    "post_create_error": "Erreur lors de la création du message.",
+    "error_fetch_topic": "Erreur lors de la récupération des sujets."
+  },
+  "BrokerList": {
+    "broker_description": "Chaque ID de demande est méticuleusement enregistré dans ce journal. \nPour plus de détails, veuillez les examiner attentivement.",
+    "broker_title": "Liste des courtiers"
+  },
+  "CoursesList": {
+    "course_description": "Chaque ID de demande est méticuleusement enregistré dans ce journal. \nPour plus de détails, veuillez les examiner attentivement.",
+    "course_title": "Cours"
+  },
+  "Interest": {
+    "interest_description": "Sélectionnez au moins un sujet qui vous intéresse pour personnaliser votre expérience.",
+    "interest_title": "Qu'est-ce qui vous intéresse?"
+  },
+  "TopBrokers": {
+    "top_broker_title": "Meilleurs courtiers"
   }
 }
