@@ -7,8 +7,7 @@ import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 export const header = new Headers();
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJpbnZlc3RvciIsIl9fZW50aXR5IjoiUm9sZUVudGl0eSJ9LCJzZXNzaW9uSWQiOjE4NjIsImlhdCI6MTcyMjU4NTMwMywiZXhwIjoxNzIyNTg2MjAzfQ.ILqB5QjnVrZpa1NwVSeRiIb8RZNiw162sfOPXuYPW3E";
-
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6eyJpZCI6MiwibmFtZSI6InVzZXIiLCJfX2VudGl0eSI6IlJvbGVFbnRpdHkifSwic2Vzc2lvbklkIjo5LCJpYXQiOjE3MjEwMTc3NzcsImV4cCI6MTgwNzQxNzc3N30.gM1-jdute6OTZE6O_ihrMegtlwODZyfu_Nk4GFAR7-Q";
 export const likeRequest = (values: any) => {
   header.set("Authorization", "Bearer " + token);
   return httpClient.post<PostRequestParams<likeParams>, T>("/v1/post", values, {
@@ -28,7 +27,6 @@ export const getComments = (page: number, take: number, postId: string) => {
 
 export const getPosts = (page: number, take: number, type: string) => {
   header.set("Authorization", "Bearer " + token);
-  console.log("calling api to get posts");
   return httpClient.get(
     `/v1/post?page=${page}&take=${take}&newsFeedType=${type}`,
     {
@@ -47,6 +45,13 @@ export const postComment = (values: { content: string; postId: string }) => {
 export const deleteComment = (commentId: string) => {
   header.set("Authorization", "Bearer " + token);
   return httpClient.delete(`/v1/comment/${commentId}`, {
+    headers: header,
+  });
+};
+
+export const deletePost = (postId: string) => {
+  header.set("Authorization", "Bearer " + token);
+  return httpClient.delete(`v1/post/${postId}`, {
     headers: header,
   });
 };

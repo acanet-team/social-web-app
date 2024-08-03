@@ -36,9 +36,10 @@ export default function BrokerProfile(props: {
         <div className={`${styles["broker-profile"]} card-body d-block w-100`}>
           <figure className="overflow-hidden avatar ms-auto me-auto mb-0 position-relative z-index-1">
             <Image
-              src={
-                photoUrl ? photoUrl : "https://via.placeholder.com/300x300.png"
-              }
+              src={"https://via.placeholder.com/300x300.png"}
+              // src={
+              //   photoUrl ? photoUrl : "https://via.placeholder.com/300x300.png"
+              // }
               width={211}
               height={211}
               alt="avatar"

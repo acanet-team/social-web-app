@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Postview from "./Postview";
-import { fakePosts } from "@/app/fakeData/posts";
 import { getPosts } from "@/api/newsfeed";
 import Link from "next/link";
+import styles from "@/styles/modules/interest.module.scss";
 import WaveLoader from "../WaveLoader";
 
 export default function FeedPosts(props: {
@@ -14,24 +14,20 @@ export default function FeedPosts(props: {
   feedType: string;
   children: React.ReactNode;
 }): JSX.Element {
-  const list = useRef<HTMLDivElement>(null);
-  // const [posts, setPosts] = useState<any[]>(props.posts || []);
-  const [posts, setPosts] = useState<any[]>(fakePosts);
+  const [posts, setPosts] = useState<any[]>(props.posts || []);
   const [page, setPage] = useState<number>(1);
-  const [totalPage, setTotalPage] = useState<number>(props.totalPage);
+  const [totalPage, setTotalPage] = useState<number>(props.totalPage || 1);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-
-  const fetchPosts = async () => {
+  console.log("client", props.posts);
+  console.log("client", props.page);
+  const fetchPosts = async (page = props.page || 1) => {
     try {
       setIsLoading(true);
-      const response: any = await getPosts(
-        props.page,
-        props.take,
-        props.feedType,
-      );
+      const response: any = await getPosts(page, props.take, props.feedType);
       // console.log(response);
       setPosts((prevState) => [...prevState, ...response.data.docs]);
       setTotalPage(response.data.meta.totalPage);
+      console.log("feed posts", response.data);
       return response.data;
     } catch (err) {
       console.log(err);
@@ -41,57 +37,87 @@ export default function FeedPosts(props: {
   };
 
   // Inifite scrolling
+  // const onScrollHandler = () => {
+  //   if (document.documentElement) {
+  //     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  //     if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+  //         setPage((prevState) => prevState + 1);
+  //         fetchPosts();
+  //     }
+  //   }
+  // };
+
   const onScrollHandler = () => {
-    if (list.current) {
-      const { scrollTop, scrollHeight, clientHeight } = list.current;
-      if (scrollTop + clientHeight === scrollHeight && !isLoading) {
-        setPage((prevState) => prevState + 1);
-        fetchPosts();
+    if (document.documentElement) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+        console.log("Page", props.page);
+        setPage((page) => page++);
+        console.log("Pag", page);
+        Promise.all([fetchPosts(page)]);
       }
     }
   };
 
+  // useEffect(() => {
+  //   const currentList = document.documentElement;
+  //   if (currentList && page < totalPage) {
+  //     currentList.addEventListener("scroll", onScrollHandler);
+  //   }
+  //   return () => {
+  //     if (currentList) {
+  //       currentList.removeEventListener("scroll", onScrollHandler);
+  //     }
+  //   };
+  // }, [page, totalPage]);
   useEffect(() => {
-    const currentList = list.current;
-    if (currentList && page < totalPage) {
-      currentList.addEventListener("scroll", onScrollHandler);
+    if (document.documentElement && page < totalPage) {
+      window.addEventListener("scroll", onScrollHandler);
     }
     return () => {
-      if (currentList) {
-        currentList.removeEventListener("scroll", onScrollHandler);
+      if (document.documentElement) {
+        window.removeEventListener("scroll", onScrollHandler);
       }
     };
   }, [page, totalPage]);
 
   return (
-    <div ref={list}>
-      {isLoading && <WaveLoader />}
-      {posts?.length === 0 && props.feedType === "for_you" && (
-        <Link href="/home?tab=suggestion">
-          <button className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block mt-5 mx-auto">
-            Explore
-          </button>
-        </Link>
+    <>
+      <div>
+        {posts?.length === 0 && props.feedType === "for_you" && (
+          <Link href="/home?tab=suggestion">
+            <button className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block my-5 mx-auto">
+              Explore
+            </button>
+          </Link>
+        )}
+        {posts?.length > 0 &&
+          posts.map((p) => (
+            <div key={p.id}>
+              <Postview
+                id={p.id}
+                user={p.user.firstName + " " + p.user.lastName}
+                userId={p.user.userId}
+                // avatar={p.user?.photo?.id ? p.user?.photo?.path : '/assets/images/user.png'}
+                avatar={"/assets/images/user.png"}
+                content={p.content}
+                assets={p.assets}
+                createdAt={p.createdAt}
+                like={p.favoriteCount}
+                comment={p.commentCount}
+              >
+                {props.children}
+              </Postview>
+            </div>
+          ))}
+      </div>
+      {isLoading && (
+        <div className="d-flex justify-content-center">
+          <div className={styles["dots-3"]}></div>
+          <div className={styles["dots-3"]}></div>
+        </div>
       )}
-      {posts?.length > 0 &&
-        posts.map((p) => (
-          <div key={p.id}>
-            <Postview
-              id={p.id}
-              user={p.user.firstName + " " + p.user.lastName}
-              userId={p.user.userId}
-              avatar={p.user.photo.path || "/assets/images/user.png"}
-              content={p.content}
-              assets={p.assets}
-              createdAt={p.time}
-              like={p.favoriteCount}
-              comment={p.commentCount}
-              // des={p.des}
-            >
-              {props.children}
-            </Postview>
-          </div>
-        ))}
-    </div>
+    </>
   );
 }

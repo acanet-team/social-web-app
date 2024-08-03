@@ -5,6 +5,7 @@ import styles from "@/styles/modules/brokers.module.scss";
 import Pagination from "../Pagination";
 import { createGetBrokersRequest } from "@/api/user";
 import CircleLoader from "../CircleLoader";
+import Link from "next/link";
 
 export default function Brokers(props: {
   brokers: Object[];
@@ -56,6 +57,10 @@ export default function Brokers(props: {
         page={page}
         totalPage={props.totalPage}
       />
+
+      <Link href="/home" className="btn mt-3 mb-5 rounded-xxl mx-auto">
+        <button className="px-5 py-2 rounded-xxl mx-auto">NEXT</button>
+      </Link>
     </div>
   );
 }

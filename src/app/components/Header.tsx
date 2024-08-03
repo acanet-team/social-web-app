@@ -13,7 +13,7 @@ export default function Header() {
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-dark");
   const session = useAuthStore((state) => state.session);
-  const photo = session.user.photo;
+  const photo = session?.user?.photo;
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;
@@ -160,7 +160,8 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            src={photo ? photo : "/assets/images/user.png"}
+            // src={photo ? photo : "/assets/images/user.png"}
+            src={"/assets/images/user.png"}
             width={40}
             height={40}
             alt="user"
@@ -180,7 +181,8 @@ export default function Header() {
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            src={photo ? photo : "/assets/images/user.png"}
+            // src={photo ? photo : "/assets/images/user.png"}
+            src={"/assets/images/user.png"}
             alt="user"
             width={40}
             height={40}
@@ -199,7 +201,8 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
           <Image
-            src={photo ? photo : "/assets/images/user.png"}
+            // src={photo ? photo : "/assets/images/user.png"}
+            src={"/assets/images/user.png"}
             alt="user"
             width={40}
             height={40}
@@ -220,7 +223,8 @@ export default function Header() {
       <Darkbutton />
       <Link href="/defaultsettings" className="p-0 ms-3 menu-icon">
         <Image
-          src={photo ? photo : "/assets/images/user.png"}
+          // src={photo ? photo : "/assets/images/user.png"}
+          src={"/assets/images/user.png"}
           alt="user"
           width={40}
           height={40}
