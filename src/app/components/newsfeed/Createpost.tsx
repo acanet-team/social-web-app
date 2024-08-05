@@ -12,6 +12,7 @@ import { useAccessTokenStore } from "@/store/accessToken";
 import { useSession } from "next-auth/react";
 import { IUserInfo, type IUserSession } from "@/api/user/model";
 import { useRouter } from "next/navigation";
+import ProfilePicture from "./ProfilePicture";
 
 const CreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,11 +42,11 @@ const CreatePost = () => {
     if (session && session.user) {
       setAccessToken(session.token);
       setUserInfo(session.user as IUserInfo);
-      if (!session.user.isProfile) {
-        router.push("/account");
-      } else {
-        router.push("/home");
-      }
+      // if (!session.user.isProfile) {
+      //   router.push("/account");
+      // } else {
+      //   router.push("/home");
+      // }
     }
   }, [sessionData, setAccessToken]);
 
@@ -177,14 +178,18 @@ const CreatePost = () => {
     <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
       <div
         className="card-body p-0 mt-3 position-relative"
-        id={style["card-body"]}
-      >
+        id={style["card-body"]}>
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
-          <img
-            // src={userInfo?.photo?.path ?? "/assets/images/profile.png"}
-            src={"/assets/images/profile.png"}
+          {/* <Image
+            src={userInfo?.image ?? "/assets/images/profile.png"}
+            // src={"/assets/images/profile.png"}
             alt="icon"
+            width={30}
+            height={30}
             className="shadow-sm rounded-circle w30"
+          /> */}
+          <ProfilePicture
+            url={"/assets/images/profile.png"}
           />
         </figure>
         <textarea
@@ -194,8 +199,7 @@ const CreatePost = () => {
           }}
           name="message"
           className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
-          placeholder={t("Whats_on_your_mind")}
-        ></textarea>
+          placeholder={t("Whats_on_your_mind")}></textarea>
 
         <div className={style["imagePreview"]}>
           {uploadedImages.map((image, index) => (
@@ -210,8 +214,7 @@ const CreatePost = () => {
               />
               <button
                 onClick={() => removeImage(index)}
-                className={style["close-button"]}
-              >
+                className={style["close-button"]}>
                 <span aria-hidden="true">×</span>
               </button>
             </div>
@@ -223,8 +226,7 @@ const CreatePost = () => {
           {" "}
           <div
             className={style["enlarged-image-container"]}
-            onClick={(e) => e.stopPropagation()}
-          >
+            onClick={(e) => e.stopPropagation()}>
             <Image
               src={URL.createObjectURL(enlargedImage)}
               alt="Enlarged Image"
@@ -241,8 +243,7 @@ const CreatePost = () => {
       <div className="card-body d-flex p-0 mt-0">
         <label
           className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
-          onClick={toggleUploadForm}
-        >
+          onClick={toggleUploadForm}>
           <i className="font-md text-success feather-image me-2"></i>
           <input
             type="file"
@@ -260,8 +261,7 @@ const CreatePost = () => {
           <label
             id="submit"
             className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
-            onClick={openModal}
-          >
+            onClick={openModal}>
             <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
             {t("create_Post")}
           </label>
@@ -279,8 +279,7 @@ const CreatePost = () => {
                   <button
                     type="button"
                     className={style["close"]}
-                    onClick={closeModal}
-                  >
+                    onClick={closeModal}>
                     <span aria-hidden="true">×</span>
                   </button>
                 </div>
@@ -332,8 +331,7 @@ const CreatePost = () => {
                       className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center pointer ${
                         style["right"]
                       }`}
-                      onClick={submitPost}
-                    >
+                      onClick={submitPost}>
                       {" "}
                       <i className="btn-round-sm font-xs text-primary feather-save me-1"></i>
                       {t("create_Post")}
