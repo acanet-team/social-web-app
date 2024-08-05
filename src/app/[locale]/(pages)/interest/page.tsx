@@ -12,7 +12,7 @@ async function fetchTopics() {
     const header = new Headers();
     const accessToken = cookies().get("accessToken")?.value;
     header.set("Authorization", "Bearer " + accessToken);
-    const response: any = await createGetAllTopicsRequest(1, 20);
+    const response: any = await createGetAllTopicsRequest(1, 100, header);
     return response.data;
   } catch (err) {
     console.log(err);
@@ -22,16 +22,14 @@ async function fetchTopics() {
 export default async function InterestList() {
   const t = await getTranslations("Interest");
   const response = await fetchTopics();
-  console.log(response);
-  const options = response.docs ?? response.data;
+  const options = response?.docs ?? response?.data;
   const { page, totalPage, take } = response.meta;
 
   return (
     <>
       <div
         id={styles.interest}
-        className="main-content bg-lightblue theme-dark-bg right-chat-active"
-      >
+        className="main-content bg-lightblue theme-dark-bg right-chat-active">
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="middle-wrap">

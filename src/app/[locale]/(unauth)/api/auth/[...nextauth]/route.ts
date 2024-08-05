@@ -54,7 +54,9 @@ const options: NextAuthOptions = {
             `/v1/auth/${token?.provider}/login`,
             removePropertiesEmpty(data),
           );
-          cookies().set('accessToken', res.data.token)
+          cookies().set("accessToken", res.data.token, {
+            expires: res.data.tokenExpires,
+          });
 
           session.user = {
             ...res.data.user,
