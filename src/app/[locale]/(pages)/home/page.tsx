@@ -1,6 +1,5 @@
 import Appfooter from "@/app/components/Appfooter";
 import NavLink from "@/app/components/NavLink";
-import Load from "@/app/components/WaveLoader";
 import styles from "@/styles/modules/home.module.scss";
 import Layout from "../layout";
 import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
@@ -15,16 +14,6 @@ const Home = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  console.log(searchParams);
-  // const renderPosts = () => {
-  //   if (searchParams.tab === "suggestion") {
-  //     return (
-  //       <Suggestion postIdParams={searchParams?.comments?.toString() || ""} />
-  //     );
-  //   }
-  //   return <ForYou postIdParams={searchParams?.comments?.toString() || ""} />;
-  // };
-
   return (
     <Layout>
       <div className="main-content right-chat-active" id={styles.home}>
@@ -33,40 +22,38 @@ const Home = async ({
             <div className="row feed-body">
               <div className="col-xl-8 col-xxl-9 col-lg-8">
                 <div className={styles["home-tabs"]}>
-                  {/* Tab display */}
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=for_you"
-                  >
+                    href="/home?tab=for_you">
                     For you
                   </NavLink>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=suggestion"
-                  >
+                    href="/home?tab=suggestion">
                     Suggestion
                   </NavLink>
                 </div>
                 <FetchBrokers />
                 <CreatePost />
-                {/* {renderPosts()} */}
-                <ForYou
-                  tab={searchParams?.tab?.toString() || "for_you"}
-                  postIdParams={searchParams?.comments?.toString() || ""}
-                />
-                {/* <RenderPosts searchParams={searchParams}/> */}
+                {searchParams.tab === "suggestion" ? (
+                  <Suggestion
+                    tab={"suggestion"}
+                    postIdParams={searchParams?.comments?.toString() || ""}
+                  />
+                ) : (
+                  <ForYou
+                    tab={"for_you"}
+                    postIdParams={searchParams?.comments?.toString() || ""}
+                  />
+                )}
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
                 <Contacts />
-                {/* <Group /> */}
-                {/* <Events />
-                <Profilephoto /> */}
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <Popupchat /> */}
       <Appfooter />
     </Layout>
   );

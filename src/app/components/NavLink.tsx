@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "@/styles/modules/navLink.module.scss";
 import { MouseEventHandler, useEffect } from "react";
@@ -11,10 +11,18 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, children, className }: NavLinkProps) => {
+  const router = useRouter();
   const params = useSearchParams();
   const currentTab = params?.get("tab") || "for_you";
   const isActive = `/home?tab=${currentTab}` === href;
-  console.log("href");
+
+  useEffect(() => {
+    if (isActive) {
+      console.log("prefetching", href);
+      router.prefetch(href);
+    }
+  }, [isActive, href]);
+
   return (
     <Link href={href}>
       <div className={`${className} ${isActive ? styles["tab-active"] : ""}`}>
