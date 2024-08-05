@@ -91,6 +91,7 @@ export interface IUserInfo {
   deletedAt: string | null;
   isBroker: boolean;
   isProfile: boolean;
+  image ?: string;
 }
 export interface IUserSession {
   user?: IUserInfo;

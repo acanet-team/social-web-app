@@ -89,8 +89,6 @@ class HttpClient {
     if (accessToken) {
       headers.append("Authorization", `Bearer ${accessToken}`);
     }
-    console.log('headerrr', headers, accessToken)
-
     const reqOptions: Pick<IHttpOptions, "method" | "headers"> & {
       body?: string | FormData;
     } = {
