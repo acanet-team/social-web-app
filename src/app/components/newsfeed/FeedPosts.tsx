@@ -20,9 +20,11 @@ export default function FeedPosts(props: {
     setIsLoading(true);
     try {
       const response: any = await getPosts(page, take, props.feedType);
-      if (response && response.data) {
+      if (response && response.data.docs.length > 0) {
         setPosts((prev) => [...prev, ...response.data.docs]);
         setTotalPage(response.data.meta.totalPage);
+      } else {
+        setPosts([]);
       }
     } catch (err) {
       console.log(err);
