@@ -18,7 +18,6 @@ export default function Postview(props: {
   comment: number;
   children: React.ReactNode;
   createdAt: string;
-  // des: string;
 }) {
   const {
     id,
@@ -30,7 +29,6 @@ export default function Postview(props: {
     comment = 0,
     createdAt,
     // time,
-    // des,
     children,
   } = props;
   // const [isOpen, toggleOpen] = useState<boolean>(false);
@@ -43,9 +41,11 @@ export default function Postview(props: {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
+  // console.log(avatar);
+
   const onShowCommentHandler = (id: string) => {
     setOpenComments((open) => !open);
-    const updatedSearchParams = new URLSearchParams(searchParams);
+    const updatedSearchParams = new URLSearchParams(searchParams ?? "");
     if (id) {
       updatedSearchParams.set("comments", id);
     } else {
@@ -141,15 +141,15 @@ export default function Postview(props: {
             : content.length > 150
               ? content.substring(0, 150) + "..."
               : content}
-          {expandPost ? (
-            ""
-          ) : (
+          {content.length > 150 && !expandPost ? (
             <span
               className={styles["expand-btn"]}
-              onClick={() => setExpandPost(true)}
+              onClick={() => setExpandPost((open) => !open)}
             >
               See more
             </span>
+          ) : (
+            ""
           )}
         </p>
       </div>

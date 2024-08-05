@@ -50,7 +50,7 @@ export default function Pagination(props: {
   };
 
   return (
-    <div className="my-5">
+    <div className="mt-5">
       <ul className={styles.pagination}>
         <button
           disabled={totalPage === 1 || page === 1 ? true : false}

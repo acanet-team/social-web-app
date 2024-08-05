@@ -6,14 +6,13 @@ import {} from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Interests from "@/app/components/interest/Interests";
 import { cookies } from "next/headers";
-import { parseCookies } from "nookies";
 
 async function fetchTopics() {
   try {
     const header = new Headers();
-    const accessToken = cookies().get('accessToken')?.value
+    const accessToken = cookies().get("accessToken")?.value;
     header.set("Authorization", "Bearer " + accessToken);
-    const response: any = await createGetAllTopicsRequest(1, 20, header);
+    const response: any = await createGetAllTopicsRequest(1, 20);
     return response.data;
   } catch (err) {
     console.log(err);

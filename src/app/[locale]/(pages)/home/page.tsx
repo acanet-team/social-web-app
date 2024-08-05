@@ -1,5 +1,4 @@
 import Appfooter from "@/app/components/Appfooter";
-import CreatePost from "@/app/components/Createpost";
 import NavLink from "@/app/components/NavLink";
 import Load from "@/app/components/WaveLoader";
 import styles from "@/styles/modules/home.module.scss";
@@ -9,6 +8,7 @@ import { ForYou } from "@/app/components/newsfeed/ForYou";
 import React from "react";
 import Contacts from "@/app/components/Contacts";
 import { Suggestion } from "@/app/components/newsfeed/Suggestion";
+import CreatePost from "@/app/components/newsfeed/Createpost";
 
 const Home = async ({
   searchParams,
@@ -16,14 +16,14 @@ const Home = async ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   console.log(searchParams);
-  const renderPosts = () => {
-    if (searchParams.tab === "suggestion") {
-      return (
-        <Suggestion postIdParams={searchParams?.comments?.toString() || ""} />
-      );
-    }
-    return <ForYou postIdParams={searchParams?.comments?.toString() || ""} />;
-  };
+  // const renderPosts = () => {
+  //   if (searchParams.tab === "suggestion") {
+  //     return (
+  //       <Suggestion postIdParams={searchParams?.comments?.toString() || ""} />
+  //     );
+  //   }
+  //   return <ForYou postIdParams={searchParams?.comments?.toString() || ""} />;
+  // };
 
   return (
     <Layout>
@@ -36,7 +36,7 @@ const Home = async ({
                   {/* Tab display */}
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=you"
+                    href="/home?tab=for_you"
                   >
                     For you
                   </NavLink>
@@ -49,12 +49,12 @@ const Home = async ({
                 </div>
                 <FetchBrokers />
                 <CreatePost />
-                {renderPosts()}
-                {/* <ForYou />
-                <Suggestion />
-                <FetchPosts
-                  postIdParams={searchParams.comments?.toString() || ""}
-                /> */}
+                {/* {renderPosts()} */}
+                <ForYou
+                  tab={searchParams?.tab?.toString() || "for_you"}
+                  postIdParams={searchParams?.comments?.toString() || ""}
+                />
+                {/* <RenderPosts searchParams={searchParams}/> */}
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
                 <Contacts />

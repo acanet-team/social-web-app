@@ -35,7 +35,7 @@ export default function Account(props: { regions: any[] }) {
   const lastName = session.user.lastName || "";
   const firstName = session.user.firstName || "";
   const email = session.user.email;
-  const photo = session.user.photo;
+  const photo = session?.user?.photo;
   const nickName = session.user.nickName;
 
   // Toast notification
@@ -145,7 +145,8 @@ export default function Account(props: { regions: any[] }) {
           <div className="col-lg-4 text-center">
             <figure className="avatar ms-auto me-auto mb-0 mt-2 w100">
               <Image
-                src={photo || "https://via.placeholder.com/300x300.png"}
+                // src={photo || "https://via.placeholder.com/300x300.png"}
+                src={"https://via.placeholder.com/300x300.png"}
                 width={100}
                 height={100}
                 alt="avatar"

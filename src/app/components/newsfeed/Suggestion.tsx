@@ -6,7 +6,7 @@ import { FetchComments } from "./FetchComments";
 const fetchPosts = async () => {
   try {
     const response: any = await getPosts(1, 20, "suggestion");
-    console.log(response);
+    console.log("server suggestion", response, "end");
     return response.data;
   } catch (err) {
     console.log(err);
@@ -14,24 +14,22 @@ const fetchPosts = async () => {
   }
 };
 /* eslint-disable react/display-name */
-export const Suggestion = React.memo(
-  async (props: { postIdParams: string }) => {
-    const res = await fetchPosts();
-    const posts = res?.data?.docs || [];
-    const { page, totalPage, take } = res.meta;
+export const Suggestion = async (props: { postIdParams: string }) => {
+  const res = await fetchPosts();
+  const posts = res?.docs || [];
+  const { page, totalPage, take } = res.meta;
 
-    return (
-      <div>
-        <FeedPosts
-          posts={posts}
-          page={page}
-          totalPage={totalPage}
-          take={take}
-          feedType="suggestion"
-        >
-          <FetchComments postId={props.postIdParams} />
-        </FeedPosts>
-      </div>
-    );
-  },
-);
+  return (
+    <div>
+      <FeedPosts
+        posts={posts}
+        page={page}
+        totalPage={totalPage}
+        take={take}
+        feedType="suggestion"
+      >
+        <FetchComments postId={props.postIdParams} />
+      </FeedPosts>
+    </div>
+  );
+};

@@ -26,7 +26,7 @@ export const Comments = React.memo(
     const commentRef = useRef<HTMLTextAreaElement>(null);
     const commentListRef = useRef<HTMLDivElement>(null);
     const session = useAuthStore((state) => state.session);
-    const avatar = session.user.photo || "/assets/images/user.png";
+    const avatar = session?.user?.photo || "/assets/images/user.png";
     const nickName = session.user.nickName || "Me";
 
     // Fetch comments ---------------------
@@ -114,7 +114,7 @@ export const Comments = React.memo(
           const values = { content: content, postId: props.postId };
           setIsLoading(true);
           // Call api to post the comment
-          // await postComment(values);
+          await postComment(values);
           setComments((prevState) => [newComment, ...prevState]);
         } catch (err) {
           setComments((prevState) => [
@@ -184,7 +184,8 @@ export const Comments = React.memo(
         {isLoading && <WaveLoader />}
         <div className="d-flex gap-2 align-items-center w-100">
           <Image
-            src={avatar}
+            // src={avatar}
+            src={"/assets/images/user.png"}
             width={35}
             height={35}
             className="rounded-circle"

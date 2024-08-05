@@ -46,6 +46,7 @@ export default function RootLayout(props: {
 
   // Using internationalization in Client Components
   const messages = useMessages();
+  // const { data: session } = useSession() as any;
 
   return (
     <SessionProvider>
@@ -56,6 +57,7 @@ export default function RootLayout(props: {
             messages={messages}
           >
             <ToastContainer />
+            {/* <Session /> */}
             {/* <Header />
             <Leftnav /> */}
             {props.children}

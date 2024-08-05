@@ -32,6 +32,7 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
+      // console.log(session);
       createProfile(session);
       if (!session.user.isProfile) {
         router.push("/account");

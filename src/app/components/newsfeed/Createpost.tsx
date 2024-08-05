@@ -35,19 +35,19 @@ const CreatePost = () => {
 
   const topicListRef = useRef(null);
 
-  // useEffect(() => {
-  //   console.log(setAccessToken);
-  //   const session = sessionData as IUserSession;
-  //   if (session && session.user) {
-  //     setAccessToken(session.token);
-  //     setUserInfo(session.user as IUserInfo);
-  //     if (!session.user.isProfile) {
-  //       router.push("/account");
-  //     } else {
-  //       router.push("/home");
-  //     }
-  //   }
-  // }, [sessionData, setAccessToken]);
+  useEffect(() => {
+    // console.log(setAccessToken);
+    const session = sessionData as IUserSession;
+    if (session && session.user) {
+      setAccessToken(session.token);
+      setUserInfo(session.user as IUserInfo);
+      if (!session.user.isProfile) {
+        router.push("/account");
+      } else {
+        router.push("/home");
+      }
+    }
+  }, [sessionData, setAccessToken]);
 
   const fetchTopics = async (page = 1, search = "") => {
     setIsLoading(true);
@@ -181,7 +181,8 @@ const CreatePost = () => {
       >
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
           <img
-            src={userInfo?.photo?.path ?? "/assets/images/profile.png"}
+            // src={userInfo?.photo?.path ?? "/assets/images/profile.png"}
+            src={"/assets/images/profile.png"}
             alt="icon"
             className="shadow-sm rounded-circle w30"
           />
@@ -328,13 +329,13 @@ const CreatePost = () => {
                   <div>
                     <label
                       id="button"
-                      className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center ${
+                      className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center pointer ${
                         style["right"]
                       }`}
                       onClick={submitPost}
                     >
                       {" "}
-                      <i className="btn-round-sm font-xs text-primary feather-save me-2"></i>
+                      <i className="btn-round-sm font-xs text-primary feather-save me-1"></i>
                       {t("create_Post")}
                     </label>
                   </div>

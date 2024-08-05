@@ -15,7 +15,7 @@ import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 export const header = new Headers();
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAsInJvbGUiOnsiaWQiOjMsIm5hbWUiOiJpbnZlc3RvciIsIl9fZW50aXR5IjoiUm9sZUVudGl0eSJ9LCJzZXNzaW9uSWQiOjE4NjIsImlhdCI6MTcyMjU4NTMwMywiZXhwIjoxNzIyNTg2MjAzfQ.ILqB5QjnVrZpa1NwVSeRiIb8RZNiw162sfOPXuYPW3E";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6eyJpZCI6MiwibmFtZSI6InVzZXIiLCJfX2VudGl0eSI6IlJvbGVFbnRpdHkifSwic2Vzc2lvbklkIjo5LCJpYXQiOjE3MjEwMTc3NzcsImV4cCI6MTgwNzQxNzc3N30.gM1-jdute6OTZE6O_ihrMegtlwODZyfu_Nk4GFAR7-Q";
 
 export const createProfileRequest = (values: any) => {
   // header.set("Authorization", "Bearer " + token);
@@ -31,12 +31,16 @@ export const getRegionRequest = () => {
 };
 
 export const createGetBrokersRequest = (page: number, take: number) => {
+  header.set("Authorization", "Bearer " + token);
   return httpClient.get<AllBrokersResponse<IUser>>(
     `/v1/users?type=broker&page=${page}&take=${take}&sort=[{"orderBy":"followers_count","order":"DESC"}]`,
+    {
+      headers: header,
+    },
   );
 };
 
-export const createGetAllTopicsRequest = (page: number, take: number, header: Headers) => {
+export const createGetAllTopicsRequest = (page: number, take: number) => {
   return httpClient.get<GetRequestParams<topicsResponse>>(
     `/v1/interest-topic?page=${page}&take=${take}&sort={"orderBy":"topic_name","order":"ASC"}`,
     {
