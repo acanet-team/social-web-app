@@ -36,24 +36,29 @@ const Home = async ({
                   {/* Tab display */}
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=for_you"
-                  >
+                    href="/home?tab=for_you">
                     For you
                   </NavLink>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=suggestion"
-                  >
+                    href="/home?tab=suggestion">
                     Suggestion
                   </NavLink>
                 </div>
                 <FetchBrokers />
                 <CreatePost />
                 {/* {renderPosts()} */}
-                <ForYou
-                  tab={searchParams?.tab?.toString() || "for_you"}
-                  postIdParams={searchParams?.comments?.toString() || ""}
-                />
+                {searchParams.tab === "suggestion" ? (
+                  <Suggestion
+                    postIdParams={searchParams?.comments?.toString() || ""}
+                  />
+                ) : (
+                  <ForYou
+                    tab={searchParams?.tab?.toString() || "for_you"}
+                    postIdParams={searchParams?.comments?.toString() || ""}
+                  />
+                )}
+
                 {/* <RenderPosts searchParams={searchParams}/> */}
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
