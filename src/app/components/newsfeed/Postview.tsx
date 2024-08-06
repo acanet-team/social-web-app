@@ -1,11 +1,13 @@
 "use client";
-import Image from "next/image";
-import React, { useState } from "react";
+import React, { useInsertionEffect, useState } from "react";
 import styles from "@/styles/modules/postView.module.scss";
 import { likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
+import Masonry from "react-responsive-masonry";
+import Image from "next/image";
+import path from "path";
 
 export default function PostCard(props: {
   id: number;
@@ -28,11 +30,8 @@ export default function PostCard(props: {
     like = 0,
     comment = 0,
     createdAt,
-    // time,
     children,
   } = props;
-  // const [isOpen, toggleOpen] = useState<boolean>(false);
-  // const menuClass = `${isOpen ? " show" : ""}`;
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
@@ -40,8 +39,6 @@ export default function PostCard(props: {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-
-  // console.log(avatar);
 
   const onShowCommentHandler = (id: string) => {
     setOpenComments((open) => !open);
@@ -132,7 +129,7 @@ export default function PostCard(props: {
       ) : (
         ""
       )} */}
-      <div className="card-body p-0 ms-1 me-lg-5">
+      <div className="card-body p-0 ms-1 me-lg-6">
         <p className="fw-500 text-grey-500 lh-26 font-xsss w-100 mb-2">
           {expandPost
             ? content
@@ -149,29 +146,17 @@ export default function PostCard(props: {
             ""
           )}
         </p>
-        {assets.map((elm: { id: string; path: string }) => {
-          if (elm.path) {
-            return (
-              <div className="card-body d-block p-0 mb-3">
-                <div className="row ps-2 pe-2">
-                  <div className="col-sm-12 p-1">
-                    <Image
-                      key={elm.id}
-                      width={100}
-                      height={400}
-                      src={`${elm.path}`}
-                      className="rounded-3 w-100"
-                      alt="post"
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })}
+        <Masonry columnsCount={assets.length > 1 ? undefined : 1} gutter="0px" style={{}}>
+          {assets.slice(0, 5).map(({ path, id }) => (
+            <img
+              key={id}
+              src={path}
+              className={styles['post-image']}
+            />
+          ))}
+        </Masonry>
       </div>
-      <div className="card-body d-flex p-0">
+      <div className="card-body d-flex p-0 mt-2">
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
