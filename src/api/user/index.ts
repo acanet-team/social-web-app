@@ -32,7 +32,7 @@ export const createGetBrokersRequest = (
     headers: Headers = undefined as unknown as Headers
 ) => {
   return httpClient.get<AllBrokersResponse<IUser>>(
-    `/v1/users?type=broker&page=${page}&take=${take}&sort=[{"orderBy":"followers_count","order":"DESC"}]`,
+    `/v1/users?type=broker&page=${page}&take=${take}&sort={"orderBy":"followers_count","order":"DESC"}`,
     { headers }
   );
 };
