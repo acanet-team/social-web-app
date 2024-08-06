@@ -45,6 +45,9 @@ export default function FeedPosts(props: {
 
   useEffect(() => {
     fetchPosts(page);
+  }, [page, props.feedType]);
+  
+  useEffect(() => {
     if (document.documentElement && page < totalPage) {
       window.addEventListener("scroll", onScrollHandler);
     }

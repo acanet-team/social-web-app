@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
 
-export default function Postview(props: {
+export default function PostCard(props: {
   id: number;
   user: string;
   userId: string;
@@ -149,26 +149,27 @@ export default function Postview(props: {
             ""
           )}
         </p>
-        {assets
-          ? assets.map((elm: { id: string; path: string }) => {
-              return (
-                <div className="card-body d-block p-0 mb-3">
-                  <div className="row ps-2 pe-2">
-                    <div className="col-sm-12 p-1">
-                      <Image
-                        key={elm.id}
-                        width={100}
-                        height={400}
-                        src={`${elm.path}`}
-                        className="rounded-3 w-100"
-                        alt="post"
-                      />
-                    </div>
+        {assets.map((elm: { id: string; path: string }) => {
+          if (elm.path) {
+            return (
+              <div className="card-body d-block p-0 mb-3">
+                <div className="row ps-2 pe-2">
+                  <div className="col-sm-12 p-1">
+                    <Image
+                      key={elm.id}
+                      width={100}
+                      height={400}
+                      src={`${elm.path}`}
+                      className="rounded-3 w-100"
+                      alt="post"
+                    />
                   </div>
                 </div>
-              );
-            })
-          : ""}
+              </div>
+            );
+          }
+          return null;
+        })}
       </div>
       <div className="card-body d-flex p-0">
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
