@@ -1,3 +1,7 @@
+.post {
+  max-height: 600px;
+  display: flex;
+}
 .post i {
   cursor: pointer;
 }
@@ -16,5 +20,12 @@
 :global(.theme-dark) {
   .post .expand-btn {
     color: var(--theme-color-shade);
-  } 
+  }
+}
+
+.post-image {
+  width: -webkit-fill-available;
+  display: block;
+  height: -webkit-fill-available;
+  object-fit: cover;
 }

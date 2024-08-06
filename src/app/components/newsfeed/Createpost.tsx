@@ -189,7 +189,7 @@ const CreatePost = () => {
             className="shadow-sm rounded-circle w30"
           /> */}
           <ProfilePicture
-            url={"/assets/images/profile.png"}
+            url={userInfo?.image ?? "/assets/images/profile.png"}
           />
         </figure>
         <textarea
