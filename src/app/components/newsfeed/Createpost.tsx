@@ -10,7 +10,7 @@ import "./yourCustomSelectStyles.css";
 import { useTranslations } from "next-intl";
 import { useAccessTokenStore } from "@/store/accessToken";
 import { useSession } from "next-auth/react";
-import { IUserInfo, type IUserSession } from "@/api/user/model";
+import { IUserInfo } from "@/api/user/model";
 import { useRouter } from "next/navigation";
 import ProfilePicture from "./ProfilePicture";
 import Box from "@mui/material/Box";
@@ -38,13 +38,13 @@ const CreatePost = () => {
 
   const topicListRef = useRef(null);
 
-  useEffect(() => {
-    const session = sessionData as IUserSession;
-    if (session && session.user) {
-      setAccessToken(session.token);
-      setUserInfo(session.user as IUserInfo);
-    }
-  }, [sessionData, setAccessToken]);
+  // useEffect(() => {
+  //   // const session = sessionData as IUserSession;
+  //   // if (session && session.user) {
+  //   //   setAccessToken(session.token);
+  //   //   setUserInfo(session.user as IUserInfo);
+  //   // }
+  // }, []);
 
   const fetchTopics = async (page = 1, search = "") => {
     setIsLoading(true);

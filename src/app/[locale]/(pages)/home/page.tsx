@@ -13,7 +13,7 @@ const Home = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
-}) => {
+  }) => {
   return (
     <Layout>
       <div className="main-content right-chat-active" id={styles.home}>

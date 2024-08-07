@@ -1,7 +1,6 @@
 "use client";
 
 import { getMe } from "@/api/auth";
-import { useAccessTokenStore } from "@/store/accessToken";
 import { getLocalStorage } from "@/utils/local-storage";
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
@@ -22,7 +21,6 @@ const LoginPage: NextPage = () => {
     const handleStorageChange = () => {
       const theme = getLocalStorage("theme");
       setCurTheme(theme);
-      // console.log(theme);
     };
     window.addEventListener("storage", handleStorageChange);
     return () => {
@@ -32,8 +30,14 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      // console.log(session);
       createProfile(session);
+      getMe()
+        .then((res) => {
+          console.log("res", res);
+          
+        })
+        .catch((err) => err); 
+      
       if (!session.user.isProfile) {
         router.push("/account");
       } else {
