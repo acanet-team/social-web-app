@@ -1,13 +1,13 @@
 "use client";
-import React, { useInsertionEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/postView.module.scss";
 import { likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
-import Masonry from "react-responsive-masonry";
 import Image from "next/image";
-import path from "path";
+import Box from "@mui/material/Box";
+import Masonry from "@mui/lab/Masonry";
 
 export default function PostCard(props: {
   id: number;
@@ -20,6 +20,7 @@ export default function PostCard(props: {
   comment: number;
   children: React.ReactNode;
   createdAt: string;
+  columnsCount: number;
 }) {
   const {
     id,
@@ -31,6 +32,7 @@ export default function PostCard(props: {
     comment = 0,
     createdAt,
     children,
+    columnsCount = 1,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
@@ -91,8 +93,6 @@ export default function PostCard(props: {
       }
     }
   };
-
-  const onClickSetting = () => {};
   return (
     <div
       className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3`}>
@@ -118,44 +118,52 @@ export default function PostCard(props: {
           <i className="bi bi-three-dots h1"></i>
         </div>
       </div>
-      {/* {postvideo ? (
-        <div className="card-body p-0 mb-3 rounded-3 overflow-hidden uttam-die">
-          <a href="/defaultvideo" className="video-btn">
-            <video autoPlay loop className="float-right w-100">
-              <source src={`assets/images/${postvideo}`} type="video/mp4" />
-            </video>
-          </a>
-        </div>
-      ) : (
-        ""
-      )} */}
       <div className="card-body p-0 ms-1 me-lg-6">
-        <p className="fw-500 text-grey-500 lh-26 font-xsss w-100 mb-2">
-          {expandPost
-            ? content
-            : content.length > 150
-              ? content.substring(0, 150) + "..."
-              : content}
-          {content.length > 150 && !expandPost ? (
-            <span
-              className={styles["expand-btn"]}
-              onClick={() => setExpandPost((open) => !open)}>
-              See more
-            </span>
-          ) : (
-            ""
-          )}
-        </p>
-        <Masonry columnsCount={assets.length > 1 ? undefined : 1} gutter="0px" style={{}}>
-          {assets.slice(0, 5).map(({ path, id }) => (
-            <img
-              key={id}
-              src={path}
-              className={styles['post-image']}
-            />
-          ))}
-        </Masonry>
+        <Box
+          sx={{
+            width: "100%",
+            maxHeight: 500,
+            overflow: "hidden",
+          }}>
+          <p className="fw-500 text-grey-500 lh-26 font-xsss w-100 mb-2">
+            {expandPost
+              ? content
+              : content.length > 150
+                ? content.substring(0, 150) + "..."
+                : content}
+            {content.length > 150 && !expandPost ? (
+              <span
+                className={styles["expand-btn"]}
+                onClick={() => setExpandPost((open) => !open)}>
+                See more
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
+          <Masonry columns={columnsCount}>
+            {assets.slice(0, 5).map(({ path, id }) =>
+              path ? (
+                <div key={id}>
+                  <img
+                    srcSet={`${path}?w=162&auto=format&dpr=2 2x`}
+                    src={`${path}?w=162&auto=format`}
+                    alt={id}
+                    loading="lazy"
+                    style={{
+                      borderBottomLeftRadius: 4,
+                      borderBottomRightRadius: 4,
+                      display: "block",
+                      width: "100%",
+                    }}
+                  />
+                </div>
+              ) : null
+            )}
+          </Masonry>
+        </Box>
       </div>
+
       <div className="card-body d-flex p-0 mt-2">
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
