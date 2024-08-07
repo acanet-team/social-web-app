@@ -29,11 +29,10 @@ export const removePropertiesEmpty = (object: any) => {
   }
   return objectToProcess;
 };
-export const cleanPath = (path:string) => {
+export const cleanPath = (path: string) => {
   if (path.includes("https://lh3.googleusercontent.com")) {
     return path.replace("https://acanet-v1-public-test.s3.amazonaws.com/", "");
-  }
-  else if (path.includes("platform-lookaside.fbsbx.com")) {
+  } else if (path.includes("platform-lookaside.fbsbx.com")) {
     return "/assets/images/user.png";
   } else {
     return path;

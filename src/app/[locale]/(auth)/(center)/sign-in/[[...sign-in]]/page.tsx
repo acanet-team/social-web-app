@@ -2,7 +2,6 @@
 
 import { getMe } from "@/api/auth";
 import { useAccessTokenStore } from "@/store/accessToken";
-import { getLocalStorage } from "@/utils/local-storage";
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
@@ -13,14 +12,14 @@ import useAuthStore from "@/store/auth";
 
 const LoginPage: NextPage = () => {
   const t = useTranslations("SignIn");
-  const [curTheme, setCurTheme] = useState("theme-dark");
+  const [curTheme, setCurTheme] = useState("theme-light");
   const { data: session } = useSession() as any;
   const createProfile = useAuthStore((state) => state.createProfile);
   const router = useRouter();
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const theme = getLocalStorage("theme");
+      const theme = localStorage.getItem("theme") || "theme-light";
       setCurTheme(theme);
       // console.log(theme);
     };
@@ -32,10 +31,10 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      // console.log(session);
+      console.log(session);
       createProfile(session);
       if (!session.user.isProfile) {
-        router.push("/account");
+        router.push("/onboard");
       } else {
         router.push("/home");
       }

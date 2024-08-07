@@ -196,7 +196,7 @@ class HttpClient {
     } as IHttpOptions);
   };
 
-  delete = <T>(url: string, options: Omit<IHttpOptions, "method" | "url">) => {
+  delete = <T>(url: string, options?: Omit<IHttpOptions, "method" | "url">) => {
     return this.fetch<T>({ ...options, method: "DELETE", url } as IHttpOptions);
   };
 }

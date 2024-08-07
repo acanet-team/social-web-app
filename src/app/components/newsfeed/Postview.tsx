@@ -95,7 +95,8 @@ export default function PostCard(props: {
   const onClickSetting = () => {};
   return (
     <div
-      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3`}>
+      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3`}
+    >
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
           <Image
@@ -114,7 +115,8 @@ export default function PostCard(props: {
         </h4>
         <div
           className="ms-auto pointer"
-          onClick={() => setOpenSettings((open) => !open)}>
+          onClick={() => setOpenSettings((open) => !open)}
+        >
           <i className="bi bi-three-dots h1"></i>
         </div>
       </div>
@@ -139,20 +141,21 @@ export default function PostCard(props: {
           {content.length > 150 && !expandPost ? (
             <span
               className={styles["expand-btn"]}
-              onClick={() => setExpandPost((open) => !open)}>
+              onClick={() => setExpandPost((open) => !open)}
+            >
               See more
             </span>
           ) : (
             ""
           )}
         </p>
-        <Masonry columnsCount={assets.length > 1 ? undefined : 1} gutter="0px" style={{}}>
+        <Masonry
+          columnsCount={assets.length > 1 ? undefined : 1}
+          gutter="0px"
+          style={{}}
+        >
           {assets.slice(0, 5).map(({ path, id }) => (
-            <img
-              key={id}
-              src={path}
-              className={styles['post-image']}
-            />
+            <img key={id} src={path} className={styles["post-image"]} />
           ))}
         </Masonry>
       </div>
@@ -161,7 +164,8 @@ export default function PostCard(props: {
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
             className="bi bi-heart h2 m-0 me-2 d-flex align-items-center"
-            onClick={(e) => onClickLikeHandler(e, id, like)}></i>
+            onClick={(e) => onClickLikeHandler(e, id, like)}
+          ></i>
           <span className="like-number">
             {like >= 1000 ? Math.round(like / 1000).toFixed(1) : like}
           </span>
@@ -171,7 +175,8 @@ export default function PostCard(props: {
         </div>
         <div
           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
-          onClick={() => onShowCommentHandler(id.toString())}>
+          onClick={() => onShowCommentHandler(id.toString())}
+        >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
           <span className="d-none-xss">
             {comment > 1000 ? Math.round(comment / 1000).toFixed(1) : comment}

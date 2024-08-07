@@ -46,7 +46,7 @@ export default function FeedPosts(props: {
   useEffect(() => {
     fetchPosts(page);
   }, [page, props.feedType]);
-  
+
   useEffect(() => {
     if (document.documentElement && page < totalPage) {
       window.addEventListener("scroll", onScrollHandler);
@@ -89,7 +89,8 @@ export default function FeedPosts(props: {
                 assets={p.assets}
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
-                comment={p.commentCount}>
+                comment={p.commentCount}
+              >
                 {props.children}
               </Postview>
             </div>

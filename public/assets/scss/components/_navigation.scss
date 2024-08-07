@@ -192,7 +192,7 @@
     -o-transition: width .25s;
     transition: width .25s;
     padding-top: calc(#{$nav-logo-height} + 6px); 
-    z-index: -1;
+    z-index: 1;
     &.menu-active {
         width: 90px;
         .nav-content {width: 90px; padding-left: 10px;padding-right: 10px;}
@@ -213,7 +213,7 @@
         .nav-content ul li:not(.logo) a i,
         .nav-content ul li:not(.logo) a span {color: #fff !important;}
         .nav-caption {color: #fff !important; opacity: 0.6;}
-        .nav-content ul li > a.active {background:var(--theme-color-tint) !important; }
+        .nav-content ul li > a.active {background:var(--theme-color-main) !important; }
 
     }
 

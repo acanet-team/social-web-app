@@ -2,15 +2,17 @@
 
 import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { ToastContainer, toast, type ToastOptions } from "react-toastify";
-import styles from "@/styles/modules/account.module.scss";
+import styles from "@/styles/modules/createProfile.module.scss";
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
-import type { AxiosError } from "axios";
 import { useFormik } from "formik";
+import TextField from "@mui/material/TextField";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import useAuthStore, { type IUserSessionStore } from "@/store/auth";
 import Image from "next/image";
 import { createProfileRequest } from "@/api/user";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface FormValues {
   nickName: string;
@@ -25,18 +27,26 @@ interface FormErrors {
   email?: string;
 }
 
-export default function Account(props: { regions: any[] }) {
+export default function CreateProfileForm(props: {
+  regions: any[];
+  onNext: () => void;
+}) {
   const router = useRouter();
 
-  const { session, updateProfile } = useAuthStore(
+  const { session: authSession, updateProfile } = useAuthStore(
     (state: IUserSessionStore) => state,
   );
-  // console.log(session);
-  const lastName = session.user.lastName || "";
-  const firstName = session.user.firstName || "";
-  const email = session.user.email;
-  const photo = session?.user?.photo;
-  const nickName = session.user.nickName;
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+  });
+  const { data: session } = useSession() as any;
+
+  console.log(props.regions);
+  const lastName = authSession.user.lastName || "";
+  const firstName = authSession.user.firstName || "";
+  const email = authSession.user.email;
+  const photo = session?.user?.image;
+  const nickName = authSession.user.nickName;
 
   // Toast notification
   const throwToast = (message: string, notiType: string) => {
@@ -113,7 +123,8 @@ export default function Account(props: { regions: any[] }) {
         throwToast(successMessage, "success");
         // Save data in auth store
         updateProfile(values);
-        router.push("/interest");
+        // Continue the onboarding process
+        props.onNext();
       } catch (err) {
         console.log(err);
         // const errors = err as AxiosError;
@@ -145,10 +156,10 @@ export default function Account(props: { regions: any[] }) {
           <div className="col-lg-4 text-center">
             <figure className="avatar ms-auto me-auto mb-0 mt-2 w100">
               <Image
-                // src={photo || "https://via.placeholder.com/300x300.png"}
-                src={"https://via.placeholder.com/300x300.png"}
+                src={photo ? photo : "/assets/images/user.png"}
                 width={100}
                 height={100}
+                objectFit="cover"
                 alt="avatar"
                 className="shadow-sm rounded-3 w-100"
               />
@@ -164,7 +175,7 @@ export default function Account(props: { regions: any[] }) {
 
         <form onSubmit={formik.handleSubmit}>
           {/* eslint-disable-next-line */}
-          <label className="fw-600 mb-2" htmlFor="nickName">
+          <label className="fw-600 mb-1" htmlFor="nickName">
             Nickname
           </label>
           <input
@@ -184,8 +195,33 @@ export default function Account(props: { regions: any[] }) {
           ) : null}
 
           {/* eslint-disable-next-line */}
-          <label className="fw-600 mt-3">Region</label>
-          <FormControl
+          <label className="fw-600 mt-3 mb-1">Region</label>
+          <Autocomplete
+            id="filter-demo"
+            options={props.regions}
+            getOptionLabel={(option) => option}
+            filterOptions={filterOptions}
+            renderInput={(params) => <TextField {...params} />}
+            sx={{
+              "& fieldset": {
+                border: "2px #eee solid",
+              },
+              "& .MuiOutlinedInput-root": {
+                padding: 0,
+              },
+              "& .MuiInputBase-input": {
+                padding: "6px 12px !important",
+                fontSize: "16px",
+                color: "rgba(17, 17, 17, 0.7843137255)",
+                height: "50px",
+                boxSizing: "border-box",
+              },
+              "& .MuiSelect-icon": {
+                color: "#ddd",
+              },
+            }}
+          />
+          {/* <FormControl
             fullWidth
             id="location"
             error={formik.touched.location && Boolean(formik.errors.location)}
@@ -206,8 +242,10 @@ export default function Account(props: { regions: any[] }) {
                 "& .MuiInputBase-input": {
                   padding: "0 !important",
                   fontSize: "16px",
-                  color: "#fff !important",
                 },
+                "& .MuiSelect-icon": {
+                  color: '#ddd'
+                }
               }}
             >
               <MenuItem disabled value="">
@@ -226,10 +264,10 @@ export default function Account(props: { regions: any[] }) {
                 {formik.errors.location}
               </FormHelperText>
             )}
-          </FormControl>
+          </FormControl> */}
 
           {/* eslint-disable-next-line */}
-          <label className="fw-600 mt-3" htmlFor="email">
+          <label className="fw-600 mt-3 mb-1" htmlFor="email">
             Email
           </label>
           <input
@@ -249,25 +287,44 @@ export default function Account(props: { regions: any[] }) {
           ) : null}
 
           {/* eslint-disable-next-line */}
-          <label className="fw-600 mt-3 mb-1">User type</label>
-          <div id={styles["profile-radio"]} className="profile-radio-btn">
-            <input
-              type="radio"
-              name="isBroker"
-              id="investor"
-              value="false"
-              defaultChecked
-              onChange={(e) => formik.setFieldValue("isBroker", false)}
-            />
-            <label htmlFor="investor">Investor</label>
-            <input
-              type="radio"
-              name="isBroker"
-              id="broker"
-              value="true"
-              onChange={(e) => formik.setFieldValue("isBroker", true)}
-            />
-            <label htmlFor="broker">Broker</label>
+
+          <div></div>
+          <label className="fw-600 mt-3 mb-3">User type</label>
+          <div
+            id={styles["profile-radio"]}
+            className="profile-radio-btn w-50 mx-auto d-flex justify-content-center gap-4"
+          >
+            <div className="w-100 rounded-xxl">
+              <input
+                type="radio"
+                name="isBroker"
+                id="investor"
+                value="false"
+                defaultChecked
+                onChange={(e) => formik.setFieldValue("isBroker", false)}
+              />
+              <label
+                htmlFor="investor"
+                className="w-100 d-flex justify-content-center"
+              >
+                Investor
+              </label>
+            </div>
+            <div className="w-100 rounded-xxl">
+              <input
+                type="radio"
+                name="isBroker"
+                id="broker"
+                value="true"
+                onChange={(e) => formik.setFieldValue("isBroker", true)}
+              />
+              <label
+                htmlFor="broker"
+                className="w-100 d-flex justify-content-center"
+              >
+                Broker
+              </label>
+            </div>
           </div>
           {formik.errors.isBroker ? (
             <FormHelperText sx={{ color: "error.main" }}>
@@ -278,9 +335,9 @@ export default function Account(props: { regions: any[] }) {
           <button
             type="submit"
             id={styles["profile-btn"]}
-            className="main-btn bg-current text-center text-white fw-600 p-3 w175 rounded-3 border-0 d-inline-block mt-5"
+            className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 d-inline-block mt-5"
           >
-            Save
+            Continue
           </button>
         </form>
         <ToastContainer />

@@ -1,13 +1,30 @@
-#header-title .page-title {
-  font-size: 32px;
-  letter-spacing: -3%;
-  color: var(--theme-color);
+#header-title {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  background-color: var(--theme-color-main);
 }
 
-#header-title .page-intro {
-  font-size: 14px;
+#header-title .page-title {
+  font-size: 25px;
+  letter-spacing: -3%;
+  width: 100%;
+  color: #fff;
 }
 
 #page-title__search {
   background-color: #ddd;
+}
+
+:global(.theme-dark) {
+  #header-title {
+    color: #fff;
+    background-color: var(--theme-color-shade) !important;
+  }
+
+  .page-intro {
+    color: #fff !important;
+  }
+  
 }

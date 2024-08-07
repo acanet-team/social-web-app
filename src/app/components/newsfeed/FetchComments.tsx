@@ -5,9 +5,9 @@ import { Comments } from "./Comments";
 import { cookies } from "next/headers";
 
 const fetchComments = async (postId: string) => {
-   const header = new Headers();
-   const accessToken = cookies().get("accessToken")?.value;
-   header.set("Authorization", "Bearer " + accessToken);
+  const header = new Headers();
+  const accessToken = cookies().get("accessToken")?.value;
+  header.set("Authorization", "Bearer " + accessToken);
   try {
     const response = await getComments(1, 20, postId, header);
     console.log(response.data);
@@ -27,7 +27,7 @@ const fetchComments = async (postId: string) => {
     };
   }
 };
-
+/* eslint-disable react/display-name */
 export const FetchComments = React.memo(async (props: { postId: string }) => {
   console.log("postId", props.postId, "end");
   const response = await fetchComments(props.postId);
