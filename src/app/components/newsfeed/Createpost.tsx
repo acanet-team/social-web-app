@@ -10,9 +10,11 @@ import "./yourCustomSelectStyles.css";
 import { useTranslations } from "next-intl";
 import { useAccessTokenStore } from "@/store/accessToken";
 import { useSession } from "next-auth/react";
-import { IUserInfo, type IUserSession } from "@/api/user/model";
+import { IUserInfo } from "@/api/user/model";
 import { useRouter } from "next/navigation";
 import ProfilePicture from "./ProfilePicture";
+import Box from "@mui/material/Box";
+import Masonry from "@mui/lab/Masonry";
 
 const CreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,19 +38,13 @@ const CreatePost = () => {
 
   const topicListRef = useRef(null);
 
-  useEffect(() => {
-    // console.log(setAccessToken);
-    const session = sessionData as IUserSession;
-    if (session && session.user) {
-      setAccessToken(session.token);
-      setUserInfo(session.user as IUserInfo);
-      // if (!session.user.isProfile) {
-      //   router.push("/account");
-      // } else {
-      //   router.push("/home");
-      // }
-    }
-  }, [sessionData, setAccessToken]);
+  // useEffect(() => {
+  //   // const session = sessionData as IUserSession;
+  //   // if (session && session.user) {
+  //   //   setAccessToken(session.token);
+  //   //   setUserInfo(session.user as IUserInfo);
+  //   // }
+  // }, []);
 
   const fetchTopics = async (page = 1, search = "") => {
     setIsLoading(true);
@@ -62,7 +58,7 @@ const CreatePost = () => {
         }));
         const uniqueTopics = [...topics, ...newTopics].filter(
           (topic, index, self) =>
-            index === self.findIndex((t) => t.value === topic.value),
+            index === self.findIndex((t) => t.value === topic.value)
         );
         setTopics(uniqueTopics);
         setIsLoading(false);
@@ -180,14 +176,6 @@ const CreatePost = () => {
         className="card-body p-0 mt-3 position-relative"
         id={style["card-body"]}>
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
-          {/* <Image
-            src={userInfo?.image ?? "/assets/images/profile.png"}
-            // src={"/assets/images/profile.png"}
-            alt="icon"
-            width={30}
-            height={30}
-            className="shadow-sm rounded-circle w30"
-          /> */}
           <ProfilePicture
             url={userInfo?.image ?? "/assets/images/profile.png"}
           />
@@ -201,25 +189,36 @@ const CreatePost = () => {
           className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
           placeholder={t("Whats_on_your_mind")}></textarea>
 
-        <div className={style["imagePreview"]}>
-          {uploadedImages.map((image, index) => (
-            <div key={index} className={style["previewImage"]}>
-              <Image
-                src={URL.createObjectURL(image)}
-                alt="Uploaded Image"
-                className={style["previewImage"]}
-                width={211}
-                height={211}
-                onClick={() => enlargeImage(image)}
-              />
-              <button
-                onClick={() => removeImage(index)}
-                className={style["close-button"]}>
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-          ))}
-        </div>
+        <Box
+          sx={{
+            width: "100%",
+            maxHeight: 500,
+            overflow: "hidden",
+          }}>
+          <Masonry
+            columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}>
+            {uploadedImages.slice(0, 6).map((image, index) => (
+              <div key={index} className={style["previewImage"]}>
+                <Image
+                  security="restricted"
+                  src={URL.createObjectURL(image)}
+                  alt="Uploaded Image"
+                  className={style["imagePreview"]}
+                  layout="responsive"
+                  width={100}
+                  height={100}
+                  objectFit="cover"
+                  sizes={
+                    image.size > 1000000
+                      ? "(max-width: 500px) 100vw, 500px"
+                      : "(max-width: 211px) 100vw, 211px"
+                  }
+                  onClick={() => enlargeImage(image)}
+                />
+              </div>
+            ))}
+          </Masonry>
+        </Box>
       </div>
       {enlargedImage && (
         <div className={style["enlarged-image-modal"]} onClick={closeEnlarge}>

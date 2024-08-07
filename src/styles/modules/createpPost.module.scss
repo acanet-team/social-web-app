@@ -10,10 +10,8 @@
 }
 
 .imagePreview {
-  display: flex;
-  overflow-x: auto;
-  gap: 10px;
   border-radius: 15px;
+  width: -webkit-fill-available;
 }
 
 .previewImage {
@@ -50,6 +48,11 @@
 .enlarged-image-container {
   border-radius: 15px;
   position: relative;
+  max-width: 80%; /* Set max width to 80% of viewport */
+  max-height: 80%; /* Set max height to 80% of viewport */
+  width: auto; /* Allow width to adjust based on aspect ratio */
+  height: auto; /* Allow height to adjust based on aspect ratio */
+  overflow: hidden; /* Hide overflowing content */
 }
 .enlarged-preview-image {
   position: relative;
@@ -164,10 +167,10 @@
   height: 200px;
   overflow-y: auto;
 }
-.left{
+.left {
   float: left;
 }
-.right{
+.right {
   float: right;
   max-width: max-content;
 }

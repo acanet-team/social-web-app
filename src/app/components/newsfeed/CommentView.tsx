@@ -5,6 +5,7 @@ import styles from "@/styles/modules/commentView.module.scss";
 import { TimeSinceDate } from "@/utils/time-since-date";
 
 export default function CommentView(props: {
+  isLast: boolean;
   id: string;
   photo: any;
   nickName: string;
@@ -13,8 +14,16 @@ export default function CommentView(props: {
   createdAt: string;
   onClickDelete: (id: string) => void;
 }) {
-  const { id, photo, nickName, content, status, createdAt, onClickDelete } =
-    props;
+  const {
+    isLast,
+    id,
+    photo,
+    nickName,
+    content,
+    status,
+    createdAt,
+    onClickDelete,
+  } = props;
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const timePassed = TimeSinceDate(createdAt);
 
@@ -23,18 +32,17 @@ export default function CommentView(props: {
   };
 
   return (
-    <div className="d-flex gap-2 align-items-center">
+    <div className={`d-flex gap-2 align-items-center ${isLast ? "" : "mb-4"}`}>
       <Image
         src={photo?.path ? photo?.path : "/assets/images/user.png"}
         width={35}
         height={35}
         className="rounded-circle"
-        alt={photo.category}
+        alt={photo.category ?? ""}
       />
 
       <div
-        className={`${status === "failed" ? styles["comment-failed"] : ""} ${styles["content-container"]} rounded-xxl d-flex flex-column`}
-      >
+        className={`${status === "failed" ? styles["comment-failed"] : ""} ${styles["content-container"]} rounded-xxl d-flex flex-column`}>
         <div className="fw-bolder">{nickName}</div>
         <div>{content}</div>
         {/* Error mark */}
@@ -56,14 +64,12 @@ export default function CommentView(props: {
       {/* Delete button */}
       <button
         className={`${styles["comment-settings"]} bg-transparent border-0`}
-        onClick={onClickSettings}
-      >
+        onClick={onClickSettings}>
         <i className="bi bi-three-dots-vertical"></i>
         {openSettings && (
           <button
             className={`${styles["delete-comment__btn"]} border-0 px-2 py-1 rounded-3`}
-            onClick={() => onClickDelete(id)}
-          >
+            onClick={() => onClickDelete(id)}>
             Delete
           </button>
         )}

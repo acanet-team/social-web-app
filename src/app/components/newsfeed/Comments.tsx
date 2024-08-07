@@ -38,7 +38,7 @@ export const Comments = React.memo(
         setComments((prevState) =>
           response.data.docs
             ? [...prevState, ...response.data.docs]
-            : [...prevState, ...response.data.data],
+            : [...prevState, ...response.data.data]
         );
         setTotalPage(response.data.meta.totalPage);
         return response.data;
@@ -149,7 +149,7 @@ export const Comments = React.memo(
           await deleteComment(commentId);
           // Remove comment from DOM
           setComments((prevState) =>
-            prevState.filter((comment) => comment.id !== commentId),
+            prevState.filter((comment) => comment.id !== commentId)
           );
         }
       } catch (err) {
@@ -161,14 +161,15 @@ export const Comments = React.memo(
     return (
       <div className={`${styles["comment-container"]} pt-4 mt-4 font-xsss`}>
         <div
-          className={`${styles["comment-content__container"]} text-white d-flex flex-column overflow-auto`}
-          ref={commentListRef}
-        >
+          className={`${styles["comment-content__container"]} text-white flex-column overflow-auto ${comments.length > 0 ? styles["min-vh-10"] : ""}`}
+          ref={commentListRef}>
           {comments?.length === 0 && (
-            <div className="text-center">No comment found.</div>
+            <div className="text-center pointer align-items-center fw-600 text-grey-900 text-dark lh-26 font-xss">
+              <span className="d-none-xs">No comment found.</span>
+            </div>
           )}
           {comments?.length > 0 &&
-            comments.map((comment) => (
+            comments.map((comment, index) => (
               <CommentView
                 key={comment.id}
                 id={comment.id}
@@ -177,12 +178,13 @@ export const Comments = React.memo(
                 content={comment.content}
                 status={comment.status}
                 createdAt={comment.createdAt}
+                isLast={index === comments.length - 1}
                 onClickDelete={onChooseDelete}
               />
             ))}
         </div>
         {isLoading && <WaveLoader />}
-        <div className="d-flex gap-2 align-items-center w-100">
+        <div className="d-flex gap-2 align-items-center w-100 mt-3">
           <Image
             // src={avatar}
             src={"/assets/images/user.png"}
@@ -192,14 +194,13 @@ export const Comments = React.memo(
             alt={nickName ?? ""}
           />
           <div
-            className={`${styles["comment-input"]} d-flex align-items-center w-100 mt-3 rounded-xxl bg-light`}
-          >
+            className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-xxl bg-light`}>
             <textarea
               id="comment"
-              className="p-3 rounded-xxl border-none bg-light"
+              className="py-2 ps-2 rounded-xxl border-none bg-light"
               placeholder="Write a comment"
               name="comment"
-              rows={2}
+              rows={1}
               ref={commentRef}
               onKeyDown={(e) => onEnterPress(e)}
             />
@@ -207,9 +208,8 @@ export const Comments = React.memo(
               type="submit"
               onClick={onPostCommentHandler}
               className="border-0 bg-transparent"
-              disabled={isLoading}
-            >
-              <i className="bi bi-send text-dark h2 m-0 pe-3"></i>
+              disabled={isLoading}>
+              <i className="bi bi-send text-dark h2 me-2"></i>
             </button>
           </div>
         </div>
@@ -224,5 +224,5 @@ export const Comments = React.memo(
         )}
       </div>
     );
-  },
+  }
 );

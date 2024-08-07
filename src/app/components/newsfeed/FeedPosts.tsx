@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Postview from "./Postview";
 import { getPosts } from "@/api/newsfeed";
 import Link from "next/link";
 import styles from "@/styles/modules/interest.module.scss";
 import { cleanPath } from "@/utils/Helpers";
+import PostCard from "./Postview";
 
 export default function FeedPosts(props: {
   feedType: string;
@@ -76,7 +76,7 @@ export default function FeedPosts(props: {
         ) : (
           posts.map((p) => (
             <div key={p.id}>
-              <Postview
+              <PostCard
                 id={p.id}
                 user={p.user.firstName + " " + p.user.lastName}
                 userId={p.user.userId}
@@ -89,9 +89,10 @@ export default function FeedPosts(props: {
                 assets={p.assets}
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
-                comment={p.commentCount}>
+                comment={p.commentCount}
+                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}>
                 {props.children}
-              </Postview>
+              </PostCard>
             </div>
           ))
         )}
