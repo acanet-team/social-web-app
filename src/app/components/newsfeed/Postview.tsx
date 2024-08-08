@@ -95,7 +95,7 @@ export default function PostCard(props: {
   };
   return (
     <div
-      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3`}>
+      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-3 mb-3`}>
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
           <Image

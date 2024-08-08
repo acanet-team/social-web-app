@@ -6,13 +6,12 @@ import style from "@/styles/modules/createpPost.module.scss";
 import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
-import "./yourCustomSelectStyles.css";
 import { useTranslations } from "next-intl";
-import { IUserInfo, type IMe } from "@/api/user/model";
+import { type IMe,} from "@/api/user/model";
 import { useRouter } from "next/navigation";
-import ProfilePicture from "./ProfilePicture";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
+import type { height } from "@mui/system";
 
 const CreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +35,8 @@ const CreatePost = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo")!);
     console.log("create post", userInfo);
     setUserInfo(userInfo);
+    fetchTopics();
+    setIsLoading(false);
   }, []);
   const topicListRef = useRef(null);
 
@@ -138,7 +139,6 @@ const CreatePost = () => {
     } catch (error) {
       throwToast(t("post_create_error"), "error");
     }
-    closeModal();
   };
 
   const handleTopicChange = (selectedOption: any) => {
@@ -146,31 +146,19 @@ const CreatePost = () => {
     setInterestTopicId(selectedOption.value);
   };
 
-  const openModal = () => {
-    if (postText.trim() === "") {
-      throwToast(t("please_enter_text"), "error");
-      return;
-    }
-    fetchTopics();
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedTopic(null);
-    setInterestTopicId("");
-  };
-
   const menuClass = `${isOpen ? " show" : ""}`;
-
   return (
-    <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
+    <div className="card w-100 shadow-xss rounded-xxl border-0 ps-2 pe-2 pb-2 mb-3">
       <div
         className="card-body p-0 mt-3 position-relative"
         id={style["card-body"]}>
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
-          <ProfilePicture
-            url={userInfo?.user?.photo?.path ?? "/assets/images/profile.png"}
+          <Image
+            src={userInfo?.user?.photo?.path ?? "/assets/images/profile.png"}
+            alt="Ảnh hồ sơ"
+            width={30}
+            height={30}
+            className="shadow-sm rounded-circle w30"
           />
         </figure>
         <textarea
@@ -232,7 +220,7 @@ const CreatePost = () => {
           </div>
         </div>
       )}
-      <div className="card-body d-flex p-0 mt-0">
+      <div className={`${style["footer"]} card-body d-flex p-0 mt-0`}>
         <label
           className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
           onClick={toggleUploadForm}>
@@ -249,92 +237,65 @@ const CreatePost = () => {
           />
           {t("Photo_Video")}
         </label>
+        <label ref={topicListRef} className={style["topic-list"]}>
+          {isLoading && (
+            <div className="text-center">
+              <span className="spinner-border spinner-border-sm me-2"></span>
+              {t("loading_topics")}
+            </div>
+          )}
+          <Select
+            options={topics}
+            value={selectedTopic}
+            onChange={handleTopicChange}
+            placeholder="Select a topic"
+            isMulti={false}
+            className={style["topic-select"]}
+            onInputChange={(searchTerm) => {
+              setTimeout(() => {
+                if (searchTerm.trim() !== "") {
+                  setSearchTerm(searchTerm);
+                  fetchTopics(1, searchTerm);
+                }
+              }, 3000);
+            }}
+            onMenuScrollToBottom={handleScroll}
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                backgroundColor: "#f0f0f0",
+                borderColor: "#ccc",
+                borderRadius: 5,
+                boxShadow: "none",
+                "&:hover": {
+                  borderColor: "#999",
+                },
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isSelected ? "#e0e0e0" : "#fff",
+                color: state.isSelected ? "#333" : "#000",
+                "&:hover": {
+                  backgroundColor: "#ddd",
+                },
+              }),
+              menu: (provided) => ({
+                ...provided,
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              }),
+            }}
+          />
+        </label>
         <div className={`ms-auto pointer ${menuClass}`}>
           <label
             id="submit"
             className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
-            onClick={openModal}>
+            onClick={submitPost}>
             <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
             {t("create_Post")}
           </label>
         </div>
       </div>
-
-      {showModal && (
-        <div>
-          <div className={style["overlay"]}></div>
-          <div className={style["modal-custom"]}>
-            <div className="modal-dialog modal-dialog-centered" role="document">
-              <div className="modal-content theme-dark card">
-                <div className="modal-header">
-                  <h1 className="modal-title">{t("select_Topic")}</h1>
-                  <button
-                    type="button"
-                    className={style["close"]}
-                    onClick={closeModal}>
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <div ref={topicListRef} className="topic-list">
-                    {isLoading && (
-                      <div className="text-center">
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        {t("loading_topics")}
-                      </div>
-                    )}
-                    {topics.length === 0 && !isLoading && (
-                      <div className="text-center">{t("no_topics")}</div>
-                    )}
-                    <Select
-                      options={topics}
-                      value={selectedTopic}
-                      onChange={handleTopicChange}
-                      placeholder="Select a topic"
-                      isMulti={false}
-                      className={style["topic-select"]}
-                      onInputChange={(searchTerm) => {
-                        setTimeout(() => {
-                          if (searchTerm.trim() !== "") {
-                            setSearchTerm(searchTerm);
-                            fetchTopics(1, searchTerm);
-                          }
-                        }, 3000);
-                      }}
-                      onMenuScrollToBottom={handleScroll}
-                      styles={{
-                        control: (provided) => ({
-                          ...provided,
-                          borderRadius: "10px",
-                          boxShadow: "none",
-                        }),
-                        menu: (provided) => ({
-                          ...provided,
-                          borderRadius: "10px",
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <div>
-                    <label
-                      id="button"
-                      className={`font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center pointer ${
-                        style["right"]
-                      }`}
-                      onClick={submitPost}>
-                      {" "}
-                      <i className="btn-round-sm font-xs text-primary feather-save me-1"></i>
-                      {t("create_Post")}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
