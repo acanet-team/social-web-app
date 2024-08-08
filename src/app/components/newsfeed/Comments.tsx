@@ -28,7 +28,8 @@ export const Comments = React.memo(
     const session = useAuthStore((state) => state.session);
     const avatar = session?.user?.photo || "/assets/images/user.png";
     const nickName = session.user.nickName || "Me";
-
+    const [userInfo, setUserInfo] = useState<any>(session.user);
+  
     // Fetch comments ---------------------
     const fetchComments = async () => {
       try {
@@ -61,6 +62,7 @@ export const Comments = React.memo(
     };
 
     useEffect(() => {
+      setUserInfo(JSON.parse(localStorage.getItem("userInfo")!));
       const currentList = commentListRef.current;
       if (currentList && page < totalPage) {
         currentList.addEventListener("scroll", onScrollHandler);
