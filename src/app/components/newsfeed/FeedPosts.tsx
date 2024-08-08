@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
 import Link from "next/link";
-import styles from "@/styles/modules/interest.module.scss";
 import { cleanPath } from "@/utils/Helpers";
 import PostCard from "./Postview";
 import { useTranslations } from "next-intl";
+import DotWaveLoader from "../DotWaveLoader";
 
 export default function FeedPosts(props: {
   feedType: string;
@@ -62,12 +62,7 @@ export default function FeedPosts(props: {
 
   return (
     <>
-      {isLoading && (
-        <div className="d-flex justify-content-center">
-          <div className={styles["dots-3"]}></div>
-          <div className={styles["dots-3"]}></div>
-        </div>
-      )}
+      {isLoading && <DotWaveLoader />}
       <div>
         {!isLoading && posts?.length === 0 && props.feedType === "for_you" ? (
           <Link href="/home?tab=suggestion">
@@ -95,8 +90,7 @@ export default function FeedPosts(props: {
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
                 comment={p.commentCount}
-                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}
-              >
+                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}>
                 {props.children}
               </PostCard>
             </div>
