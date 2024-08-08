@@ -14,7 +14,7 @@ export default function BrokerProfile(props: {
   coursesEnrolledCount: number;
   rating: number;
   rank: string;
-  photoUrl: string;
+  photo: any;
 }) {
   const {
     brokerProfileId,
@@ -25,21 +25,22 @@ export default function BrokerProfile(props: {
     coursesEnrolledCount = 0,
     rating = 0,
     rank,
-    photoUrl,
+    photo,
   } = { ...props };
   const onFollowBrokerHandler = (brokerId: string) => {
     console.log("follow a broker...");
   };
   return (
-    <div className="col-md-3 col-sm-4 pe-2 ps-2">
+    <div className="col-xl-2 col-lg-4 col-sm-6 pe-2 ps-2">
       <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
         <div className={`${styles["broker-profile"]} card-body d-block w-100`}>
           <figure className="overflow-hidden avatar ms-auto me-auto mb-0 position-relative z-index-1">
             <Image
-              src={"https://via.placeholder.com/300x300.png"}
-              // src={
-              //   photoUrl ? photoUrl : "https://via.placeholder.com/300x300.png"
-              // }
+              src={
+                photo?.id
+                  ? photo?.path
+                  : "https://via.placeholder.com/300x300.png"
+              }
               width={211}
               height={211}
               alt="avatar"

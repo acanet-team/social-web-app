@@ -35,10 +35,12 @@ const options: NextAuthOptions = {
     },
 
     async session({ session, token }: any) {
-      const jwtToken = cookies().get('accessToken');
-      if(jwtToken) {
-        return session
+      const jwtToken = cookies().get("accessToken");
+      if (jwtToken) {
+        return session;
       }
+      console.log("token", token);
+
       if ((token?.access_token || token.idToken) && !session.user?.id) {
         const data: { accessToken?: string; idToken?: string } = {};
 
@@ -64,10 +66,10 @@ const options: NextAuthOptions = {
             isProfile: res.data.isProfile,
           };
           session.token = res.data.token;
-          console.log('bbbbbbbbbbbbbbb', session)
+          console.log("bbbbbbbbbbbbbbb", session);
           return session;
         } catch (err) {
-          console.log("err", err);
+          console.log("errj", err);
           return session;
         }
       } else {

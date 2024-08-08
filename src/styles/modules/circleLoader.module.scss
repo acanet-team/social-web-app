@@ -13,10 +13,10 @@
   width: 51px;
   height: 51px;
   margin: 6px;
-  border: 6px solid var(--theme-color-tint);
+  border: 6px solid var(--theme-color-main);
   border-radius: 50%;
   animation: circle-loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: var(--theme-color-tint) transparent transparent transparent;
+  border-color: var(--theme-color-main) transparent transparent transparent;
 }
 
 .circle-loader div:nth-child(1) {

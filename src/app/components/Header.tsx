@@ -4,16 +4,18 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Darkbutton from "./Darkbutton";
-import { getLocalStorage } from "@/utils/local-storage";
 import useAuthStore from "@/store/auth";
+import { useSession } from "next-auth/react";
 
 export default function Header() {
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
-  const [curTheme, setCurTheme] = useState("theme-dark");
-  const session = useAuthStore((state) => state.session);
-  const photo = session?.user?.photo;
+  const [curTheme, setCurTheme] = useState("theme-light");
+  // const session = useAuthStore((state) => state.session);
+  const { data: session } = useSession() as any;
+  // console.log(session);
+  const photo = session?.user?.image;
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;
@@ -22,7 +24,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleThemeChange = () => {
-      const theme = getLocalStorage("theme");
+      const theme = localStorage.getItem("theme");
       if (theme) setCurTheme(theme);
     };
     window.addEventListener("themeChange", handleThemeChange as EventListener);
@@ -160,12 +162,11 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            // src={photo ? photo : "/assets/images/user.png"}
-            src={"/assets/images/user.png"}
+            src={photo ? photo : "/assets/images/user.png"}
             width={40}
             height={40}
             alt="user"
-            className="w40 position-absolute left-0"
+            className="w40 position-absolute left-0 rounded-xl"
           />
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
             Goria Coast{" "}
@@ -181,12 +182,11 @@ export default function Header() {
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            // src={photo ? photo : "/assets/images/user.png"}
-            src={"/assets/images/user.png"}
+            src={photo ? photo : "/assets/images/user.png"}
             alt="user"
             width={40}
             height={40}
-            className="w40 position-absolute left-0"
+            className="w40 position-absolute left-0 rounded-xl"
           />
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
             Surfiya Zakir{" "}
@@ -201,12 +201,11 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
           <Image
-            // src={photo ? photo : "/assets/images/user.png"}
-            src={"/assets/images/user.png"}
+            src={photo ? photo : "/assets/images/user.png"}
             alt="user"
             width={40}
             height={40}
-            className="w40 position-absolute left-0"
+            className="w40 position-absolute left-0 rounded-xl"
           />
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
             Victor Exrixon{" "}
@@ -223,16 +222,16 @@ export default function Header() {
       <Darkbutton />
       <Link href="/defaultsettings" className="p-0 ms-3 menu-icon">
         <Image
-          // src={photo ? photo : "/assets/images/user.png"}
-          src={"/assets/images/user.png"}
+          src={photo ? photo : "/assets/images/user.png"}
           alt="user"
           width={40}
           height={40}
-          className="w40 mt--1"
+          className="w40 mt--1 rounded-xl"
         />
       </Link>
 
-      <nav className={`navigation scroll-bar ${navClass}`}>
+      {/* Left navbar */}
+      {/* <nav className={`navigation scroll-bar ${navClass}`}>
         <div className="container ps-0 pe-0">
           <div className="nav-content">
             <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
@@ -284,50 +283,6 @@ export default function Header() {
               </ul>
             </div>
 
-            {/* <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">
-              <div className="nav-caption fw-600 font-xssss text-grey-500">
-                <span>More </span>Pages
-              </div>
-              <ul className="mb-3">
-                <li>
-                  <Link
-                    href="/defaultemailbox"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="font-xl text-current feather-inbox me-3"></i>
-                    <span>Email Box</span>
-                    <span className="circle-count bg-warning mt-1">584</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaulthotel"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="font-xl text-current feather-home me-3"></i>
-                    <span>Near Hotel</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaultevent"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="font-xl text-current feather-map-pin me-3"></i>
-                    <span>Latest Event</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaultlive"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="font-xl text-current feather-youtube me-3"></i>
-                    <span>Live Stream</span>
-                  </Link>
-                </li>
-              </ul>
-            </div> */}
             <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
               <div className="nav-caption fw-600 font-xssss text-grey-500">
                 <span></span> Account
@@ -366,8 +321,8 @@ export default function Header() {
             </div>
           </div>
         </div>
-      </nav>
-
+      </nav> */}
+      {/* 
       <div className={`app-header-search ${searchClass}`}>
         <form className="search-form">
           <div className="form-group searchbox mb-0 border-0 p-1">
@@ -376,14 +331,6 @@ export default function Header() {
               className="form-control border-0"
               placeholder="Search..."
             />
-            {/* <i className="input-icon">
-              <ion-icon
-                name="search-outline"
-                role="img"
-                className="md hydrated"
-                aria-label="search outline"
-              ></ion-icon>
-            </i> */}
             <span className="ms-1 mt-1 d-inline-block close searchbox-close">
               <i
                 className="ti-close font-xs"
@@ -392,7 +339,7 @@ export default function Header() {
             </span>
           </div>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 }

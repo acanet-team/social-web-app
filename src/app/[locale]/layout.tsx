@@ -46,23 +46,18 @@ export default function RootLayout(props: {
 
   // Using internationalization in Client Components
   const messages = useMessages();
-  // const { data: session } = useSession() as any;
 
   return (
     <SessionProvider>
       <html lang={props.params.locale}>
-        <body className="color-theme-blue nunito-font loaded theme-dark">
+        <body className="color-theme-blue nunito-font loaded theme-light">
           <NextIntlClientProvider
             locale={props.params.locale}
             messages={messages}
           >
             <ToastContainer />
             {/* <Session /> */}
-            {/* <Header />
-            <Leftnav /> */}
             {props.children}
-            {/* <Popupchat />
-            <Appfooter /> */}
           </NextIntlClientProvider>
         </body>
       </html>

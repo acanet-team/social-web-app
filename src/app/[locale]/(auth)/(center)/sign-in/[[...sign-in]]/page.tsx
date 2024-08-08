@@ -1,7 +1,7 @@
 "use client";
 
 import { getMe } from "@/api/auth";
-import { getLocalStorage } from "@/utils/local-storage";
+import { useAccessTokenStore } from "@/store/accessToken";
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
@@ -12,14 +12,14 @@ import useAuthStore from "@/store/auth";
 
 const LoginPage: NextPage = () => {
   const t = useTranslations("SignIn");
-  const [curTheme, setCurTheme] = useState("theme-dark");
+  const [curTheme, setCurTheme] = useState("theme-light");
   const { data: session } = useSession() as any;
   const createProfile = useAuthStore((state) => state.createProfile);
   const router = useRouter();
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const theme = getLocalStorage("theme");
+      const theme = localStorage.getItem("theme") || "theme-light";
       setCurTheme(theme);
     };
     window.addEventListener("storage", handleStorageChange);
@@ -30,6 +30,7 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
+      // console.log(session);
       createProfile(session);
       getMe()
         .then((res) => {
@@ -37,7 +38,7 @@ const LoginPage: NextPage = () => {
         })
         .catch((err) => err);
       if (!session.user.isProfile) {
-        router.push("/account");
+        router.push("/onboard");
       } else {
         router.push("/home");
       }
@@ -51,7 +52,8 @@ const LoginPage: NextPage = () => {
           <a href="/" className="me-auto">
             <span
               id="site-logo"
-              className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current">
+              className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"
+            >
               <Image
                 src={
                   curTheme === "theme-dark"
@@ -94,7 +96,8 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Google"
                     title="Sign in with Google"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
-                    onClick={() => signIn("google")}>
+                    onClick={() => signIn("google")}
+                  >
                     <Image
                       width={40}
                       height={40}
@@ -111,7 +114,8 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Facebook"
                     title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-facebook border-0 p-0 text-left text-white "
-                    onClick={() => signIn("facebook")}>
+                    onClick={() => signIn("facebook")}
+                  >
                     <Image
                       src="/assets/images/icon-3.png"
                       alt="icon"

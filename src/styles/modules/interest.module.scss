@@ -4,19 +4,19 @@
 }
 
 #interest .btn-selected {
-  background-color: var(--theme-color-tint);
+  background-color: var(--theme-color-main);
   color: #fff !important;
 }
 
 #interest button,
 .interest-options .btn-unselected {
-  border: 1px solid var(--theme-color-tint);
+  border: 1px solid var(--theme-color-main);
   border-radius: 18px;
-  color: var(--theme-color-tint);
+  color: var(--theme-color-main);
 }
 
 #interest p {
-  color: var(--theme-color-text-secondary);
+  color: #fff;
 }
 
 #interest-container {
@@ -34,9 +34,9 @@
 }  
 
 .interest-options button:hover {
-  background-color: var(--theme-color-tint);
+  background-color: var(--theme-color-main);
   color: #fff;
-  box-shadow: 0px 0px 1px 1px var(--theme-color-tint);
+  box-shadow: 0px 0px 1px 1px var(--theme-color-main);
   overflow-y: scroll;
 }
 

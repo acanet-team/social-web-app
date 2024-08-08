@@ -31,7 +31,8 @@ const MasonryLayout: React.FC<MasonryLayoutProps> = ({ images }) => {
             <div
               key={index}
               className={styles["imageContainer"]}
-              onClick={() => handleImageClick(image)}>
+              onClick={() => handleImageClick(image)}
+            >
               <Image
                 src={image.path}
                 alt={image.id}
@@ -40,14 +41,15 @@ const MasonryLayout: React.FC<MasonryLayoutProps> = ({ images }) => {
                 className={styles["imageCustom"]}
               />
             </div>
-          ) : null
+          ) : null,
         )}
       </div>
 
       {images.length > 4 && (
         <div
           className={styles["moreImages"]}
-          onClick={() => setShowMore(!showMore)}>
+          onClick={() => setShowMore(!showMore)}
+        >
           {showMore ? (
             <>
               {images.slice(4).map((image, index) =>
@@ -55,7 +57,8 @@ const MasonryLayout: React.FC<MasonryLayoutProps> = ({ images }) => {
                   <div
                     key={index}
                     className={styles["imageContainer"]}
-                    onClick={() => handleImageClick(image)}>
+                    onClick={() => handleImageClick(image)}
+                  >
                     <Image
                       src={image.path}
                       alt={image.id}
@@ -64,7 +67,7 @@ const MasonryLayout: React.FC<MasonryLayoutProps> = ({ images }) => {
                       className={styles["imageCustom"]}
                     />
                   </div>
-                ) : null
+                ) : null,
               )}
             </>
           ) : (

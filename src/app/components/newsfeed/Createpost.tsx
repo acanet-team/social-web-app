@@ -11,7 +11,6 @@ import { type IMe,} from "@/api/user/model";
 import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
-import type { height } from "@mui/system";
 
 const CreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +51,7 @@ const CreatePost = () => {
         }));
         const uniqueTopics = [...topics, ...newTopics].filter(
           (topic, index, self) =>
-            index === self.findIndex((t) => t.value === topic.value)
+            index === self.findIndex((t) => t.value === topic.value),
         );
         setTopics(uniqueTopics);
         setIsLoading(false);
@@ -151,7 +150,8 @@ const CreatePost = () => {
     <div className="card w-100 shadow-xss rounded-xxl border-0 ps-2 pe-2 pb-2 mb-3">
       <div
         className="card-body p-0 mt-3 position-relative"
-        id={style["card-body"]}>
+        id={style["card-body"]}
+      >
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
           <Image
             src={userInfo?.user?.photo?.path ?? "/assets/images/profile.png"}
@@ -168,16 +168,19 @@ const CreatePost = () => {
           }}
           name="message"
           className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
-          placeholder={t("Whats_on_your_mind")}></textarea>
+          placeholder={t("Whats_on_your_mind")}
+        ></textarea>
 
         <Box
           sx={{
             width: "100%",
             maxHeight: 500,
             overflow: "hidden",
-          }}>
+          }}
+        >
           <Masonry
-            columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}>
+            columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}
+          >
             {uploadedImages.slice(0, 6).map((image, index) => (
               <div key={index} className={style["previewImage"]}>
                 <Image
@@ -206,7 +209,8 @@ const CreatePost = () => {
           {" "}
           <div
             className={style["enlarged-image-container"]}
-            onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}
+          >
             <Image
               src={URL.createObjectURL(enlargedImage)}
               alt="Enlarged Image"
@@ -223,7 +227,8 @@ const CreatePost = () => {
       <div className={`${style["footer"]} card-body d-flex p-0 mt-0`}>
         <label
           className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
-          onClick={toggleUploadForm}>
+          onClick={toggleUploadForm}
+        >
           <i className="font-md text-success feather-image me-2"></i>
           <input
             type="file"

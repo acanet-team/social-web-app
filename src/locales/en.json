@@ -104,5 +104,9 @@
   "Post": {
     "Explore_More": "Explore More",
     "No_Posts_Found": "No posts found."
+  },
+  "CreateProfile": {
+    "create_profile_title": "Account Details",
+    "create_profile_desc": "Please fill out some basic information about you."
   }
 }

@@ -114,7 +114,8 @@ export default function PostCard(props: {
         </h4>
         <div
           className="ms-auto pointer"
-          onClick={() => setOpenSettings((open) => !open)}>
+          onClick={() => setOpenSettings((open) => !open)}
+        >
           <i className="bi bi-three-dots h1"></i>
         </div>
       </div>
@@ -124,7 +125,8 @@ export default function PostCard(props: {
             width: "100%",
             maxHeight: 500,
             overflow: "hidden",
-          }}>
+          }}
+        >
           <p className="fw-500 text-grey-500 lh-26 font-xsss w-100 mb-2">
             {expandPost
               ? content
@@ -134,7 +136,8 @@ export default function PostCard(props: {
             {content.length > 150 && !expandPost ? (
               <span
                 className={styles["expand-btn"]}
-                onClick={() => setExpandPost((open) => !open)}>
+                onClick={() => setExpandPost((open) => !open)}
+              >
                 See more
               </span>
             ) : (
@@ -158,7 +161,7 @@ export default function PostCard(props: {
                     }}
                   />
                 </div>
-              ) : null
+              ) : null,
             )}
           </Masonry>
         </Box>
@@ -169,7 +172,8 @@ export default function PostCard(props: {
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
             className="bi bi-heart h2 m-0 me-2 d-flex align-items-center"
-            onClick={(e) => onClickLikeHandler(e, id, like)}></i>
+            onClick={(e) => onClickLikeHandler(e, id, like)}
+          ></i>
           <span className="like-number">
             {like >= 1000 ? Math.round(like / 1000).toFixed(1) : like}
           </span>
@@ -179,7 +183,8 @@ export default function PostCard(props: {
         </div>
         <div
           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
-          onClick={() => onShowCommentHandler(id.toString())}>
+          onClick={() => onShowCommentHandler(id.toString())}
+        >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
           <span className="d-none-xss">
             {comment > 1000 ? Math.round(comment / 1000).toFixed(1) : comment}

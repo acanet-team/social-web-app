@@ -126,7 +126,7 @@
 }
 
 #profile-radio input[type="radio"]:checked + label {
-  background-color: var(--theme-color-tint) !important;
+  background-color: var(--theme-color-main) !important;
 }
 
 .theme-dark input[type="radio"]:checked + label {

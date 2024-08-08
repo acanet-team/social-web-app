@@ -2,7 +2,10 @@ import React from "react";
 import FeedPosts from "./FeedPosts";
 import { FetchComments } from "./FetchComments";
 
-export const Suggestion = async (props: { postIdParams: string; tab: string }) => {
+export const Suggestion = async (props: {
+  postIdParams: string;
+  tab: string;
+}) => {
   return (
     <div>
       <FeedPosts feedType={props.tab}>
