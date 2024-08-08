@@ -2,7 +2,7 @@
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 3rem;
+  padding: 2.5rem;
   background-color: var(--theme-color-main);
 }
 
@@ -27,4 +27,11 @@
     color: #fff !important;
   }
   
+}
+
+// MEDIA QUERIES
+@media (max-width: 768px) {
+  #header-title {
+    padding: 1.5rem;
+  }
 }

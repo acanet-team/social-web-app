@@ -86,6 +86,7 @@
     font-size: 16px;
     display: inline-block;
     border: 2px #eee solid;
+    border-radius: 10px !important;
     &:focus {
         border-color: var(--theme-color-main);
     }

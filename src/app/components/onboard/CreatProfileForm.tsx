@@ -3,7 +3,7 @@
 import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { ToastContainer, toast, type ToastOptions } from "react-toastify";
 import styles from "@/styles/modules/createProfile.module.scss";
-import React from "react";
+import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import TextField from "@mui/material/TextField";
@@ -40,13 +40,14 @@ export default function CreateProfileForm(props: {
     matchFrom: "start",
   });
   const { data: session } = useSession() as any;
+  const [regionInputValue, setRegionInputValue] = useState<string>();
+  const [regionValue, setRegionValue] = useState<string>(props.regions[0]);
 
-  console.log(props.regions);
   const lastName = authSession.user.lastName || "";
   const firstName = authSession.user.firstName || "";
-  const email = authSession.user.email;
+  const email = session?.user.email;
   const photo = session?.user?.image;
-  const nickName = authSession.user.nickName;
+  const nickName = authSession?.user.nickName;
 
   // Toast notification
   const throwToast = (message: string, notiType: string) => {
@@ -116,7 +117,7 @@ export default function CreateProfileForm(props: {
       values.location = values.location?.toLowerCase().trim();
       values.email = values.email?.toLowerCase().trim();
       values.isBroker = values.isBroker === true ? true : false;
-
+      console.log(values);
       try {
         await createProfileRequest(values);
         const successMessage = "Your profile has been updated.";
@@ -157,11 +158,11 @@ export default function CreateProfileForm(props: {
             <figure className="avatar ms-auto me-auto mb-0 mt-2 w100">
               <Image
                 src={photo ? photo : "/assets/images/user.png"}
-                width={100}
-                height={100}
+                width={50}
+                height={50}
                 objectFit="cover"
                 alt="avatar"
-                className="shadow-sm rounded-3 w-100"
+                className="shadow-sm rounded-3"
               />
             </figure>
             <h2 className="fw-700 font-sm text-grey-900 mt-3">
@@ -179,7 +180,6 @@ export default function CreateProfileForm(props: {
             Nickname
           </label>
           <input
-            type="text"
             className="form-control"
             name="nickName"
             id="nickName"
@@ -196,31 +196,77 @@ export default function CreateProfileForm(props: {
 
           {/* eslint-disable-next-line */}
           <label className="fw-600 mt-3 mb-1">Region</label>
-          <Autocomplete
-            id="filter-demo"
-            options={props.regions}
-            getOptionLabel={(option) => option}
-            filterOptions={filterOptions}
-            renderInput={(params) => <TextField {...params} />}
-            sx={{
-              "& fieldset": {
-                border: "2px #eee solid",
-              },
-              "& .MuiOutlinedInput-root": {
-                padding: 0,
-              },
-              "& .MuiInputBase-input": {
-                padding: "6px 12px !important",
-                fontSize: "16px",
-                color: "rgba(17, 17, 17, 0.7843137255)",
-                height: "50px",
-                boxSizing: "border-box",
-              },
-              "& .MuiSelect-icon": {
-                color: "#ddd",
-              },
-            }}
-          />
+          <FormControl
+            fullWidth
+            id="location"
+            error={formik.touched.location && Boolean(formik.errors.location)}
+          >
+            <Autocomplete
+              id="location"
+              autoComplete
+              options={props.regions}
+              getOptionLabel={(option) => option}
+              filterOptions={filterOptions}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                formik.setFieldValue("location", e.target.value)
+              }
+              onBlur={formik.handleBlur}
+              // value={regionValue}
+              // onChange={(event, newValue) => {
+              //   setRegionValue(newValue);
+              // }}
+              // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              //   setRegionValue(e.target.value)
+              // }
+              // inputValue={regionInputValue}
+              // onInputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              //     setRegionInputValue(e.target.value)
+              // }
+              // onBlur={formik.handleBlur}
+              // onInputChange={(event, newInputValue) => {
+              //   setRegionInputValue(newInputValue);
+              // }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={
+                    formik.touched.location && Boolean(formik.errors.location)
+                  }
+                  value={formik.values.location}
+
+                  // error={
+                  //   formik.touched.location && Boolean(formik.errors.location)
+                  // }
+                  // value={formik.values.location}
+                />
+              )}
+              sx={{
+                "& fieldset": {
+                  border: "2px #eee solid",
+                  borderRadius: "10px",
+                },
+                "& .MuiOutlinedInput-root": {
+                  padding: 0,
+                },
+                "& .MuiInputBase-input": {
+                  padding: "6px 12px !important",
+                  fontSize: "16px",
+                  color: "rgba(17, 17, 17, 0.7843137255)",
+                  height: "50px",
+                  boxSizing: "border-box",
+                },
+                "& .MuiSelect-icon": {
+                  color: "#ddd",
+                },
+              }}
+            />
+            {formik.touched.location && (
+              <FormHelperText sx={{ color: "error.main", marginLeft: "0" }}>
+                {formik.errors.location}
+              </FormHelperText>
+            )}
+          </FormControl>
+
           {/* <FormControl
             fullWidth
             id="location"
@@ -292,9 +338,9 @@ export default function CreateProfileForm(props: {
           <label className="fw-600 mt-3 mb-3">User type</label>
           <div
             id={styles["profile-radio"]}
-            className="profile-radio-btn w-50 mx-auto d-flex justify-content-center gap-4"
+            className="profile-radio-btn mx-auto"
           >
-            <div className="w-100 rounded-xxl">
+            <div className="w-100">
               <input
                 type="radio"
                 name="isBroker"
@@ -303,14 +349,11 @@ export default function CreateProfileForm(props: {
                 defaultChecked
                 onChange={(e) => formik.setFieldValue("isBroker", false)}
               />
-              <label
-                htmlFor="investor"
-                className="w-100 d-flex justify-content-center"
-              >
-                Investor
+              <label htmlFor="investor">
+                <i className="bi bi-person h2 m-0"></i>I am an Investor
               </label>
             </div>
-            <div className="w-100 rounded-xxl">
+            <div className="w-100">
               <input
                 type="radio"
                 name="isBroker"
@@ -318,11 +361,8 @@ export default function CreateProfileForm(props: {
                 value="true"
                 onChange={(e) => formik.setFieldValue("isBroker", true)}
               />
-              <label
-                htmlFor="broker"
-                className="w-100 d-flex justify-content-center"
-              >
-                Broker
+              <label htmlFor="broker">
+                <i className="bi bi-person-check h2 m-0"></i>I am a Broker
               </label>
             </div>
           </div>

@@ -9,12 +9,12 @@ export default function Pagetitle(props: {
   // const t = useTranslations('BrokerList');
   return (
     <div id={styles["header-title"]} className="card w-100 border-0">
-      <h2 className="fw-700 mb-0 mt-0 font-md fs-1 text-grey-900 d-flex align-items-center">
-        <h4
+      <h2 className="fw-700 mb-2 mt-0 font-md fs-1 text-grey-900 d-flex align-items-center">
+        <div
           className={`page-title fs-1 text-white fw-800 ${styles["page-title"]}`}
         >
           {props.title}
-        </h4>
+        </div>
         {props.isSearch && (
           <div>
             <form action="#" className="pt-0 pb-0 ms-auto">
