@@ -31,7 +31,17 @@ export default bundleAnalyzer(
       includePaths: [path.join(__dirname, "./src/styles/global.scss")],
     },
     images: {
-      domains: ["via.placeholder.com", "lh3.googleusercontent.com", "acanet-v1-public-test.s3.amazonaws.com"],
+      domains: [
+        "via.placeholder.com",
+        "lh3.googleusercontent.com",
+        "acanet-v1-public-test.s3.amazonaws.com",
+      ],
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "**",
+        },
+      ],
     },
   }),
 );

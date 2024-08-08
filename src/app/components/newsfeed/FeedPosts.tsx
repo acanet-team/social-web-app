@@ -48,7 +48,7 @@ export default function FeedPosts(props: {
   useEffect(() => {
     fetchPosts(page);
   }, [page, props.feedType]);
-  
+
   useEffect(() => {
     if (document.documentElement && page < totalPage) {
       window.addEventListener("scroll", onScrollHandler);
@@ -95,7 +95,8 @@ export default function FeedPosts(props: {
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
                 comment={p.commentCount}
-                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}>
+                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}
+              >
                 {props.children}
               </PostCard>
             </div>

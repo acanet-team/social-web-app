@@ -14,6 +14,7 @@ export default async function Courses() {
             <Pagetitle
               title={t("course_title")}
               intro={t("course_description")}
+              isSearch={false}
             />
             <ListCourses />
           </div>

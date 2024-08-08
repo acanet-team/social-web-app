@@ -13,7 +13,7 @@ const Home = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
-  }) => {
+}) => {
   return (
     <Layout>
       <div className="main-content right-chat-active" id={styles.home}>
@@ -24,12 +24,14 @@ const Home = async ({
                 <div className={styles["home-tabs"]}>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=for_you">
+                    href="/home?tab=for_you"
+                  >
                     For you
                   </NavLink>
                   <NavLink
                     className={`${styles["tab-active"]} d-flex justify-content-center`}
-                    href="/home?tab=suggestion">
+                    href="/home?tab=suggestion"
+                  >
                     Suggestion
                   </NavLink>
                 </div>

@@ -50,7 +50,7 @@
     color: var(--theme-color-shade) !important;
     background-color: #fff;
     border: 1px solid var(--theme-color-shade);
-  } 
+  }
   .theme-btn {
     color: #fff;
   }
@@ -71,7 +71,16 @@
   .page-intro {
     color: var(--theme-color-text-secondary);
   }
+}
 
+.main-btn {
+  background-color: var(--theme-color-main);
+  color: #fff;
+  padding: 10px 35px;
+  border-radius: 1.5rem;
+}
+.main-btn:hover {
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
 }
 
 .bg-facebook {
@@ -135,7 +144,7 @@
 
 .text-current {
   // color: white !important;
-  color: var(--theme-color-tint) !important;
+  color: var(--theme-color-main) !important;
 }
 .text-red {
   color: red !important;
@@ -153,7 +162,7 @@
   color: #ffde00 !important;
 }
 .text-blue {
-  color: #2A66F4 !important;
+  color: #2a66f4 !important;
 }
 
 .bg-black-08 {
@@ -161,7 +170,7 @@
 }
 
 .bg-current {
-  background-color: var(--theme-color-tint) !important;
+  background-color: var(--theme-color-main) !important;
 }
 .bg-current-shade {
   background-color: var(--theme-color-shade) !important;
@@ -342,13 +351,13 @@
 }
 
 .color-theme-blue {
+  --theme-color-main: #1e74fd;
   --theme-color: #100c28;
   --theme-color-rgb: 33, 150, 243;
   --theme-color-shade: #9f59ff;
-  --theme-color-tint: #1e74fd;
-  --theme-color-text-secondary: #f8f9fa9a;
-  --theme-light-color-bg: #f5f5f5 ;
-  --theme-light-color-text: #212529 ;
+  --theme-color-text-secondary: #0707079a;
+  --theme-light-color-bg: #f5f5f5;
+  --theme-light-color-text: #212529;
   --theme-dark-color-bg: #1a1237;
   --theme-dark-color-bg-btn: rgb(28, 30, 33);
 }
