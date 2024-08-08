@@ -48,11 +48,11 @@
 .enlarged-image-container {
   border-radius: 15px;
   position: relative;
-  max-width: 80%; /* Set max width to 80% of viewport */
-  max-height: 80%; /* Set max height to 80% of viewport */
-  width: auto; /* Allow width to adjust based on aspect ratio */
-  height: auto; /* Allow height to adjust based on aspect ratio */
-  overflow: hidden; /* Hide overflowing content */
+  max-width: 80%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
+  overflow: hidden;
 }
 .enlarged-preview-image {
   position: relative;
@@ -163,14 +163,21 @@
   font-size: 20px;
   font-weight: bold;
 }
-.topic-list {
-  height: 200px;
-  overflow-y: auto;
-}
 .left {
   float: left;
 }
 .right {
   float: right;
   max-width: max-content;
+}
+.footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+.topic-list{
+  width: 40%;
 }
