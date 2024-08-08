@@ -1,8 +1,9 @@
-// export interface IUser {
-//   user: User;
-//   userProfile?: UserProfile;
-//   brokerProfile?: BrokerProfile;
-// }
+export interface IMe {
+  user: IUserInfo;
+  userProfile?: UserProfile;
+  brokerProfile?: BrokerProfile;
+  referBy?: IUserInfo;
+}
 
 export interface IUser {
   userId: number;
