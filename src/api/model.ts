@@ -53,6 +53,7 @@ export type CreateProfileParams = {
 
 export type subcribeTopicsParam<T> = {
   interestTopicIds: T;
+  isOnboarding: boolean;
 };
 
 export type BaseResponse<T> = {

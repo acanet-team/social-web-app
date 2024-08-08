@@ -16,7 +16,6 @@ interface Option {
 
 export default function Interests(props: { onNextHandler: () => void }) {
   const list = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const [error, setError] = useState<string>("");
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [options, setOptions] = useState<Option[]>([]);
@@ -31,8 +30,11 @@ export default function Interests(props: { onNextHandler: () => void }) {
       return setError("Please choose at least 1 interest topic.");
     }
     try {
-      subscribeTopicsRequest({ interestTopicIds: selectedOptions });
-      router.push("/brokers");
+      subscribeTopicsRequest({
+        interestTopicIds: selectedOptions,
+        isOnboarding: true,
+      });
+      props.onNextHandler();
     } catch (err) {
       console.log(err);
     }
@@ -107,20 +109,11 @@ export default function Interests(props: { onNextHandler: () => void }) {
           <div className="middle-sidebar-left">
             <div className="onboard-wrap">
               <div className="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
-                {/* <div className="card-body p-4 w-100 bg-current border-0 rounded-3"> */}
-                {/* <Link href="/defaultsettings" className="d-inline-block mt-2">
-                    <i className="ti-arrow-left font-sm text-white" />
-                  </Link>
-                  <h4 className="fs-1 text-white fw-800">
-                    {t("interest_title")}
-                  </h4>
-                  <p>{t("interest_description")}</p> */}
                 <Pagetitle
                   title={t("interest_title")}
                   intro={t("interest_description")}
                   isSearch={false}
                 />
-                {/* </div> */}
 
                 <div
                   ref={list}

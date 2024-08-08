@@ -6,16 +6,19 @@ import Pagination from "../Pagination";
 import { createGetBrokersRequest } from "@/api/user";
 import CircleLoader from "../CircleLoader";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Brokers(props: { onNextHandler: () => void }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [brokers, setBrokers] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
-
   const TAKE = 18;
+  const router = useRouter();
 
-  // console.log(brokers);
+  const onFinishOnboarding = () => {
+    router.push("/home");
+  };
 
   useEffect(() => {
     async function getBrokers() {
@@ -58,7 +61,10 @@ export default function Brokers(props: { onNextHandler: () => void }) {
       <Pagination pageUpdateFn={setPage} page={page} totalPage={totalPage} />
 
       <Link href="/home" className="btn mt-3 mb-5 mx-auto">
-        <button className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-5 mx-auto">
+        <button
+          className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-5 mx-auto"
+          onClick={onFinishOnboarding}
+        >
           Finish
         </button>
       </Link>

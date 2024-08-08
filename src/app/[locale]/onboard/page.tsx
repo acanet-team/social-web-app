@@ -8,15 +8,28 @@ import Interests from "@/app/components/onboard/Interests";
 import Brokers from "@/app/components/onboard/Brokers";
 const onboardPage = () => {
   /* eslint-disable react-hooks/rules-of-hooks */
-  const [curstep, setCurstep] = useState<number>(1);
+  const [curstep, setCurStep] = useState<number>(1);
   const numSteps = 3;
 
   const onClickNextStep = () => {
-    setCurstep((step) => step + 1);
+    setCurStep((step) => step + 1);
     if (curstep > numSteps) {
-      setCurstep(1);
+      setCurStep(1);
     }
   };
+
+  useEffect(() => {
+    const onboardingStep = localStorage.getItem("onboarding_step");
+    // Set the onboarding step
+    if (onboardingStep) {
+      if (onboardingStep === "create_profile") {
+        setCurStep(1);
+      } else if (onboardingStep === "select_interest_topic") {
+        setCurStep(2);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     /* eslint-disable react-hooks/rules-of-hooks */
     const stepDivs = document.querySelectorAll(`.${styles.step}`);
@@ -27,7 +40,7 @@ const onboardPage = () => {
       // Find tab number and update curPage
       const clickedTabNum = Number(clickedTab?.dataset.tab);
       if (clickedTab && curstep + 2 > clickedTabNum) {
-        setCurstep(clickedTabNum);
+        setCurStep(clickedTabNum);
       }
     };
 
@@ -108,7 +121,7 @@ const onboardPage = () => {
             "tab-content__container--1",
           )}
         >
-          <CreateProfile onNextHandler={onClickNextStep} />
+          {<CreateProfile onNextHandler={onClickNextStep} />}
         </div>
         <div
           className={classNames(
@@ -127,13 +140,6 @@ const onboardPage = () => {
           <Brokers onNextHandler={onClickNextStep} />
         </div>
       </div>
-
-      {/* <button
-        className={`btn main-btn ${styles["onboard-btn"]}`}
-        onClick={onClickNextStep}
-      >
-        Next
-      </button> */}
     </>
   );
 };

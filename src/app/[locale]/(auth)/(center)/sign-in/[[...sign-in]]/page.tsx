@@ -30,18 +30,29 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      // console.log(session);
+      console.log(session);
       createProfile(session);
       getMe()
         .then((res) => {
           localStorage.setItem("userInfo", JSON.stringify(res));
         })
         .catch((err) => err);
-      if (!session.user.isProfile) {
+      // Navigation
+      const onboardingStep = session.user["onboarding_data"].step;
+      localStorage.setItem("onboarding_step", onboardingStep);
+      if (
+        onboardingStep === "create_profile" ||
+        onboardingStep === "select_interest_topic"
+      ) {
         router.push("/onboard");
       } else {
         router.push("/home");
       }
+      // if (!session.user.isProfile) {
+      //   router.push("/onboard");
+      // } else {
+      //   router.push("/home");
+      // }
     }
   }, [session]);
 

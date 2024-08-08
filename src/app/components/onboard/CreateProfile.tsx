@@ -29,8 +29,6 @@ export default function CreateProfile(props: { onNextHandler: () => void }) {
     getRegions();
   }, []);
   const t = useTranslations("CreateProfile");
-  // const response = await getRegions();
-  // const regions = response.data.value.map((obj) => obj.name);
 
   return (
     <>
