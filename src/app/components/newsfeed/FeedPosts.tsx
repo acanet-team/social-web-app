@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "@/styles/modules/interest.module.scss";
 import { cleanPath } from "@/utils/Helpers";
 import PostCard from "./Postview";
+import { useTranslations } from "next-intl";
 
 export default function FeedPosts(props: {
   feedType: string;
@@ -15,6 +16,7 @@ export default function FeedPosts(props: {
   const [take, setTake] = useState<number>(20);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const t = useTranslations("Post");
 
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
@@ -69,8 +71,11 @@ export default function FeedPosts(props: {
       <div>
         {!isLoading && posts?.length === 0 && props.feedType === "for_you" ? (
           <Link href="/home?tab=suggestion">
-            <button className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block my-5 mx-auto">
-              Explore
+            <div className="text-center pointer align-items-center fw-600 text-grey-900 text-dark lh-26 font-xss mt-5">
+              <span className="d-none-xs">{t("No_Posts_Found")}</span>
+            </div>
+            <button className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block mb-5 mx-auto">
+              {t("Explore_More")}
             </button>
           </Link>
         ) : (

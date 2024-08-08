@@ -100,5 +100,8 @@
   },
   "UserProfile": {
     "meta_title": "ประวัติผู้ใช้"
+  },
+  "Post": {
+    "Explore_More": "สำรวจเพิ่มเติม"
   }
 }

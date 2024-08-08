@@ -100,5 +100,8 @@
   },
   "TopBrokers": {
     "top_broker_title": "Meilleurs courtiers"
+  },
+  "Post": {
+    "Explore_More": "Explore plus"
   }
 }

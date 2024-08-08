@@ -100,5 +100,9 @@
     "post_create_success": "Post created successfully!",
     "post_create_error": "Error creating post.",
     "error_fetch_topic": "Error fetching topics."
+  },
+  "Post": {
+    "Explore_More": "Explore More",
+    "No_Posts_Found": "No posts found."
   }
 }
