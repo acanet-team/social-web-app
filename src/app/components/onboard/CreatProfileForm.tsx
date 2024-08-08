@@ -36,18 +36,21 @@ export default function CreateProfileForm(props: {
   const { session: authSession, updateProfile } = useAuthStore(
     (state: IUserSessionStore) => state,
   );
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-  });
   const { data: session } = useSession() as any;
-  const [regionInputValue, setRegionInputValue] = useState<string>();
-  const [regionValue, setRegionValue] = useState<string>(props.regions[0]);
+  const [regionInputValue, setRegionInputValue] = useState<string>("");
+  const [regionValue, setRegionValue] = useState<string | null>(
+    props.regions[0],
+  );
 
   const lastName = authSession.user.lastName || "";
   const firstName = authSession.user.firstName || "";
   const email = session?.user.email;
   const photo = session?.user?.image;
   const nickName = authSession?.user.nickName;
+
+  const capitalizeWords = (str: string) => {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
 
   // Toast notification
   const throwToast = (message: string, notiType: string) => {
@@ -113,13 +116,16 @@ export default function CreateProfileForm(props: {
     onSubmit: async (values, { setFieldError }) => {
       if (nickName) values.nickName = nickName;
       if (email) values.email = email;
-      values.nickName = values.nickName?.toLowerCase().trim();
-      values.location = values.location?.toLowerCase().trim();
-      values.email = values.email?.toLowerCase().trim();
-      values.isBroker = values.isBroker === true ? true : false;
-      console.log(values);
+      // console.log("value", values);
+
+      const profileValues = {
+        nickName: values.nickName?.toLowerCase().trim(),
+        location: values.location?.toLowerCase().trim(),
+        email: values.email?.toLowerCase().trim(),
+        isBroker: values.isBroker === true ? true : false,
+      };
       try {
-        await createProfileRequest(values);
+        await createProfileRequest(profileValues);
         const successMessage = "Your profile has been updated.";
         throwToast(successMessage, "success");
         // Save data in auth store
@@ -203,43 +209,16 @@ export default function CreateProfileForm(props: {
           >
             <Autocomplete
               id="location"
-              autoComplete
               options={props.regions}
-              getOptionLabel={(option) => option}
-              filterOptions={filterOptions}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                formik.setFieldValue("location", e.target.value)
-              }
+              value={formik.values.location}
+              onChange={(
+                e: React.ChangeEvent<HTMLInputElement>,
+                newValue: string | null,
+              ) => formik.setFieldValue("location", newValue)}
+              onInputChange={(e, newInputValue) => {
+                setRegionInputValue(newInputValue);
+              }}
               onBlur={formik.handleBlur}
-              // value={regionValue}
-              // onChange={(event, newValue) => {
-              //   setRegionValue(newValue);
-              // }}
-              // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              //   setRegionValue(e.target.value)
-              // }
-              // inputValue={regionInputValue}
-              // onInputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              //     setRegionInputValue(e.target.value)
-              // }
-              // onBlur={formik.handleBlur}
-              // onInputChange={(event, newInputValue) => {
-              //   setRegionInputValue(newInputValue);
-              // }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  error={
-                    formik.touched.location && Boolean(formik.errors.location)
-                  }
-                  value={formik.values.location}
-
-                  // error={
-                  //   formik.touched.location && Boolean(formik.errors.location)
-                  // }
-                  // value={formik.values.location}
-                />
-              )}
               sx={{
                 "& fieldset": {
                   border: "2px #eee solid",
@@ -259,58 +238,22 @@ export default function CreateProfileForm(props: {
                   color: "#ddd",
                 },
               }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={
+                    formik.touched.location && Boolean(formik.errors.location)
+                  }
+                />
+              )}
             />
+
             {formik.touched.location && (
               <FormHelperText sx={{ color: "error.main", marginLeft: "0" }}>
                 {formik.errors.location}
               </FormHelperText>
             )}
           </FormControl>
-
-          {/* <FormControl
-            fullWidth
-            id="location"
-            error={formik.touched.location && Boolean(formik.errors.location)}
-          >
-            <Select
-              className="form-control d-flex align-items-center"
-              labelId="location"
-              id="location"
-              name="location"
-              value={formik.values.location}
-              onChange={(e) => formik.setFieldValue("location", e.target.value)}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location && Boolean(formik.errors.location)}
-              sx={{
-                "& fieldset": {
-                  border: "none",
-                },
-                "& .MuiInputBase-input": {
-                  padding: "0 !important",
-                  fontSize: "16px",
-                },
-                "& .MuiSelect-icon": {
-                  color: '#ddd'
-                }
-              }}
-            >
-              <MenuItem disabled value="">
-                <em>Choose a location</em>
-              </MenuItem>
-              {props.regions.map((location) => {
-                return (
-                  <MenuItem value={location?.toLowerCase()} key={location}>
-                    {location}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            {formik.touched.location && (
-              <FormHelperText sx={{ color: "error.main", marginLeft: "0" }}>
-                {formik.errors.location}
-              </FormHelperText>
-            )}
-          </FormControl> */}
 
           {/* eslint-disable-next-line */}
           <label className="fw-600 mt-3 mb-1" htmlFor="email">
