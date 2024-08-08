@@ -100,5 +100,8 @@
   },
   "UserProfile": {
     "meta_title": "Thông tin người dùng"
+  },
+  "Post": {
+    "Explore_More": "Tìm hiểu thêm"
   }
 }
