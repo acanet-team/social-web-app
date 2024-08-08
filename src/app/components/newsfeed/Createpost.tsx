@@ -8,9 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import "./yourCustomSelectStyles.css";
 import { useTranslations } from "next-intl";
-import { useAccessTokenStore } from "@/store/accessToken";
-import { useSession } from "next-auth/react";
-import { IUserInfo } from "@/api/user/model";
+import { IUserInfo, type IMe } from "@/api/user/model";
 import { useRouter } from "next/navigation";
 import ProfilePicture from "./ProfilePicture";
 import Box from "@mui/material/Box";
@@ -30,21 +28,16 @@ const CreatePost = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const [userInfo, setUserInfo] = useState<IMe>();
   const router = useRouter();
-  const { data: sessionData } = useSession();
   const t = useTranslations("CreatePost");
-  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
 
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")!);
+    console.log("create post", userInfo);
+    setUserInfo(userInfo);
+  }, []);
   const topicListRef = useRef(null);
-
-  // useEffect(() => {
-  //   // const session = sessionData as IUserSession;
-  //   // if (session && session.user) {
-  //   //   setAccessToken(session.token);
-  //   //   setUserInfo(session.user as IUserInfo);
-  //   // }
-  // }, []);
 
   const fetchTopics = async (page = 1, search = "") => {
     setIsLoading(true);
@@ -177,7 +170,7 @@ const CreatePost = () => {
         id={style["card-body"]}>
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
           <ProfilePicture
-            url={userInfo?.image ?? "/assets/images/profile.png"}
+            url={userInfo?.user?.photo?.path ?? "/assets/images/profile.png"}
           />
         </figure>
         <textarea

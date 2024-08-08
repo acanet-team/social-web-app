@@ -33,11 +33,9 @@ const LoginPage: NextPage = () => {
       createProfile(session);
       getMe()
         .then((res) => {
-          console.log("res", res);
-          
+          localStorage.setItem("userInfo", JSON.stringify(res));
         })
-        .catch((err) => err); 
-      
+        .catch((err) => err);
       if (!session.user.isProfile) {
         router.push("/account");
       } else {
@@ -53,8 +51,7 @@ const LoginPage: NextPage = () => {
           <a href="/" className="me-auto">
             <span
               id="site-logo"
-              className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"
-            >
+              className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current">
               <Image
                 src={
                   curTheme === "theme-dark"
@@ -97,8 +94,7 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Google"
                     title="Sign in with Google"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
-                    onClick={() => signIn("google")}
-                  >
+                    onClick={() => signIn("google")}>
                     <Image
                       width={40}
                       height={40}
@@ -115,8 +111,7 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Facebook"
                     title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-facebook border-0 p-0 text-left text-white "
-                    onClick={() => signIn("facebook")}
-                  >
+                    onClick={() => signIn("facebook")}>
                     <Image
                       src="/assets/images/icon-3.png"
                       alt="icon"
