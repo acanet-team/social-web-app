@@ -32,6 +32,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
         interestTopicIds: selectedOptions,
         isOnboarding: true,
       });
+      localStorage.setItem("onboarding_step", "select_interest_topic");
       props.onNextHandler();
     } catch (err) {
       console.log(err);

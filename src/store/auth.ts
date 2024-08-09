@@ -6,24 +6,51 @@ export interface IUserSessionStore {
   session: {
     token: string | null;
     user: {
-      isBroker: boolean;
-      isProfile: boolean;
-      nickName: string | null;
       id: number | null;
       email: string | null;
+      provider: string | null;
+      socialId: string | null;
       firstName: string | null;
       lastName: string | null;
-      photo: string | null;
-      role: string | null;
-      status: string | null;
+      photo: {
+        isPublic: boolean | null;
+        isDeleted: boolean | null;
+        id: string | null;
+        path: string | null;
+        mimetype: string | null;
+        ownerId: number | null;
+      };
+      role: {
+        id: number | null;
+        name: string | null;
+        __entity: string | null;
+      };
+      status: {
+        id: number | null;
+        name: string | null;
+        __entity: string | null;
+      };
+      onboarding_data: object | null;
       createdAt: string | null;
       updatedAt: string | null;
       deletedAt: string | null;
+    };
+    userProfile: {
+      id: string | null;
+      createdAt: string | null;
+      updatedAt: string | null;
+      deletedAt: string | null;
+      nickName: string | null;
+      birthDate: string | null;
       gender: string | null;
       location: string | null;
+      shortDesc: string | null;
+      additionalData: object | null;
+      brokerProfile: object | null;
     };
   };
-  login: () => void;
+  checkOnboarding: () => string;
+  login: (session: any) => void;
   createProfile: (session: any) => void;
   updateProfile: (values: any) => void;
   logout: () => void;
@@ -37,64 +64,145 @@ const useAuthStore = create<IUserSessionStore>((set) => ({
   session: {
     token: null,
     user: {
-      isBroker: false,
-      isProfile: false,
-      nickName: null,
       id: null,
       email: null,
+      provider: null,
+      socialId: null,
       firstName: null,
       lastName: null,
-      photo: null,
-      role: null,
-      status: null,
+      photo: {
+        isPublic: null,
+        isDeleted: null,
+        id: null,
+        path: null,
+        mimetype: null,
+        ownerId: null,
+      },
+      role: {
+        id: null,
+        name: null,
+        __entity: null,
+      },
+      status: {
+        id: null,
+        name: null,
+        __entity: null,
+      },
+      onboarding_data: null,
       createdAt: null,
       updatedAt: null,
       deletedAt: null,
+    },
+    userProfile: {
+      id: null,
+      createdAt: null,
+      updatedAt: null,
+      deletedAt: null,
+      nickName: null,
+      birthDate: null,
       gender: null,
       location: null,
-      phone: null,
+      shortDesc: null,
+      additionalData: null,
+      brokerProfile: null,
     },
   },
-  login: () => {
-    getMe()
-      .then((res) => {
-        localStorage.setItem("userInfo", JSON.stringify(res));
-      })
-      .catch((err) => err);
-  },
-  createProfile: (session: any) =>
-    set((state) => {
-      return {
+  login: async (session: any) => {
+    try {
+      const res = await getMe();
+      localStorage.setItem("userInfo", JSON.stringify(res));
+      set((state) => ({
+        ...state,
         session: {
           ...state.session,
           token: session.token,
           user: {
             ...state.session.user,
-            id: session.user.id,
-            email: session.user.email,
-            photo: session?.user?.photo?.path || session?.user?.image,
-            firstName: session.user.firstName,
-            lastName: session.user.lastName,
-            isBroker: session.user.isBroker,
-            isProfile: session.user.isProfile,
-            createdAt: session.user.createdAt,
-            role: session.user.role?.name,
-            status: session.user.status?.name,
+            id: res?.user.id,
+            email: res?.user.email,
+            photo: {
+              ...state.session.user.photo,
+              path: session?.user.image || res?.user?.photo?.path,
+            },
+            firstName: res?.user.firstName,
+            lastName: res?.user.lastName,
+            createdAt: res?.user.createdAt,
+            role: { ...state.session.user.role, name: res?.user.role.name },
+            status: {
+              ...state.session.user.status,
+              name: res?.user.status.name,
+            },
+          },
+          userProfile: {
+            ...state.session.userProfile,
+          },
+        },
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  createProfile: async (session: any) => {
+    const res = await getMe();
+    localStorage.setItem("userInfo", JSON.stringify(res));
+    set((state) => {
+      const updatedState = {
+        ...state,
+        session: {
+          ...state.session,
+          token: session.token,
+          user: {
+            ...state.session.user,
+            id: session.user.id || res.user.id,
+            email: session.user.email || res.user.email,
+            photo: {
+              ...state.session.user.photo,
+              path:
+                session.user?.image ||
+                session.user?.photo.path ||
+                res.user?.photo.path,
+            },
+            firstName: session.user.firstName || res.user.firstName,
+            lastName: session.user.lastName || res.user.lastName,
+            createdAt: session.user.createdAt || res.user.createdAt,
+            role: {
+              ...state.session.user.role,
+              name: session.user.role?.name || res.user.role?.name,
+            },
+            status: {
+              ...state.session.user.status,
+              name: session.user.status?.name || res.user.status?.name,
+            },
+          },
+          userProfile: {
+            ...state.session.userProfile,
           },
         },
       };
-    }),
-  updateProfile: (values: any) =>
-    set((state) => ({
-      session: {
-        ...state.session,
-        user: {
-          ...state.session.user,
-          nickName: values.nickName,
-          location: values.location,
+      localStorage.setItem("userInfo", JSON.stringify(state));
+      return updatedState;
+    });
+  },
+  updateProfile: async (values: any) => {
+    const res = await getMe();
+    localStorage.setItem("userInfo", JSON.stringify(res));
+    set((state) => {
+      const updatedState = {
+        ...state,
+        session: {
+          ...state.session,
+          user: {
+            ...state.session.user,
+            nickName: values.nickName || res.userProfile?.nickName,
+            location: values.location || res.userProfile?.location,
+          },
         },
-      },
-    })),
+      };
+      localStorage.setItem("userInfo", JSON.stringify(state));
+      return updatedState;
+    });
+  },
+
   logout: async () => {
     try {
       // Calling APIs
@@ -102,9 +210,22 @@ const useAuthStore = create<IUserSessionStore>((set) => ({
       deleteCookie("accessToken");
       localStorage.removeItem("userInfo");
       localStorage.removeItem("theme");
-      localStorage.removeItem("onboarding_step");
+      // localStorage.removeItem("onboarding_step");
     } catch (err) {
       console.log(err);
+    }
+  },
+  checkOnboarding: () => {
+    // Continue onboarding
+    const onboardingStep = localStorage.getItem("onboarding_step");
+    if (onboardingStep) {
+      const isOnboarding =
+        onboardingStep === "create_profile" ||
+        onboardingStep === "select_interest_topic";
+      const redirectPath = isOnboarding ? "/onboard" : "/home";
+      return redirectPath;
+    } else {
+      return "/home";
     }
   },
 }));

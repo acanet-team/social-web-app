@@ -6,7 +6,8 @@ import useAuthStore from "@/store/auth";
 
 export default function Appfooter() {
   const session = useAuthStore((state) => state.session);
-  const photo = session.user.photo;
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+  const photo = userInfo?.session?.user?.photo?.path;
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
       <Link href="/home" className="nav-content-bttn nav-center">

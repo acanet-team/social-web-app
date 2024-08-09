@@ -7,17 +7,21 @@ import Darkbutton from "./Darkbutton";
 import useAuthStore from "@/store/auth";
 import { useSession } from "next-auth/react";
 import HeaderSetting from "./auth/HeaderSetting";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-light");
   const [openSettings, setOpenSettings] = useState(false);
-  // const session = useAuthStore((state) => state.session);
-  const { data: session } = useSession() as any;
-  const photo = session?.user?.photo?.path || session?.user?.image;
-  const token = session?.token;
+  const { session, checkOnboarding } = useAuthStore((state) => state);
+  // const { data: session } = useSession() as any;
+  // const photo = session?.user?.photo.path;
+  // get photo from local storage
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+  const photo = userInfo?.session?.user?.photo?.path;
   console.log(photo);
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
@@ -26,6 +30,10 @@ export default function Header() {
   const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
+    const onboardingPath = checkOnboarding();
+    if (onboardingPath) {
+      router.push(onboardingPath);
+    }
     const handleThemeChange = () => {
       const theme = localStorage.getItem("theme");
       if (theme) setCurTheme(theme);
@@ -40,9 +48,7 @@ export default function Header() {
   }, []);
 
   const onOpenSettingHandler = () => {
-    if (token) {
-      setOpenSettings((open) => !open);
-    }
+    setOpenSettings((open) => !open);
   };
   return (
     <div className="nav-header shadow-xs border-0">

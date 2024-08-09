@@ -38,7 +38,7 @@ const onboardPage = () => {
       ) as HTMLElement;
       // Find tab number and update curPage
       const clickedTabNum = Number(clickedTab?.dataset.tab);
-      if (clickedTab && curstep + 2 > clickedTabNum) {
+      if (clickedTab && curstep + 1 > clickedTabNum) {
         setCurStep(clickedTabNum);
       }
     };
