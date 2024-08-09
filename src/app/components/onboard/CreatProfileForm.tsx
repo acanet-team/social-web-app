@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import useAuthStore, { type IUserSessionStore } from "@/store/auth";
 import Image from "next/image";
-import { createProfileRequest } from "@/api/user";
+import { createProfileRequest } from "@/api/onboard";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -37,10 +37,7 @@ export default function CreateProfileForm(props: {
     (state: IUserSessionStore) => state,
   );
   const { data: session } = useSession() as any;
-  const [regionInputValue, setRegionInputValue] = useState<string>("");
-  const [regionValue, setRegionValue] = useState<string | null>(
-    props.regions[0],
-  );
+  // const [regionInputValue, setRegionInputValue] = useState<string>();
 
   const lastName = authSession.user.lastName || "";
   const firstName = authSession.user.firstName || "";
@@ -116,14 +113,17 @@ export default function CreateProfileForm(props: {
     onSubmit: async (values, { setFieldError }) => {
       if (nickName) values.nickName = nickName;
       if (email) values.email = email;
-      // console.log("value", values);
+      console.log("value", values);
 
       const profileValues = {
         nickName: values.nickName?.toLowerCase().trim(),
         location: values.location?.toLowerCase().trim(),
         email: values.email?.toLowerCase().trim(),
         isBroker: values.isBroker === true ? true : false,
+        isOnboarding: true,
       };
+      console.log("sent value", profileValues);
+
       try {
         await createProfileRequest(profileValues);
         const successMessage = "Your profile has been updated.";
@@ -131,7 +131,9 @@ export default function CreateProfileForm(props: {
         // Save data in auth store
         updateProfile(values);
         // Continue the onboarding process
-        props.onNext();
+        setTimeout(() => {
+          props.onNext();
+        }, 4000);
       } catch (err) {
         console.log(err);
         // const errors = err as AxiosError;
@@ -168,11 +170,11 @@ export default function CreateProfileForm(props: {
                 height={50}
                 objectFit="cover"
                 alt="avatar"
-                className="shadow-sm rounded-3"
+                className="shadow-sm rounded-circle"
               />
             </figure>
             <h2 className="fw-700 font-sm text-grey-900 mt-3">
-              {firstName + lastName}
+              {firstName + " " + lastName}
             </h2>
             {/* <h4 className="text-grey-500 fw-500 mb-3 font-xsss mb-4">
               Brooklyn
@@ -215,9 +217,9 @@ export default function CreateProfileForm(props: {
                 e: React.ChangeEvent<HTMLInputElement>,
                 newValue: string | null,
               ) => formik.setFieldValue("location", newValue)}
-              onInputChange={(e, newInputValue) => {
-                setRegionInputValue(newInputValue);
-              }}
+              // onInputChange={(e, newInputValue) => {
+              //   setRegionInputValue(newInputValue);
+              // }}
               onBlur={formik.handleBlur}
               sx={{
                 "& fieldset": {

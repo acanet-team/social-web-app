@@ -59,6 +59,7 @@ const options: NextAuthOptions = {
           cookies().set("accessToken", res.data.token, {
             expires: res.data.tokenExpires,
           });
+          console.log("login res", res);
 
           session.user = {
             ...res.data.user,

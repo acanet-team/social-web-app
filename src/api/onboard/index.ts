@@ -72,3 +72,10 @@ export const getUserInfoRequest = (
 ) => {
   return httpClient.get("/v1/auth/me", { headers });
 };
+
+export const followABroker = (
+  value: any,
+  headers: Headers = undefined as unknown as Headers,
+) => {
+  return httpClient.post("/v1/users/follow", value, { headers });
+};

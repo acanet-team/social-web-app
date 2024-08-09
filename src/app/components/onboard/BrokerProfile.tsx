@@ -1,15 +1,17 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import styles from "@/styles/modules/brokers.module.scss";
+import styles from "@/styles/modules/brokerProfile.module.scss";
 import { faSuitcase, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { followABroker } from "@/api/onboard";
 
 export default function BrokerProfile(props: {
-  brokerProfileId: string;
+  brokerProfileId: number;
   firstName: string;
   lastName: string;
   topicName: string;
+  followed: boolean;
   followersCount: number;
   coursesEnrolledCount: number;
   rating: number;
@@ -21,14 +23,23 @@ export default function BrokerProfile(props: {
     firstName,
     lastName,
     topicName,
+    followed,
     followersCount = 0,
     coursesEnrolledCount = 0,
     rating = 0,
     rank,
     photo,
   } = { ...props };
-  const onFollowBrokerHandler = (brokerId: string) => {
-    console.log("follow a broker...");
+  const [isFollowing, setIsFollowing] = useState<boolean>(followed);
+  const onFollowBrokerHandler = (e: any, brokerId: number) => {
+    try {
+      setIsFollowing(true);
+      followABroker({ userId: brokerId });
+      console.log(e.target);
+      e.target.classList.add(styles["follow_broker"]);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div className="col-xl-2 col-lg-4 col-sm-6 pe-2 ps-2">
@@ -108,10 +119,10 @@ export default function BrokerProfile(props: {
 
           <button
             type="button"
-            className={`${styles["follow-btn"]} main-btn bg-current text-center text-white fw-500 w-100 border-0 d-inline-block`}
-            onClick={() => onFollowBrokerHandler(brokerProfileId)}
+            className={`${styles["follow-btn"]} ${isFollowing ? styles["follow-broker"] : ""} main-btn bg-current text-center text-white fw-500 w-100 border-0 d-inline-block`}
+            onClick={(e) => onFollowBrokerHandler(e, brokerProfileId)}
           >
-            Follow
+            {isFollowing ? "Following" : "+ Follow"}
           </button>
         </div>
       </div>
