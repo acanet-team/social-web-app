@@ -1,4 +1,3 @@
-"use client";
 import { createNewPostRequest, getTopics } from "@/api/post";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";

@@ -1,5 +1,6 @@
-import { parseCookies } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 import { BaseApiResponse } from "./model";
+import { useAccessTokenStore } from "@/store/accessToken";
 
 export interface IHttpOptions {
   url: string;
@@ -84,8 +85,7 @@ class HttpClient {
       }
     }
 
-    const cookies = parseCookies();
-    const accessToken = cookies.accessToken;
+    const accessToken = useAccessTokenStore.getState().accessToken;
     if (accessToken) {
       headers.append("Authorization", `Bearer ${accessToken}`);
     }

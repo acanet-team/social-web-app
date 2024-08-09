@@ -43,5 +43,9 @@ export default bundleAnalyzer(
         },
       ],
     },
+    i18n: {
+      locales: ['en', 'vi'],
+      defaultLocale: 'en'
+    }
   }),
 );

@@ -2,14 +2,10 @@ import { getComments } from "@/api/newsfeed";
 import { commentArr } from "@/app/fakeData/comments";
 import React from "react";
 import { Comments } from "./Comments";
-import { cookies } from "next/headers";
 
 const fetchComments = async (postId: string) => {
-  const header = new Headers();
-  const accessToken = cookies().get("accessToken")?.value;
-  header.set("Authorization", "Bearer " + accessToken);
   try {
-    const response = await getComments(1, 20, postId, header);
+    const response = await getComments(1, 20, postId);
     console.log(response.data);
     return response.data;
   } catch (err) {

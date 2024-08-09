@@ -1,8 +1,7 @@
-"use client";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import styles from "@/styles/modules/navLink.module.scss";
-import { MouseEventHandler, useEffect } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface NavLinkProps {
   href: string;
