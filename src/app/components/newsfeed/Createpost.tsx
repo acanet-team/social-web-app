@@ -7,7 +7,7 @@ import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import { useTranslations } from "next-intl";
-import { type IMe,} from "@/api/user/model";
+import { type IMe } from "@/api/onboard/model";
 import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
@@ -27,15 +27,28 @@ const CreatePost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [userInfo, setUserInfo] = useState<IMe>();
+  const [curTheme, setCurTheme] = useState("");
   const router = useRouter();
   const t = useTranslations("CreatePost");
 
   useEffect(() => {
+    const theme = localStorage.getItem("theme");
+    if (theme) setCurTheme(theme);
     const userInfo = JSON.parse(localStorage.getItem("userInfo")!);
-    console.log("create post", userInfo);
     setUserInfo(userInfo);
     fetchTopics();
     setIsLoading(false);
+    const handleThemeChange = () => {
+      const theme = localStorage.getItem("theme");
+      if (theme) setCurTheme(theme);
+    };
+    window.addEventListener("themeChange", handleThemeChange as EventListener);
+    return () => {
+      window.removeEventListener(
+        "themeChange",
+        handleThemeChange as EventListener,
+      );
+    };
   }, []);
   const topicListRef = useRef(null);
 
@@ -242,7 +255,10 @@ const CreatePost = () => {
           />
           {t("Photo_Video")}
         </label>
-        <label ref={topicListRef} className={style["topic-list"]}>
+        <label
+          ref={topicListRef}
+          className={`${style["topic-list"]} theme-dark-bg`}
+        >
           {isLoading && (
             <div className="text-center">
               <span className="spinner-border spinner-border-sm me-2"></span>
@@ -255,7 +271,7 @@ const CreatePost = () => {
             onChange={handleTopicChange}
             placeholder="Select a topic"
             isMulti={false}
-            className={style["topic-select"]}
+            classNamePrefix={`${style["topic-select"]}`}
             onInputChange={(searchTerm) => {
               setTimeout(() => {
                 if (searchTerm.trim() !== "") {
@@ -268,8 +284,9 @@ const CreatePost = () => {
             styles={{
               control: (provided) => ({
                 ...provided,
-                backgroundColor: "#f0f0f0",
-                borderColor: "#ccc",
+                backgroundColor:
+                  curTheme === "theme-light" ? "#fff" : "#1a1237",
+                borderColor: "",
                 borderRadius: 5,
                 boxShadow: "none",
                 "&:hover": {
@@ -295,7 +312,8 @@ const CreatePost = () => {
           <label
             id="submit"
             className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
-            onClick={submitPost}>
+            onClick={submitPost}
+          >
             <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
             {t("create_Post")}
           </label>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import { getRegionRequest } from "@/api/user";
+import { getRegionRequest } from "@/api/onboard";
 import styles from "@/styles/modules/createProfile.module.scss";
 import CreateProfileForm from "./CreatProfileForm";
 import Pagetitle from "../Pagetitle";
@@ -29,8 +29,6 @@ export default function CreateProfile(props: { onNextHandler: () => void }) {
     getRegions();
   }, []);
   const t = useTranslations("CreateProfile");
-  // const response = await getRegions();
-  // const regions = response.data.value.map((obj) => obj.name);
 
   return (
     <>
@@ -41,7 +39,7 @@ export default function CreateProfile(props: { onNextHandler: () => void }) {
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="onboard-wrap">
-              <div className="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
+              <div className="card w-100 border-0 bg-white shadow-md rounded-xxls p-0 mb-4">
                 <Pagetitle
                   title={t("create_profile_title")}
                   intro={t("create_profile_desc")}

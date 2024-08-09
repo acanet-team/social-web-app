@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 import { IHttpOptions } from "./index";
-import { IUser } from "./user/model";
+import { IUser } from "./onboard/model";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?
@@ -53,6 +53,7 @@ export type CreateProfileParams = {
 
 export type subcribeTopicsParam<T> = {
   interestTopicIds: T;
+  isOnboarding: boolean;
 };
 
 export type BaseResponse<T> = {

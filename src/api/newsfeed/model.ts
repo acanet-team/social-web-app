@@ -1,5 +1,5 @@
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
-import { Photo, Role } from "../user/model";
+import { Photo, Role } from "../onboard/model";
 
 export interface likeParams {
   postId: string;

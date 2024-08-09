@@ -127,7 +127,7 @@ export default function PostCard(props: {
             overflow: "hidden",
           }}
         >
-          <p className="fw-500 text-grey-500 lh-26 font-xsss w-100 mb-2">
+          <p className="fw-500 lh-26 font-xsss w-100 mb-2">
             {expandPost
               ? content
               : content.length > 150
