@@ -7,7 +7,7 @@ import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import { useTranslations } from "next-intl";
-import { type IMe,} from "@/api/user/model";
+import { type IMe } from "@/api/onboard/model";
 import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
@@ -295,7 +295,8 @@ const CreatePost = () => {
           <label
             id="submit"
             className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
-            onClick={submitPost}>
+            onClick={submitPost}
+          >
             <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
             {t("create_Post")}
           </label>

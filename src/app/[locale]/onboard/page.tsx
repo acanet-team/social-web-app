@@ -2,7 +2,6 @@
 import React, { useEffect, useState, MouseEvent } from "react";
 import styles from "@/styles/modules/onboard.module.scss";
 import classNames from "classnames";
-import Account from "@/app/components/onboard/CreatProfileForm";
 import CreateProfile from "@/app/components/onboard/CreateProfile";
 import Interests from "@/app/components/onboard/Interests";
 import Brokers from "@/app/components/onboard/Brokers";

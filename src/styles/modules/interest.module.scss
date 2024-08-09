@@ -1,6 +1,7 @@
 #interest {
   height: 100vh;
-  overflow-y: scroll;
+  width: 100% !important;
+  padding: 0 !important;
 }
 
 #interest .btn-selected {
@@ -40,26 +41,6 @@
   overflow-y: scroll;
 }
 
-
-.dots-3 {
-  width: 30px;
-  aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side,#fff 90%,#000);
-  background: 
-    var(--_g) 0%   50%,
-    var(--_g) 50%  50%,
-    var(--_g) 100% 50%;
-  background-size: calc(100%/3) 50%;
-  animation: d3 1s infinite linear;
-}
-@keyframes d3 {
-    20%{background-position:0%   0%, 50%  50%,100%  50%}
-    40%{background-position:0% 100%, 50%   0%,100%  50%}
-    60%{background-position:0%  50%, 50% 100%,100%   0%}
-    80%{background-position:0%  50%, 50%  50%,100% 100%}
-}
-
-
 :global(.theme-dark) #interest .btn-selected {
   background-color: var(--theme-color-shade) !important;
   color: #fff !important;
@@ -67,4 +48,17 @@
 
 :global(.theme-dark) #interest button {
   border: 1px solid var(--theme-color-shade) !important;
+}
+
+// MEDIA QUERIES
+@media (max-width: 768px) {
+  #interest-container {
+    padding: 15px !important;
+    margin-bottom: 0 !important;
+    height: 40vh;
+  }
+
+  #interest button {
+    font-size: 14px !important;
+  }
 }

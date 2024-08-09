@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import useAuthStore, { type IUserSessionStore } from "@/store/auth";
 import Image from "next/image";
-import { createProfileRequest } from "@/api/user";
+import { createProfileRequest } from "@/api/onboard";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 

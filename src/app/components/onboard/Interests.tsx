@@ -1,10 +1,8 @@
 "use client";
-import { subscribeTopicsRequest } from "@/api/user";
-import { useRouter } from "next/navigation";
+import { subscribeTopicsRequest } from "@/api/onboard";
 import React, { useEffect, useRef, useState } from "react";
-import { createGetAllTopicsRequest } from "@/api/user";
+import { createGetAllTopicsRequest } from "@/api/onboard";
 import styles from "@/styles/modules/interest.module.scss";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
 import Pagetitle from "../Pagetitle";
@@ -108,7 +106,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="onboard-wrap">
-              <div className="card w-100 border-0 bg-white shadow-xs p-0 mb-4">
+              <div className="card w-100 border-0 bg-white shadow-md rounded-xxl p-0 mb-4">
                 <Pagetitle
                   title={t("interest_title")}
                   intro={t("interest_description")}
@@ -118,7 +116,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
                 <div
                   ref={list}
                   id={styles["interest-container"]}
-                  className="interest-options card-body p-lg-5 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-3 mb-5"
+                  className="interest-options card-body p-lg-5 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-lg-3 gap-2 mb-lg-3 mb-1"
                 >
                   {options?.length > 0 &&
                     options.map((option) => (
@@ -138,7 +136,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
                 {isLoading && <DotWaveLoader />}
                 <button
                   type="submit"
-                  className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-5 mx-auto"
+                  className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-lg-5 my-4 mx-auto"
                   onClick={onSelectInterestHandler}
                 >
                   Continue

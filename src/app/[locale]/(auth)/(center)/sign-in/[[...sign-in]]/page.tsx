@@ -38,21 +38,22 @@ const LoginPage: NextPage = () => {
         })
         .catch((err) => err);
       // Navigation
-      const onboardingStep = session.user["onboarding_data"].step;
-      localStorage.setItem("onboarding_step", onboardingStep);
-      if (
-        onboardingStep === "create_profile" ||
-        onboardingStep === "select_interest_topic"
-      ) {
-        router.push("/onboard");
-      } else {
-        router.push("/home");
+      const onboardingStep = session.user["onboarding_data"]?.step;
+      if (onboardingStep) {
+        localStorage.setItem("onboarding_step", onboardingStep);
+
+        const isOnboarding =
+          onboardingStep === "create_profile" ||
+          onboardingStep === "select_interest_topic";
+        const redirectPath = isOnboarding ? "/onboard" : "/home";
+
+        router.push(redirectPath);
+        // if (!session.user.isProfile) {
+        //   router.push("/onboard");
+        // } else {
+        //   router.push("/home");
+        // }
       }
-      // if (!session.user.isProfile) {
-      //   router.push("/onboard");
-      // } else {
-      //   router.push("/home");
-      // }
     }
   }, [session]);
 

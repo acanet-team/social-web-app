@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import BrokerProfile from "./BrokerProfile";
-import styles from "@/styles/modules/brokers.module.scss";
+import styles from "@/styles/modules/brokerProfile.module.scss";
 import Pagination from "../Pagination";
-import { createGetBrokersRequest } from "@/api/user";
+import { createGetBrokersRequest } from "@/api/onboard";
 import CircleLoader from "../CircleLoader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,10 +26,9 @@ export default function Brokers(props: { onNextHandler: () => void }) {
         setIsLoading(true);
         const res = await createGetBrokersRequest(page, TAKE);
         setBrokers(res.data.docs ? res.data.docs : res.data.data || []);
-        console.log(res.data.docs);
-
         setPage(res.data.meta.page);
         setTotalPage(res.data.meta.totalPage);
+        console.log(res.data.docs);
       } catch (err) {
         console.log(err);
       } finally {
@@ -47,10 +46,11 @@ export default function Brokers(props: { onNextHandler: () => void }) {
         brokers.map((b) => (
           <BrokerProfile
             key={b.userId}
-            brokerProfileId={b.brokerProfileId}
+            brokerProfileId={b.userId}
             firstName={b.firstName}
             lastName={b.lastName}
             photo={b.photo}
+            followed={b.followed}
             topicName={b.skills[0]?.topicName}
             followersCount={b.followersCount}
             coursesEnrolledCount={b.coursesEnrolledCount}
