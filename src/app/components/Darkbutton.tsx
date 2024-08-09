@@ -43,7 +43,7 @@ const DarkMode = () => {
       onClick={(e) => switchTheme(e)}
       style={{ cursor: "pointer" }}
     >
-      <i className="feather-moon font-xl"></i>
+      <i className="feather-moon text-current font-xl"></i>
     </span>
   );
 };

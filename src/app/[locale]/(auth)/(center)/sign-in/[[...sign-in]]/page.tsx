@@ -11,11 +11,12 @@ import { useEffect, useState } from "react";
 import useAuthStore from "@/store/auth";
 
 const LoginPage: NextPage = () => {
+  const router = useRouter();
   const t = useTranslations("SignIn");
   const [curTheme, setCurTheme] = useState("theme-light");
   const { data: session } = useSession() as any;
-  const createProfile = useAuthStore((state) => state.createProfile);
-  const router = useRouter();
+  // Zustand store
+  const { createProfile, login } = useAuthStore((state) => state);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -32,11 +33,7 @@ const LoginPage: NextPage = () => {
     if (session) {
       console.log(session);
       createProfile(session);
-      getMe()
-        .then((res) => {
-          localStorage.setItem("userInfo", JSON.stringify(res));
-        })
-        .catch((err) => err);
+      login();
       // Navigation
       const onboardingStep = session.user["onboarding_data"]?.step;
       if (onboardingStep) {
@@ -53,6 +50,8 @@ const LoginPage: NextPage = () => {
         // } else {
         //   router.push("/home");
         // }
+      } else {
+        router.push("/home");
       }
     }
   }, [session]);
