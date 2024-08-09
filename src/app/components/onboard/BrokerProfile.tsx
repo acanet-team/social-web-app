@@ -33,10 +33,17 @@ export default function BrokerProfile(props: {
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
   const onFollowBrokerHandler = (e: any, brokerId: number) => {
     try {
-      setIsFollowing(true);
-      followABroker({ userId: brokerId });
-      console.log(e.target);
-      e.target.classList.add(styles["follow_broker"]);
+      setIsFollowing((following) => !following);
+      // Calling api
+      followABroker({
+        userId: brokerId,
+        followType: isFollowing ? "UNFOLLOW" : "FOLLOW",
+      });
+      if (!isFollowing) {
+        e.target.classList.add(styles["follow_broker"]);
+      } else {
+        e.target.classList.remove(styles["follow_broker"]);
+      }
     } catch (err) {
       console.log(err);
     }

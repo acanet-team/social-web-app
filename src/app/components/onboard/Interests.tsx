@@ -116,7 +116,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
                 <div
                   ref={list}
                   id={styles["interest-container"]}
-                  className="interest-options card-body p-lg-5 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-lg-3 gap-2 mb-lg-3 mb-1"
+                  className="interest-options card-body p-lg-5 gap-3 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-lg-3 gap-2 mb-lg-3 mb-1"
                 >
                   {options?.length > 0 &&
                     options.map((option) => (

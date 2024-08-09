@@ -6,16 +6,19 @@ import Image from "next/image";
 import Darkbutton from "./Darkbutton";
 import useAuthStore from "@/store/auth";
 import { useSession } from "next-auth/react";
+import HeaderSetting from "./auth/HeaderSetting";
 
 export default function Header() {
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-light");
+  const [openSettings, setOpenSettings] = useState(false);
   // const session = useAuthStore((state) => state.session);
   const { data: session } = useSession() as any;
-  // console.log(session);
-  const photo = session?.user?.image;
+  const photo = session?.user?.photo?.path || session?.user?.image;
+  const token = session?.token;
+  console.log(photo);
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;
@@ -36,6 +39,11 @@ export default function Header() {
     };
   }, []);
 
+  const onOpenSettingHandler = () => {
+    if (token) {
+      setOpenSettings((open) => !open);
+    }
+  };
   return (
     <div className="nav-header shadow-xs border-0">
       <div className="nav-top">
@@ -58,7 +66,7 @@ export default function Header() {
               style={{ width: "auto", height: "55px" }}
               alt="logo"
             />
-          </span>{" "}
+          </span>
         </Link>
         <Link
           href="/defaultmessage"
@@ -220,15 +228,14 @@ export default function Header() {
         </div>
       </div>
       <Darkbutton />
-      <Link href="/defaultsettings" className="p-0 ms-3 menu-icon">
-        <Image
-          src={photo ? photo : "/assets/images/user.png"}
-          alt="user"
-          width={40}
-          height={40}
-          className="w40 mt--1 rounded-xl"
-        />
-      </Link>
+      <Image
+        src={photo ? photo : "/assets/images/user.png"}
+        alt="user"
+        width={40}
+        height={40}
+        className="w40 rounded-xl p-0 ms-3 menu-icon cursor-pointer"
+        onClick={onOpenSettingHandler}
+      />
 
       {/* Left navbar */}
       {/* <nav className={`navigation scroll-bar ${navClass}`}>
@@ -340,6 +347,8 @@ export default function Header() {
           </div>
         </form>
       </div> */}
+
+      {openSettings && <HeaderSetting />}
     </div>
   );
 }

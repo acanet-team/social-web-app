@@ -21,7 +21,7 @@
 }
 
 #interest-container {
-  height: 35vh;
+  max-height: 35vh;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 8px;
@@ -53,9 +53,8 @@
 // MEDIA QUERIES
 @media (max-width: 768px) {
   #interest-container {
-    padding: 15px !important;
+    padding: 15px 0 0 0 !important;
     margin-bottom: 0 !important;
-    height: 40vh;
   }
 
   #interest button {
