@@ -27,9 +27,9 @@ export const Comments = React.memo(
     const commentListRef = useRef<HTMLDivElement>(null);
     const session = useAuthStore((state) => state.session);
     const avatar = session?.user?.photo || "/assets/images/user.png";
-    const nickName = session.user.nickName || "Me";
-    const [userInfo, setUserInfo] = useState<any>(session.user);
-  
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+    const nickName = userInfo?.session?.userProfile?.nickName || "Me";
+
     // Fetch comments ---------------------
     const fetchComments = async () => {
       try {
@@ -39,7 +39,7 @@ export const Comments = React.memo(
         setComments((prevState) =>
           response.data.docs
             ? [...prevState, ...response.data.docs]
-            : [...prevState, ...response.data.data]
+            : [...prevState, ...response.data.data],
         );
         setTotalPage(response.data.meta.totalPage);
         return response.data;
@@ -62,7 +62,7 @@ export const Comments = React.memo(
     };
 
     useEffect(() => {
-      setUserInfo(JSON.parse(localStorage.getItem("userInfo")!));
+      // setUserInfo(JSON.parse(localStorage.getItem("userInfo")!));
       const currentList = commentListRef.current;
       if (currentList && page < totalPage) {
         currentList.addEventListener("scroll", onScrollHandler);
@@ -151,7 +151,7 @@ export const Comments = React.memo(
           await deleteComment(commentId);
           // Remove comment from DOM
           setComments((prevState) =>
-            prevState.filter((comment) => comment.id !== commentId)
+            prevState.filter((comment) => comment.id !== commentId),
           );
         }
       } catch (err) {
@@ -164,7 +164,8 @@ export const Comments = React.memo(
       <div className={`${styles["comment-container"]} pt-4 mt-4 font-xsss`}>
         <div
           className={`${styles["comment-content__container"]} text-white flex-column overflow-auto ${comments.length > 0 ? styles["min-vh-10"] : ""}`}
-          ref={commentListRef}>
+          ref={commentListRef}
+        >
           {comments?.length === 0 && (
             <div className="text-center pointer align-items-center fw-600 text-grey-900 text-dark lh-26 font-xss">
               <span className="d-none-xs">No comment found.</span>
@@ -196,7 +197,8 @@ export const Comments = React.memo(
             alt={nickName ?? ""}
           />
           <div
-            className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-xxl bg-light`}>
+            className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-xxl bg-light`}
+          >
             <textarea
               id="comment"
               className="py-2 ps-2 rounded-xxl border-none bg-light"
@@ -210,7 +212,8 @@ export const Comments = React.memo(
               type="submit"
               onClick={onPostCommentHandler}
               className="border-0 bg-transparent"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               <i className="bi bi-send text-dark h2 me-2"></i>
             </button>
           </div>
@@ -226,5 +229,5 @@ export const Comments = React.memo(
         )}
       </div>
     );
-  }
+  },
 );

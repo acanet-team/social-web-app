@@ -16,7 +16,9 @@ const LoginPage: NextPage = () => {
   const [curTheme, setCurTheme] = useState("theme-light");
   const { data: session } = useSession() as any;
   // Zustand store
-  const { createProfile, login } = useAuthStore((state) => state);
+  const { createProfile, login, checkOnboarding } = useAuthStore(
+    (state) => state,
+  );
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -32,24 +34,17 @@ const LoginPage: NextPage = () => {
   useEffect(() => {
     if (session) {
       console.log(session);
+      login(session);
       createProfile(session);
-      login();
       // Navigation
       const onboardingStep = session.user["onboarding_data"]?.step;
       if (onboardingStep) {
         localStorage.setItem("onboarding_step", onboardingStep);
-
         const isOnboarding =
           onboardingStep === "create_profile" ||
           onboardingStep === "select_interest_topic";
         const redirectPath = isOnboarding ? "/onboard" : "/home";
-
         router.push(redirectPath);
-        // if (!session.user.isProfile) {
-        //   router.push("/onboard");
-        // } else {
-        //   router.push("/home");
-        // }
       } else {
         router.push("/home");
       }

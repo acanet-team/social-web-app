@@ -31,23 +31,21 @@ export default function CreateProfileForm(props: {
   regions: any[];
   onNext: () => void;
 }) {
-  const router = useRouter();
-
   const { session: authSession, updateProfile } = useAuthStore(
     (state: IUserSessionStore) => state,
   );
-  const { data: session } = useSession() as any;
-  // const [regionInputValue, setRegionInputValue] = useState<string>();
-
-  const lastName = authSession.user.lastName || "";
-  const firstName = authSession.user.firstName || "";
-  const email = session?.user.email;
-  const photo = session?.user?.image;
-  const nickName = authSession?.user.nickName;
-
-  const capitalizeWords = (str: string) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
+  // const lastName = authSession.user.lastName || "";
+  // const firstName = authSession.user.firstName || "";
+  // const email = authSession?.user.email;
+  // const photo = authSession?.user?.photo.path;
+  // const nickName = authSession?.userProfile.nickName;
+  // Get data from local storage
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+  const lastName = userInfo?.session?.user?.lastName || "";
+  const firstName = userInfo?.session?.user?.firstName || "";
+  const email = userInfo?.session?.user?.email;
+  const photo = userInfo?.session?.user?.photo?.path;
+  const nickName = userInfo?.session?.userProfile?.nickName;
 
   // Toast notification
   const throwToast = (message: string, notiType: string) => {
@@ -113,7 +111,6 @@ export default function CreateProfileForm(props: {
     onSubmit: async (values, { setFieldError }) => {
       if (nickName) values.nickName = nickName;
       if (email) values.email = email;
-      console.log("value", values);
 
       const profileValues = {
         nickName: values.nickName?.toLowerCase().trim(),
@@ -122,7 +119,6 @@ export default function CreateProfileForm(props: {
         isBroker: values.isBroker === true ? true : false,
         isOnboarding: true,
       };
-      console.log("sent value", profileValues);
 
       try {
         await createProfileRequest(profileValues);
@@ -131,6 +127,7 @@ export default function CreateProfileForm(props: {
         // Save data in auth store
         updateProfile(values);
         // Continue the onboarding process
+        localStorage.setItem("onboarding_step", "create_profile");
         setTimeout(() => {
           props.onNext();
         }, 4000);
@@ -188,7 +185,7 @@ export default function CreateProfileForm(props: {
             Nickname
           </label>
           <input
-            className="form-control"
+            className={`${formik.touched.nickName && formik.errors.nickName ? " border-danger" : ""} form-control`}
             name="nickName"
             id="nickName"
             onChange={formik.handleChange}
@@ -263,7 +260,7 @@ export default function CreateProfileForm(props: {
           </label>
           <input
             type="email"
-            className="form-control"
+            className={`${formik.touched.email && formik.errors.email ? " border-danger" : ""} form-control`}
             name="email"
             id="email"
             onChange={formik.handleChange}
