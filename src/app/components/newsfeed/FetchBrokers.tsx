@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { createGetBrokersRequest } from "@/api/onboard";
 import "slick-carousel/slick/slick.css";
@@ -28,7 +28,7 @@ export const FetchBrokers = () => {
     fetchBrokers();
   }, []);
 
-  const memoizedBrokers = useMemo(() => brokers, [brokers]);
+  // const memoizedBrokers = useMemo(() => brokers, [brokers]);
 
   const brokersettings = {
     arrows: false,
@@ -43,8 +43,8 @@ export const FetchBrokers = () => {
   return (
     <div>
       <Slider {...brokersettings}>
-        {memoizedBrokers?.length > 0 &&
-          memoizedBrokers.map((b, index) => (
+        {brokers?.length > 0 &&
+          brokers.map((b, index) => (
             <TopBrokers
               key={b.userId}
               photoUrl={b.photoUrl}

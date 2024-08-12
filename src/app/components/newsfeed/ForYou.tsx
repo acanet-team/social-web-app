@@ -1,8 +1,8 @@
 import React from "react";
 import FeedPosts from "./FeedPosts";
-import { FetchComments } from "./FetchComments";
+import FetchComments from "./FetchComments";
 
-export const ForYou = async (props: { postIdParams: string; tab: string }) => {
+export const ForYou = (props: { postIdParams: string; tab: string }) => {
   return (
     <div>
       <FeedPosts feedType={props.tab}>

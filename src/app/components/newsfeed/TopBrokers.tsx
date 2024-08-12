@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
 
 /* eslint-disable react/display-name */
-export const TopBrokers = React.memo(
+export const TopBrokers =
   (props: {
     photoUrl: string;
     firstName: string;
@@ -51,5 +51,4 @@ export const TopBrokers = React.memo(
         </div>
       </div>
     );
-  },
-);
+  };

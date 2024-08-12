@@ -9,7 +9,7 @@ import DotWaveLoader from "../DotWaveLoader";
 
 export default function FeedPosts(props: {
   feedType: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }): JSX.Element {
   const [posts, setPosts] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
