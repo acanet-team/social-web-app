@@ -9,7 +9,7 @@ import { postComment, getComments, deleteComment } from "@/api/newsfeed";
 import CustomModal from "../Modal";
 
 /* eslint-disable react/display-name */
-export const Comments = React.memo(
+export const Comments = 
   (props: {
     comments: any[];
     page: number;
@@ -229,5 +229,4 @@ export const Comments = React.memo(
         )}
       </div>
     );
-  },
-);
+  };

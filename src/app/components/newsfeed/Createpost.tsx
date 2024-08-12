@@ -56,6 +56,8 @@ const CreatePost = () => {
 
     try {
       const response = await getTopics(page, search);
+      console.log("topics", response);
+      
       if (response) {
         const newTopics = response["data"]["docs"].map((topic) => ({
           value: topic.id,
@@ -165,13 +167,13 @@ const CreatePost = () => {
         id={style["card-body"]}
       >
         <figure className="avatar position-absolute ms-2 mt-1 top-5">
-          <Image
+          {/* <Image
             src={userInfo?.user?.photo?.path ?? "/assets/images/profile.png"}
             alt="Ảnh hồ sơ"
             width={30}
             height={30}
             className="shadow-sm rounded-circle w30"
-          />
+          /> */}
         </figure>
         <textarea
           maxLength={5000}
