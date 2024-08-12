@@ -1,5 +1,6 @@
 "use client";
 
+import login from "@/pages/login";
 import { useAccessTokenStore } from "@/store/accessToken";
 import useAuthStore from "@/store/auth";
 import { useSession } from "next-auth/react";
@@ -8,21 +9,28 @@ import React, { useEffect } from "react";
 
 export default function Session() {
   const { data: session } = useSession() as any;
-  const createProfile = useAuthStore((state) => state.createProfile);
+  const { createProfile, login } = useAuthStore((state) => state);
   const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
   const router = useRouter();
 
   useEffect(() => {
-    console.log("aaaaaaaa", session);
     if (session) {
+      console.log(session);
+      login(session);
       createProfile(session);
-      // console.log(session);
-      if (!session.user.isProfile) {
-        console.log("sessionnn", session);
-        setAccessToken(session.token);
-        router.push("/home");
+      setAccessToken({ accessToken: session.token });
+      // Navigation
+      const onboardingStep = session.user["onboarding_data"]?.step;
+      console.log(onboardingStep);
+      if (onboardingStep) {
+        localStorage.setItem("onboarding_step", onboardingStep);
+        const isOnboarding =
+          onboardingStep === "create_profile" ||
+          onboardingStep === "select_interest_topic";
+        const redirectPath = isOnboarding ? "/onboard" : "/";
+        router.push(redirectPath);
       } else {
-        router.push("/home");
+        router.push("/");
       }
     }
   }, [session, setAccessToken]);

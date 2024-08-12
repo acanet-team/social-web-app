@@ -1,13 +1,18 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAuthStore from "@/store/auth";
+import { userInfo } from "os";
 
 export default function Appfooter() {
   const session = useAuthStore((state) => state.session);
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-  const photo = userInfo?.session?.user?.photo?.path;
+  const [photo, setPhoto] = useState<string>();
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+    const photo = userInfo?.session?.user?.photo?.path;
+    setPhoto(photo);
+  }, []);
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
       <Link href="/home" className="nav-content-bttn nav-center">

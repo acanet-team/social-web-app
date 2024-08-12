@@ -65,9 +65,10 @@ const options: NextAuthOptions = {
             isProfile: res.data.isProfile,
           };
           session.token = res.data.token;
+          console.log(session);
           return session;
         } catch (err) {
-          console.log("errj", err);
+          console.log("err", err);
           return session;
         }
       } else {
@@ -77,7 +78,7 @@ const options: NextAuthOptions = {
   },
 
   pages: {
-    signIn: "/sign-in",
+    signIn: "/login",
     signOut: "/sign-out",
     error: "/error",
   },

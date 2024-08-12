@@ -17,12 +17,15 @@ export default function Header() {
   const [curTheme, setCurTheme] = useState("theme-light");
   const [openSettings, setOpenSettings] = useState(false);
   const { session, checkOnboarding } = useAuthStore((state) => state);
+  const [photo, setPhoto] = useState<string>("");
   // const { data: session } = useSession() as any;
   // const photo = session?.user?.photo.path;
-  // get photo from local storage
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-  const photo = userInfo?.session?.user?.photo?.path;
-  console.log(photo);
+  useEffect(() => {
+    // get photo from local storage
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+    setPhoto(userInfo?.session?.user?.photo?.path);
+    console.log(photo);
+  }, []);
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;

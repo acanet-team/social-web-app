@@ -3,7 +3,7 @@
 import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { ToastContainer, toast, type ToastOptions } from "react-toastify";
 import styles from "@/styles/modules/createProfile.module.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import TextField from "@mui/material/TextField";
@@ -40,7 +40,12 @@ export default function CreateProfileForm(props: {
   // const photo = authSession?.user?.photo.path;
   // const nickName = authSession?.userProfile.nickName;
   // Get data from local storage
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+  const [userInfo, setUserInfo] = useState<any>({});
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+    setUserInfo(userInfo);
+  }, []);
   const lastName = userInfo?.session?.user?.lastName || "";
   const firstName = userInfo?.session?.user?.firstName || "";
   const email = userInfo?.session?.user?.email;

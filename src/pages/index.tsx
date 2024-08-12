@@ -1,3 +1,4 @@
+import "@/styles/global.scss";
 import Appfooter from "@/app/components/Appfooter";
 import NavLink from "@/app/components/NavLink";
 import styles from "@/styles/modules/home.module.scss";
@@ -11,7 +12,6 @@ import type { NextApiRequest, NextApiResponse, NextPageContext } from "next";
 import RootLayout from "@/layout/root";
 import { useAccessTokenStore } from "@/store/accessToken";
 import type { getServerSideProps } from "next/dist/build/templates/pages";
-import { unstable_getServerSession } from "next-auth";
 
 const Home = () => {
   return (
@@ -62,24 +62,24 @@ const Home = () => {
 
 export default React.memo(Home);
 
-export async function getServerSideProps(context: NextPageContext) {
-  const accessToken = useAccessTokenStore.getState().accessToken;
-  if (~accessToken) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false, // Nếu true, redirect sẽ được cache
-      },
-    };
-  }
-  const res = await fetch("https://api.github.com/repos/vercel/next.js");
-  const repo = await res.json();
+// export async function getServerSideProps(context: NextPageContext) {
+//   // const accessToken = useAccessTokenStore.getState().accessToken;
+//   // if (~accessToken) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: "/login",
+//   //       permanent: false, // Nếu true, redirect sẽ được cache
+//   //     },
+//   //   };
+//   // }
+//   const res = await fetch("https://api.github.com/repos/vercel/next.js");
+//   const repo = await res.json();
 
-  // Pass data to the page via props
-  return {
-    props: {
-      repo,
-      messages: (await import(`@/locales/${context.locale}.json`)).default,
-    },
-  };
-}
+//   // Pass data to the page via props
+//   return {
+//     props: {
+//       repo,
+//       messages: (await import(`@/locales/${context.locale}.json`)).default,
+//     },
+//   };
+// }

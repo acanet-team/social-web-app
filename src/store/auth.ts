@@ -222,10 +222,10 @@ const useAuthStore = create<IUserSessionStore>((set) => ({
       const isOnboarding =
         onboardingStep === "create_profile" ||
         onboardingStep === "select_interest_topic";
-      const redirectPath = isOnboarding ? "/onboard" : "/home";
+      const redirectPath = isOnboarding ? "/onboarding" : "/";
       return redirectPath;
     } else {
-      return "/home";
+      return "/";
     }
   },
 }));

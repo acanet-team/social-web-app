@@ -1,6 +1,6 @@
-"use client";
-import React, { useEffect, useState, MouseEvent } from "react";
-import styles from "@/styles/modules/onboard.module.scss";
+import React, { useEffect, useState } from "react";
+import styles from "../styles/modules/onboard.module.scss";
+import "@/styles/global.scss";
 import classNames from "classnames";
 import CreateProfile from "@/app/components/onboard/CreateProfile";
 import Interests from "@/app/components/onboard/Interests";
@@ -41,7 +41,7 @@ const Onboarding: NextPageWithLayout = () => {
       ) as HTMLElement;
       // Find tab number and update curPage
       const clickedTabNum = Number(clickedTab?.dataset.tab);
-      if (clickedTab && curstep + 2 > clickedTabNum) {
+      if (clickedTab && curstep + 1 > clickedTabNum) {
         setCurStep(clickedTabNum);
       }
     };

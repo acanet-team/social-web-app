@@ -1,19 +1,25 @@
 import { getMe } from "@/api/auth";
+import Session from "@/app/components/auth/Session";
+import { useAccessTokenStore } from "@/store/accessToken";
 import useAuthStore from "@/store/auth";
 import type { NextPage, NextPageContext } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const LoginPage: NextPage = () => {
-  const t = useTranslations("SignIn");
-  const { data: session } = useSession();
-  const [curTheme, setCurTheme] = useState("theme-light");
-
-  const createProfile = useAuthStore((state) => state.createProfile);
   const router = useRouter();
+  const t = useTranslations("SignIn");
+  const [curTheme, setCurTheme] = useState("theme-light");
+  const { data: session } = useSession() as any;
+  // Zustand store
+  const { createProfile, login, checkOnboarding } = useAuthStore(
+    (state) => state,
+  );
+  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -27,27 +33,32 @@ const LoginPage: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("sesion", session);
     if (session) {
+      console.log(session);
+      setAccessToken({ accessToken: session.token });
+      login(session);
       createProfile(session);
-      getMe()
-        .then((res) => {
-          localStorage.setItem("userInfo", JSON.stringify(res));
-        })
-        .catch((err) => err);
-      if (!session.user.isProfile) {
-        router.push("/onboarding");
+      // Navigation
+      const onboardingStep = session.user["onboarding_data"]?.step;
+      console.log(onboardingStep);
+      if (onboardingStep) {
+        localStorage.setItem("onboarding_step", onboardingStep);
+        const isOnboarding =
+          onboardingStep === "create_profile" ||
+          onboardingStep === "select_interest_topic";
+        const redirectPath = isOnboarding ? "/onboarding" : "/";
+        router.push(redirectPath);
       } else {
-        router.push("/home");
+        router.push("/");
       }
     }
-  }, [session]);
-
+  }, [session, setAccessToken]);
   return (
     <div className="main-wrap">
+      {/* <Session /> */}
       <div className="nav-header border-0 bg-transparent shadow-none">
         <div className="nav-top w-100">
-          <a href="/" className="me-auto">
+          <Link href="/" className="me-auto">
             <span
               id="site-logo"
               className="d-inline-block fredoka-font ls-3 fw-600 font-xxl logo-text mb-0 text-current"
@@ -64,7 +75,7 @@ const LoginPage: NextPage = () => {
                 alt="logo"
               />
             </span>
-          </a>
+          </Link>
           <button
             className="nav-menu me-0 ms-auto"
             title="Menu"

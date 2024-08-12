@@ -28,7 +28,7 @@ export default bundleAnalyzer(
       serverComponentsExternalPackages: ["@electric-sql/pglite"],
     },
     sassOptions: {
-      includePaths: [path.join(__dirname, "./src/styles/global.scss")],
+      includePaths: [path.join(__dirname, "./src/styles")],
     },
     images: {
       domains: [
@@ -44,8 +44,8 @@ export default bundleAnalyzer(
       ],
     },
     i18n: {
-      locales: ['en', 'vi'],
-      defaultLocale: 'en'
-    }
+      locales: ["en", "vi"],
+      defaultLocale: "en",
+    },
   }),
 );
