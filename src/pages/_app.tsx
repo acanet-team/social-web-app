@@ -57,7 +57,12 @@ MyApp.getInitialProps = async (appContext: any) => {
     appProps.pageProps["session"] = session;
     httpClient.setAuthorization(session?.accessToken);
     if (session.user.onboarding_data?.step !== ONBOARDING_STEP.COMPLETE) {
-      if (appContext.ctx.res && appContext.ctx.asPath !== "/onboarding") {
+      console.log("appContext.ctx.asPath", appContext.ctx.asPath);
+      if (
+        appContext.ctx.res &&
+        appContext.ctx.asPath !== "/onboarding" &&
+        !appContext.ctx.asPath.includes("next")
+      ) {
         appContext.ctx.res.writeHead(302, {
           Location: "/onboarding",
         });
