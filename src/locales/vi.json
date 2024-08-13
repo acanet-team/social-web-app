@@ -1,0 +1,107 @@
+{
+  "SignIn": {
+    "sign_in_with_google": "Đăng nhập bằng Google",
+    "sign_in_with_facebook": "Đăng nhập bằng facebook",
+    "your_social_account": "tài khoản xã hội của bạn",
+    "sign_in_with": "Đăng nhập bằng",
+    "meta_description": "Đăng nhập liền mạch vào tài khoản của bạn bằng quy trình đăng nhập thân thiện với người dùng của chúng tôi.",
+    "meta_title": "Đăng nhập"
+  },
+  "CreatePost": {
+    "live_Video": "Video trực tiếp",
+    "create_Post": "Tạo bài đăng",
+    "Photo_Video": "Ảnh/Video",
+    "Whats_on_your_mind": "Bạn đang nghĩ gì vậy?",
+    "select_Topic": "Chọn chủ đề",
+    "no_topics": "Không tìm thấy chủ đề nào.",
+    "loading_topics": "Đang tải chủ đề...",
+    "please_select_a_topic": "Vui lòng chọn một chủ đề cho bài viết của bạn.",
+    "please_enter_text": "Vui lòng nhập một số văn bản cho bài viết của bạn.",
+    "post_create_success": "Bài viết được tạo thành công!",
+    "post_create_error": "Lỗi tạo bài viết.",
+    "error_fetch_topic": "Lỗi khi tìm nạp chủ đề."
+  },
+  "BrokerList": {
+    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
+    "broker_title": "Danh sách môi giới"
+  },
+  "Interest": {
+    "interest_title": "Bạn quan tâm đến điều gì?",
+    "interest_description": "Chọn ít nhất 1 chủ đề bạn quan tâm để giúp cá nhân hóa trải nghiệm của bạn."
+  },
+  "About": {
+    "about_paragraph": "Chào mừng bạn đến với trang Giới thiệu của chúng tôi! \nChúng tôi là một nhóm gồm những cá nhân đam mê tạo ra phần mềm tuyệt vời.",
+    "meta_description": "Giới thiệu về mô tả trang",
+    "meta_title": "Về",
+    "translation_powered_by": "Bản dịch được cung cấp bởi"
+  },
+  "BaseTemplate": {
+    "description": "Mã khởi đầu cho Nextjs Boilerplate của bạn với CSS Tailwind",
+    "made_with": "Làm với"
+  },
+  "CoursesList": {
+    "course_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
+    "course_title": "Khóa học"
+  },
+  "Dashboard": {
+    "hello_message": "Xin chào {email}!",
+    "meta_title": "bảng điều khiển"
+  },
+  "DashboardLayout": {
+    "dashboard_link": "bảng điều khiển",
+    "sign_out": "Đăng xuất",
+    "user_profile_link": "Quản lý tài khoản của bạn"
+  },
+  "Guestbook": {
+    "database_powered_by": "Cơ sở dữ liệu được cung cấp bởi",
+    "error_reporting_powered_by": "Báo cáo lỗi được cung cấp bởi",
+    "loading_guestbook": "Đang tải sổ lưu bút...",
+    "meta_description": "Một ví dụ về hoạt động CRUD",
+    "meta_title": "Sổ lưu bút"
+  },
+  "GuestbookForm": {
+    "body": "Thân hình",
+    "save": "Cứu",
+    "username": "tên tài khoản"
+  },
+  "Index": {
+    "meta_description": "Next js Boilerplate là mã khởi đầu hoàn hảo cho dự án của bạn. \nXây dựng ứng dụng React của bạn với khung Next.js.",
+    "meta_title": "Bản trình bày bản tóm tắt Next.js"
+  },
+  "Portfolio": {
+    "coverage_powered_by": "Bảo hiểm mã được cung cấp bởi",
+    "error_reporting_powered_by": "Báo cáo lỗi được cung cấp bởi",
+    "meta_description": "Chào mừng đến với trang danh mục đầu tư của tôi!",
+    "meta_title": "danh mục đầu tư",
+    "portfolio_name": "Danh mục đầu tư {name}",
+    "presentation": "Chào mừng đến với trang danh mục đầu tư của tôi! \nỞ đây bạn sẽ tìm thấy một bộ sưu tập được tuyển chọn cẩn thận về công việc và thành tích của tôi. \nThông qua danh mục đầu tư này, tôi muốn thể hiện chuyên môn, sự sáng tạo và giá trị mà tôi có thể mang lại cho các dự án của bạn."
+  },
+  "PortfolioSlug": {
+    "content": "Tạo một bộ tài liệu quảng cáo và các yếu tố xây dựng thương hiệu cho một sự kiện của công ty. \nTạo một chủ đề thống nhất về mặt hình ảnh, bao gồm logo, áp phích, biểu ngữ và nội dung kỹ thuật số. \nTích hợp nhận diện thương hiệu của khách hàng đồng thời truyền tải nó bằng cách tiếp cận hiện đại và sáng tạo. \nThu được phản hồi tích cực từ những người tham dự sự kiện, dẫn đến một sự kiện thành công với mức độ tương tác của người tham gia tăng cao và khả năng hiển thị thương hiệu tăng lên.",
+    "header": "Danh mục đầu tư {sên}",
+    "log_management_powered_by": "Quản lý nhật ký được cung cấp bởi",
+    "meta_description": "Mô tả danh mục đầu tư {sên}",
+    "meta_title": "Danh mục đầu tư {sên}"
+  },
+  "RootLayout": {
+    "about_link": "Về",
+    "guestbook_link": "Sổ lưu bút",
+    "home_link": "Trang chủ",
+    "portfolio_link": "danh mục đầu tư",
+    "sign_in_link": "Đăng nhập",
+    "sign_up_link": "Đăng ký"
+  },
+  "SignUp": {
+    "meta_description": "Dễ dàng tạo tài khoản thông qua quy trình đăng ký trực quan của chúng tôi.",
+    "meta_title": "Đăng ký"
+  },
+  "TopBrokers": {
+    "top_broker_title": "Nhà môi giới hàng đầu"
+  },
+  "UserProfile": {
+    "meta_title": "Thông tin người dùng"
+  },
+  "Post": {
+    "Explore_More": "Tìm hiểu thêm"
+  }
+}

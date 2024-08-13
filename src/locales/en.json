@@ -50,7 +50,11 @@
   },
   "SignIn": {
     "meta_title": "Sign in",
-    "meta_description": "Seamlessly sign in to your account with our user-friendly login process."
+    "meta_description": "Seamlessly sign in to your account with our user-friendly login process.",
+    "sign_in_with": "Sign in with",
+    "your_social_account": "Your social account",
+    "sign_in_with_google": "Sign in with Google",
+    "sign_in_with_facebook": "Sign in with Facebook"
   },
   "SignUp": {
     "meta_title": "Sign up",
@@ -67,5 +71,42 @@
     "dashboard_link": "Dashboard",
     "user_profile_link": "Manage your account",
     "sign_out": "Sign out"
+  },
+  "BrokerList": {
+    "broker_title": "Broker List",
+    "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
+  },
+  "Interest": {
+    "interest_title": "What are you interested in?",
+    "interest_description": "Select at least 1 topic you are interested in to help personalize your experience."
+  },
+  "CoursesList": {
+    "course_title": "Courses",
+    "course_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
+  },
+  "TopBrokers": {
+    "top_broker_title": "Top Brokers"
+  },
+  "CreatePost": {
+    "Whats_on_your_mind": "What's on your mind?",
+    "Photo_Video": "Photo/Video",
+    "live_Video": "Live Video",
+    "create_Post": "Create Post",
+    "select_Topic": "Select Topic",
+    "no_topics": "No topics found.",
+    "loading_topics": "Loading topics...",
+    "please_enter_text": "Please enter some text for your post.",
+    "please_select_a_topic": "Please select a topic for your post.",
+    "post_create_success": "Post created successfully!",
+    "post_create_error": "Error creating post.",
+    "error_fetch_topic": "Error fetching topics."
+  },
+  "Post": {
+    "Explore_More": "Explore More",
+    "No_Posts_Found": "No posts found."
+  },
+  "CreateProfile": {
+    "create_profile_title": "Account Details",
+    "create_profile_desc": "Please fill out some basic information about you."
   }
 }

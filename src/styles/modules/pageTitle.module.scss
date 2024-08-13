@@ -1,0 +1,38 @@
+#header-title {
+  width: 100%;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem;
+  background-color: var(--theme-color-main);
+}
+
+#header-title .page-title {
+  font-size: 25px;
+  letter-spacing: -3%;
+  width: 100%;
+  color: #fff;
+}
+
+#page-title__search {
+  background-color: #ddd;
+}
+
+:global(.theme-dark) {
+  #header-title {
+    color: #fff;
+    background-color: var(--theme-color-shade) !important;
+  }
+
+  .page-intro {
+    color: #fff !important;
+  }
+  
+}
+
+// MEDIA QUERIES
+@media (max-width: 768px) {
+  #header-title {
+    padding: 1.5rem;
+  }
+}

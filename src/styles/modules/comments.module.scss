@@ -1,0 +1,26 @@
+.comment-container {
+  padding: 10px 5px;
+  border-top: 0.1px solid #eeeeeeb6;
+}
+
+.comment-input textarea {
+  border: none !important;
+  resize: none;
+  width: 100% !important;
+
+}
+
+.comment-input i::before {
+  color: var(--theme-color) !important;
+  cursor: pointer;
+}
+
+.comment-content__container {
+  gap: 1.8rem;
+  // min-height: 10vh;
+  padding-right: 20px;
+}
+
+.min-vh-10 {
+  min-height: 10vh;
+}
