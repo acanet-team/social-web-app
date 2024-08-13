@@ -59,7 +59,7 @@ export type ResponseDto<T> = {
       hasPreviousPage: boolean;
       hasNextPage: boolean;
     };
-  };
+  }| T ;
 };
 
 export interface IPost {

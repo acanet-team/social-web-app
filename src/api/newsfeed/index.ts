@@ -1,3 +1,4 @@
+import type { Post } from "@/types";
 import httpClient from "../index";
 import { type PostRequestParams } from "../model";
 import {
@@ -56,7 +57,7 @@ export const getTopics = (
 };
 
 export const createNewPostRequest = (values: CreatePostRequest) => {
-  return httpClient.fetch({
+  return httpClient.fetch<ResponseDto<Post>>({
     url: "/v1/post",
     method: "POST",
     body: { ...values },
