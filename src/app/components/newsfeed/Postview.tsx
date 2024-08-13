@@ -8,6 +8,7 @@ import { TimeSinceDate } from "@/utils/time-since-date";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
+import { Comments } from "./Comments";
 
 export default function PostCard(props: {
   id: number;
@@ -18,7 +19,7 @@ export default function PostCard(props: {
   assets: Array<{ id: string; path: string }>;
   like: number;
   comment: number;
-  children: React.ReactNode;
+  // children: React.ReactNoe;
   createdAt: string;
   columnsCount: number;
 }) {
@@ -31,7 +32,6 @@ export default function PostCard(props: {
     like = 0,
     comment = 0,
     createdAt,
-    children,
     columnsCount = 1,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
@@ -95,7 +95,8 @@ export default function PostCard(props: {
   };
   return (
     <div
-      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-3 mb-3`}>
+      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-3 mb-3`}
+    >
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
           <Image
@@ -280,7 +281,15 @@ export default function PostCard(props: {
         </div> */}
       </div>
       {/* All comments */}
-      {openComments && children}
+      {/* {openComments && (
+        <Comments
+          comments={comments}
+          page={page}
+          totalPage={totalPage}
+          take={take}
+          postId={props.postId}
+        />
+      )} */}
     </div>
   );
 }

@@ -44,7 +44,7 @@ MyApp.getInitialProps = async (appContext: any) => {
   if (session) {
     appProps.pageProps["session"] = session;
     httpClient.setAuthorization(session?.token);
-    if (session.user.onboarding_data.step !== ONBOARDING_STEP.COMPLETE) {
+    if (session.user.onboarding_data?.step !== ONBOARDING_STEP.COMPLETE) {
       if (appContext.ctx.res && appContext.ctx.asPath !== "/onboarding") {
         appContext.ctx.res.writeHead(302, {
           Location: "/onboarding",

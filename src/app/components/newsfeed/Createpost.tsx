@@ -1,4 +1,4 @@
-import { createNewPostRequest, getTopics } from "@/api/post";
+import { createNewPostRequest, getTopics } from "@/api/newsfeed";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import style from "@/styles/modules/createpPost.module.scss";
@@ -57,7 +57,7 @@ const CreatePost = () => {
     try {
       const response = await getTopics(page, search);
       console.log("topics", response);
-      
+
       if (response) {
         const newTopics = response["data"]["docs"].map((topic) => ({
           value: topic.id,
