@@ -14,7 +14,7 @@ export default function Header() {
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-light");
   const [openSettings, setOpenSettings] = useState(false);
-  const { session, checkOnboarding } = useAuthStore((state) => state);
+  // const { session, checkOnboarding } = useAuthStore((state) => state);
   const [photo, setPhoto] = useState<string>("");
   // const { data: session } = useSession() as any;
   // const photo = session?.user?.photo.path;
@@ -31,10 +31,10 @@ export default function Header() {
   const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
-    const onboardingPath = checkOnboarding();
-    if (onboardingPath) {
-      router.push(onboardingPath);
-    }
+    // const onboardingPath = checkOnboarding();
+    // if (onboardingPath) {
+    //   router.push(onboardingPath);
+    // }
     const handleThemeChange = () => {
       const theme = localStorage.getItem("theme");
       if (theme) setCurTheme(theme);
