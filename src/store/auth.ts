@@ -207,7 +207,6 @@ const useAuthStore = create<IUserSessionStore>((set) => ({
     try {
       // Calling APIs
       logOut();
-      deleteCookie("accessToken");
       localStorage.removeItem("userInfo");
       localStorage.removeItem("theme");
       // localStorage.removeItem("onboarding_step");
