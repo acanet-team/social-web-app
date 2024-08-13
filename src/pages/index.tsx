@@ -1,46 +1,39 @@
-import { getPosts } from "@/api/newsfeed";
-import Contacts from "@/app/components/Contacts";
-import NavLink from "@/app/components/NavLink";
-import CreatePost from "@/app/components/newsfeed/Createpost";
-import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
-import { ForYou } from "@/app/components/newsfeed/ForYou";
-import { Suggestion } from "@/app/components/newsfeed/Suggestion";
-import RootLayout from "@/layout/root";
-import "@/styles/global.scss";
 import styles from "@/styles/modules/home.module.scss";
+import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
+import React, { useEffect, useState } from "react";
+import Contacts from "@/app/components/Contacts";
+import CreatePost from "@/app/components/newsfeed/Createpost";
+import RootLayout from "@/layout/root";
+import type { InferGetServerSidePropsType, NextPageContext } from "next";
+import Posts from "@/app/components/newsfeed/Posts";
+import { getPosts } from "@/api/newsfeed";
 import { TabEnum } from "@/types/enum";
-import type { NextPageContext } from "next";
-import React from "react";
 
-const Home = () => {
-  const [tab, setTab] = React.useState<string>(TabEnum.ForYou);
-  // const [postIdParams, setPostIdParams] = React.useState<string>("");
-  // const [comments, setComments] = React.useState<string>("");
-  // const [newFeeds, setNewFeeds] = React.useState<any[]>([]);
-  // const [isLoading, setIsLoading] = React.useState<Boolean>(false);
-  // const [page, setPage] = React.useState<number>(1);
-  // const [take, setTake] = React.useState<number>(20);
-  // const [totalPage, setTotalPage] = React.useState<number>(1);
+const TAKE = 5;
 
-  // const fetchNewsFeed = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response: any = await getPosts(page, take, tab);
-  //     console.log("aaaa", response);
+const Home = ({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const posts = data.data.docs;
+  const totalPage = data.data.meta.totalPage;
+  const page = data.data.meta.page;
+  const hasNextPage = data.data.meta.hasNextPage;
+  const [curTab, setCurTab] = useState<string>("suggestion");
+  // const [feedPosts, setFeedPosts] = useState<[]>(posts);
 
-  //     if (response && response.data.docs.length > 0) {
-  //       setNewFeeds((prev) => [...prev, ...response.data.docs]);
-  //       setTotalPage(response.data.meta.totalPage);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-  // React.useEffect(() => {
-  //   fetchNewsFeed();
-  // }, [page, tab]);
+  // useEffect(() => {
+  //   setFeedPosts(posts);
+  // }, [curTab])
+
+  const onSelectTabHandler = (e: any) => {
+    const chosenTab = e.target.textContent;
+    console.log(chosenTab);
+    if (chosenTab === "For you") {
+      setCurTab("for_you");
+    } else {
+      setCurTab("suggestion");
+    }
+  };
   return (
     <RootLayout>
       <div className="main-content right-chat-active" id={styles.home}>
@@ -51,26 +44,26 @@ const Home = () => {
                 <FetchBrokers />
                 <div className={styles["home-tabs"]}>
                   <div
-                    className={`${styles["button-tab"]} ${tab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center`}
-                    onClick={() => {
-                      setTab(TabEnum.ForYou);
-                    }}>
+                    className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center`}
+                    onClick={(e) => onSelectTabHandler(e)}
+                  >
                     For you
                   </div>
                   <div
-                    className={`${styles["button-tab"]} ${tab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center`}
-                    onClick={() => {
-                      setTab(TabEnum.Suggestion);
-                    }}>
+                    className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center`}
+                    onClick={(e) => onSelectTabHandler(e)}
+                  >
                     Suggestion
                   </div>
                 </div>
                 <CreatePost />
-                {tab === "suggestion" ? (
-                  <Suggestion tab={"suggestion"} postIdParams={""} />
-                ) : (
-                  <ForYou tab={"for_you"} postIdParams={""} />
-                )}
+                <Posts
+                  posts={posts}
+                  feedType={curTab}
+                  take={TAKE}
+                  allPage={totalPage}
+                  curPage={page}
+                />
               </div>
               <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
                 <Contacts />
@@ -86,10 +79,35 @@ const Home = () => {
 export default React.memo(Home);
 
 export async function getServerSideProps(context: NextPageContext) {
-  // Pass data to the page via props
-  return {
-    props: {
-      messages: (await import(`@/locales/${context.locale}.json`)).default,
-    },
-  };
+  try {
+    const response = await getPosts(1, TAKE, "suggestion");
+    return {
+      props: {
+        messages: (await import(`@/locales/${context.locale}.json`)).default,
+        data: response,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {
+        messages: (await import(`@/locales/${context.locale}.json`)).default,
+        data: {
+          status: 500,
+          message: "error",
+          data: {
+            docs: [],
+            meta: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              page: 1,
+              take: TAKE,
+              total: 1,
+              totalPage: 1,
+            },
+          },
+        },
+      },
+    };
+  }
 }

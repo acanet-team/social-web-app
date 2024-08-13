@@ -1,30 +1,38 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
 import Link from "next/link";
 import { cleanPath } from "@/utils/Helpers";
-import PostCard from "./Postview";
+import PostView from "./Postview";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
 
-export default function FeedPosts(props: {
+export default function Posts(props: {
+  posts: any;
   feedType: string;
-  children?: React.ReactNode;
+  take: number;
+  allPage: number;
+  curPage: number;
 }): JSX.Element {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [take, setTake] = useState<number>(20);
-  const [totalPage, setTotalPage] = useState<number>(1);
+  const [posts, setPosts] = useState<any[]>(props.posts);
+  const [take, setTake] = useState<number>(props.take);
+  const [page, setPage] = useState<number>(props.curPage);
+  const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  // const [hasNextPage, setHasNextPage] = useState<Boolean>(props.hasNextPage);
+  const [isFirstRender, setIsFirstRender] = useState<Boolean>(true);
   const t = useTranslations("Post");
 
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
     try {
       const response: any = await getPosts(page, take, props.feedType);
+      console.log(response);
       if (response && response.data.docs.length > 0) {
         setPosts((prev) => [...prev, ...response.data.docs]);
         setTotalPage(response.data.meta.totalPage);
+        // setPage(response.data.meta.page);
+        // setHasNextPage(response.data.meta.hasNextPage);
       } else {
         setPosts([]);
       }
@@ -39,18 +47,30 @@ export default function FeedPosts(props: {
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
-        setPage(page + 1);
+      if (scrollTop + clientHeight >= scrollHeight) {
+        console.log("bbbb");
+        setPage((page) => page + 1);
       }
     }
   };
 
   useEffect(() => {
+    // if (setIsFirstRender && page === 1 && props.feedType === "suggestion") {
+    //   setIsFirstRender(false);
+    //   return;
+    // }
     fetchPosts(page);
   }, [page, props.feedType]);
 
   useEffect(() => {
+    setPage(1);
+    setTotalPage(2);
+  }, [props.feedType]);
+
+  useEffect(() => {
     if (document.documentElement && page < totalPage) {
+      // console.log("total pages", totalPage);
+      // console.log("page", page);
       window.addEventListener("scroll", onScrollHandler);
     }
     return () => {
@@ -58,11 +78,10 @@ export default function FeedPosts(props: {
         window.removeEventListener("scroll", onScrollHandler);
       }
     };
-  }, [page, totalPage, props.feedType]);
+  }, [page, totalPage]);
 
   return (
     <>
-      {isLoading && <DotWaveLoader />}
       <div>
         {!isLoading && posts?.length === 0 && props.feedType === "for_you" ? (
           <Link href="/home?tab=suggestion">
@@ -76,7 +95,7 @@ export default function FeedPosts(props: {
         ) : (
           posts.map((p) => (
             <div key={p.id}>
-              <PostCard
+              <PostView
                 id={p.id}
                 user={p.user.firstName + " " + p.user.lastName}
                 userId={p.user.userId}
@@ -90,13 +109,13 @@ export default function FeedPosts(props: {
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
                 comment={p.commentCount}
-                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}>
-                {props.children}
-              </PostCard>
+                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}
+              />
             </div>
           ))
         )}
       </div>
+      {isLoading && <DotWaveLoader />}
     </>
   );
 }
