@@ -1,6 +1,8 @@
 import httpClient from "@/api";
 import { ONBOARDING_STEP, type ISession } from "@/api/auth/auth.model";
 import { AppProvider, useApp } from "@/context/app.context";
+import Loading from "@/context/Loading";
+import { LoadingProvider } from "@/context/Loading/context";
 import { useAccessTokenStore } from "@/store/accessToken";
 import "@/styles/global.scss";
 import type { NextPage } from "next";
@@ -20,17 +22,20 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const router = useRouter();
   const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <AppProvider session={pageProps.session}>
-      <SessionProvider>
+      <SessionProvider refetchInterval={10}>
         <NextIntlClientProvider
           locale={"en"}
           timeZone="Europe/Vienna"
           messages={pageProps.messages}
         >
-          {getLayout(<Component {...pageProps} />)}
+          <LoadingProvider>
+            {getLayout(<Component {...pageProps} />)}
+            <Loading />
+          </LoadingProvider>
         </NextIntlClientProvider>
       </SessionProvider>
     </AppProvider>
@@ -39,11 +44,18 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
 MyApp.getInitialProps = async (appContext: any) => {
   const appProps = await App.getInitialProps(appContext);
-
   const session = (await getSession(appContext)) as unknown as ISession;
-  if (session) {
+  if (!session || session.needToLogin) {
+    if (appContext.ctx.res && appContext.ctx.asPath !== "/login") {
+      appContext.ctx.res.writeHead(302, {
+        Location: "/login",
+      });
+      appContext.ctx.res.end();
+      return;
+    }
+  } else {
     appProps.pageProps["session"] = session;
-    httpClient.setAuthorization(session?.token);
+    httpClient.setAuthorization(session?.accessToken);
     if (session.user.onboarding_data?.step !== ONBOARDING_STEP.COMPLETE) {
       if (appContext.ctx.res && appContext.ctx.asPath !== "/onboarding") {
         appContext.ctx.res.writeHead(302, {
@@ -54,9 +66,5 @@ MyApp.getInitialProps = async (appContext: any) => {
       }
     }
   }
-  //  else {
-  //   redirect('/login')
-  // }
-
   return { ...appProps, session };
 };

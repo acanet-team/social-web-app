@@ -1,6 +1,10 @@
 export interface ISession {
   user: IUser;
-  token: string;
+  accessToken: string;
+  refreshTokenExpires: number;
+  tokenExpires: number;
+  refreshToken: string;
+  needToLogin: boolean;
 }
 
 export enum ONBOARDING_STEP {

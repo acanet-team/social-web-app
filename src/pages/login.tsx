@@ -1,4 +1,4 @@
-import { useAccessTokenStore } from "@/store/accessToken";
+import { useLoading } from "@/context/Loading/context";
 import useAuthStore from "@/store/auth";
 import type { NextPage, NextPageContext } from "next";
 import { signIn, useSession } from "next-auth/react";
@@ -12,7 +12,8 @@ const LoginPage: NextPage = () => {
   const router = useRouter();
   const t = useTranslations("SignIn");
   const [curTheme, setCurTheme] = useState("theme-light");
-  const { data: session } = useSession() as any;
+  const { data: session, update } = useSession() as any;
+  const { showLoading } = useLoading();
   // Zustand store
   const { createProfile, login, checkOnboarding } = useAuthStore(
     (state) => state,
@@ -31,9 +32,9 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      console.log(session);
       login(session);
       createProfile(session);
+      update({ ...session, a: 1 });
       // Navigation
       const onboardingStep = session.user["onboarding_data"]?.step;
       console.log(onboardingStep);
@@ -49,6 +50,7 @@ const LoginPage: NextPage = () => {
       }
     }
   }, [session]);
+
   return (
     <div className="main-wrap">
       {/* <Session /> */}
@@ -101,7 +103,10 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Google"
                     title="Sign in with Google"
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
-                    onClick={() => signIn("google")}
+                    onClick={() => {
+                      showLoading();
+                      signIn("google");
+                    }}
                   >
                     <Image
                       width={40}
@@ -119,7 +124,10 @@ const LoginPage: NextPage = () => {
                     aria-label="Sign in with Facebook"
                     title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-facebook border-0 p-0 text-left text-white "
-                    onClick={() => signIn("facebook")}
+                    onClick={() => {
+                      signIn("facebook");
+                      showLoading();
+                    }}
                   >
                     <Image
                       src="/assets/images/icon-3.png"
@@ -143,8 +151,6 @@ const LoginPage: NextPage = () => {
 export default LoginPage;
 
 export async function getServerSideProps(context: NextPageContext) {
-  const accessToken = useAccessTokenStore.getState().accessToken;
-  console.log("accessToken", accessToken);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
