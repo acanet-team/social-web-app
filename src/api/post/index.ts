@@ -1,11 +1,13 @@
+import type { Post } from "@/types";
 import httpClient from "../index";
+import type { ResponseDto } from "./interface";
 interface CreatePostRequest {
   interestTopicId: string;
   content: string;
   images: File[];
 }
 export const createNewPostRequest = (values: CreatePostRequest) => {
-  return httpClient.fetch({
+  return httpClient.fetch<ResponseDto<Post>>({
     url: "/v1/post",
     method: "POST",
     body: { ...values },
