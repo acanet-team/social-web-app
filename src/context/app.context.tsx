@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import httpClient from "@/api";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 type authContextType = {
   user: any;
@@ -22,10 +29,14 @@ export function useApp() {
 
 type Props = {
   children: ReactNode;
+  session: any;
 };
 
-export function AppProvider({ children }: Props) {
-  const [user, setUser] = useState<boolean>();
+export function AppProvider({ children, session }: Props) {
+  const [user, setUser] = useState<boolean>(session?.user);
+  httpClient.setAuthorization(session?.token);
+  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
 
   const login = () => {
     setUser(true);
@@ -35,6 +46,10 @@ export function AppProvider({ children }: Props) {
     setUser(false);
   };
 
+  useEffect(() => {
+    // console.log("aaaaaaaaaaaaaaaaaa");
+  }, []);
+
   const value = {
     user,
     login,
@@ -42,9 +57,5 @@ export function AppProvider({ children }: Props) {
     setUser,
   };
 
-  return (
-    <>
-      <AppContext.Provider value={value}>{children}</AppContext.Provider>
-    </>
-  );
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

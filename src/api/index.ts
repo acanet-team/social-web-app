@@ -25,6 +25,11 @@ export interface IHttpOptions {
 }
 
 class HttpClient {
+  accessToken = "";
+  setAuthorization = (token: string) => {
+    this.accessToken = `Bearer ${token}`;
+  };
+
   fetch = async <T>(config: IHttpOptions): Promise<T> => {
     const {
       method,
@@ -85,9 +90,8 @@ class HttpClient {
       }
     }
 
-    const accessToken = useAccessTokenStore.getState().accessToken;
-    if (accessToken) {
-      headers.append("Authorization", `Bearer ${accessToken}`);
+    if (this.accessToken) {
+      headers.append("Authorization", `${this.accessToken}`);
     }
     const reqOptions: Pick<IHttpOptions, "method" | "headers"> & {
       body?: string | FormData;

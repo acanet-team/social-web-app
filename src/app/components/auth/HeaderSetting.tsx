@@ -11,7 +11,7 @@ export default function HeaderSetting() {
   const onLogOutHandler = () => {
     logout();
     // Calling next/auth sign out
-    signOut({ callbackUrl: "/sign-in" });
+    signOut({ callbackUrl: "/login" });
   };
   return (
     <div className="dropdown-menu-settings switchcolor-wrap active">

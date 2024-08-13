@@ -1,15 +1,13 @@
 import "dotenv/config";
 
-import type { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 
 import httpClient from "@/api";
-import { removePropertiesEmpty } from "@/utils/Helpers";
-import { cookies } from "next/headers";
-import { setCookie } from "nookies";
 import { useAccessTokenStore } from "@/store/accessToken";
+import { removePropertiesEmpty } from "@/utils/Helpers";
+import type { NextAuthOptions } from "next-auth";
 
 const options: NextAuthOptions = {
   providers: [
@@ -33,14 +31,15 @@ const options: NextAuthOptions = {
         token.idToken = account.id_token;
         token.provider = "google";
       }
+
       return token;
     },
 
-    async session({ session, token }: any) {
-      const accessToken = useAccessTokenStore.getState().accessToken;
-      if (accessToken) {
-        return session;
-      }
+    async session({ session, token, ...d }: any) {
+      // const accessToken = useAccessTokenStore.getState().accessToken;
+      // if (accessToken) {
+      //   return session;
+      // }
 
       if ((token?.access_token || token.idToken) && !session.user?.id) {
         const data: { accessToken?: string; idToken?: string } = {};
@@ -58,14 +57,19 @@ const options: NextAuthOptions = {
             removePropertiesEmpty(data),
           );
 
-          useAccessTokenStore.setState({ accessToken: res.data.token });
+          useAccessTokenStore.setState({
+            accessToken: res.data.token,
+            refreshTokenExpires: res.data.refreshTokenExpires,
+            tokenExpires: res.data.tokenExpires,
+            refreshToken: res.data.refreshToken,
+          });
+
           session.user = {
             ...res.data.user,
             isBroker: res.data.isBroker,
             isProfile: res.data.isProfile,
           };
           session.token = res.data.token;
-          console.log(session);
           return session;
         } catch (err) {
           console.log("err", err);

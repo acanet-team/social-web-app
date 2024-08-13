@@ -1,5 +1,3 @@
-import { getMe } from "@/api/auth";
-import Session from "@/app/components/auth/Session";
 import { useAccessTokenStore } from "@/store/accessToken";
 import useAuthStore from "@/store/auth";
 import type { NextPage, NextPageContext } from "next";
@@ -19,7 +17,6 @@ const LoginPage: NextPage = () => {
   const { createProfile, login, checkOnboarding } = useAuthStore(
     (state) => state,
   );
-  const setAccessToken = useAccessTokenStore((s: any) => s.setAccessToken);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -35,7 +32,6 @@ const LoginPage: NextPage = () => {
   useEffect(() => {
     if (session) {
       console.log(session);
-      setAccessToken({ accessToken: session.token });
       login(session);
       createProfile(session);
       // Navigation
@@ -52,7 +48,7 @@ const LoginPage: NextPage = () => {
         router.push("/");
       }
     }
-  }, [session, setAccessToken]);
+  }, [session]);
   return (
     <div className="main-wrap">
       {/* <Session /> */}
@@ -146,7 +142,9 @@ const LoginPage: NextPage = () => {
 
 export default LoginPage;
 
-export async function getStaticProps(context: NextPageContext) {
+export async function getServerSideProps(context: NextPageContext) {
+  const accessToken = useAccessTokenStore.getState().accessToken;
+  console.log("accessToken", accessToken);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,

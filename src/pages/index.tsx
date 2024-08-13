@@ -1,17 +1,12 @@
-import "@/styles/global.scss";
-import Appfooter from "@/app/components/Appfooter";
-import NavLink from "@/app/components/NavLink";
-import styles from "@/styles/modules/home.module.scss";
-import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
-import { ForYou } from "@/app/components/newsfeed/ForYou";
-import React from "react";
 import Contacts from "@/app/components/Contacts";
-import { Suggestion } from "@/app/components/newsfeed/Suggestion";
+import NavLink from "@/app/components/NavLink";
 import CreatePost from "@/app/components/newsfeed/Createpost";
-import type { NextApiRequest, NextApiResponse, NextPageContext } from "next";
+import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
 import RootLayout from "@/layout/root";
-import { useAccessTokenStore } from "@/store/accessToken";
-import type { getServerSideProps } from "next/dist/build/templates/pages";
+import "@/styles/global.scss";
+import styles from "@/styles/modules/home.module.scss";
+import type { NextPageContext } from "next";
+import React from "react";
 
 const Home = () => {
   return (
@@ -62,24 +57,11 @@ const Home = () => {
 
 export default React.memo(Home);
 
-// export async function getServerSideProps(context: NextPageContext) {
-//   // const accessToken = useAccessTokenStore.getState().accessToken;
-//   // if (~accessToken) {
-//   //   return {
-//   //     redirect: {
-//   //       destination: "/login",
-//   //       permanent: false, // Nếu true, redirect sẽ được cache
-//   //     },
-//   //   };
-//   // }
-//   const res = await fetch("https://api.github.com/repos/vercel/next.js");
-//   const repo = await res.json();
-
-//   // Pass data to the page via props
-//   return {
-//     props: {
-//       repo,
-//       messages: (await import(`@/locales/${context.locale}.json`)).default,
-//     },
-//   };
-// }
+export async function getServerSideProps(context: NextPageContext) {
+  // Pass data to the page via props
+  return {
+    props: {
+      messages: (await import(`@/locales/${context.locale}.json`)).default,
+    },
+  };
+}

@@ -17,7 +17,7 @@ export default function Brokers(props: { onNextHandler: () => void }) {
   const router = useRouter();
 
   const onFinishOnboarding = () => {
-    router.push("/home");
+    router.push("/");
   };
 
   useEffect(() => {

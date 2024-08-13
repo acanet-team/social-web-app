@@ -1,15 +1,25 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useAccessTokenStore = create(
-  persist<{ accessToken: string }>(
-    (set) => ({
-      accessToken: "",
-      setAccessToken: (token: string) => set({ accessToken: token }),
-    }),
-    {
-      name: "auth-storage",
-      storage: createJSONStorage(() => localStorage),
-    },
-  ),
+interface IAccessToken {
+  accessToken: string;
+  refreshToken: string;
+  tokenExpires: number;
+  refreshTokenExpires: number;
+}
+
+export const useAccessTokenStore = create<IAccessToken>(
+  // persist<IAccessToken>(
+  (set) => ({
+    accessToken: "",
+    refreshToken: "",
+    tokenExpires: 0,
+    refreshTokenExpires: 0,
+    setToken: (data: IAccessToken) => set({ ...data }),
+  }),
+  // {
+  //   name: "auth-storage",
+  //   storage: createJSONStorage(() => localStorage),
+  // },
 );
+// );

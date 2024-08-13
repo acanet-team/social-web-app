@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import styles from "../styles/modules/onboard.module.scss";
-import "@/styles/global.scss";
-import classNames from "classnames";
+import Header from "@/app/components/Header";
+import Brokers from "@/app/components/onboard/Brokers";
 import CreateProfile from "@/app/components/onboard/CreateProfile";
 import Interests from "@/app/components/onboard/Interests";
-import Brokers from "@/app/components/onboard/Brokers";
-import Header from "@/app/components/Header";
+import "@/styles/global.scss";
+import classNames from "classnames";
+import type { NextPageContext } from "next";
+import { useEffect, useState } from "react";
+import styles from "../styles/modules/onboard.module.scss";
 import type { NextPageWithLayout } from "./_app";
 
 const Onboarding: NextPageWithLayout = () => {
@@ -156,3 +157,11 @@ Onboarding.getLayout = function getLayout(page: any) {
 };
 
 export default Onboarding;
+
+export async function getServerSideProps(context: NextPageContext) {
+  return {
+    props: {
+      messages: (await import(`@/locales/${context.locale}.json`)).default,
+    },
+  };
+}
