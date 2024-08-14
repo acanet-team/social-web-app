@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/postView.module.scss";
-import { likeRequest } from "@/api/newsfeed";
+import { getComments, likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
@@ -9,6 +9,7 @@ import Image from "next/image";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import { Comments } from "./Comments";
+import DotWaveLoader from "../DotWaveLoader";
 
 export default function PostCard(props: {
   id: number;
@@ -19,7 +20,6 @@ export default function PostCard(props: {
   assets: Array<{ id: string; path: string }>;
   like: number;
   comment: number;
-  // children: React.ReactNoe;
   createdAt: string;
   columnsCount: number;
 }) {
@@ -37,10 +37,42 @@ export default function PostCard(props: {
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
+  const [commentNum, setCommentNum] = useState<number>(comment);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  // Comment states
+  const [comments, setComments] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [take, setTake] = useState<number>(5);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Function to fetch comments
+  const fetchComments = async () => {
+    setIsLoading(true);
+    try {
+      const response: any = await getComments(page, take, id);
+
+      // Update the comments state with the fetched data
+      // setComments((prevState) => [...prevState, ...response.data.docs]);
+      setComments(response.data.docs);
+      console.log("comment array", response.data.docs);
+      setTotalPage(response.data.meta.totalPage);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch comments again every time user opens the comment section
+    if (openComments) {
+      fetchComments();
+    }
+  }, [id, openComments]);
 
   const onShowCommentHandler = (id: string) => {
     setOpenComments((open) => !open);
@@ -75,6 +107,7 @@ export default function PostCard(props: {
       try {
         if (isLiked) {
           clickTime = +1;
+          // Calling api
           likeRequest({ postId: id, action: "favorite" });
         } else {
           clickTime = 0;
@@ -172,7 +205,7 @@ export default function PostCard(props: {
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
-            className="bi bi-heart h2 m-0 me-2 d-flex align-items-center"
+            className="bi bi-heart h2 m-0 me-2 d-flex align-items-center cursor-pointer"
             onClick={(e) => onClickLikeHandler(e, id, like)}
           ></i>
           <span className="like-number">
@@ -188,8 +221,13 @@ export default function PostCard(props: {
         >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
           <span className="d-none-xss">
-            {comment > 1000 ? Math.round(comment / 1000).toFixed(1) : comment}
-            {comment >= 1000 ? "k" : ""} {comment < 2 ? "Comment" : "Comments"}
+            {/* {comment > 1000 ? Math.round(comment / 1000).toFixed(1) : comment}
+            {comment >= 1000 ? "k" : ""} {comment < 2 ? "Comment" : "Comments"} */}
+            {commentNum > 1000
+              ? Math.round(commentNum / 1000).toFixed(1)
+              : commentNum}
+            {commentNum >= 1000 ? "k" : ""}{" "}
+            {commentNum < 2 ? "Comment" : "Comments"}
           </span>
         </div>
         <div
@@ -281,15 +319,17 @@ export default function PostCard(props: {
         </div> */}
       </div>
       {/* All comments */}
-      {/* {openComments && (
+      {isLoading && <DotWaveLoader />}
+      {openComments && !isLoading && (
         <Comments
           comments={comments}
           page={page}
           totalPage={totalPage}
           take={take}
-          postId={props.postId}
+          postId={id}
+          setCommentNum={setCommentNum}
         />
-      )} */}
+      )}
     </div>
   );
 }

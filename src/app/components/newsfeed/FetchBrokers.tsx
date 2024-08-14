@@ -47,7 +47,7 @@ export const FetchBrokers = () => {
           brokers.map((b, index) => (
             <TopBrokers
               key={b.userId}
-              photoUrl={b.photoUrl}
+              photoUrl={b.photo?.path}
               firstName={b.firstName}
               lastName={b.lastName}
               followersCount={b.followersCount}

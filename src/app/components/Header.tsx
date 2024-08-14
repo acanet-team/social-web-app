@@ -21,7 +21,7 @@ export default function Header() {
   useEffect(() => {
     // get photo from local storage
     const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-    setPhoto(userInfo?.session?.user?.photo?.path);
+    setPhoto(userInfo?.user?.photo?.path);
     console.log(photo);
   }, []);
 

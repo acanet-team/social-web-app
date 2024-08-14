@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
 import Link from "next/link";
 import { cleanPath } from "@/utils/Helpers";
-import PostView from "./Postview";
+import PostCard from "./Postcard";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
 
@@ -28,14 +28,15 @@ export default function Posts(props: {
     try {
       const response: any = await getPosts(page, take, props.feedType);
       console.log(response);
-      if (response && response.data.docs.length > 0) {
-        setPosts((prev) => [...prev, ...response.data.docs]);
-        setTotalPage(response.data.meta.totalPage);
-        // setPage(response.data.meta.page);
-        // setHasNextPage(response.data.meta.hasNextPage);
-      } else {
-        setPosts([]);
-      }
+      setPosts((prev) => [...prev, ...response.data.docs]);
+      setTotalPage(response.data.meta.totalPage);
+      // if (response && response.data.docs.length > 0) {
+
+      //   // setPage(response.data.meta.page);
+      //   // setHasNextPage(response.data.meta.hasNextPage);
+      // } else {
+      //   setPosts([]);
+      // }
     } catch (err) {
       console.log(err);
     } finally {
@@ -65,6 +66,7 @@ export default function Posts(props: {
   useEffect(() => {
     setPage(1);
     setTotalPage(2);
+    setPosts([]);
   }, [props.feedType]);
 
   useEffect(() => {
@@ -78,24 +80,29 @@ export default function Posts(props: {
         window.removeEventListener("scroll", onScrollHandler);
       }
     };
-  }, [page, totalPage]);
+  }, [page, totalPage, props.feedType]);
 
   return (
     <>
       <div>
         {!isLoading && posts?.length === 0 && props.feedType === "for_you" ? (
-          <Link href="/home?tab=suggestion">
-            <div className="text-center pointer align-items-center fw-600 text-grey-900 text-dark lh-26 font-xss mt-5">
-              <span className="d-none-xs">{t("No_Posts_Found")}</span>
+          <div>
+            <div className="text-center pointer align-items-center lh-26 font-xss mt-5 mb-3">
+              <span className="d-none-xs fw-600 text-grey-700">
+                {t("No_Posts_Found")}
+              </span>
             </div>
-            <button className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block mb-5 mx-auto">
+            <button
+              className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block mb-5 mx-auto"
+              onClick={() => (window.location.href = "/")}
+            >
               {t("Explore_More")}
             </button>
-          </Link>
+          </div>
         ) : (
           posts.map((p) => (
             <div key={p.id}>
-              <PostView
+              <PostCard
                 id={p.id}
                 user={p.user.firstName + " " + p.user.lastName}
                 userId={p.user.userId}

@@ -12,26 +12,16 @@ import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 export const header = new Headers();
 
-export const likeRequest = (
-  values: any,
-  headers: Headers = undefined as unknown as Headers,
-) => {
-  return httpClient.post<PostRequestParams<likeParams>, T>("/v1/post", values, {
-    headers,
-  });
+export const likeRequest = (values: any) => {
+  return httpClient.post<PostRequestParams<likeParams>, T>(
+    "/v1/post/favorite",
+    values,
+  );
 };
 
-export const getComments = (
-  page: number,
-  take: number,
-  postId: string,
-  headers: Headers = undefined as unknown as Headers,
-) => {
+export const getComments = (page: number, take: number, postId: number) => {
   return httpClient.get<CommentResponse<Comment>>(
     `/v1/comment?order=DESC&page=${page}&take=${take}&postId=${postId}`,
-    {
-      headers,
-    },
   );
 };
 
@@ -64,29 +54,14 @@ export const createNewPostRequest = (values: CreatePostRequest) => {
   });
 };
 
-export const postComment = (
-  values: { content: string; postId: string },
-  headers: Headers = undefined as unknown as Headers,
-) => {
-  return httpClient.post("/v1/comment", values, {
-    headers,
-  });
+export const postComment = (values: { content: string; postId: number }) => {
+  return httpClient.post("/v1/comment", values);
 };
 
-export const deleteComment = (
-  commentId: string,
-  headers: Headers = undefined as unknown as Headers,
-) => {
-  return httpClient.delete(`/v1/comment/${commentId}`, {
-    headers,
-  });
+export const deleteComment = (commentId: string) => {
+  return httpClient.delete(`/v1/comment/${commentId}`);
 };
 
-export const deletePost = (
-  postId: string,
-  headers: Headers = undefined as unknown as Headers,
-) => {
-  return httpClient.delete(`v1/post/${postId}`, {
-    headers,
-  });
+export const deletePost = (postId: string) => {
+  return httpClient.delete(`v1/post/${postId}`);
 };

@@ -32,7 +32,15 @@
   display: block;
   object-fit: cover;
 }
+
 .ResponsiveMasonry {
   max-height: 500px;
   overflow: hidden;
+}
+
+// MEDIA QUERIES
+@media (max-width: 768px) {
+  .post {
+    padding-right: 0 !important;
+  }
 }

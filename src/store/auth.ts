@@ -111,33 +111,33 @@ const useAuthStore = create<IUserSessionStore>((set) => ({
     try {
       const res = await getMe();
       localStorage.setItem("userInfo", JSON.stringify(res));
-      set((state) => ({
-        ...state,
-        session: {
-          ...state.session,
-          token: session.token,
-          user: {
-            ...state.session.user,
-            id: res?.user.id,
-            email: res?.user.email,
-            photo: {
-              ...state.session.user.photo,
-              path: session?.user.image || res?.user?.photo?.path,
-            },
-            firstName: res?.user.firstName,
-            lastName: res?.user.lastName,
-            createdAt: res?.user.createdAt,
-            role: { ...state.session.user.role, name: res?.user.role.name },
-            status: {
-              ...state.session.user.status,
-              name: res?.user.status.name,
-            },
-          },
-          userProfile: {
-            ...state.session.userProfile,
-          },
-        },
-      }));
+      // set((state) => ({
+      //   ...state,
+      //   session: {
+      //     ...state.session,
+      //     token: session.token,
+      //     user: {
+      //       ...state.session.user,
+      //       id: res?.user.id,
+      //       email: res?.user.email,
+      //       photo: {
+      //         ...state.session.user.photo,
+      //         path: session?.user.image || res?.user?.photo?.path,
+      //       },
+      //       firstName: res?.user.firstName,
+      //       lastName: res?.user.lastName,
+      //       createdAt: res?.user.createdAt,
+      //       role: { ...state.session.user.role, name: res?.user.role.name },
+      //       status: {
+      //         ...state.session.user.status,
+      //         name: res?.user.status.name,
+      //       },
+      //     },
+      //     userProfile: {
+      //       ...state.session.userProfile,
+      //     },
+      //   },
+      // }));
     } catch (err) {
       console.log(err);
     }

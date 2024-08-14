@@ -37,7 +37,7 @@ export default function Contacts() {
       {contactList.map((value, index) => (
         <div
           key={index}
-          className="card-body bg-transparent-card d-flex p-3 bg-greylight ms-3 me-3 rounded-3 mb-3"
+          className="card-body bg-transparent-card d-flex p-3 bg-light ms-3 me-3 rounded-xxl mb-3"
         >
           <figure className="avatar me-2 mb-0">
             <img
