@@ -42,7 +42,7 @@ const Onboarding: NextPageWithLayout = () => {
       ) as HTMLElement;
       // Find tab number and update curPage
       const clickedTabNum = Number(clickedTab?.dataset.tab);
-      if (clickedTab && curstep + 1 > clickedTabNum) {
+      if (clickedTab && curstep + 2 > clickedTabNum) {
         setCurStep(clickedTabNum);
       }
     };

@@ -8,6 +8,7 @@ import {
   type subcribeTopicsParam,
   type topicsResponse,
 } from "../model";
+import type { IBrokers } from "../newsfeed/model";
 import type { IUser } from "./model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
@@ -28,14 +29,9 @@ export const getRegionRequest = (
   return httpClient.get<Regions>("/v1/master-data/regions", { headers });
 };
 
-export const createGetBrokersRequest = (
-  page: number,
-  take: number,
-  headers: Headers = undefined as unknown as Headers,
-) => {
-  return httpClient.get<AllBrokersResponse<IUser>>(
+export const createGetBrokersRequest = (page: number, take: number) => {
+  return httpClient.get<AllBrokersResponse<IBrokers>>(
     `/v1/users?type=broker&page=${page}&take=${take}&sort={"orderBy":"followers_count","order":"DESC"}`,
-    { headers },
   );
 };
 

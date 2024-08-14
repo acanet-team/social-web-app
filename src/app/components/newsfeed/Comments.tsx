@@ -16,6 +16,7 @@ export const Comments = (props: {
   totalPage: number;
   take: number;
   postId: number;
+  postAuthor: number;
   setCommentNum: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [comments, setComments] = useState<any[]>(props.comments);
@@ -34,6 +35,7 @@ export const Comments = (props: {
     setUserInfo(user);
     console.log("nickname", user);
   }, []);
+
   // Fetch comments ---------------------
   const fetchComments = async () => {
     setIsLoading(true);
@@ -60,13 +62,10 @@ export const Comments = (props: {
       const { scrollTop, scrollHeight, clientHeight } = commentListRef.current;
       if (scrollTop + clientHeight === scrollHeight) {
         setPage((prevState) => prevState + 1);
+        fetchComments();
       }
     }
   };
-
-  useEffect(() => {
-    fetchComments();
-  }, [page]);
 
   useEffect(() => {
     const currentList = commentListRef.current;
@@ -173,9 +172,9 @@ export const Comments = (props: {
   }, [commentId]);
 
   return (
-    <div className={`${styles["comment-container"]} pt-4 mt-4 font-xsss`}>
+    <div className={`${styles["comment-container"]} pt-4 mt-3 font-xsss`}>
       <div
-        className={`${styles["comment-content__container"]} text-white flex-column overflow-auto ${comments.length > 0 ? styles["min-vh-10"] : ""}`}
+        className={`${styles["comment-content__container"]} text-white overflow-auto`}
         ref={commentListRef}
       >
         {comments?.length === 0 && (
@@ -196,7 +195,7 @@ export const Comments = (props: {
               status={comment.status}
               createdAt={comment.createdAt}
               createdBy={comment.createBy?.id}
-              isLast={index === comments.length - 1}
+              postAuthor={props.postAuthor}
               onClickDelete={onChooseDelete}
             />
           ))}

@@ -1,34 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Slider from "react-slick";
-import { createGetBrokersRequest } from "@/api/onboard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { TopBrokers } from "./TopBrokers";
+import { IBrokers } from "@/api/newsfeed/model";
 
-const getTopBrokers = async () => {
-  try {
-    const response = await createGetBrokersRequest(1, 20);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    return { data: [], meta: { page: 1, totalPage: 1 } };
-  }
-};
-
-export const FetchBrokers = () => {
-  const [brokers, setBrokers] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchBrokers = async () => {
-      const data = await getTopBrokers();
-      const topBrokers = data.docs || data.data || [];
-      setBrokers(topBrokers);
-      console.log(topBrokers);
-    };
-
-    fetchBrokers();
-  }, []);
-
-  // const memoizedBrokers = useMemo(() => brokers, [brokers]);
+const FetchBrokers = (props: { brokers: IBrokers[] }) => {
+  const memoizedBrokers = useMemo(() => props.brokers, [props.brokers]);
 
   const brokersettings = {
     arrows: false,
@@ -38,15 +16,18 @@ export const FetchBrokers = () => {
     slidesToShow: 1,
     centerMode: false,
     variableWidth: true,
+    draggable: true,
+    swipeToSlide: true,
   };
 
   return (
     <div>
       <Slider {...brokersettings}>
-        {brokers?.length > 0 &&
-          brokers.map((b, index) => (
+        {memoizedBrokers?.length > 0 &&
+          memoizedBrokers.map((b, index) => (
             <TopBrokers
               key={b.userId}
+              brokerId={b.userId}
               photoUrl={b.photo?.path}
               firstName={b.firstName}
               lastName={b.lastName}
@@ -57,3 +38,5 @@ export const FetchBrokers = () => {
     </div>
   );
 };
+
+export default FetchBrokers;

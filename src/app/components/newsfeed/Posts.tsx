@@ -29,7 +29,7 @@ export default function Posts(props: {
     setIsLoading(true);
     try {
       const response: any = await getPosts(page, take, props.feedType);
-      console.log(response);
+      console.log("posts", response);
       setPosts((prev) => [...prev, ...response.data.docs]);
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
@@ -92,9 +92,9 @@ export default function Posts(props: {
           posts.map((p) => (
             <div key={p.id}>
               <PostCard
-                id={p.id}
-                user={p.user?.firstName + " " + p.user?.lastName}
-                userId={p.user?.userId}
+                postId={p.id}
+                user={p.user.firstName + " " + p.user.lastName}
+                userId={p.user.userId}
                 avatar={
                   p.user?.photo?.id
                     ? cleanPath(p.user?.photo?.path)

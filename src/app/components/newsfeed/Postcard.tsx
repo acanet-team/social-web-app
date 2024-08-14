@@ -12,9 +12,9 @@ import { Comments } from "./Comments";
 import DotWaveLoader from "../DotWaveLoader";
 
 export default function PostCard(props: {
-  id: number;
+  postId: number;
   user: string;
-  userId: string;
+  userId: number;
   avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
@@ -24,11 +24,12 @@ export default function PostCard(props: {
   columnsCount: number;
 }) {
   const {
-    id,
+    postId,
     user,
     avatar,
     content,
     assets,
+    userId,
     like = 0,
     comment = 0,
     createdAt,
@@ -37,7 +38,7 @@ export default function PostCard(props: {
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
-  const [commentNum, setCommentNum] = useState<number>(comment);
+  const [commentNum, setCommentNum] = useState<number>(comment || 0);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -53,7 +54,7 @@ export default function PostCard(props: {
   const fetchComments = async () => {
     setIsLoading(true);
     try {
-      const response: any = await getComments(page, take, id);
+      const response: any = await getComments(page, take, postId);
 
       // Update the comments state with the fetched data
       // setComments((prevState) => [...prevState, ...response.data.docs]);
@@ -72,7 +73,7 @@ export default function PostCard(props: {
     if (openComments) {
       fetchComments();
     }
-  }, [id, openComments]);
+  }, [postId, openComments]);
 
   const onShowCommentHandler = (id: string) => {
     setOpenComments((open) => !open);
@@ -206,7 +207,7 @@ export default function PostCard(props: {
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
             className="bi bi-heart h2 m-0 me-2 d-flex align-items-center cursor-pointer"
-            onClick={(e) => onClickLikeHandler(e, id, like)}
+            onClick={(e) => onClickLikeHandler(e, postId, like)}
           ></i>
           <span className="like-number">
             {like >= 1000 ? Math.round(like / 1000).toFixed(1) : like}
@@ -217,7 +218,7 @@ export default function PostCard(props: {
         </div>
         <div
           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
-          onClick={() => onShowCommentHandler(id.toString())}
+          onClick={() => onShowCommentHandler(postId.toString())}
         >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
           <span className="d-none-xss">
@@ -326,8 +327,9 @@ export default function PostCard(props: {
           page={page}
           totalPage={totalPage}
           take={take}
-          postId={id}
+          postId={postId}
           setCommentNum={setCommentNum}
+          postAuthor={userId}
         />
       )}
     </div>

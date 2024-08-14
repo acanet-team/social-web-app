@@ -1,6 +1,7 @@
 import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 import { IHttpOptions } from "./index";
 import { IUser } from "./onboard/model";
+import type { IBrokers } from "./newsfeed/model";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?
@@ -70,8 +71,8 @@ export type AllBrokersResponse<T> = {
   message: string;
   success: boolean;
   data: {
-    docs?: IUser[];
-    data?: IUser[];
+    docs?: IBrokers[];
+    data?: IBrokers[];
     meta: {
       page: number;
       totalPage: number;

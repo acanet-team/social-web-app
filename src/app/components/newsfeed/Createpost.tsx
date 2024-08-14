@@ -254,7 +254,7 @@ const CreatePost = () => {
           </div>
         </div>
       )}
-      <div className={`${style["footer"]} card-body d-flex p-0 mt-0`}>
+      <div className={`${style["footer"]} card-body p-0 mt-0`}>
         <label
           className="d-flex align-items-center font-xsss fw-600 ls-1 text-grey-700 text-dark pe-4"
           onClick={toggleUploadForm}
@@ -327,13 +327,15 @@ const CreatePost = () => {
             }}
           />
         </label>
-        <div className={`ms-auto pointer ${menuClass}`}>
+        <div
+          className={`ms-auto pointer ${menuClass} ${style["create-post__btn"]}`}
+        >
           <label
             id="submit"
-            className="font-xsss fw-600 text-grey-800 card-body p-0 d-flex align-items-center cursor-pointer"
+            className="main-btn font-xsss fw-600 text-white card-body px-4 py-2 d-flex align-items-center justify-content-center cursor-pointer"
             onClick={submitPost}
           >
-            <i className="btn-round-sm font-xs text-primary feather-edit-3"></i>
+            <i className="rounded-xxl font-xs text-white feather-edit-3"></i>
             {t("create_Post")}
           </label>
         </div>

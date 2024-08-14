@@ -96,3 +96,22 @@ export interface CreatePostRequest {
   content: string;
   images: File[];
 }
+
+export interface IBrokers {
+  brokerProfileId: string;
+  coursesEnrolledCount: number;
+  firstName: string;
+  followed: boolean;
+  followersCount: number;
+  followingsCount: number;
+  lastName: string;
+  photo: {
+    id: string;
+    path: string;
+  };
+  rank: string;
+  rating: number;
+  role: string;
+  skills: { interestTopicId: string; topicName: string };
+  userId: number;
+}
