@@ -192,6 +192,7 @@ const CreatePost = () => {
           onChange={(event) => {
             setPostText(event.target.value);
           }}
+          value={postText}
           name="message"
           className="h100 w-100 rounded-xxl p-3 ps-5 font-xsss text-dark fw-400 border-light-md theme-dark-bg"
           placeholder={t("Whats_on_your_mind")}
