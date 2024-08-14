@@ -1,6 +1,5 @@
-import { parseCookies, setCookie } from "nookies";
 import { BaseApiResponse } from "./model";
-import { useAccessTokenStore } from "@/store/accessToken";
+import { v4 as uuidV4 } from "uuid";
 
 export interface IHttpOptions {
   url: string;
@@ -49,6 +48,7 @@ class HttpClient {
       autoQuery = false,
     } = config;
     const headers = !headersInit ? new Headers() : headersInit;
+    headers.append("request-id", uuidV4());
     let url: string = "";
     if (originUrl.startsWith("/")) {
       url = process.env.NEXT_PUBLIC_API_URL + originUrl;
