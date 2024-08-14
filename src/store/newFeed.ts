@@ -1,6 +1,5 @@
 import type { Post } from "@/types";
-import {create} from "zustand";
-
+import { create } from "zustand";
 
 interface PostState {
   posts: Post[];

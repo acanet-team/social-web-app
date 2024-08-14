@@ -179,7 +179,7 @@ export default function PostCard(props: {
             )}
           </p>
           <Masonry columns={columnsCount}>
-            {assets.slice(0, 5).map(({ path, id }) =>
+            {assets?.slice(0, 5).map(({ path, id }) =>
               path ? (
                 <div key={id}>
                   <img

@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
-import Link from "next/link";
 import { cleanPath } from "@/utils/Helpers";
 import PostCard from "./Postcard";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
+import { usePostStore } from "@/store/newFeed";
 
 export default function Posts(props: {
   posts: any;
@@ -19,10 +19,12 @@ export default function Posts(props: {
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  // const [hasNextPage, setHasNextPage] = useState<Boolean>(props.hasNextPage);
-  const [isFirstRender, setIsFirstRender] = useState<Boolean>(true);
   const t = useTranslations("Post");
+  const post = usePostStore((state) => state.posts);
 
+  useEffect(() => {
+    setPosts((prev) => [...post, ...prev]);
+  }, [post]);
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
     try {
@@ -30,13 +32,6 @@ export default function Posts(props: {
       console.log(response);
       setPosts((prev) => [...prev, ...response.data.docs]);
       setTotalPage(response.data.meta.totalPage);
-      // if (response && response.data.docs.length > 0) {
-
-      //   // setPage(response.data.meta.page);
-      //   // setHasNextPage(response.data.meta.hasNextPage);
-      // } else {
-      //   setPosts([]);
-      // }
     } catch (err) {
       console.log(err);
     } finally {
@@ -56,10 +51,6 @@ export default function Posts(props: {
   };
 
   useEffect(() => {
-    // if (setIsFirstRender && page === 1 && props.feedType === "suggestion") {
-    //   setIsFirstRender(false);
-    //   return;
-    // }
     fetchPosts(page);
   }, [page, props.feedType]);
 
@@ -71,8 +62,6 @@ export default function Posts(props: {
 
   useEffect(() => {
     if (document.documentElement && page < totalPage) {
-      // console.log("total pages", totalPage);
-      // console.log("page", page);
       window.addEventListener("scroll", onScrollHandler);
     }
     return () => {
@@ -104,19 +93,19 @@ export default function Posts(props: {
             <div key={p.id}>
               <PostCard
                 id={p.id}
-                user={p.user.firstName + " " + p.user.lastName}
-                userId={p.user.userId}
+                user={p.user?.firstName + " " + p.user?.lastName}
+                userId={p.user?.userId}
                 avatar={
                   p.user?.photo?.id
                     ? cleanPath(p.user?.photo?.path)
                     : "/assets/images/user.png"
                 }
                 content={p.content}
-                assets={p.assets}
+                assets={p?.assets}
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
                 comment={p.commentCount}
-                columnsCount={p.assets.length > 3 ? 3 : p.assets.length}
+                columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
               />
             </div>
           ))
