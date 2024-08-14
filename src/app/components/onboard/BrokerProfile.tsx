@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { followABroker } from "@/api/onboard";
 
 export default function BrokerProfile(props: {
-  brokerProfileId: number;
+  brokerId: number;
   firstName: string;
   lastName: string;
   topicName: string;
@@ -19,7 +19,7 @@ export default function BrokerProfile(props: {
   photo: any;
 }) {
   const {
-    brokerProfileId,
+    brokerId,
     firstName,
     lastName,
     topicName,
@@ -40,9 +40,9 @@ export default function BrokerProfile(props: {
         followType: isFollowing ? "UNFOLLOW" : "FOLLOW",
       });
       if (!isFollowing) {
-        e.target.classList.add(styles["follow_broker"]);
+        e.target.classList.add(styles["follow-broker"]);
       } else {
-        e.target.classList.remove(styles["follow_broker"]);
+        e.target.classList.remove(styles["follow-broker"]);
       }
     } catch (err) {
       console.log(err);
@@ -127,7 +127,7 @@ export default function BrokerProfile(props: {
           <button
             type="button"
             className={`${styles["follow-btn"]} ${isFollowing ? styles["follow-broker"] : ""} main-btn bg-current text-center text-white fw-500 w-100 border-0 d-inline-block`}
-            onClick={(e) => onFollowBrokerHandler(e, brokerProfileId)}
+            onClick={(e) => onFollowBrokerHandler(e, brokerId)}
           >
             {isFollowing ? "Following" : "+ Follow"}
           </button>

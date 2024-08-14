@@ -1,6 +1,6 @@
 .comment-container {
   padding: 10px 5px;
-  border-top: 0.1px solid #eeeeeeb6;
+  border-top: 1px solid #eee;
 }
 
 .comment-input textarea {
@@ -16,11 +16,14 @@
 }
 
 .comment-content__container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   width: 100%;
-  gap: 1.8rem;
+  // gap: 1.8rem;
   padding-right: 20px;
   height: auto; 
-  max-height: 400px;
+  max-height: 450px;
   overflow-y: auto;
 
   // Custom scrollbar styles

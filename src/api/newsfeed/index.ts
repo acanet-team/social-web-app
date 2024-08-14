@@ -1,6 +1,6 @@
 import type { Post } from "@/types";
 import httpClient from "../index";
-import { type PostRequestParams } from "../model";
+import { type AllBrokersResponse, type PostRequestParams } from "../model";
 import {
   likeParams,
   GetTopicsResponse,
@@ -9,6 +9,7 @@ import {
   type CommentResponse,
   type ResponseDto,
   type IPost,
+  type IBrokers,
 } from "./model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
@@ -54,6 +55,12 @@ export const createNewPostRequest = (values: CreatePostRequest) => {
     body: { ...values },
     contentType: "multi-form",
   });
+};
+
+export const getTopBrokers = (page: number, take: number) => {
+  return httpClient.get<AllBrokersResponse<IBrokers>>(
+    `/v1/users?type=broker&page=${page}&take=${take}&followStatus=notFollowed&sort={"orderBy":"followers_count","order":"DESC"}`,
+  );
 };
 
 export const postComment = (values: { content: string; postId: number }) => {

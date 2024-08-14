@@ -46,7 +46,7 @@ export default function Brokers(props: { onNextHandler: () => void }) {
         brokers.map((b) => (
           <BrokerProfile
             key={b.userId}
-            brokerProfileId={b.userId}
+            brokerId={b.userId}
             firstName={b.firstName}
             lastName={b.lastName}
             photo={b.photo}
