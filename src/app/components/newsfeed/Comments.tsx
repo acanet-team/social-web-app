@@ -7,6 +7,7 @@ import Image from "next/image";
 import WaveLoader from "../WaveLoader";
 import { postComment, getComments, deleteComment } from "@/api/newsfeed";
 import CustomModal from "../Modal";
+import { combineUniqueById } from "@/utils/combine-arrs";
 
 /* eslint-disable react/display-name */
 export const Comments = (props: {
@@ -14,7 +15,8 @@ export const Comments = (props: {
   page: number;
   totalPage: number;
   take: number;
-  postId: string;
+  postId: number;
+  setCommentNum: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [comments, setComments] = useState<any[]>(props.comments);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -22,24 +24,28 @@ export const Comments = (props: {
   const [page, setPage] = useState<number>(1);
   const [commentId, setCommentId] = useState<string>();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<any>({});
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
   const session = useAuthStore((state) => state.session);
-  const avatar = session?.user?.photo || "/assets/images/user.png";
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-  const nickName = userInfo?.session?.userProfile?.nickName || "Me";
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    setUserInfo(user);
+    console.log("nickname", user);
+  }, []);
   // Fetch comments ---------------------
   const fetchComments = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response: any = await getComments(page, props.take, props.postId);
       // console.log(response);
-      setComments((prevState) =>
-        response.data.docs
-          ? [...prevState, ...response.data.docs]
-          : [...prevState, ...response.data.data],
-      );
+      // setComments((prevState) => [...prevState, ...response.data.docs]
+      setComments((prevState) => {
+        const newCommentArr = combineUniqueById(prevState, response.data.docs);
+        console.log(newCommentArr);
+        return newCommentArr;
+      });
       setTotalPage(response.data.meta.totalPage);
       return response.data;
     } catch (err) {
@@ -52,15 +58,17 @@ export const Comments = (props: {
   const onScrollHandler = () => {
     if (commentListRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = commentListRef.current;
-      if (scrollTop + clientHeight === scrollHeight && !isLoading) {
+      if (scrollTop + clientHeight === scrollHeight) {
         setPage((prevState) => prevState + 1);
-        fetchComments();
       }
     }
   };
 
   useEffect(() => {
-    // setUserInfo(JSON.parse(localStorage.getItem("userInfo")!));
+    fetchComments();
+  }, [page]);
+
+  useEffect(() => {
     const currentList = commentListRef.current;
     if (currentList && page < totalPage) {
       currentList.addEventListener("scroll", onScrollHandler);
@@ -91,18 +99,18 @@ export const Comments = (props: {
       content: content,
       childrenCount: 0,
       createBy: {
-        id: 0,
+        id: userInfo?.user?.id,
         firstName: session.user.firstName,
         lastName: session.user.lastName,
         photo: {
-          path: avatar,
+          path: userInfo?.user?.photo?.path || "/assets/images/user.png",
         },
         role: {
           id: 0,
           name: "investor",
         },
         refCode: "string",
-        nickName: nickName,
+        nickName: userInfo?.userProfile?.nickName,
       },
       post: {},
       parent: "string",
@@ -116,6 +124,11 @@ export const Comments = (props: {
         // Call api to post the comment
         await postComment(values);
         setComments((prevState) => [newComment, ...prevState]);
+        props.setCommentNum((prevState: number) => prevState + 1);
+        // Scroll to top of the comment section
+        if (commentListRef.current) {
+          commentListRef.current.scrollTop = 0;
+        }
       } catch (err) {
         setComments((prevState) => [
           { ...newComment, status: "failed" },
@@ -143,10 +156,11 @@ export const Comments = (props: {
 
   const onProceedDelete = useCallback(async () => {
     setShowModal(false);
-    // Call server to delete comment
     try {
       if (commentId) {
+        // Calling api
         await deleteComment(commentId);
+        props.setCommentNum((prevState) => prevState - 1);
         // Remove comment from DOM
         setComments((prevState) =>
           prevState.filter((comment) => comment.id !== commentId),
@@ -165,8 +179,10 @@ export const Comments = (props: {
         ref={commentListRef}
       >
         {comments?.length === 0 && (
-          <div className="text-center pointer align-items-center fw-600 text-grey-900 text-dark lh-26 font-xss">
-            <span className="d-none-xs">No comment found.</span>
+          <div className="text-center pointer align-items-center text-dark lh-26 font-xss">
+            <span className="d-none-xs font-xsss fw-600 text-grey-700">
+              No comment found.
+            </span>
           </div>
         )}
         {comments?.length > 0 &&
@@ -174,11 +190,12 @@ export const Comments = (props: {
             <CommentView
               key={comment.id}
               id={comment.id}
-              photo={comment.createBy}
+              photo={comment.createBy.photo?.path}
               nickName={comment.createBy.nickName}
               content={comment.content}
               status={comment.status}
               createdAt={comment.createdAt}
+              createdBy={comment.createBy?.id}
               isLast={index === comments.length - 1}
               onClickDelete={onChooseDelete}
             />
@@ -187,12 +204,11 @@ export const Comments = (props: {
       {isLoading && <WaveLoader />}
       <div className="d-flex gap-2 align-items-center w-100 mt-3">
         <Image
-          // src={avatar}
-          src={"/assets/images/user.png"}
+          src={userInfo?.user?.photo?.path || "/assets/images/user.png"}
           width={35}
           height={35}
           className="rounded-circle"
-          alt={nickName ?? ""}
+          alt={""}
         />
         <div
           className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-xxl bg-light`}

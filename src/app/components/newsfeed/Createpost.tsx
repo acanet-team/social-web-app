@@ -6,7 +6,6 @@ import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import { useTranslations } from "next-intl";
-import { type IMe } from "@/api/onboard/model";
 import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
@@ -26,7 +25,15 @@ const CreatePost = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [userInfo, setUserInfo] = useState<IMe>();
+  interface UserInfo {
+    user?: {
+      photo?: {
+        path: string;
+      };
+    };
+  }
+
+  const [userInfo, setUserInfo] = useState<UserInfo>();
   const [curTheme, setCurTheme] = useState("");
   const router = useRouter();
   const t = useTranslations("CreatePost");
@@ -34,7 +41,7 @@ const CreatePost = () => {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme) setCurTheme(theme);
-    const userInfo = JSON.parse(localStorage.getItem("userInfo")!);
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
     setUserInfo(userInfo);
     fetchTopics();
     setIsLoading(false);
@@ -46,7 +53,7 @@ const CreatePost = () => {
     return () => {
       window.removeEventListener(
         "themeChange",
-        handleThemeChange as EventListener
+        handleThemeChange as EventListener,
       );
     };
   }, []);
@@ -66,7 +73,7 @@ const CreatePost = () => {
         }));
         const uniqueTopics = [...topics, ...newTopics].filter(
           (topic, index, self) =>
-            index === self.findIndex((t) => t.value === topic.value)
+            index === self.findIndex((t) => t.value === topic.value),
         );
         setTopics(uniqueTopics);
         setIsLoading(false);
@@ -163,13 +170,17 @@ const CreatePost = () => {
 
   const menuClass = `${isOpen ? " show" : ""}`;
   return (
-    <div className="card w-100 shadow-xss rounded-xxl border-0 ps-2 pe-2 pb-2 mb-3">
+    <div
+      className="card w-100 shadow-xss border-0 px-4 py-3 mb-3 nunito-font"
+      id={style["create-post"]}
+    >
       <div
-        className="card-body p-0 mt-3 position-relative"
-        id={style["card-body"]}>
-        <figure className="avatar position-absolute ms-2 mt-1 top-5">
+        className="card-body p-0 mb-2 position-relative"
+        id={style["card-body"]}
+      >
+        <figure className="avatar position-absolute p-1 ms-2 mt-2 top-5">
           <Image
-            src={userInfo?.user?.photo?.path ?? "/assets/images/profile.png"}
+            src={userInfo?.user?.photo?.path ?? "/assets/images/user.png"}
             alt="Ảnh hồ sơ"
             width={30}
             height={30}
@@ -182,17 +193,21 @@ const CreatePost = () => {
             setPostText(event.target.value);
           }}
           name="message"
-          className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
-          placeholder={t("Whats_on_your_mind")}></textarea>
+          className="h100 w-100 rounded-xxl p-3 ps-5 font-xsss text-dark fw-400 border-light-md theme-dark-bg"
+          placeholder={t("Whats_on_your_mind")}
+          style={{ resize: "none" }}
+        ></textarea>
 
         <Box
           sx={{
             width: "100%",
             maxHeight: 500,
             overflow: "hidden",
-          }}>
+          }}
+        >
           <Masonry
-            columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}>
+            columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}
+          >
             {uploadedImages.slice(0, 6).map((image, index) => (
               <div key={index} className={style["previewImage"]}>
                 <Image
@@ -221,7 +236,8 @@ const CreatePost = () => {
           {" "}
           <div
             className={style["enlarged-image-container"]}
-            onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}
+          >
             <Image
               src={URL.createObjectURL(enlargedImage)}
               alt="Enlarged Image"
@@ -237,8 +253,9 @@ const CreatePost = () => {
       )}
       <div className={`${style["footer"]} card-body d-flex p-0 mt-0`}>
         <label
-          className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"
-          onClick={toggleUploadForm}>
+          className="d-flex align-items-center font-xsss fw-600 ls-1 text-grey-700 text-dark pe-4"
+          onClick={toggleUploadForm}
+        >
           <i className="font-md text-success feather-image me-2"></i>
           <input
             type="file"
@@ -254,7 +271,8 @@ const CreatePost = () => {
         </label>
         <label
           ref={topicListRef}
-          className={`${style["topic-list"]} theme-dark-bg`}>
+          className={`${style["topic-list"]} theme-dark-bg`}
+        >
           {isLoading && (
             <div className="text-center">
               <span className="spinner-border spinner-border-sm me-2"></span>
@@ -282,20 +300,22 @@ const CreatePost = () => {
                 ...provided,
                 backgroundColor:
                   curTheme === "theme-light" ? "#fff" : "#1a1237",
-                borderColor: "",
-                borderRadius: 5,
-                boxShadow: "none",
-                "&:hover": {
-                  borderColor: "#999",
-                },
+                borderColor: "#f1f1f1",
+                borderWidth: "2px",
+                borderRadius: "10px",
+                boxShadow: "shadow-md",
+                fontSize: "15px",
+                cursor: "pointer",
+                color: "#111",
               }),
               option: (provided, state) => ({
                 ...provided,
                 backgroundColor: state.isSelected ? "#e0e0e0" : "#fff",
                 color: state.isSelected ? "#333" : "#000",
                 "&:hover": {
-                  backgroundColor: "#ddd",
+                  backgroundColor: "#f1f1f1",
                 },
+                fontSize: "15px",
               }),
               menu: (provided) => ({
                 ...provided,
@@ -307,9 +327,10 @@ const CreatePost = () => {
         <div className={`ms-auto pointer ${menuClass}`}>
           <label
             id="submit"
-            className="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"
-            onClick={submitPost}>
-            <i className="btn-round-sm font-xs text-primary feather-edit-3 me-2"></i>
+            className="font-xsss fw-600 text-grey-800 card-body p-0 d-flex align-items-center cursor-pointer"
+            onClick={submitPost}
+          >
+            <i className="btn-round-sm font-xs text-primary feather-edit-3"></i>
             {t("create_Post")}
           </label>
         </div>

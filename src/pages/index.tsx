@@ -1,4 +1,5 @@
 import styles from "@/styles/modules/home.module.scss";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { FetchBrokers } from "@/app/components/newsfeed/FetchBrokers";
 import React, { useEffect, useState } from "react";
 import Contacts from "@/app/components/Contacts";
@@ -8,16 +9,15 @@ import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import Posts from "@/app/components/newsfeed/Posts";
 import { getPosts } from "@/api/newsfeed";
 import { TabEnum } from "@/types/enum";
+import page from "./courses/investor/page";
 
 const TAKE = 5;
 
 const Home = ({
-  data,
+  posts,
+  totalPage,
+  page,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const posts = data.data.docs;
-  const totalPage = data.data.meta.totalPage;
-  const page = data.data.meta.page;
-  const hasNextPage = data.data.meta.hasNextPage;
   const [curTab, setCurTab] = useState<string>("suggestion");
   // const [feedPosts, setFeedPosts] = useState<[]>(posts);
 
@@ -27,7 +27,6 @@ const Home = ({
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
-    console.log(chosenTab);
     if (chosenTab === "For you") {
       setCurTab("for_you");
     } else {
@@ -42,15 +41,15 @@ const Home = ({
             <div className="row feed-body">
               <div className="col-xl-8 col-xxl-9 col-lg-8">
                 <FetchBrokers />
-                <div className={styles["home-tabs"]}>
+                <div className={`${styles["home-tabs"]} bg-light`}>
                   <div
-                    className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center`}
+                    className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center shadow-md cursor-pointer`}
                     onClick={(e) => onSelectTabHandler(e)}
                   >
                     For you
                   </div>
                   <div
-                    className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center`}
+                    className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center shadow-md cursor-pointer`}
                     onClick={(e) => onSelectTabHandler(e)}
                   >
                     Suggestion
@@ -79,35 +78,13 @@ const Home = ({
 export default React.memo(Home);
 
 export async function getServerSideProps(context: NextPageContext) {
-  try {
-    const response = await getPosts(1, TAKE, "suggestion");
-    return {
-      props: {
-        messages: (await import(`@/locales/${context.locale}.json`)).default,
-        data: response,
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      props: {
-        messages: (await import(`@/locales/${context.locale}.json`)).default,
-        data: {
-          status: 500,
-          message: "error",
-          data: {
-            docs: [],
-            meta: {
-              hasNextPage: false,
-              hasPreviousPage: false,
-              page: 1,
-              take: TAKE,
-              total: 1,
-              totalPage: 1,
-            },
-          },
-        },
-      },
-    };
-  }
+  const response = await getPosts(1, TAKE, "suggestion");
+  return {
+    props: {
+      messages: (await import(`@/locales/${context.locale}.json`)).default,
+      posts: response?.data?.docs,
+      totalPage: response?.data?.meta?.totalPage,
+      page: response.data?.meta.page,
+    },
+  };
 }

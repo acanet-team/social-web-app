@@ -1,4 +1,5 @@
 import httpClient from "@/api";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { ONBOARDING_STEP, type ISession } from "@/api/auth/auth.model";
 import { AppProvider } from "@/context/app.context";
 import Loading from "@/context/Loading";
@@ -12,6 +13,7 @@ import App from "next/app";
 import { useRouter } from "next/navigation";
 import Router from "next/router";
 import type { ReactElement, ReactNode } from "react";
+import { ToastContainer } from "react-toastify";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -33,6 +35,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           timeZone="Europe/Vienna"
           messages={pageProps.messages}
         >
+          <ToastContainer />
           <LoadingProvider>
             {getLayout(<Component {...pageProps} />)}
             <Loading />

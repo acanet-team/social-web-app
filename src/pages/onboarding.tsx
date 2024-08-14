@@ -42,7 +42,7 @@ const Onboarding: NextPageWithLayout = () => {
       ) as HTMLElement;
       // Find tab number and update curPage
       const clickedTabNum = Number(clickedTab?.dataset.tab);
-      if (clickedTab && curstep + 1 > clickedTabNum) {
+      if (clickedTab && curstep + 2 > clickedTabNum) {
         setCurStep(clickedTabNum);
       }
     };
@@ -124,7 +124,7 @@ const Onboarding: NextPageWithLayout = () => {
             "tab-content__container--1",
           )}
         >
-          {<CreateProfile onNextHandler={onClickNextStep} />}
+          {curstep === 1 && <CreateProfile onNextHandler={onClickNextStep} />}
         </div>
         <div
           className={classNames(
@@ -132,7 +132,7 @@ const Onboarding: NextPageWithLayout = () => {
             styles["tab-content__container"],
           )}
         >
-          <Interests onNextHandler={onClickNextStep} />
+          {curstep === 2 && <Interests onNextHandler={onClickNextStep} />}
         </div>
         <div
           className={classNames(
@@ -140,7 +140,7 @@ const Onboarding: NextPageWithLayout = () => {
             styles["tab-content__container"],
           )}
         >
-          <Brokers onNextHandler={onClickNextStep} />
+          {curstep === 3 && <Brokers onNextHandler={onClickNextStep} />}
         </div>
       </div>
     </>
