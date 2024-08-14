@@ -199,38 +199,40 @@ const CreatePost = () => {
           style={{ resize: "none" }}
         ></textarea>
 
-        <Box
-          sx={{
-            width: "100%",
-            maxHeight: 500,
-            overflow: "hidden",
-          }}
-        >
-          <Masonry
-            columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}
+        {uploadedImages.length > 0 && (
+          <Box
+            sx={{
+              width: "100%",
+              maxHeight: 500,
+              overflow: "hidden",
+            }}
           >
-            {uploadedImages.slice(0, 6).map((image, index) => (
-              <div key={index} className={style["previewImage"]}>
-                <Image
-                  security="restricted"
-                  src={URL.createObjectURL(image)}
-                  alt="Uploaded Image"
-                  className={style["imagePreview"]}
-                  layout="responsive"
-                  width={100}
-                  height={100}
-                  objectFit="cover"
-                  sizes={
-                    image.size > 1000000
-                      ? "(max-width: 500px) 100vw, 500px"
-                      : "(max-width: 211px) 100vw, 211px"
-                  }
-                  onClick={() => enlargeImage(image)}
-                />
-              </div>
-            ))}
-          </Masonry>
-        </Box>
+            <Masonry
+              columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}
+            >
+              {uploadedImages.slice(0, 6).map((image, index) => (
+                <div key={index} className={style["previewImage"]}>
+                  <Image
+                    security="restricted"
+                    src={URL.createObjectURL(image)}
+                    alt="Uploaded Image"
+                    className={style["imagePreview"]}
+                    layout="responsive"
+                    width={100}
+                    height={100}
+                    objectFit="cover"
+                    sizes={
+                      image.size > 1000000
+                        ? "(max-width: 500px) 100vw, 500px"
+                        : "(max-width: 211px) 100vw, 211px"
+                    }
+                    onClick={() => enlargeImage(image)}
+                  />
+                </div>
+              ))}
+            </Masonry>
+          </Box>
+        )}
       </div>
       {enlargedImage && (
         <div className={style["enlarged-image-modal"]} onClick={closeEnlarge}>
