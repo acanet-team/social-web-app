@@ -51,13 +51,13 @@ MyApp.getInitialProps = async (appContext: any) => {
   const appProps = await App.getInitialProps(appContext);
   const session = (await getSession(appContext)) as unknown as ISession;
   if (!session || session.needToLogin) {
-    if (appContext.ctx.res && appContext.ctx.asPath !== "/login") {
-      appContext.ctx.res.writeHead(302, {
-        Location: "/login",
-      });
-      appContext.ctx.res.end();
-      return;
-    }
+    // if (appContext.ctx.res && appContext.ctx.asPath !== "/login") {
+    //   appContext.ctx.res.writeHead(302, {
+    //     Location: "/login",
+    //   });
+    //   appContext.ctx.res.end();
+    //   return;
+    // }
   } else {
     appProps.pageProps["session"] = session;
     // httpClient.setAuthorization(session?.accessToken);
