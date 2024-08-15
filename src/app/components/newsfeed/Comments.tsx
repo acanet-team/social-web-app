@@ -8,6 +8,7 @@ import WaveLoader from "../WaveLoader";
 import { postComment, getComments, deleteComment } from "@/api/newsfeed";
 import CustomModal from "../Modal";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import { useSession } from "next-auth/react";
 
 /* eslint-disable react/display-name */
 export const Comments = (props: {
@@ -28,12 +29,14 @@ export const Comments = (props: {
   const [userInfo, setUserInfo] = useState<any>({});
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
-  const session = useAuthStore((state) => state.session);
+  const { data: session } = useSession() as any;
+  // const session = useAuthStore((state) => state.session);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
-    setUserInfo(user);
-    console.log("nickname", user);
+    // const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    if (session) {
+      setUserInfo(session);
+    }
   }, []);
 
   // Fetch comments ---------------------
@@ -45,7 +48,7 @@ export const Comments = (props: {
       // setComments((prevState) => [...prevState, ...response.data.docs]
       setComments((prevState) => {
         const newCommentArr = combineUniqueById(prevState, response.data.docs);
-        console.log(newCommentArr);
+        // console.log(newCommentArr);
         return newCommentArr;
       });
       setTotalPage(response.data.meta.totalPage);
@@ -188,7 +191,7 @@ export const Comments = (props: {
           comments.map((comment, index) => (
             <CommentView
               key={comment.id}
-              id={comment.id}
+              commentId={comment.id}
               photo={comment.createBy.photo?.path}
               nickName={comment.createBy.nickName}
               content={comment.content}
@@ -197,6 +200,7 @@ export const Comments = (props: {
               createdBy={comment.createBy?.id}
               postAuthor={props.postAuthor}
               onClickDelete={onChooseDelete}
+              userSession={session}
             />
           ))}
       </div>

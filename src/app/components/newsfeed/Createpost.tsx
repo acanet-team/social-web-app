@@ -11,7 +11,15 @@ import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import { usePostStore } from "@/store/newFeed";
 
-const CreatePost = () => {
+interface UserInfo {
+  user?: {
+    photo?: {
+      path: string;
+    };
+  };
+}
+
+const CreatePost = (props: { userSession: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [postText, setPostText] = useState("");
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
@@ -25,26 +33,26 @@ const CreatePost = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  interface UserInfo {
-    user?: {
-      photo?: {
-        path: string;
-      };
-    };
-  }
 
   const [userInfo, setUserInfo] = useState<UserInfo>();
   const [curTheme, setCurTheme] = useState("");
   const router = useRouter();
   const t = useTranslations("CreatePost");
   const addPost = usePostStore((state) => state.addPost);
+
+  useEffect(() => {
+    if (props.userSession) {
+      setUserInfo(props.userSession);
+    }
+  }, [props.userSession]);
+
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme) setCurTheme(theme);
-    const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-    setUserInfo(userInfo);
+    // const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
     fetchTopics();
     setIsLoading(false);
+
     const handleThemeChange = () => {
       const theme = localStorage.getItem("theme");
       if (theme) setCurTheme(theme);

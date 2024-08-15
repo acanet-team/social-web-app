@@ -1,11 +1,10 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/commentView.module.scss";
 import { TimeSinceDate } from "@/utils/time-since-date";
-import { useSession } from "next-auth/react";
 
-export default async function CommentView(props: {
-  id: string;
+export default function CommentView(props: {
+  commentId: string;
   photo: any;
   nickName: string;
   content: string;
@@ -13,10 +12,11 @@ export default async function CommentView(props: {
   postAuthor: number;
   createdAt: string;
   createdBy: number;
+  userSession: any;
   onClickDelete: (id: string) => void;
 }) {
   const {
-    id,
+    commentId,
     photo,
     nickName,
     content,
@@ -25,20 +25,31 @@ export default async function CommentView(props: {
     createdBy,
     postAuthor,
     onClickDelete,
+    userSession,
   } = props;
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const timePassed = TimeSinceDate(createdAt);
   const [userId, setUserId] = useState<number>();
-  // const { data: session } = useSession() as any;
-  // console.log(session);
-
-  console.log("delete", userId, createdBy, postAuthor);
+  const settingsRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const userId = JSON.parse(localStorage.getItem("userInfo") || "{}").user
-      ?.id;
-    setUserId(userId);
-  }, []);
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        settingsRef.current &&
+        !settingsRef.current.contains(event.target as Node)
+      ) {
+        setOpenSettings(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [settingsRef]);
+
+  useEffect(() => {
+    setUserId(userSession?.user?.id);
+  }, [userSession]);
 
   const onClickSettings = () => {
     setOpenSettings((open) => !open);
@@ -81,15 +92,16 @@ export default async function CommentView(props: {
         <button
           className={`${styles["comment-settings"]} bg-transparent border-0`}
           onClick={onClickSettings}
+          ref={settingsRef}
         >
           <i className="bi bi-three-dots-vertical"></i>
           {openSettings && (
-            <button
-              className={`${styles["delete-comment__btn"]} border-0 px-2 py-1 rounded-3`}
-              onClick={() => onClickDelete(id)}
+            <div
+              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-3`}
+              onClick={() => onClickDelete(commentId)}
             >
               Delete
-            </button>
+            </div>
           )}
         </button>
       )}

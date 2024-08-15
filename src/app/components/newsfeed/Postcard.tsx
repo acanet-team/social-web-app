@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/postView.module.scss";
-import { getComments, likeRequest } from "@/api/newsfeed";
+import { deletePost, getComments, likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
@@ -22,6 +22,7 @@ export default function PostCard(props: {
   comment: number;
   createdAt: string;
   columnsCount: number;
+  liked: boolean;
 }) {
   const {
     postId,
@@ -34,6 +35,7 @@ export default function PostCard(props: {
     comment = 0,
     createdAt,
     columnsCount = 1,
+    liked,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
@@ -43,6 +45,9 @@ export default function PostCard(props: {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [isLiked, setIsLiked] = useState<boolean>(liked);
+  const [likeNum, setLikeNum] = useState<number>(like);
+
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -95,10 +100,10 @@ export default function PostCard(props: {
     const likeBtn = e.target;
     let clickTime = 0;
     if (likeBtn) {
-      // Update DOM
-      likeBtn.classList.toggle("bi-heart");
-      likeBtn.classList.toggle("bi-heart-fill");
-      const isLiked = likeBtn.classList.contains("bi-heart-fill");
+      // // Update DOM
+      // likeBtn.classList.toggle("bi-heart");
+      // likeBtn.classList.toggle("bi-heart-fill");
+      const hasLikeClass = likeBtn.classList.contains("bi-heart-fill");
       const likeNumEl = likeBtn
         .closest(".card-body")
         .querySelector(".like-number");
@@ -106,25 +111,63 @@ export default function PostCard(props: {
         .closest(".card-body")
         .querySelector(".like-thousand");
       try {
+        // if (hasLikeClass) {
+        //   clickTime = +1;
+        //   // Calling api
+        //   likeRequest({ postId: id, action: "favorite" });
+        // } else {
+        //   clickTime = 0;
+        //   likeRequest({ postId: id, action: "unfavorite" });
+        // }
+        // let newLikeNum;
+
+        let newLikeNum;
         if (isLiked) {
-          clickTime = +1;
-          // Calling api
-          likeRequest({ postId: id, action: "favorite" });
-        } else {
-          clickTime = 0;
+          setLikeNum((prev) => prev - 1);
+          setIsLiked(false);
           likeRequest({ postId: id, action: "unfavorite" });
+        } else {
+          setLikeNum((prev) => prev + 1);
+          setIsLiked(true);
+          likeRequest({ postId: id, action: "favorite" });
         }
-        // Update the like number on DOM
-        const newLikeNum = like + clickTime;
-        likeNumEl.textContent = (
-          newLikeNum >= 1000
-            ? Math.round(newLikeNum / 1000).toFixed(1)
-            : newLikeNum
-        ).toString();
-        likeThousandEl.textContent = newLikeNum >= 1000 ? "k" : "";
+        // if (isLiked) {
+        //   if (hasLikeClass) {
+        //     newLikeNum = like - 1;
+        //   } else {
+        //     newLikeNum = like;
+        //   }
+        //   setIsLiked(false);
+        //   likeRequest({ postId: id, action: "unfavorite" });
+        // } else {
+        //   if (hasLikeClass) {
+        //     newLikeNum = like - 1;
+        //   } else {
+        //     newLikeNum = like;
+        //   }
+        //   setIsLiked(true);
+        //   likeRequest({ postId: id, action: "favorite" });
+        // }
+
+        // const newLikeNum = like + clickTime;
+        // likeNumEl.textContent = (
+        //   newLikeNum >= 1000
+        //     ? Math.round(newLikeNum / 1000).toFixed(1)
+        //     : newLikeNum
+        // ).toString();
+        // likeThousandEl.textContent = newLikeNum >= 1000 ? "k" : "";
       } catch (err) {
         console.log(err);
       }
+    }
+  };
+
+  const onClickDelete = async (postId: string) => {
+    try {
+      // Calling api;
+      await deletePost(postId);
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
@@ -151,7 +194,7 @@ export default function PostCard(props: {
           className="ms-auto pointer"
           onClick={() => setOpenSettings((open) => !open)}
         >
-          <i className="bi bi-three-dots h1"></i>
+          <i className="bi bi-three-dots h1 me-3"></i>
         </div>
       </div>
       <div className="card-body p-0 ms-1 me-lg-6">
@@ -206,15 +249,15 @@ export default function PostCard(props: {
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
-            className="bi bi-heart h2 m-0 me-2 d-flex align-items-center cursor-pointer"
+            className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
             onClick={(e) => onClickLikeHandler(e, postId, like)}
           ></i>
           <span className="like-number">
-            {like >= 1000 ? Math.round(like / 1000).toFixed(1) : like}
+            {likeNum >= 1000 ? Math.round(likeNum / 1000).toFixed(1) : likeNum}
           </span>
-          <span className="like-thousand">{like >= 1000 ? "k" : ""}</span>
+          <span className="like-thousand">{likeNum >= 1000 ? "k" : ""}</span>
           &nbsp;
-          {like < 2 ? "Like" : "Likes"}
+          {likeNum < 2 ? "Like" : "Likes"}
         </div>
         <div
           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
@@ -231,16 +274,16 @@ export default function PostCard(props: {
             {commentNum < 2 ? "Comment" : "Comments"}
           </span>
         </div>
-        <div
+        {/* <div
           className="pointer ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"
-          // id={`dropdownMenu${props.id}`}
-          // data-bs-toggle="dropdown"
-          // aria-expanded="false"
-          // onClick={() => toggleOpen((prevState) => !prevState)}
+          id={`dropdownMenu${props.id}`}
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          onClick={() => toggleOpen((prevState) => !prevState)}
         >
           <i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg"></i>
           <span className="d-none-xs">Share</span>
-        </div>
+        </div> */}
 
         {/* <div
           className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg right-0"
@@ -332,6 +375,14 @@ export default function PostCard(props: {
           postAuthor={userId}
         />
       )}
+      {/* {openSettings && (
+        <div
+          className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-3`}
+          onClick={() => onClickDelete(postId)}
+        >
+          Delete
+        </div>
+      )} */}
     </div>
   );
 }

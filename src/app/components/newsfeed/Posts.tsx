@@ -106,6 +106,7 @@ export default function Posts(props: {
                 like={p.favoriteCount}
                 comment={p.commentCount}
                 columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
+                liked={p.liked}
               />
             </div>
           ))

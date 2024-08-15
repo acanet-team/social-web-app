@@ -1,15 +1,15 @@
 import styles from "@/styles/modules/home.module.scss";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import FetchBrokers from "@/app/components/newsfeed/FetchBrokers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Contacts from "@/app/components/Contacts";
 import CreatePost from "@/app/components/newsfeed/Createpost";
 import RootLayout from "@/layout/root";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import Posts from "@/app/components/newsfeed/Posts";
 import { getPosts, getTopBrokers } from "@/api/newsfeed";
+import { useSession } from "next-auth/react";
 import { TabEnum } from "@/types/enum";
-import { createGetBrokersRequest } from "@/api/onboard";
 
 const TAKE = 5;
 
@@ -20,6 +20,7 @@ const Home = ({
   topBrokers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [curTab, setCurTab] = useState<string>("suggestion");
+  const { data: session } = useSession() as any;
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -51,7 +52,7 @@ const Home = ({
                     Suggestion
                   </div>
                 </div>
-                <CreatePost />
+                <CreatePost userSession={session} />
                 <Posts
                   posts={posts}
                   feedType={curTab}

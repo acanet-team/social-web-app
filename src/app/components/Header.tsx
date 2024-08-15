@@ -16,14 +16,14 @@ export default function Header() {
   const [openSettings, setOpenSettings] = useState(false);
   // const { session, checkOnboarding } = useAuthStore((state) => state);
   const [photo, setPhoto] = useState<string>("");
-  // const { data: session } = useSession() as any;
+  const { data: session } = useSession() as any;
   // const photo = session?.user?.photo.path;
   useEffect(() => {
-    // get photo from local storage
-    const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-    setPhoto(userInfo?.user?.photo?.path);
-    console.log(photo);
-  }, []);
+    // const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+    if (session) {
+      setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
+    }
+  }, [session]);
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;
@@ -177,7 +177,7 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            src={photo ? photo : "/assets/images/user.png"}
+            src={photo}
             width={40}
             height={40}
             alt="user"
@@ -197,7 +197,7 @@ export default function Header() {
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
           <Image
-            src={photo ? photo : "/assets/images/user.png"}
+            src={photo}
             alt="user"
             width={40}
             height={40}
@@ -216,7 +216,7 @@ export default function Header() {
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
           <Image
-            src={photo ? photo : "/assets/images/user.png"}
+            src={photo}
             alt="user"
             width={40}
             height={40}
@@ -236,7 +236,7 @@ export default function Header() {
       </div>
       <Darkbutton />
       <Image
-        src={photo ? photo : "/assets/images/user.png"}
+        src={photo}
         alt="user"
         width={40}
         height={40}
