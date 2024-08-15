@@ -5,10 +5,10 @@ import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 
 import httpClient from "@/api";
+import { refreshToken } from "@/api/auth";
 import { removePropertiesEmpty } from "@/utils/Helpers";
 import type { NextAuthOptions } from "next-auth";
-import { redirect } from "next/navigation";
-import { refreshToken } from "@/api/auth";
+import { setCookie } from "nookies";
 
 const options: NextAuthOptions = {
   providers: [
@@ -38,7 +38,6 @@ const options: NextAuthOptions = {
           token.refreshTokenExpires = res.refreshTokenExpires;
           token.tokenExpires = res.tokenExpires;
           token.refreshToken = res.refreshToken;
-          console.log("1111111111111", token);
           return token;
         }
         return token;

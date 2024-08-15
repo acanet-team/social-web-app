@@ -12,6 +12,7 @@ import type { AppProps } from "next/app";
 import App from "next/app";
 import { useRouter } from "next/navigation";
 import Router from "next/router";
+import { setCookie } from "nookies";
 import type { ReactElement, ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 
@@ -59,24 +60,25 @@ MyApp.getInitialProps = async (appContext: any) => {
     }
   } else {
     appProps.pageProps["session"] = session;
-    httpClient.setAuthorization(session?.accessToken);
+    // httpClient.setAuthorization(session?.accessToken);
+    setCookie(appContext.ctx, "acanet_token", session?.accessToken);
     if (session.user.onboarding_data?.step !== ONBOARDING_STEP.COMPLETE) {
       if (
         appContext.ctx.res &&
         appContext.ctx.asPath !== "/onboarding" &&
         !appContext.ctx.asPath.includes("next")
       ) {
-        appContext.ctx.res.writeHead(302, {
-          Location: "/onboarding",
-        });
-        appContext.ctx.res.end();
+        // appContext.ctx.res.writeHead(302, {
+        //   Location: "/onboarding",
+        // });
+        // appContext.ctx.res.end();
         // return;
       } else if (
         !appContext.ctx.res &&
         appContext.ctx.asPath !== "/onboarding" &&
         !appContext.ctx.asPath.includes("next")
       ) {
-        Router.push("/onboarding");
+        // Router.push("/onboarding");
       }
     }
   }

@@ -15,14 +15,14 @@ const bundleAnalyzer = withBundleAnalyzer({
 /** @type {import('next').NextConfig} */
 export default bundleAnalyzer(
   withNextIntlConfig({
-    // async rewrites() {
-    //   return [
-    //     {
-    //       source: '/api/v1/:path*',
-    //       destination: 'https://api-dev.acanet.io/api/v1/:path*',
-    //     },
-    //   ]
-    // },
+    async rewrites() {
+      return [
+        {
+          source: "/api/v1/:path*",
+          destination: "https://api-dev.acanet.io/api/v1/:path*",
+        },
+      ];
+    },
     async headers() {
       return [
         {
