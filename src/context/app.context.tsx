@@ -34,7 +34,7 @@ type Props = {
 
 export function AppProvider({ children, session }: Props) {
   const [user, setUser] = useState<boolean>(session?.user);
-  // httpClient.setAuthorization(session?.accessToken);
+  httpClient.setAuthorization(session?.accessToken);
 
   const login = () => {
     setUser(true);

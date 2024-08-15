@@ -60,7 +60,7 @@ MyApp.getInitialProps = async (appContext: any) => {
     // }
   } else {
     appProps.pageProps["session"] = session;
-    // httpClient.setAuthorization(session?.accessToken);
+    httpClient.setAuthorization(session?.accessToken);
     setCookie(appContext.ctx, "acanet_token", session?.accessToken);
     if (session.user.onboarding_data?.step !== ONBOARDING_STEP.COMPLETE) {
       if (
