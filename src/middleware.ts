@@ -1,8 +1,7 @@
-import { getSession } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import httpClient from "./api";
-import { ONBOARDING_STEP, type ISession } from "./api/auth/auth.model";
+import { ONBOARDING_STEP } from "./api/auth/auth.model";
 
 export async function middleware(request: NextRequest) {
   const requestForNextAuth = {
@@ -10,9 +9,14 @@ export async function middleware(request: NextRequest) {
       cookie: request.headers.get("cookie"),
     },
   };
-  const session = (await getSession({
-    req: requestForNextAuth as any,
-  })) as unknown as ISession;
+  // const session = (await getSession({
+  //   req: requestForNextAuth as any,
+  // })) as unknown as ISession;
+
+  const session = (await getToken({
+    req: request,
+    secret: process.env.NEXT_AUTH_SECRET,
+  })) as any;
 
   if (!session || session.needToLogin) {
     return NextResponse.redirect(new URL("/login", request.nextUrl.origin));
@@ -27,4 +31,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/"],
+  runtime: "nodejs", // rather than "edge"
+  unstable_allowDynamic: [
+    "/node_modules/@babel/runtime/regenerator/index.js", // file causing the build error
+  ],
 };
