@@ -52,7 +52,8 @@ export default bundleAnalyzer(
       ignoreBuildErrors: true,
     },
     poweredByHeader: false,
-    reactStrictMode: false,
+    reactStrictMode: true,
+    swcMinify: true,
     experimental: {
       serverComponentsExternalPackages: ["@electric-sql/pglite"],
     },
