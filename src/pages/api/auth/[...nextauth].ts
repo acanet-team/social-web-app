@@ -23,6 +23,9 @@ const options: NextAuthOptions = {
     }),
   ],
   secret: process.env.NEXT_AUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
     async jwt({ token, account, trigger }: any) {
       if (trigger === "update") {
