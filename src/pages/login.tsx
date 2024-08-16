@@ -97,7 +97,7 @@ const LoginPage: NextPage = () => {
                     className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
                     onClick={() => {
                       showLoading();
-                      signIn("google");
+                      signIn("google", { callbackUrl: "/" });
                     }}
                   >
                     <Image
@@ -117,8 +117,8 @@ const LoginPage: NextPage = () => {
                     title="Sign in with Facebook"
                     className="form-control style2-input fw-600 bg-facebook border-0 p-0 text-left text-white "
                     onClick={() => {
-                      signIn("facebook");
                       showLoading();
+                      signIn("facebook", { callbackUrl: "/" });
                     }}
                   >
                     <Image

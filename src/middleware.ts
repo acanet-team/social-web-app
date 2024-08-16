@@ -9,6 +9,8 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXT_AUTH_SECRET,
   })) as any;
 
+  console.log("trace =>>>>>>>>", token);
+
   if (!token || token.needToLogin) {
     return NextResponse.redirect(new URL("/login", request.nextUrl.origin));
   }
