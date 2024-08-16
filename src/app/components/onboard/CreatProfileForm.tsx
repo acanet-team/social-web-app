@@ -333,13 +333,6 @@ export default function CreateProfileForm(props: {
           >
             Continue
           </button>
-          <button
-            onClick={() => updateSession()}
-            id={styles["profile-btn"]}
-            className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 d-inline-block mt-5"
-          >
-            Continue
-          </button>
         </form>
       </div>
     </>

@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXT_AUTH_SECRET,
     cookieName: "__Secure-next-auth.session-token",
     secureCookie: true,
+    raw: true,
   })) as any;
 
   console.log("trace =>>>>>>>>", token);
