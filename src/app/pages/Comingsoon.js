@@ -6,7 +6,7 @@ class Comingsoon extends Component {
   render() {
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <div className="main-content pt-0 bg-white ps-0 pe-0">
           <div className="container">
             <div className="row justify-content-center">

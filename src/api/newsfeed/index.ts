@@ -22,7 +22,7 @@ export const likeRequest = (values: any) => {
   );
 };
 
-export const getComments = (page: number, take: number, postId: number) => {
+export const getComments = (page: number, take: number, postId: string) => {
   return httpClient.get<CommentResponse<Comment>>(
     `/v1/comment?order=DESC&page=${page}&take=${take}&postId=${postId}`,
   );
@@ -63,7 +63,7 @@ export const getTopBrokers = (page: number, take: number) => {
   );
 };
 
-export const postComment = (values: { content: string; postId: number }) => {
+export const postComment = (values: { content: string; postId: string }) => {
   return httpClient.post("/v1/comment", values);
 };
 
@@ -72,5 +72,5 @@ export const deleteComment = (commentId: string) => {
 };
 
 export const deletePost = (postId: string) => {
-  return httpClient.delete(`v1/post/${postId}`);
+  return httpClient.delete(`/v1/post/${postId}`);
 };

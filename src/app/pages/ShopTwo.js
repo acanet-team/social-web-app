@@ -85,7 +85,7 @@ class ShopTwo extends Component {
     };
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <Leftnav />
         <Rightchat />
 

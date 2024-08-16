@@ -143,64 +143,64 @@ const useAuthStore = create<IUserSessionStore>((set) => ({
     }
   },
   createProfile: async (session: any) => {
-    const res = await getMe();
-    localStorage.setItem("userInfo", JSON.stringify(res));
-    set((state) => {
-      const updatedState = {
-        ...state,
-        session: {
-          ...state.session,
-          token: session.token,
-          user: {
-            ...state.session.user,
-            id: session.user.id || res.user.id,
-            email: session.user.email || res.user.email,
-            photo: {
-              ...state.session.user.photo,
-              path:
-                session.user?.image ||
-                session.user?.photo.path ||
-                res.user?.photo.path,
-            },
-            firstName: session.user.firstName || res.user.firstName,
-            lastName: session.user.lastName || res.user.lastName,
-            createdAt: session.user.createdAt || res.user.createdAt,
-            role: {
-              ...state.session.user.role,
-              name: session.user.role?.name || res.user.role?.name,
-            },
-            status: {
-              ...state.session.user.status,
-              name: session.user.status?.name || res.user.status?.name,
-            },
-          },
-          userProfile: {
-            ...state.session.userProfile,
-          },
-        },
-      };
-      localStorage.setItem("userInfo", JSON.stringify(state));
-      return updatedState;
-    });
+    // const res = await getMe();
+    // localStorage.setItem("userInfo", JSON.stringify(res));
+    // set((state) => {
+    //   const updatedState = {
+    //     ...state,
+    //     session: {
+    //       ...state.session,
+    //       token: session.token,
+    //       user: {
+    //         ...state.session.user,
+    //         id: session.user.id || res.user.id,
+    //         email: session.user.email || res.user.email,
+    //         photo: {
+    //           ...state.session.user.photo,
+    //           path:
+    //             session.user?.image ||
+    //             session.user?.photo.path ||
+    //             res.user?.photo.path,
+    //         },
+    //         firstName: session.user.firstName || res.user.firstName,
+    //         lastName: session.user.lastName || res.user.lastName,
+    //         createdAt: session.user.createdAt || res.user.createdAt,
+    //         role: {
+    //           ...state.session.user.role,
+    //           name: session.user.role?.name || res.user.role?.name,
+    //         },
+    //         status: {
+    //           ...state.session.user.status,
+    //           name: session.user.status?.name || res.user.status?.name,
+    //         },
+    //       },
+    //       userProfile: {
+    //         ...state.session.userProfile,
+    //       },
+    //     },
+    //   };
+    //   localStorage.setItem("userInfo", JSON.stringify(state));
+    //   return updatedState;
+    // });
   },
   updateProfile: async (values: any) => {
-    const res = await getMe();
-    localStorage.setItem("userInfo", JSON.stringify(res));
-    set((state) => {
-      const updatedState = {
-        ...state,
-        session: {
-          ...state.session,
-          user: {
-            ...state.session.user,
-            nickName: values.nickName || res.userProfile?.nickName,
-            location: values.location || res.userProfile?.location,
-          },
-        },
-      };
-      localStorage.setItem("userInfo", JSON.stringify(state));
-      return updatedState;
-    });
+    // const res = await getMe();
+    // localStorage.setItem("userInfo", JSON.stringify(res));
+    // set((state) => {
+    //   const updatedState = {
+    //     ...state,
+    //     session: {
+    //       ...state.session,
+    //       user: {
+    //         ...state.session.user,
+    //         nickName: values.nickName || res.userProfile?.nickName,
+    //         location: values.location || res.userProfile?.location,
+    //       },
+    //     },
+    //   };
+    //   localStorage.setItem("userInfo", JSON.stringify(state));
+    //   return updatedState;
+    // });
   },
 
   logout: async () => {

@@ -1,7 +1,7 @@
 import { createNewPostRequest, getTopics } from "@/api/newsfeed";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import style from "@/styles/modules/createpPost.module.scss";
+import style from "@/styles/modules/createPost.module.scss";
 import { toast, type ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import { usePostStore } from "@/store/newFeed";
+import { throwToast } from "@/utils/throw-toast";
 
 interface UserInfo {
   user?: {
@@ -33,6 +34,7 @@ const CreatePost = (props: { userSession: any }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
+  const imageRef = useRef<HTMLInputElement>(null);
 
   const [userInfo, setUserInfo] = useState<UserInfo>();
   const [curTheme, setCurTheme] = useState("");
@@ -49,7 +51,6 @@ const CreatePost = (props: { userSession: any }) => {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme) setCurTheme(theme);
-    // const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
     fetchTopics();
     setIsLoading(false);
 
@@ -106,17 +107,24 @@ const CreatePost = (props: { userSession: any }) => {
       setUploadedImages([...uploadedImages, ...files]);
     }
   };
+
   const toggleUploadForm = () => {
     setShowUploadForm(!showUploadForm);
   };
+
   const removeImage = (index: number) => {
     const newUploadedImages = [...uploadedImages];
     newUploadedImages.splice(index, 1);
+    if (imageRef.current) {
+      imageRef.current.value = null || "";
+    }
     setUploadedImages(newUploadedImages);
   };
+
   const enlargeImage = (image: File) => {
     setEnlargedImage(image);
   };
+
   const closeEnlarge = () => {
     setEnlargedImage(null);
   };
@@ -218,26 +226,33 @@ const CreatePost = (props: { userSession: any }) => {
             <Masonry
               columns={uploadedImages.length > 3 ? 3 : uploadedImages.length}
             >
-              {uploadedImages.slice(0, 6).map((image, index) => (
-                <div key={index} className={style["previewImage"]}>
-                  <Image
-                    security="restricted"
-                    src={URL.createObjectURL(image)}
-                    alt="Uploaded Image"
-                    className={style["imagePreview"]}
-                    layout="responsive"
-                    width={100}
-                    height={100}
-                    objectFit="cover"
-                    sizes={
-                      image.size > 1000000
-                        ? "(max-width: 500px) 100vw, 500px"
-                        : "(max-width: 211px) 100vw, 211px"
-                    }
-                    onClick={() => enlargeImage(image)}
-                  />
-                </div>
-              ))}
+              {uploadedImages.slice(0, 6).map((image, index) => {
+                console.log(image);
+                return (
+                  <div key={index} className={style["previewImage"]}>
+                    <Image
+                      security="restricted"
+                      src={URL.createObjectURL(image)}
+                      alt="Uploaded Image"
+                      className={style["imagePreview"]}
+                      layout="responsive"
+                      width={100}
+                      height={100}
+                      objectFit="cover"
+                      sizes={
+                        image.size > 1000000
+                          ? "(max-width: 500px) 100vw, 500px"
+                          : "(max-width: 211px) 100vw, 211px"
+                      }
+                      onClick={() => enlargeImage(image)}
+                    />
+                    <i
+                      className={`${style["remove-img"]} bi bi-x-circle-fill cursor-pointer`}
+                      onClick={() => removeImage(index)}
+                    ></i>
+                  </div>
+                );
+              })}
             </Masonry>
           </Box>
         )}
@@ -264,7 +279,7 @@ const CreatePost = (props: { userSession: any }) => {
       )}
       <div className={`${style["footer"]} card-body p-0 mt-0`}>
         <label
-          className="d-flex align-items-center font-xsss fw-600 ls-1 text-grey-700 text-dark pe-4"
+          className="d-flex align-items-center font-xsss fw-600 ls-1 text-grey-700 text-dark pe-4 cursor-pointer"
           onClick={toggleUploadForm}
         >
           <i className="font-md text-success feather-image me-2"></i>
@@ -277,6 +292,7 @@ const CreatePost = (props: { userSession: any }) => {
             hidden={!showUploadForm}
             max={20}
             className={style["imageUploadInput"]}
+            ref={imageRef}
           />
           {t("Photo_Video")}
         </label>

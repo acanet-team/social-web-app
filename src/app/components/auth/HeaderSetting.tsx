@@ -5,7 +5,6 @@ import useAuthStore from "@/store/auth";
 import { signOut } from "next-auth/react";
 
 export default function HeaderSetting() {
-  const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
 
   const onLogOutHandler = () => {

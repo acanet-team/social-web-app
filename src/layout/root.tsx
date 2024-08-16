@@ -6,7 +6,7 @@ import Popupchat from "@/app/components/Popupchat";
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <>
-      <Header />
+      <Header isOnboarding={false} />
       <Leftnav />
       {props.children}
       <Popupchat />

@@ -12,7 +12,7 @@ class Settings extends Component {
   render() {
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <Leftnav />
         <Rightchat />
 
@@ -116,7 +116,7 @@ class Settings extends Component {
                             </Link>
                           </li>
                           <li className="list-inline-item d-block border-bottom me-0">
-                            <a
+                            <Link
                               href="/helpbox"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
@@ -125,10 +125,10 @@ class Settings extends Component {
                                 Help
                               </h4>
                               <i className="ti-angle-right font-xsss text-grey-500 ms-auto mt-3"></i>
-                            </a>
+                            </Link>
                           </li>
                           <li className="list-inline-item d-block me-0">
-                            <a
+                            <Link
                               href="/login"
                               className="pt-2 pb-2 d-flex align-items-center"
                             >
@@ -137,7 +137,7 @@ class Settings extends Component {
                                 Logout
                               </h4>
                               <i className="ti-angle-right font-xsss text-grey-500 ms-auto mt-3"></i>
-                            </a>
+                            </Link>
                           </li>
                         </ul>
                       </div>

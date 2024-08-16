@@ -88,7 +88,7 @@ class Badge extends Component {
   render() {
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <Leftnav />
         <Rightchat />
 

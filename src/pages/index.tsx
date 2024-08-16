@@ -11,7 +11,7 @@ import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
-const TAKE = 5;
+const TAKE = 10;
 
 const Home = ({
   posts,

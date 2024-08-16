@@ -13,7 +13,7 @@ class Socialaccount extends Component {
     return (
       <Fragment>
         <div className="main-wrapper">
-          <Header />
+          <Header isOnboarding={false} />
           <Leftnav />
           <Rightchat />
           <div className="main-content bg-lightblue theme-dark-bg right-chat-active">

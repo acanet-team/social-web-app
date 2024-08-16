@@ -93,8 +93,10 @@ export default function Posts(props: {
             <div key={p.id}>
               <PostCard
                 postId={p.id}
-                user={p.user.firstName + " " + p.user.lastName}
-                userId={p.user.userId}
+                nickName={
+                  p.user.nickName || p.user.firstName + " " + p.user.lastName
+                }
+                author={p.user.userId}
                 avatar={
                   p.user?.photo?.id
                     ? cleanPath(p.user?.photo?.path)
@@ -107,6 +109,7 @@ export default function Posts(props: {
                 comment={p.commentCount}
                 columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
                 liked={p.liked}
+                setPostHandler={setPosts}
               />
             </div>
           ))

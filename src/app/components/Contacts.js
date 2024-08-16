@@ -22,7 +22,7 @@ const contactList = [
 
 export default function Contacts() {
   return (
-    <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+    <div className="card w-100 shadow-xss rounded-xxl border-0 mb-sm-3 mb-5">
       <div className="card-body d-flex align-items-center p-4">
         <h4 className="fw-700 mb-0 font-xssss text-grey-900">
           Confirm Friend

@@ -39,7 +39,7 @@ class Singleproduct extends Component {
     };
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <Leftnav />
         <Rightchat />
         <div className="main-content right-chat-active">

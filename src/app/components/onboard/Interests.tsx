@@ -135,6 +135,13 @@ export default function Interests(props: { onNextHandler: () => void }) {
                   <div className="mx-auto dark-error-text">{error}</div>
                 )}
                 {isLoading && <DotWaveLoader />}
+                <button
+                  type="submit"
+                  className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-lg-5 my-4 mx-auto"
+                  onClick={onSelectInterestHandler}
+                >
+                  Continue
+                </button>
               </div>
             </div>
           </div>

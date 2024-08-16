@@ -37,9 +37,7 @@
   z-index: 9999;
   background-color: #eee;
   color: var(--theme-light-color-text);
-  box-shadow:
-    0 12px 28px 0 rgba(0, 0, 0, 0.2),
-    0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
 
   &.active {
     visibility: visible;
@@ -75,20 +73,20 @@
     color: #fff;
   }
 
-  .delete-comment__btn {
-    background-color: rgb(28, 30, 33);
-    color: #fff !important;
-    box-shadow:
-      0 12px 28px 0 rgba(0, 0, 0, 0.2),
-      0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  // .delete-comment__btn {
+  //   background-color: rgb(28, 30, 33);
+  //   color: #fff !important;
+  //   box-shadow:
+  //     0 12px 28px 0 rgba(0, 0, 0, 0.2),
+  //     0 2px 4px 0 rgba(0, 0, 0, 0.1);
 
-    &:after {
-      border-color: transparent transparent rgb(28, 30, 33) transparent;
-    }
-  }
+  //   &:after {
+  //     border-color: transparent transparent rgb(28, 30, 33) transparent;
+  //   }
+  // }
 
   .delete-comment__btn:hover {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;  
+    box-shadow: rgba(135, 135, 137, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;  
   }
 
   .comment-msg {

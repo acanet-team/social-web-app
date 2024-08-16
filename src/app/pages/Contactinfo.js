@@ -23,7 +23,7 @@ class Contactinfo extends Component {
     return (
       <Fragment>
         <div className="main-wrapper">
-          <Header />
+          <Header isOnboarding={false} />
           <Leftnav />
           <Rightchat />
 

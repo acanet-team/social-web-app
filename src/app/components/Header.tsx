@@ -6,20 +6,19 @@ import useAuthStore from "@/store/auth";
 import { useSession } from "next-auth/react";
 import HeaderSetting from "./auth/HeaderSetting";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
-export default function Header() {
-  const router = useRouter();
+export default function Header(props: { isOnboarding: boolean }) {
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-light");
   const [openSettings, setOpenSettings] = useState(false);
-  // const { session, checkOnboarding } = useAuthStore((state) => state);
+  const logout = useAuthStore((state) => state.logout);
   const [photo, setPhoto] = useState<string>("");
   const { data: session } = useSession() as any;
-  // const photo = session?.user?.photo.path;
+
   useEffect(() => {
-    // const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
     if (session) {
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
     }
@@ -31,10 +30,6 @@ export default function Header() {
   const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
-    // const onboardingPath = checkOnboarding();
-    // if (onboardingPath) {
-    //   router.push(onboardingPath);
-    // }
     const handleThemeChange = () => {
       const theme = localStorage.getItem("theme");
       if (theme) setCurTheme(theme);
@@ -50,6 +45,12 @@ export default function Header() {
 
   const onOpenSettingHandler = () => {
     setOpenSettings((open) => !open);
+  };
+
+  const onLogOutHandler = () => {
+    logout();
+    // Calling next/auth sign out
+    signOut({ callbackUrl: "/login" });
   };
   return (
     <div className="nav-header shadow-xs border-0">
@@ -87,10 +88,21 @@ export default function Header() {
         >
           <i className="feather-search text-grey-900 font-sm btn-round-md bg-greylight"></i>
         </span>
-        <button
-          onClick={() => toggleOpen((prevState) => !prevState)}
-          className={`nav-menu me-0 ms-2 ${buttonClass}`}
-        ></button>
+        {props.isOnboarding ? (
+          <Image
+            src={photo}
+            alt="user"
+            width={40}
+            height={40}
+            className="w40 rounded-xl p-0 me-0 nav-menu h-auto rounded-circle cursor-pointer"
+            onClick={onOpenSettingHandler}
+          />
+        ) : (
+          <button
+            onClick={() => toggleOpen((prevState) => !prevState)}
+            className={`nav-menu me-0 ms-2 ${buttonClass}`}
+          ></button>
+        )}
       </div>
 
       <form action="#" className="float-left header-search ms-3">
@@ -245,97 +257,112 @@ export default function Header() {
       />
 
       {/* Left navbar */}
-      {/* <nav className={`navigation scroll-bar ${navClass}`}>
-        <div className="container ps-0 pe-0">
-          <div className="nav-content">
-            <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
-              <div className="nav-caption fw-600 font-xssss text-grey-500">
-                <span>New </span>Feeds
-              </div>
-              <ul className="mb-1 top-content">
-                <li className="logo d-none d-xl-block d-lg-block"></li>
-                <li>
-                  <Link href="/home" className="nav-content-bttn open-font">
-                    <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
+      {!props.isOnboarding && (
+        <nav className={`navigation scroll-bar ${navClass}`}>
+          <div className="container ps-0 pe-0">
+            <div className="nav-content">
+              <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
+                <div className="nav-caption fw-600 font-xssss text-grey-500">
+                  <span>New </span>Feeds
+                </div>
+                <ul className="mb-1 top-content">
+                  <li className="logo d-none d-xl-block d-lg-block"></li>
+                  <li>
+                    <Link href="/" className="nav-content-bttn open-font">
+                      <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
 
-                    <span>Newsfeed</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/broker-list"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
-                    <span>Brokers</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaultstorie"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
-                    <span>Courses</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaultgroup"
-                    className="nav-content-bttn open-font"
-                  >
-                    <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
-                    <span>Messages</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/userpage" className="nav-content-bttn open-font">
-                    <i className="feather-settings btn-round-md bg-primary-gradiant me-3"></i>
-                    <span>Settings</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
-              <div className="nav-caption fw-600 font-xssss text-grey-500">
-                <span></span> Account
+                      <span>Newsfeed</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/brokers"
+                      className="nav-content-bttn open-font"
+                    >
+                      <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
+                      <span>Brokers</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/defaultstorie"
+                      className="nav-content-bttn open-font"
+                    >
+                      <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
+                      <span>Courses</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/defaultgroup"
+                      className="nav-content-bttn open-font"
+                    >
+                      <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
+                      <span>Messages</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/userpage"
+                      className="nav-content-bttn open-font"
+                    >
+                      <i className="feather-settings btn-round-md bg-primary-gradiant me-3"></i>
+                      <span>Settings</span>
+                    </Link>
+                  </li>
+                </ul>
               </div>
-              <ul className="mb-1">
-                <li className="logo d-none d-xl-block d-lg-block"></li>
-                <li>
-                  <Link
-                    href="/defaultsettings"
-                    className="nav-content-bttn open-font h-auto pt-2 pb-2"
-                  >
-                    <i className="font-sm feather-settings me-3 text-grey-500"></i>
-                    <span>Settings</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaultanalytics"
-                    className="nav-content-bttn open-font h-auto pt-2 pb-2"
-                  >
-                    <i className="font-sm feather-pie-chart me-3 text-grey-500"></i>
-                    <span>Analytics</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/defaultmessage"
-                    className="nav-content-bttn open-font h-auto pt-2 pb-2"
-                  >
-                    <i className="font-sm feather-message-square me-3 text-grey-500"></i>
-                    <span>Chat</span>
-                    <span className="circle-count bg-warning mt-0">23</span>
-                  </Link>
-                </li>
-              </ul>
+
+              <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
+                <div className="nav-caption fw-600 font-xssss text-grey-500">
+                  <span></span> Account
+                </div>
+                <ul className="mb-1">
+                  <li className="logo d-none d-xl-block d-lg-block"></li>
+                  <li>
+                    <Link
+                      href="/defaultsettings"
+                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                    >
+                      <i className="font-sm feather-settings me-3 text-grey-500"></i>
+                      <span>Settings</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/defaultanalytics"
+                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                    >
+                      <i className="font-sm feather-pie-chart me-3 text-grey-500"></i>
+                      <span>Analytics</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/defaultmessage"
+                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                    >
+                      <i className="font-sm feather-message-square me-3 text-grey-500"></i>
+                      <span>Chat</span>
+                      <span className="circle-count bg-warning mt-0">23</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="#"
+                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                      onClick={onLogOutHandler}
+                    >
+                      <i className="font-sm bi bi-box-arrow-right me-3 text-grey-500"></i>
+                      <span>Logout</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      </nav> */}
+        </nav>
+      )}
       {/* 
       <div className={`app-header-search ${searchClass}`}>
         <form className="search-form">

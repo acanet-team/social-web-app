@@ -16,26 +16,25 @@ export const Comments = (props: {
   page: number;
   totalPage: number;
   take: number;
-  postId: number;
+  postId: string;
   postAuthor: number;
   setCommentNum: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [comments, setComments] = useState<any[]>(props.comments);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [totalPage, setTotalPage] = useState<number>(props.totalPage);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(props.page);
   const [commentId, setCommentId] = useState<string>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
-  // const session = useAuthStore((state) => state.session);
 
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
     if (session) {
       setUserInfo(session);
+      console.log("info", session);
     }
   }, []);
 
@@ -44,8 +43,6 @@ export const Comments = (props: {
     setIsLoading(true);
     try {
       const response: any = await getComments(page, props.take, props.postId);
-      // console.log(response);
-      // setComments((prevState) => [...prevState, ...response.data.docs]
       setComments((prevState) => {
         const newCommentArr = combineUniqueById(prevState, response.data.docs);
         // console.log(newCommentArr);
@@ -65,10 +62,15 @@ export const Comments = (props: {
       const { scrollTop, scrollHeight, clientHeight } = commentListRef.current;
       if (scrollTop + clientHeight === scrollHeight) {
         setPage((prevState) => prevState + 1);
-        fetchComments();
       }
     }
   };
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchComments();
+    }
+  }, [page]);
 
   useEffect(() => {
     const currentList = commentListRef.current;
@@ -112,7 +114,7 @@ export const Comments = (props: {
           name: "investor",
         },
         refCode: "string",
-        nickName: userInfo?.userProfile?.nickName,
+        nickName: userInfo?.user?.userProfile?.nickName,
       },
       post: {},
       parent: "string",
@@ -177,7 +179,7 @@ export const Comments = (props: {
   return (
     <div className={`${styles["comment-container"]} pt-4 mt-3 font-xsss`}>
       <div
-        className={`${styles["comment-content__container"]} text-white overflow-auto`}
+        className={`${styles["comment-content__container"]} text-white overflow-auto pb-3`}
         ref={commentListRef}
       >
         {comments?.length === 0 && (
@@ -199,7 +201,7 @@ export const Comments = (props: {
               createdAt={comment.createdAt}
               createdBy={comment.createBy?.id}
               postAuthor={props.postAuthor}
-              onClickDelete={onChooseDelete}
+              onClickDelete={() => onChooseDelete(comment.id)}
               userSession={session}
             />
           ))}

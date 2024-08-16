@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from "react";
 import Header from "../components/Header";
+import Link from "next/link";
 
 class Notfound extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <div className="main-content pt-0 bg-white ps-0 pe-0">
           <div className="container">
             <div className="row justify-content-center">
@@ -24,12 +25,12 @@ class Notfound extends Component {
                     The page you&apos;re looking for isn&apos;t available. Try
                     to search again or use the go to.
                   </p>
-                  <a
+                  <Link
                     href="/"
                     className="p-3 w175 bg-current text-white d-inline-block text-center fw-600 font-xssss rounded-3 text-uppercase ls-3"
                   >
                     Home Page
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

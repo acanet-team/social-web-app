@@ -1,6 +1,5 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styles from "@/styles/modules/postView.module.scss";
+import React, { useEffect, useRef, useState } from "react";
+import styles from "@/styles/modules/postCard.module.scss";
 import { deletePost, getComments, likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
@@ -10,11 +9,13 @@ import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import { Comments } from "./Comments";
 import DotWaveLoader from "../DotWaveLoader";
+import { useSession } from "next-auth/react";
+import { throwToast } from "@/utils/throw-toast";
 
 export default function PostCard(props: {
-  postId: number;
-  user: string;
-  userId: number;
+  postId: string;
+  nickName: string;
+  author: number;
   avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
@@ -23,19 +24,21 @@ export default function PostCard(props: {
   createdAt: string;
   columnsCount: number;
   liked: boolean;
+  setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
 }) {
   const {
     postId,
-    user,
+    nickName,
     avatar,
     content,
     assets,
-    userId,
+    author,
     like = 0,
     comment = 0,
     createdAt,
     columnsCount = 1,
     liked,
+    setPostHandler,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
@@ -47,6 +50,9 @@ export default function PostCard(props: {
   const [isPending, startTransition] = useTransition();
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likeNum, setLikeNum] = useState<number>(like);
+  const settingsRef = useRef<HTMLDivElement>(null);
+  const { data: session } = useSession() as any;
+  const [userId, setUserId] = useState<number>();
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -60,7 +66,6 @@ export default function PostCard(props: {
     setIsLoading(true);
     try {
       const response: any = await getComments(page, take, postId);
-
       // Update the comments state with the fetched data
       // setComments((prevState) => [...prevState, ...response.data.docs]);
       setComments(response.data.docs);
@@ -74,11 +79,30 @@ export default function PostCard(props: {
   };
 
   useEffect(() => {
+    setUserId(session?.user?.id);
+  }, [session]);
+
+  useEffect(() => {
     // Fetch comments again every time user opens the comment section
     if (openComments) {
       fetchComments();
     }
   }, [postId, openComments]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        settingsRef.current &&
+        !settingsRef.current.contains(event.target as Node)
+      ) {
+        setOpenSettings(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [settingsRef]);
 
   const onShowCommentHandler = (id: string) => {
     setOpenComments((open) => !open);
@@ -96,32 +120,10 @@ export default function PostCard(props: {
     });
   };
 
-  const onClickLikeHandler = (e: any, id: number, like: number) => {
+  const onClickLikeHandler = (e: any, id: string, like: number) => {
     const likeBtn = e.target;
-    let clickTime = 0;
     if (likeBtn) {
-      // // Update DOM
-      // likeBtn.classList.toggle("bi-heart");
-      // likeBtn.classList.toggle("bi-heart-fill");
-      const hasLikeClass = likeBtn.classList.contains("bi-heart-fill");
-      const likeNumEl = likeBtn
-        .closest(".card-body")
-        .querySelector(".like-number");
-      const likeThousandEl = likeBtn
-        .closest(".card-body")
-        .querySelector(".like-thousand");
       try {
-        // if (hasLikeClass) {
-        //   clickTime = +1;
-        //   // Calling api
-        //   likeRequest({ postId: id, action: "favorite" });
-        // } else {
-        //   clickTime = 0;
-        //   likeRequest({ postId: id, action: "unfavorite" });
-        // }
-        // let newLikeNum;
-
-        let newLikeNum;
         if (isLiked) {
           setLikeNum((prev) => prev - 1);
           setIsLiked(false);
@@ -131,48 +133,27 @@ export default function PostCard(props: {
           setIsLiked(true);
           likeRequest({ postId: id, action: "favorite" });
         }
-        // if (isLiked) {
-        //   if (hasLikeClass) {
-        //     newLikeNum = like - 1;
-        //   } else {
-        //     newLikeNum = like;
-        //   }
-        //   setIsLiked(false);
-        //   likeRequest({ postId: id, action: "unfavorite" });
-        // } else {
-        //   if (hasLikeClass) {
-        //     newLikeNum = like - 1;
-        //   } else {
-        //     newLikeNum = like;
-        //   }
-        //   setIsLiked(true);
-        //   likeRequest({ postId: id, action: "favorite" });
-        // }
-
-        // const newLikeNum = like + clickTime;
-        // likeNumEl.textContent = (
-        //   newLikeNum >= 1000
-        //     ? Math.round(newLikeNum / 1000).toFixed(1)
-        //     : newLikeNum
-        // ).toString();
-        // likeThousandEl.textContent = newLikeNum >= 1000 ? "k" : "";
       } catch (err) {
         console.log(err);
       }
     }
   };
 
-  const onClickDelete = async (postId: string) => {
+  const onDeletePost = async (e: any, postId: string) => {
     try {
+      console.log("el", e.target);
       // Calling api;
       await deletePost(postId);
+      setPostHandler((prev) => prev.filter((post) => post.id !== postId));
+      throwToast("Post was successfully deleted", "success");
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <div
-      className={`${styles.post} card w-100 shadow-xss rounded-xxl border-0 p-3 mb-3`}
+      className={`${styles.post} post-card card w-100 shadow-xss rounded-xxl border-0 p-3 mb-3`}
     >
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
@@ -185,17 +166,28 @@ export default function PostCard(props: {
           />
         </figure>
         <h4 className="fw-700 text-grey-900 font-xsss mt-1">
-          {user}
+          {nickName}
           <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
             {createdAt ? TimeSinceDate(createdAt) : ""}
           </span>
         </h4>
-        <div
-          className="ms-auto pointer"
-          onClick={() => setOpenSettings((open) => !open)}
-        >
-          <i className="bi bi-three-dots h1 me-3"></i>
-        </div>
+        {userId && userId === author && (
+          <div
+            className="ms-auto pointer position-relative"
+            onClick={() => setOpenSettings((open) => !open)}
+            ref={settingsRef}
+          >
+            <i className="bi bi-three-dots h1 me-2"></i>
+            {openSettings && (
+              <div
+                className={`${styles["delete-post__btn"]} font-xsss border-0 py-2 px-3 py-1 rounded-xxl cursor-pointer`}
+                onClick={(e) => onDeletePost(e, postId)}
+              >
+                Delete
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="card-body p-0 ms-1 me-lg-6">
         <Box
@@ -372,17 +364,9 @@ export default function PostCard(props: {
           take={take}
           postId={postId}
           setCommentNum={setCommentNum}
-          postAuthor={userId}
+          postAuthor={author}
         />
       )}
-      {/* {openSettings && (
-        <div
-          className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-3`}
-          onClick={() => onClickDelete(postId)}
-        >
-          Delete
-        </div>
-      )} */}
     </div>
   );
 }

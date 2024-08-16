@@ -5,10 +5,10 @@ import Interests from "@/app/components/onboard/Interests";
 import "@/styles/global.scss";
 import classNames from "classnames";
 import type { NextPageContext } from "next";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import styles from "../styles/modules/onboard.module.scss";
 import type { NextPageWithLayout } from "./_app";
-import { useSession } from "next-auth/react";
 
 const Onboarding: NextPageWithLayout = () => {
   /* eslint-disable react-hooks/rules-of-hooks */
@@ -40,16 +40,16 @@ const Onboarding: NextPageWithLayout = () => {
   useEffect(() => {
     /* eslint-disable react-hooks/rules-of-hooks */
     const stepDivs = document.querySelectorAll(`.${styles.step}`);
-    const handleCLick = function (e: any) {
-      const clickedTab = (e.target as HTMLElement).closest(
-        `.${styles["step"]}`,
-      ) as HTMLElement;
-      // Find tab number and update curPage
-      const clickedTabNum = Number(clickedTab?.dataset.tab);
-      if (clickedTab && curstep + 2 > clickedTabNum) {
-        setCurStep(clickedTabNum);
-      }
-    };
+    // const handleCLick = function (e: any) {
+    //   const clickedTab = (e.target as HTMLElement).closest(
+    //     `.${styles["step"]}`,
+    //   ) as HTMLElement;
+    //   // Find tab number and update curPage
+    //   const clickedTabNum = Number(clickedTab?.dataset.tab);
+    //   if (clickedTab && curstep + 1 > clickedTabNum) {
+    //     setCurStep(clickedTabNum);
+    //   }
+    // };
 
     stepDivs.forEach((stepDiv, index) => {
       // Hightlight chosen tab
@@ -66,7 +66,7 @@ const Onboarding: NextPageWithLayout = () => {
         stepDiv.classList.remove(`${styles["done"]}`);
       }
 
-      stepDiv.addEventListener("click", handleCLick as EventListener);
+      // stepDiv.addEventListener("click", handleCLick as EventListener);
 
       // Reveal corresponding content
       const contentContainer = document.querySelectorAll(
@@ -80,11 +80,11 @@ const Onboarding: NextPageWithLayout = () => {
         ?.classList.add(`${styles["content-active"]}`);
     });
 
-    return () => {
-      stepDivs.forEach((stepDiv) =>
-        stepDiv.removeEventListener("click", handleCLick as EventListener),
-      );
-    };
+    // return () => {
+    //   stepDivs.forEach((stepDiv) =>
+    //     stepDiv.removeEventListener("click", handleCLick as EventListener),
+    //   );
+    // };
   }, [curstep]);
 
   return (
@@ -154,7 +154,7 @@ const Onboarding: NextPageWithLayout = () => {
 Onboarding.getLayout = function getLayout(page: any) {
   return (
     <div className="container-fluid px-lg-5 px-sm-3">
-      <Header />
+      <Header isOnboarding={true} />
       {page}
     </div>
   );

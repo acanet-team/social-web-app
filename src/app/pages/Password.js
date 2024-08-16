@@ -11,7 +11,7 @@ class Password extends Component {
     return (
       <Fragment>
         <div className="main-wrapper">
-          <Header />
+          <Header isOnboarding={false} />
           <Leftnav />
           <Rightchat />
 

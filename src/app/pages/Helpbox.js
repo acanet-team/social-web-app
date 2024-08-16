@@ -18,7 +18,7 @@ class Helpbox extends Component {
   render() {
     return (
       <Fragment>
-        <Header />
+        <Header isOnboarding={false} />
         <Leftnav />
         <Rightchat />
 

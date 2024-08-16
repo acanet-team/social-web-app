@@ -97,7 +97,7 @@ export default function CommentView(props: {
           <i className="bi bi-three-dots-vertical"></i>
           {openSettings && (
             <div
-              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-3`}
+              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-xxl`}
               onClick={() => onClickDelete(commentId)}
             >
               Delete
