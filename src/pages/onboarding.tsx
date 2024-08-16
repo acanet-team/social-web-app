@@ -8,11 +8,13 @@ import type { NextPageContext } from "next";
 import { useEffect, useState } from "react";
 import styles from "../styles/modules/onboard.module.scss";
 import type { NextPageWithLayout } from "./_app";
+import { useSession } from "next-auth/react";
 
 const Onboarding: NextPageWithLayout = () => {
   /* eslint-disable react-hooks/rules-of-hooks */
-  const [curstep, setCurStep] = useState<number>(1);
   const numSteps = 3;
+  const [curstep, setCurStep] = useState<number>(0);
+  const { data: session } = useSession();
 
   const onClickNextStep = () => {
     setCurStep((step) => step + 1);
@@ -22,16 +24,18 @@ const Onboarding: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    const onboardingStep = localStorage.getItem("onboarding_step");
-    // Set the onboarding step
-    if (onboardingStep) {
-      if (onboardingStep === "create_profile") {
-        setCurStep(1);
-      } else if (onboardingStep === "select_interest_topic") {
-        setCurStep(2);
+    if (session && curstep === 0) {
+      const onboardingStep = session.user["onboarding_data"]?.step;
+      // Set the onboarding step
+      if (onboardingStep) {
+        if (onboardingStep === "create_profile") {
+          setCurStep(1);
+        } else if (onboardingStep === "select_interest_topic") {
+          setCurStep(2);
+        }
       }
     }
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     /* eslint-disable react-hooks/rules-of-hooks */

@@ -55,10 +55,12 @@
   "exclude": ["./out/**/*", "./node_modules/**/*"],
   "include": [
     "next-env.d.ts",
+    "types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
     ".storybook/*.ts",
     ".next/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "src/middleware.ts"
   ]
 }

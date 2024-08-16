@@ -1,15 +1,15 @@
-import styles from "@/styles/modules/home.module.scss";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import FetchBrokers from "@/app/components/newsfeed/FetchBrokers";
-import React, { useEffect, useState } from "react";
+import { getPosts, getTopBrokers } from "@/api/newsfeed";
 import Contacts from "@/app/components/Contacts";
 import CreatePost from "@/app/components/newsfeed/Createpost";
-import RootLayout from "@/layout/root";
-import type { InferGetServerSidePropsType, NextPageContext } from "next";
+import FetchBrokers from "@/app/components/newsfeed/FetchBrokers";
 import Posts from "@/app/components/newsfeed/Posts";
-import { getPosts, getTopBrokers } from "@/api/newsfeed";
-import { useSession } from "next-auth/react";
+import RootLayout from "@/layout/root";
+import styles from "@/styles/modules/home.module.scss";
 import { TabEnum } from "@/types/enum";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import type { InferGetServerSidePropsType, NextPageContext } from "next";
+import { useSession } from "next-auth/react";
+import React, { useState } from "react";
 
 const TAKE = 5;
 

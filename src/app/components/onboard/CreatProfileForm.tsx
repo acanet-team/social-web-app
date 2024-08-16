@@ -1,18 +1,16 @@
-"use client";
-
-import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
-import { ToastContainer, toast, type ToastOptions } from "react-toastify";
-import styles from "@/styles/modules/createProfile.module.scss";
-import React, { useEffect, useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
-import { useFormik } from "formik";
-import TextField from "@mui/material/TextField";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import useAuthStore, { type IUserSessionStore } from "@/store/auth";
-import Image from "next/image";
+import type { IUser } from "@/api/auth/auth.model";
 import { createProfileRequest } from "@/api/onboard";
-import { useRouter } from "next/navigation";
+import { useLoading } from "@/context/Loading/context";
+import styles from "@/styles/modules/createProfile.module.scss";
+import { FormControl, FormHelperText } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { toast, type ToastOptions } from "react-toastify";
+import * as Yup from "yup";
 
 interface FormValues {
   nickName: string;
@@ -31,26 +29,32 @@ export default function CreateProfileForm(props: {
   regions: any[];
   onNext: () => void;
 }) {
-  const { session: authSession, updateProfile } = useAuthStore(
-    (state: IUserSessionStore) => state,
-  );
+  const { data: session, update: updateSession } = useSession();
+  const { showLoading, hideLoading } = useLoading();
+
   // const lastName = authSession.user.lastName || "";
   // const firstName = authSession.user.firstName || "";
   // const email = authSession?.user.email;
   // const photo = authSession?.user?.photo.path;
   // const nickName = authSession?.userProfile.nickName;
   // Get data from local storage
-  const [userInfo, setUserInfo] = useState<any>({});
+  const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-    setUserInfo(userInfo);
-  }, []);
-  const lastName = userInfo?.session?.user?.lastName || "";
-  const firstName = userInfo?.session?.user?.firstName || "";
-  const email = userInfo?.session?.user?.email;
-  const photo = userInfo?.session?.user?.photo?.path;
-  const nickName = userInfo?.session?.userProfile?.nickName;
+    if (session) {
+      setUserInfo({
+        ...session.user,
+        fullName: `${session?.user?.lastName} ${session?.user?.firstName}`,
+        avatar: session.user.photo.path || "/assets/images/user.png",
+      });
+      // formik.setValues({
+      //   email: session.user.email,
+      //   nickName: session.user.nickName,
+      //   location: session.user.location,
+      //   isBroker: session.user.isBroker,
+      // });
+    }
+  }, [session]);
 
   // Toast notification
   const throwToast = (message: string, notiType: string) => {
@@ -84,22 +88,19 @@ export default function CreateProfileForm(props: {
     if (values.isBroker === null) {
       errors.isBroker = "Please choose the user type.";
     }
-
-    if (!nickName) {
-      if (!values.nickName) {
-        errors.nickName = "Please fill out a valid nickname.";
-      } else if (values.nickName.length > 20 || values.nickName.length < 8) {
-        errors.nickName = "Nick name must be between 8 and 20 characters.";
-      }
+    console.log("val", values);
+    if (!values.nickName) {
+      errors.nickName = "Please fill out a valid nickname.";
+    } else if (values.nickName.length > 20 || values.nickName.length < 8) {
+      errors.nickName = "Nick name must be between 8 and 20 characters.";
     }
-    if (!email) {
-      if (!values.email) {
-        errors.email = "Please fill out a valid email.";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
-        errors.email = "Invalid email address";
-      }
+
+    if (!values.email) {
+      errors.email = "Please fill out a valid email.";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = "Invalid email address";
     }
 
     return errors;
@@ -107,16 +108,24 @@ export default function CreateProfileForm(props: {
 
   const formik = useFormik({
     initialValues: {
-      nickName: "",
-      location: "",
-      isBroker: false,
-      email: "",
+      nickName: userInfo.nickName,
+      location: userInfo.location,
+      isBroker: userInfo.isBroker,
+      email: userInfo.email,
     },
-    validate,
+    enableReinitialize: true,
+    validationSchema: Yup.object({
+      nickName: Yup.string()
+        .required("Please fill out a valid nickname.")
+        .min(8, () => "Nick name must be between 8 and 20 characters.")
+        .max(20, () => "Nick name must be between 8 and 20 characters."),
+      location: Yup.string().required("Please choose a location."),
+      isBroker: Yup.bool().required("Please choose the user type."),
+      email: Yup.string()
+        .required("Please fill out a valid email.")
+        .email("Invalid email address"),
+    }),
     onSubmit: async (values, { setFieldError }) => {
-      if (nickName) values.nickName = nickName;
-      if (email) values.email = email;
-
       const profileValues = {
         nickName: values.nickName?.toLowerCase().trim(),
         location: values.location?.toLowerCase().trim(),
@@ -126,11 +135,12 @@ export default function CreateProfileForm(props: {
       };
 
       try {
+        showLoading();
         await createProfileRequest(profileValues);
         const successMessage = "Your profile has been updated.";
         throwToast(successMessage, "success");
         // Save data in auth store
-        updateProfile(values);
+        // updateProfile(values);
         // Continue the onboarding process
         localStorage.setItem("onboarding_step", "create_profile");
         setTimeout(() => {
@@ -155,7 +165,7 @@ export default function CreateProfileForm(props: {
           throwToast(errorMessage, "error");
         }
       } finally {
-        // stop loading
+        hideLoading();
       }
     },
   });
@@ -167,7 +177,7 @@ export default function CreateProfileForm(props: {
           <div className="col-lg-4 text-center">
             <figure className="avatar ms-auto me-auto mb-0 mt-2 w100">
               <Image
-                src={photo ? photo : "/assets/images/user.png"}
+                src={userInfo.avatar}
                 width={50}
                 height={50}
                 objectFit="cover"
@@ -176,7 +186,7 @@ export default function CreateProfileForm(props: {
               />
             </figure>
             <h2 className="fw-700 font-sm text-grey-900 mt-3">
-              {firstName + " " + lastName}
+              {userInfo.fullName}
             </h2>
             {/* <h4 className="text-grey-500 fw-500 mb-3 font-xsss mb-4">
               Brooklyn
@@ -185,7 +195,6 @@ export default function CreateProfileForm(props: {
         </div>
 
         <form onSubmit={formik.handleSubmit}>
-          {/* eslint-disable-next-line */}
           <label className="fw-600 mb-1" htmlFor="nickName">
             Nickname
           </label>
@@ -195,8 +204,7 @@ export default function CreateProfileForm(props: {
             id="nickName"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={nickName ? nickName : formik.values.nickName}
-            disabled={nickName ? true : false}
+            value={formik.values.nickName}
           />
           {formik.touched.nickName && formik.errors.nickName ? (
             <FormHelperText sx={{ color: "error.main" }}>
@@ -270,8 +278,7 @@ export default function CreateProfileForm(props: {
             id="email"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={email ? email : formik.values.email}
-            disabled={email ? true : false}
+            value={formik.values.email}
           />
           {formik.touched.email && formik.errors.email ? (
             <FormHelperText sx={{ color: "error.main" }}>
@@ -326,8 +333,14 @@ export default function CreateProfileForm(props: {
           >
             Continue
           </button>
+          <button
+            onClick={() => updateSession()}
+            id={styles["profile-btn"]}
+            className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 d-inline-block mt-5"
+          >
+            Continue
+          </button>
         </form>
-        <ToastContainer />
       </div>
     </>
   );

@@ -124,6 +124,7 @@ class HttpClient {
         if (rawError && res.status === 401) {
           return Promise.reject(res);
         }
+
         const result = await res[responseType]();
         if (res.ok) {
           return result;

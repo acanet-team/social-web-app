@@ -5,10 +5,11 @@ import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 
 import httpClient from "@/api";
-import { refreshToken } from "@/api/auth";
+import { getMe, refreshToken } from "@/api/auth";
 import { removePropertiesEmpty } from "@/utils/Helpers";
 import type { NextAuthOptions } from "next-auth";
 import { setCookie } from "nookies";
+import { trigger } from "@spotlightjs/spotlight";
 
 const options: NextAuthOptions = {
   providers: [
@@ -23,7 +24,17 @@ const options: NextAuthOptions = {
   ],
   secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
-    async jwt({ token, account }: any) {
+    async jwt({ token, account, trigger }: any) {
+      if (trigger === "update") {
+        httpClient.setAuthorization(token.accessToken);
+        const userData = await getMe();
+        token.user = {
+          ...token.user,
+          ...userData,
+          ...userData.user,
+        };
+        return token;
+      }
       if (token.accessToken || !account) {
         token.needToLogin = false;
         const shouldRefreshTime =
@@ -32,6 +43,7 @@ const options: NextAuthOptions = {
           token.needToLogin = true;
           return token;
         }
+
         if (shouldRefreshTime) {
           const res = await refreshToken(token.refreshToken);
           token.accessToken = res.token;
@@ -56,9 +68,13 @@ const options: NextAuthOptions = {
         `/v1/auth/${token?.provider}/login`,
         removePropertiesEmpty(data),
       );
+      httpClient.setAuthorization(res.data.token);
+      const userData = await getMe();
 
       token.user = {
         ...res.data.user,
+        ...userData.user,
+        ...userData,
         isBroker: res.data.isBroker,
         isProfile: res.data.isProfile,
       };

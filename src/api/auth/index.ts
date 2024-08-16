@@ -11,6 +11,7 @@ export const logOut = (headers: Headers = undefined as unknown as Headers) => {
 };
 
 export const refreshToken = (refreshToken: string) => {
+  console.log("refreshToken", refreshToken);
   return httpClient.post<
     { refreshToken: string },
     {

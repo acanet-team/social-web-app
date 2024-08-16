@@ -1,3 +1,4 @@
+import { ONBOARDING_STEP } from "@/api/auth/auth.model";
 import { useLoading } from "@/context/Loading/context";
 import useAuthStore from "@/store/auth";
 import type { NextPage, NextPageContext } from "next";
@@ -32,19 +33,10 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      login(session);
-      createProfile(session);
-      update({ ...session, a: 1 });
       // Navigation
       const onboardingStep = session.user["onboarding_data"]?.step;
-      console.log(onboardingStep);
-      if (onboardingStep) {
-        localStorage.setItem("onboarding_step", onboardingStep);
-        const isOnboarding =
-          onboardingStep === "create_profile" ||
-          onboardingStep === "select_interest_topic";
-        const redirectPath = isOnboarding ? "/onboarding" : "/";
-        router.push(redirectPath);
+      if (onboardingStep !== ONBOARDING_STEP.COMPLETE) {
+        router.push("/onboarding");
       } else {
         router.push("/");
       }

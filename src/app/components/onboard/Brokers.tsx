@@ -1,11 +1,11 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import BrokerProfile from "./BrokerProfile";
-import styles from "@/styles/modules/brokerProfile.module.scss";
-import Pagination from "../Pagination";
 import { createGetBrokersRequest } from "@/api/onboard";
-import CircleLoader from "../CircleLoader";
+import styles from "@/styles/modules/brokerProfile.module.scss";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import CircleLoader from "../CircleLoader";
+import Pagination from "../Pagination";
+import BrokerProfile from "./BrokerProfile";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function Brokers(props: { onNextHandler: () => void }) {
@@ -14,11 +14,8 @@ export default function Brokers(props: { onNextHandler: () => void }) {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const TAKE = 18;
+  const { update } = useSession();
   const router = useRouter();
-
-  const onFinishOnboarding = () => {
-    router.push("/");
-  };
 
   useEffect(() => {
     async function getBrokers() {
@@ -37,6 +34,11 @@ export default function Brokers(props: { onNextHandler: () => void }) {
     }
     getBrokers();
   }, [page]);
+
+  const onFinish = async () => {
+    await update();
+    router.push("/");
+  };
 
   return (
     <div className="row ps-2 pe-2" id={styles["all-brokers"]}>
@@ -60,14 +62,14 @@ export default function Brokers(props: { onNextHandler: () => void }) {
         ))}
       <Pagination pageUpdateFn={setPage} page={page} totalPage={totalPage} />
 
-      <Link href="/home" className="btn mt-3 mb-5 mx-auto">
+      <div className="btn mt-3 mb-5 mx-auto">
         <button
+          onClick={onFinish}
           className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-5 mx-auto"
-          onClick={onFinishOnboarding}
         >
           Finish
         </button>
-      </Link>
+      </div>
     </div>
   );
 }

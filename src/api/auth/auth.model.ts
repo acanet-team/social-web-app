@@ -27,6 +27,11 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
   deletedAt: null;
+  fullName: string;
+  nickName: string;
+  avatar: string;
+  isBroker: boolean;
+  location: string;
 }
 
 interface OnboardingData {

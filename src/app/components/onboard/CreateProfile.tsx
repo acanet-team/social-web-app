@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 
 export default function CreateProfile(props: { onNextHandler: () => void }) {
   const [regions, setRegions] = useState<any[]>([]);
+
   useEffect(() => {
     const getRegions = async () => {
       try {
@@ -28,6 +29,7 @@ export default function CreateProfile(props: { onNextHandler: () => void }) {
     };
     getRegions();
   }, []);
+
   const t = useTranslations("CreateProfile");
 
   return (
