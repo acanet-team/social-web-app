@@ -25,7 +25,6 @@ export default function Brokers(props: { onNextHandler: () => void }) {
         setBrokers(res.data.docs ? res.data.docs : res.data.data || []);
         setPage(res.data.meta.page);
         setTotalPage(res.data.meta.totalPage);
-        console.log(res.data.docs);
       } catch (err) {
         console.log(err);
       } finally {
@@ -37,6 +36,7 @@ export default function Brokers(props: { onNextHandler: () => void }) {
 
   const onFinish = async () => {
     await update();
+    localStorage.setItem("onboarding_step", "onboarding_complete");
     router.push("/");
   };
 

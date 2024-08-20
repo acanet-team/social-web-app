@@ -6,6 +6,7 @@ import PostCard from "./Postcard";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
 import { usePostStore } from "@/store/newFeed";
+import { combineUniqueById } from "@/utils/combine-arrs";
 
 export default function Posts(props: {
   posts: any;
@@ -23,14 +24,23 @@ export default function Posts(props: {
   const post = usePostStore((state) => state.posts);
 
   useEffect(() => {
-    setPosts((prev) => [...post, ...prev]);
+    // setPosts(prev => [...posts, ...prev]);
+    setPosts((prev) => {
+      const newPosts = combineUniqueById(posts, prev);
+      return newPosts;
+    });
   }, [post]);
+
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
     try {
       const response: any = await getPosts(page, take, props.feedType);
       console.log("posts", response);
-      setPosts((prev) => [...prev, ...response.data.docs]);
+      // setPosts((prev) => [...prev, ...response.data.docs]);
+      setPosts((prev) => {
+        const newPosts = combineUniqueById(prev, response.data.docs);
+        return newPosts;
+      });
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -44,7 +54,6 @@ export default function Posts(props: {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight) {
-        console.log("bbbb");
         setPage((page) => page + 1);
       }
     }
