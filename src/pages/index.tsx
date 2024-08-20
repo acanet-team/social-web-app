@@ -31,44 +31,44 @@ const Home = ({
     }
   };
   return (
-    <RootLayout>
-      <div className="main-content right-chat-active" id={styles.home}>
-        <div className="middle-sidebar-bottom">
-          <div className="middle-sidebar-left">
-            <div className="row feed-body">
-              <div className="col-xl-8 col-xxl-9 col-lg-8">
-                <FetchBrokers brokers={topBrokers} />
-                <div className={`${styles["home-tabs"]} bg-light`}>
-                  <div
-                    className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-                    onClick={(e) => onSelectTabHandler(e)}
-                  >
-                    For you
-                  </div>
-                  <div
-                    className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-                    onClick={(e) => onSelectTabHandler(e)}
-                  >
-                    Suggestion
-                  </div>
+    // <RootLayout>
+    <div className="" id={styles.home}>
+      <div className="">
+        <div className="middle-sidebar-left">
+          <div className="row feed-body">
+            <div className="col-xl-8 col-xxl-9 col-lg-8">
+              <FetchBrokers brokers={topBrokers} />
+              <div className={`${styles["home-tabs"]} bg-light`}>
+                <div
+                  className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  For you
                 </div>
-                <CreatePost userSession={session} />
-                <Posts
-                  posts={posts}
-                  feedType={curTab}
-                  take={TAKE}
-                  allPage={totalPage}
-                  curPage={page}
-                />
+                <div
+                  className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  Suggestion
+                </div>
               </div>
-              <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-                <Contacts />
-              </div>
+              <CreatePost userSession={session} />
+              <Posts
+                posts={posts}
+                feedType={curTab}
+                take={TAKE}
+                allPage={totalPage}
+                curPage={page}
+              />
+            </div>
+            <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
+              <Contacts />
             </div>
           </div>
         </div>
       </div>
-    </RootLayout>
+    </div>
+    // </RootLayout>
   );
 };
 

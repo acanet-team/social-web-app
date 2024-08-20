@@ -7,8 +7,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <>
       <Header isOnboarding={false} />
-      <Leftnav />
-      {props.children}
+      {/* <Leftnav /> */}
+      <div className="main-content right-chat-active">
+        <div className="middle-sidebar-bottom">{props.children}</div>
+      </div>
       <Popupchat />
       <Appfooter />
     </>

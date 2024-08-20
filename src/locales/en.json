@@ -107,6 +107,27 @@
   },
   "CreateProfile": {
     "create_profile_title": "Account Details",
-    "create_profile_desc": "Please fill out some basic information about you."
+    "create_profile_desc": "Please fill out some basic information about you.",
+    "region": "Region",
+    "user_type": "User type",
+    "broker": "I am a Broker",
+    "investor": "I am an Investor",
+    "error_location": "Please choose a location.",
+    "error_user_type": "Please choose the user type.",
+    "error_missing_nickname": "Please fill out a valid nickname.",
+    "error_invalid_nickname": "Nick name must be between 8 and 20 characters.",
+    "error_missing_email": "Please fill out a valid email.",
+    "error_invalid_email": "Invalid email address"
+  },
+  "NavBar": {
+    "newsfeed": "Newsfeed",
+    "brokers": "Brokers",
+    "courses": "Courses",
+    "community": "Communities",
+    "messages": "Messages",
+    "settings": "Settings",
+    "logout": "Log out",
+    "chat": "Chat",
+    "account": "Account"
   }
 }

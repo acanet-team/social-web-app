@@ -103,5 +103,16 @@
   },
   "Post": {
     "Explore_More": "สำรวจเพิ่มเติม"
+  },
+  "CreateProfile": {
+    "error_invalid_email": "ที่อยู่อีเมลไม่ถูกต้อง",
+    "error_missing_email": "กรุณากรอกอีเมล์ที่ถูกต้อง",
+    "error_user_type": "กรุณาเลือกประเภทผู้ใช้",
+    "error_location": "กรุณาเลือกสถานที่",
+    "error_invalid_nickname": "ชื่อเล่นต้องมีความยาวระหว่าง 8 ถึง 20 ตัวอักษร",
+    "error_missing_nickname": "กรุณากรอกชื่อเล่นที่ถูกต้อง"
+  },
+  "NavBar": {
+    "newsfeed": "ฟีดข่าว"
   }
 }

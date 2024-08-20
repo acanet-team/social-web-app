@@ -36,7 +36,7 @@ export const Comments = (props: {
       setUserInfo(session);
       console.log("info", session);
     }
-  }, []);
+  }, [session]);
 
   // Fetch comments ---------------------
   const fetchComments = async () => {
@@ -45,7 +45,6 @@ export const Comments = (props: {
       const response: any = await getComments(page, props.take, props.postId);
       setComments((prevState) => {
         const newCommentArr = combineUniqueById(prevState, response.data.docs);
-        // console.log(newCommentArr);
         return newCommentArr;
       });
       setTotalPage(response.data.meta.totalPage);

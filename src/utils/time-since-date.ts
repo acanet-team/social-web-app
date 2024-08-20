@@ -15,7 +15,8 @@ export const TimeSinceDate = (date: string | number): string => {
   } else if (hours > 0) {
     timePassed = `${hours} hour${hours > 1 ? "s" : ""}`;
   } else {
-    timePassed = minutes > 0 ? `${minutes} minute${minutes > 1 ? "s" : ""}` : "now";
+    timePassed =
+      minutes > 0 ? `${minutes} minute${minutes > 1 ? "s" : ""}` : "now";
   }
 
   return timePassed;

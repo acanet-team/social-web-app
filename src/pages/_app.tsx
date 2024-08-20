@@ -2,6 +2,7 @@ import httpClient from "@/api";
 import { type ISession } from "@/api/auth/auth.model";
 import Loading from "@/context/Loading";
 import { LoadingProvider } from "@/context/Loading/context";
+import RootLayout from "@/layout/root";
 import "@/styles/global.scss";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import type { NextPage } from "next";
@@ -24,7 +25,8 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? ((page) => page);
+  const getLayout =
+    Component.getLayout ?? ((page) => <RootLayout>{page}</RootLayout>);
   const router = useRouter();
 
   return (

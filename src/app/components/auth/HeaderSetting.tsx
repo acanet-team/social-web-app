@@ -1,11 +1,11 @@
-"use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/auth";
 import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export default function HeaderSetting() {
   const logout = useAuthStore((state) => state.logout);
+  const t = useTranslations("NavBar");
 
   const onLogOutHandler = () => {
     logout();
@@ -14,7 +14,7 @@ export default function HeaderSetting() {
   };
   return (
     <div className="dropdown-menu-settings switchcolor-wrap active">
-      <h4 className="fw-700 font-sm text-current mb-4">Settings</h4>
+      <h4 className="fw-700 font-sm text-current mb-4">{t("settings")}</h4>
       <div className="card bg-transparent-card border-0 d-block mt-3">
         <h4 className="d-inline font-xsss text-grey-500 fw-700">Setting 1</h4>
         <div className="d-inline float-right mt-1">
@@ -50,7 +50,7 @@ export default function HeaderSetting() {
         onClick={onLogOutHandler}
       >
         <button className="btn font-xsss fw-700 text-current p-0 bg-transparent border-0">
-          Log out
+          {t("logout")}
         </button>
         <i className="bi bi-box-arrow-right ps-2 text-current fw-700"></i>
       </div>
