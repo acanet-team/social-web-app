@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
 
-const AiSummary = () => {
+const AiSummary = ({ role }: { role: boolean }) => {
   return (
     <div
       className="card p-4"
@@ -74,12 +74,18 @@ const AiSummary = () => {
                 objectFit: "cover",
               }}
             /> */}
-            <h1>
-              <i className={`bi bi-plus-lg ${styles["icon-profile"]}`}></i>
-            </h1>
-            <h4>
-              <i className={`bi bi-pencil-fill ${styles["icon-profile"]}`}></i>
-            </h4>
+            {role === true && (
+              <>
+                <h1>
+                  <i className={`bi bi-plus-lg ${styles["icon-profile"]}`}></i>
+                </h1>
+                <h4>
+                  <i
+                    className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                  ></i>
+                </h4>
+              </>
+            )}
             {/* <Image
               src="/assets/images/profile/icons8-edit-100 6.png"
               width={15}

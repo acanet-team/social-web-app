@@ -10,7 +10,7 @@ import type { BrokerProfile } from "@/api/profile/model";
 // }: {
 //   dataBrokerProfile: BrokerProfile;
 // }) => {
-const License = () => {
+const License = ({ role }: { role: boolean }) => {
   const [showAllLicense, setshowAllLicense] = useState<boolean>(false);
 
   const licenseToShow = showAllLicense
@@ -53,12 +53,18 @@ const License = () => {
               objectFit: "cover",
             }}
           /> */}
-          <h1>
-            <i className={`bi bi-plus-lg ${styles["icon-profile"]}`}></i>
-          </h1>
-          <h4>
-            <i className={`bi bi-pencil-fill ${styles["icon-profile"]}`}></i>
-          </h4>
+          {role === true && (
+            <>
+              <h1>
+                <i className={`bi bi-plus-lg ${styles["icon-profile"]}`}></i>
+              </h1>
+              <h4>
+                <i
+                  className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                ></i>
+              </h4>
+            </>
+          )}
           {/* <Image
             src="/assets/images/profile/icons8-edit-100 6.png"
             width={20}

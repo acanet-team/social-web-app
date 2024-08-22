@@ -135,3 +135,9 @@ export type Post = {
   createdAt: string;
   updatedAt: string;
 };
+
+export interface ModalProps {
+  title: string;
+  onCancel: () => void;
+  onOk: () => void;
+}
