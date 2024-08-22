@@ -183,7 +183,7 @@
     }
   }
 
-  button:hover {
+  button:hover, button:focus, button:active {
     background-color: var(--theme-color-shade) !important;
     border-color: var(--theme-color-shade) !important;
     color: #fff !important;
@@ -191,6 +191,12 @@
 
   .MuiInputBase-input {
     color: #fff !important;
+  }
+
+  .form-control {
+    &:focus {
+      background-color: var(--theme-color) !important;
+    }
   }
 }
 
