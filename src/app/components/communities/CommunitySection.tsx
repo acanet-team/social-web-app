@@ -14,6 +14,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import styles from "@/styles/modules/communities.module.scss";
 import CommunityForm from "@/app/components/communities/CommunityForm";
+import SharedModal from "../ModalExample";
 
 interface Icommunity {
   imageUrl: string;
@@ -41,7 +42,7 @@ export default function CommunitySection(props: {
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [filterValue, setFilterValue] = React.useState<string>("None");
   const [searchValue, setSearchValue] = useState("");
-  const [isOpenModal, toggleModal] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const filters = ["None", "Free", "Paid"];
@@ -114,12 +115,12 @@ export default function CommunitySection(props: {
     }
   };
 
-  const handleCancel = useCallback(() => {
-    toggleModal(false);
+  const handleClose = useCallback(() => {
+    setShow(false);
   }, []);
 
-  const handleSubmit = useCallback(() => {
-    toggleModal(false);
+  const handleShow = useCallback(() => {
+    setShow(true);
   }, []);
 
   return (
@@ -153,7 +154,11 @@ export default function CommunitySection(props: {
         </Box>
         {/* Filter */}
         <FormControl
-          sx={props.isBroker ? { width: "15%" } : { width: "35%" }}
+          sx={
+            props.communityType === "owned"
+              ? { width: "15%" }
+              : { width: "35%" }
+          }
           className={styles["filter-box"]}
         >
           <InputLabel id="demo-multiple-checkbox-label">
@@ -180,10 +185,10 @@ export default function CommunitySection(props: {
             ))}
           </Select>
         </FormControl>
-        {props.isBroker && (
+        {props.isBroker && props.communityType === "owned" && (
           <button
             className={`${styles["new-community__btn"]} btn btn-primary text-white`}
-            onClick={() => toggleModal(true)}
+            onClick={handleShow}
           >
             + Add new
           </button>
@@ -230,18 +235,15 @@ export default function CommunitySection(props: {
                           {group.memberCount > 0 ? "members" : "member"}
                         </div>
                         <div className="position-absolute right-35 top-0 d-flex align-items-center d-flex flex-column">
-                          {!props.isBroker && (
-                            <button
-                              className="btn btn-primary text-white px-3 py-1 mb-1"
-                              onClick={onJoinCommunityHandler}
-                            >
-                              Join
-                            </button>
-                          )}
-                          {group.fee === "Free" ? (
-                            <div className="text-success fw-bolder">
-                              {group.fee.toLocaleString()}
-                            </div>
+                          <button
+                            className="btn btn-primary text-white px-4 py-1 mb-2"
+                            onClick={onJoinCommunityHandler}
+                          >
+                            Join
+                          </button>
+                          {/* eslint-disable react/no-unescaped-entities */}
+                          {group.fee === 0 ? (
+                            <div className="text-success fw-bolder">"Free"</div>
                           ) : (
                             <div className="d-flex align-items-center">
                               <Image
@@ -252,7 +254,7 @@ export default function CommunitySection(props: {
                                 }
                                 alt="logo"
                               />
-                              <span className="ms-2 fw-bolder">
+                              <span className="ms-2 fw-bolder text-dark">
                                 {group.fee.toLocaleString()}
                               </span>
                             </div>
@@ -270,11 +272,12 @@ export default function CommunitySection(props: {
             </div>
           </div>
           {isLoading && <DotWaveLoader />}
-          {isOpenModal && (
+          {show && (
             <CommunityForm
               title={isEditing ? "Edit Community" : "New Community"}
-              onCancel={handleCancel}
-              onOk={handleSubmit}
+              handleClose={handleClose}
+              handleShow={handleShow}
+              show={show}
             />
           )}
         </div>
