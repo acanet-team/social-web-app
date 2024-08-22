@@ -1,5 +1,5 @@
 import React, { useEffect, useState, type ReactNode } from "react";
-import styles from "@/styles/modules/modalExample.module.scss";
+import styles from "@/styles/modules/modalTemplate.module.scss";
 import classes from "@/styles/modules/createProfile.module.scss";
 import { useFormik } from "formik";
 import { throwToast } from "@/utils/throw-toast";
@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { useLoading } from "@/context/Loading/context";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { title } from "process";
 
 interface CommunityFormProps {
   title: string;
@@ -107,7 +108,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           ></i>
         )}
         <Modal.Title>
-          <h1 className="m-0 fw-bold">Modal heading</h1>
+          <h1 className="m-0 fw-bold">{title}</h1>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>

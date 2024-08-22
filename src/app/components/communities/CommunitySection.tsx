@@ -14,7 +14,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import styles from "@/styles/modules/communities.module.scss";
 import CommunityForm from "@/app/components/communities/CommunityForm";
-import SharedModal from "../ModalExample";
+import ModalTemplate from "../ModalTemplate";
 
 interface Icommunity {
   imageUrl: string;
