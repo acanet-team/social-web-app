@@ -7,3 +7,8 @@ export enum TabPnum {
   Communities = "communities",
   About = "about",
 }
+export enum CommunityEnum {
+  popular = "popular",
+  following = "following",
+  owned = "owned",
+}

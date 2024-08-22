@@ -129,5 +129,23 @@
     "logout": "Log out",
     "chat": "Chat",
     "account": "Account"
+  },
+  "Community": {
+    "community": "Communities",
+    "popular_community": "Popular",
+    "following_community": "Following",
+    "owned_community": "Your Communities",
+    "group_name": "Community Name",
+    "group_desc": "Community Description",
+    "group_overview": "Community Overview",
+    "group_type": "Community Type",
+    "joining_fee": "Joining fee",
+    "free": "Free Community",
+    "paid": "Paid Community",
+    "error_missing_community_name": "Please fill out a community name.",
+    "error_invalid_community_name": "Name must be between 4 and 40 characters.",
+    "error_missing_description": "Please fill out a community description.",
+    "error_invalid_description": "Description must be between 4 and 250 characters.",
+    "error_missing_fee": "Please fill out a joining fee."
   }
 }

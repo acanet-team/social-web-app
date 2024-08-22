@@ -29,6 +29,13 @@ export type IUser = {
   deletedAt: string;
 };
 
+export type ICommunity = {
+  name: string;
+  description: string;
+  hasFee: boolean;
+  feeNum: number;
+};
+
 type BrokerProfile = {
   id: string;
   createdAt: string;

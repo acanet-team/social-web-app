@@ -59,7 +59,7 @@
   }
 
   .form-control {
-    background-color: #333 !important;
+    background-color: var(--theme-color);
     border-color: var(--theme-color);
   }
 
@@ -181,6 +181,16 @@
     &[readonly] {
       background-color: #343a40 !important;
     }
+  }
+
+  button:hover {
+    background-color: var(--theme-color-shade) !important;
+    border-color: var(--theme-color-shade) !important;
+    color: #fff !important;
+  }
+
+  .MuiInputBase-input {
+    color: #fff !important;
   }
 }
 

@@ -6,7 +6,7 @@ import useAuthStore from "@/store/auth";
 import Image from "next/image";
 import WaveLoader from "../WaveLoader";
 import { postComment, getComments, deleteComment } from "@/api/newsfeed";
-import CustomModal from "../Modal";
+import AlertModal from "../AlertModal";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { useSession } from "next-auth/react";
 
@@ -34,7 +34,7 @@ export const Comments = (props: {
   useEffect(() => {
     if (session) {
       setUserInfo(session);
-      console.log("info", session);
+      // console.log("info", session);
     }
   }, [session]);
 
@@ -85,7 +85,7 @@ export const Comments = (props: {
 
   // Post a comment ---------------------
   const onEnterPress = (e: any) => {
-    if (e.keyCode == 13 && e.shiftKey == false) {
+    if (e.key === "Enter" && e.shiftKey == false) {
       e.preventDefault();
       onPostCommentHandler();
     }
@@ -93,9 +93,9 @@ export const Comments = (props: {
 
   const onPostCommentHandler = async () => {
     const content = commentRef?.current?.value;
-    const randomKey = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    // const randomKey = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     let newComment = {
-      id: randomKey,
+      id: null,
       createdAt: new Date(),
       updatedAt: null,
       deletedAt: null,
@@ -103,8 +103,8 @@ export const Comments = (props: {
       childrenCount: 0,
       createBy: {
         id: userInfo?.user?.id,
-        firstName: session.user.firstName,
-        lastName: session.user.lastName,
+        firstName: session?.user?.firstName,
+        lastName: session?.user?.lastName,
         photo: {
           path: userInfo?.user?.photo?.path || "/assets/images/user.png",
         },
@@ -125,7 +125,10 @@ export const Comments = (props: {
         const values = { content: content, postId: props.postId };
         setIsLoading(true);
         // Call api to post the comment
-        await postComment(values);
+        const res: any = await postComment(values);
+        newComment.id = res.data.id;
+        console.log("res id", res.data.id);
+        console.log("id", newComment.id);
         setComments((prevState) => [newComment, ...prevState]);
         props.setCommentNum((prevState: number) => prevState + 1);
         // Scroll to top of the comment section
@@ -162,6 +165,7 @@ export const Comments = (props: {
     try {
       if (commentId) {
         // Calling api
+        console.log(commentId);
         await deleteComment(commentId);
         props.setCommentNum((prevState) => prevState - 1);
         // Remove comment from DOM
@@ -239,7 +243,7 @@ export const Comments = (props: {
 
       {/* Delete modal */}
       {showModal && (
-        <CustomModal
+        <AlertModal
           message="Are you sure you want to proceed?"
           onCancel={handleCancel}
           onOk={onProceedDelete}
