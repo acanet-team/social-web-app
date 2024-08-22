@@ -103,5 +103,16 @@
   },
   "Post": {
     "Explore_More": "Tìm hiểu thêm"
+  },
+  "CreateProfile": {
+    "error_invalid_email": "Địa chỉ email không hợp lệ",
+    "error_missing_email": "Vui lòng điền vào một email hợp lệ.",
+    "error_user_type": "Vui lòng chọn loại người dùng.",
+    "error_location": "Vui lòng chọn một địa điểm.",
+    "error_invalid_nickname": "Tên biệt hiệu phải có từ 8 đến 20 ký tự.",
+    "error_missing_nickname": "Vui lòng điền một biệt hiệu hợp lệ."
+  },
+  "NavBar": {
+    "newsfeed": "Nguồn cấp tin tức"
   }
 }

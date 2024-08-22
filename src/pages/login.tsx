@@ -1,15 +1,16 @@
 import { ONBOARDING_STEP } from "@/api/auth/auth.model";
 import { useLoading } from "@/context/Loading/context";
 import useAuthStore from "@/store/auth";
-import type { NextPage, NextPageContext } from "next";
+import type { NextPageContext } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { NextPageWithLayout } from "./_app";
 
-const LoginPage: NextPage = () => {
+const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
   const t = useTranslations("SignIn");
   const [curTheme, setCurTheme] = useState("theme-light");
@@ -141,6 +142,10 @@ const LoginPage: NextPage = () => {
 };
 
 export default LoginPage;
+
+LoginPage.getLayout = function getLayout(page: any) {
+  return <div>{page}</div>;
+};
 
 export async function getServerSideProps(context: NextPageContext) {
   return {

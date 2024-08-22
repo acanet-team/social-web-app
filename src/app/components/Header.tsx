@@ -5,8 +5,8 @@ import Darkbutton from "./Darkbutton";
 import useAuthStore from "@/store/auth";
 import { useSession } from "next-auth/react";
 import HeaderSetting from "./auth/HeaderSetting";
-import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export default function Header(props: { isOnboarding: boolean }) {
   const [isOpen, toggleOpen] = useState(false);
@@ -17,6 +17,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   const logout = useAuthStore((state) => state.logout);
   const [photo, setPhoto] = useState<string>("");
   const { data: session } = useSession() as any;
+  const t = useTranslations("NavBar");
 
   useEffect(() => {
     if (session) {
@@ -63,8 +64,10 @@ export default function Header(props: { isOnboarding: boolean }) {
         >
           <span
             id="site-logo"
-            className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0"
+            className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0
+            "
           >
+            {/* eslint-disable @next/next/no-img-element */}
             <Image
               src={
                 curTheme === "theme-dark"
@@ -90,7 +93,8 @@ export default function Header(props: { isOnboarding: boolean }) {
         >
           <i className="feather-search text-grey-900 font-sm btn-round-md bg-greylight"></i>
         </span>
-        {props.isOnboarding ? (
+        {/* eslint-disable @next/next/no-img-element */}
+        {props.isOnboarding && photo ? (
           <Image
             src={photo}
             alt="user"
@@ -106,7 +110,6 @@ export default function Header(props: { isOnboarding: boolean }) {
           ></button>
         )}
       </div>
-
       <form action="#" className="float-left header-search ms-3">
         <div className="form-group mb-0 icon-input">
           <i className="feather-search font-sm text-grey-400"></i>
@@ -123,7 +126,7 @@ export default function Header(props: { isOnboarding: boolean }) {
       >
         <i className="feather-home font-lg text-grey-500 "></i>
         <div className={curTheme === "theme-dark" ? "text-white" : "text-dark"}>
-          Newsfeed
+          {t('newsfeed')}
         </div>
       </Link>
       <Link
@@ -134,7 +137,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         <div
           className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
         >
-          Brokers
+          {t('brokers')}
         </div>
       </Link>
       <Link
@@ -145,7 +148,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         <div
           className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
         >
-          Courses
+          {t('courses')}
         </div>
       </Link>
       <Link
@@ -156,7 +159,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         <div
           className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
         >
-          Messages
+          {t('messages')}
         </div>
       </Link>
       <Link
@@ -167,10 +170,9 @@ export default function Header(props: { isOnboarding: boolean }) {
         <div
           className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
         >
-          Settings
+          {t('settings')}
         </div>
       </Link> */}
-
       <span
         className={`p-2 pointer text-center ms-auto menu-icon ${notiClass}`}
         id="dropdownMenu3"
@@ -190,13 +192,16 @@ export default function Header(props: { isOnboarding: boolean }) {
           {/* Notification content */}
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          <Image
-            src={photo}
-            width={40}
-            height={40}
-            alt="user"
-            className="w40 position-absolute left-0 rounded-xl"
-          />
+          {/* eslint-disable @next/next/no-img-element */}
+          {photo && (
+            <Image
+              src={photo}
+              width={40}
+              height={40}
+              alt="user"
+              className="w40 position-absolute left-0 rounded-xl"
+            />
+          )}
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
             Goria Coast{" "}
             <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
@@ -210,13 +215,16 @@ export default function Header(props: { isOnboarding: boolean }) {
         </div>
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          <Image
-            src={photo}
-            alt="user"
-            width={40}
-            height={40}
-            className="w40 position-absolute left-0 rounded-xl"
-          />
+          {/* eslint-disable @next/next/no-img-element */}
+          {photo && (
+            <Image
+              src={photo}
+              alt="user"
+              width={40}
+              height={40}
+              className="w40 position-absolute left-0 rounded-xl"
+            />
+          )}
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
             Surfiya Zakir{" "}
             <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
@@ -229,13 +237,16 @@ export default function Header(props: { isOnboarding: boolean }) {
           </h6>
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
-          <Image
-            src={photo}
-            alt="user"
-            width={40}
-            height={40}
-            className="w40 position-absolute left-0 rounded-xl"
-          />
+          {/* eslint-disable @next/next/no-img-element */}
+          {photo && (
+            <Image
+              src={photo}
+              alt="user"
+              width={40}
+              height={40}
+              className="w40 position-absolute left-0 rounded-xl"
+            />
+          )}
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
             Victor Exrixon{" "}
             <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
@@ -249,23 +260,27 @@ export default function Header(props: { isOnboarding: boolean }) {
         </div>
       </div>
       <Darkbutton />
-      <Image
-        src={photo}
-        alt="user"
-        width={40}
-        height={40}
-        className="w40 rounded-xl p-0 ms-3 menu-icon cursor-pointer"
-        onClick={onOpenSettingHandler}
-      />
-
+      {/* eslint-disable @next/next/no-img-element */}
+      {photo && (
+        <Image
+          src={photo}
+          alt="user"
+          width={40}
+          height={40}
+          className="w40 rounded-xl p-0 ms-3 menu-icon cursor-pointer"
+          onClick={onOpenSettingHandler}
+        />
+      )}
       {/* Left navbar */}
       {!props.isOnboarding && (
-        <nav className={`navigation scroll-bar ${navClass}`}>
+        <nav
+          className={`navigation scroll-bar ${navClass} header-navbar__margin`}
+        >
           <div className="container ps-0 pe-0">
             <div className="nav-content">
               <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
-                <div className="nav-caption fw-600 font-xssss text-grey-500">
-                  <span>New </span>Feeds
+                <div className="nav-caption fw-600 font-xsss text-grey-500">
+                  <span>{t("newsfeed")}</span>
                 </div>
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block"></li>
@@ -283,7 +298,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                     <Link href="/" className="nav-content-bttn open-font">
                       <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
 
-                      <span>Newsfeed</span>
+                      <span>{t("newsfeed")}</span>
                     </Link>
                   </li>
                   <li>
@@ -292,7 +307,16 @@ export default function Header(props: { isOnboarding: boolean }) {
                       className="nav-content-bttn open-font"
                     >
                       <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
-                      <span>Brokers</span>
+                      <span>{t("brokers")}</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/communities"
+                      className="nav-content-bttn open-font"
+                    >
+                      <i className="feather-globe btn-round-md bg-mini-gradiant me-3"></i>
+                      <span>{t("community")}</span>
                     </Link>
                   </li>
                   <li>
@@ -301,7 +325,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                       className="nav-content-bttn open-font"
                     >
                       <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
-                      <span>Courses</span>
+                      <span>{t("courses")}</span>
                     </Link>
                   </li>
                   <li>
@@ -310,63 +334,54 @@ export default function Header(props: { isOnboarding: boolean }) {
                       className="nav-content-bttn open-font"
                     >
                       <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
-                      <span>Messages</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/userpage"
-                      className="nav-content-bttn open-font"
-                    >
-                      <i className="feather-settings btn-round-md bg-primary-gradiant me-3"></i>
-                      <span>Settings</span>
+                      <span>{t("messages")}</span>
                     </Link>
                   </li>
                 </ul>
               </div>
 
               <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
-                <div className="nav-caption fw-600 font-xssss text-grey-500">
-                  <span></span> Account
+                <div className="nav-caption fw-600 font-xsss text-grey-500">
+                  <span>{t("account")}</span>
                 </div>
                 <ul className="mb-1">
                   <li className="logo d-none d-xl-block d-lg-block"></li>
                   <li>
                     <Link
                       href="/defaultsettings"
-                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                      className="nav-content-bttn open-font h-auto"
                     >
-                      <i className="font-sm feather-settings me-3 text-grey-500"></i>
-                      <span>Settings</span>
+                      <i className="font-xl text-current feather-settings me-3"></i>
+                      <span>{t("settings")}</span>
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/defaultanalytics"
-                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                      className="nav-content-bttn open-font h-auto"
                     >
-                      <i className="font-sm feather-pie-chart me-3 text-grey-500"></i>
+                      <i className="font-xl text-current feather-pie-chart me-3"></i>
                       <span>Analytics</span>
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/defaultmessage"
-                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                      className="nav-content-bttn open-font h-auto"
                     >
-                      <i className="font-sm feather-message-square me-3 text-grey-500"></i>
-                      <span>Chat</span>
+                      <i className="font-xl text-current feather-message-square me-3"></i>
+                      <span>{t("chat")}</span>
                       <span className="circle-count bg-warning mt-0">23</span>
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="#"
-                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                      className="nav-content-bttn open-font h-auto"
                       onClick={onLogOutHandler}
                     >
-                      <i className="font-sm bi bi-box-arrow-right me-3 text-grey-500"></i>
-                      <span>Logout</span>
+                      <i className="font-xl text-current bi bi-box-arrow-right me-3"></i>
+                      <span>{t("logout")}</span>
                     </Link>
                   </li>
                 </ul>
@@ -393,7 +408,6 @@ export default function Header(props: { isOnboarding: boolean }) {
           </div>
         </form>
       </div> */}
-
       {openSettings && <HeaderSetting />}
     </div>
   );

@@ -1,11 +1,11 @@
-export type IMe= {
+export type IMe = {
   user: IUserInfo;
   userProfile?: UserProfile;
   brokerProfile?: BrokerProfile;
   referBy?: IUserInfo;
-}
+};
 
-export type IUser= {
+export type IUser = {
   userId: number;
   email: string;
   firstName: string;
@@ -27,9 +27,9 @@ export type IUser= {
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
-}
+};
 
-type BrokerProfile ={
+type BrokerProfile = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -38,9 +38,9 @@ type BrokerProfile ={
   schoolName: string[];
   companyName: string[];
   socialMedia: string[];
-}
+};
 
-type UserProfile ={
+type UserProfile = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -53,21 +53,21 @@ type UserProfile ={
   shortDesc: string;
   additionalData: AdditionalData;
   brokerProfile: AdditionalData;
-}
+};
 
-type AdditionalData ={}
+type AdditionalData = {};
 
-export type Role ={
+export type Role = {
   id: number;
   name: string;
-}
+};
 
-export type Status= {
+export type Status = {
   id: number;
   name: string;
-}
+};
 
-export type Photo= {
+export type Photo = {
   id: string;
   path: string;
   mimetype: string;
@@ -76,8 +76,8 @@ export type Photo= {
   ownerId: number;
   courseId: number;
   category: string;
-}
-export type IUserInfo ={
+};
+export type IUserInfo = {
   id: number | null;
   email: string;
   provider: string;
@@ -93,12 +93,12 @@ export type IUserInfo ={
   isBroker: boolean;
   isProfile: boolean;
   image?: string;
-}
-export type IUserSession= {
+};
+export type IUserSession = {
   user?: IUserInfo;
   expires: string;
   token: string;
-}
+};
 
 export type ResponseDto<T> = {
   status: number;
@@ -127,4 +127,4 @@ export type Post = {
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
-}
+};

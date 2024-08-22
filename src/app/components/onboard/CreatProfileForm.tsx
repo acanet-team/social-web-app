@@ -9,36 +9,32 @@ import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { toast, type ToastOptions } from "react-toastify";
 import * as Yup from "yup";
+import { throwToast } from "@/utils/throw-toast";
+import { useTranslations } from "next-intl";
 
-interface FormValues {
-  nickName: string;
-  location: string;
-  isBroker: Boolean;
-  email: string;
-}
-interface FormErrors {
-  nickName?: string;
-  location?: string;
-  isBroker?: string;
-  email?: string;
-}
+// interface FormValues {
+//   nickName: string;
+//   location: string;
+//   isBroker: Boolean;
+//   email: string;
+// }
+// interface FormErrors {
+//   nickName?: string;
+//   location?: string;
+//   isBroker?: string;
+//   email?: string;
+// }
 
 export default function CreateProfileForm(props: {
   regions: any[];
   onNext: () => void;
 }) {
   const { data: session, update: updateSession } = useSession();
+  console.log(session);
   const { showLoading, hideLoading } = useLoading();
-
-  // const lastName = authSession.user.lastName || "";
-  // const firstName = authSession.user.firstName || "";
-  // const email = authSession?.user.email;
-  // const photo = authSession?.user?.photo.path;
-  // const nickName = authSession?.userProfile.nickName;
-  // Get data from local storage
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
+  const t = useTranslations("CreateProfile");
 
   useEffect(() => {
     if (session) {
@@ -56,54 +52,37 @@ export default function CreateProfileForm(props: {
     }
   }, [session]);
 
-  // Toast notification
-  const throwToast = (message: string, notiType: string) => {
-    const notiConfig: ToastOptions = {
-      position: "top-right",
-      autoClose: 4000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    };
-
-    const notify = () => {
-      if (message !== "" && notiType === "success") {
-        toast.success(message, notiConfig);
-      } else if (message !== "" && notiType === "error") {
-        toast.error(message, notiConfig);
-      }
-    };
-
-    notify();
-  };
-
   // Form validation
-  const validate = (values: FormValues) => {
-    const errors: FormErrors = {};
-    if (!values.location) {
-      errors.location = "Please choose a location.";
-    }
-    if (values.isBroker === null) {
-      errors.isBroker = "Please choose the user type.";
-    }
-    console.log("val", values);
-    if (!values.nickName) {
-      errors.nickName = "Please fill out a valid nickname.";
-    } else if (values.nickName.length > 20 || values.nickName.length < 8) {
-      errors.nickName = "Nick name must be between 8 and 20 characters.";
-    }
+  // const validate = (values: FormValues) => {
+  //   const errors: FormErrors = {};
+  //   if (!values.location) {
+  //     errors.location = "Please choose a location.";
+  //   }
+  //   if (values.isBroker === null) {
+  //     errors.isBroker = "Please choose the user type.";
+  //   }
+  //   console.log("val", values);
+  //   if (!values.nickName) {
+  //     errors.nickName = "Please fill out a valid nickname.";
+  //   } else if (values.nickName.length > 20 || values.nickName.length < 8) {
+  //     errors.nickName = "Nick name must be between 8 and 20 characters.";
+  //   }
 
-    if (!values.email) {
-      errors.email = "Please fill out a valid email.";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-      errors.email = "Invalid email address";
-    }
+  //   if (!values.email) {
+  //     errors.email = "Please fill out a valid email.";
+  //   } else if (
+  //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+  //   ) {
+  //     errors.email = "Invalid email address";
+  //   }
 
-    return errors;
+  //   return errors;
+  // };
+
+  const errorFieldMap: { [key: string]: string } = {
+    ER1018: "nickName",
+    ER3013: "isBroker",
+    ER1010: "nickName",
   };
 
   const formik = useFormik({
@@ -116,14 +95,14 @@ export default function CreateProfileForm(props: {
     enableReinitialize: true,
     validationSchema: Yup.object({
       nickName: Yup.string()
-        .required("Please fill out a valid nickname.")
-        .min(8, () => "Nick name must be between 8 and 20 characters.")
-        .max(20, () => "Nick name must be between 8 and 20 characters."),
-      location: Yup.string().required("Please choose a location."),
-      isBroker: Yup.bool().required("Please choose the user type."),
+        .required(t("error_missing_nickname"))
+        .min(8, () => t("error_invalid_nickname"))
+        .max(20, () => t("error_invalid_nickname")),
+      location: Yup.string().required(t("error_location")),
+      isBroker: Yup.bool().required(t("error_user_type")),
       email: Yup.string()
-        .required("Please fill out a valid email.")
-        .email("Invalid email address"),
+        .required(t("error_missing_email"))
+        .email(t("error_invalid_email")),
     }),
     onSubmit: async (values, { setFieldError }) => {
       const profileValues = {
@@ -143,26 +122,14 @@ export default function CreateProfileForm(props: {
         // updateProfile(values);
         // Continue the onboarding process
         localStorage.setItem("onboarding_step", "create_profile");
-        setTimeout(() => {
-          props.onNext();
-        }, 4000);
+        props.onNext();
       } catch (err) {
-        console.log(err);
-        // const errors = err as AxiosError;
-        let errorMessage = "";
         const errorCode = err.code || err.statusCode;
-        if (errorCode === "ER1018") {
-          errorMessage = "Nickname already exists.";
-          setFieldError("nickName", errorMessage);
-          throwToast(errorMessage, "error");
-        } else if (errorCode === "ER3013") {
-          errorMessage = "You're not a whitelisted broker.";
-          setFieldError("isBroker", errorMessage);
-          throwToast(errorMessage, "error");
-        } else if (errorCode === "ER1010") {
-          errorMessage = "User profile already existed.";
-          setFieldError("nickName", errorMessage);
-          throwToast(errorMessage, "error");
+        const errorMsg = err.message || "Something goes wrong.";
+        const field = errorFieldMap[errorCode];
+        if (field) {
+          setFieldError(field, errorMsg);
+          throwToast(errorMsg, "error");
         }
       } finally {
         hideLoading();
@@ -213,7 +180,7 @@ export default function CreateProfileForm(props: {
           ) : null}
 
           {/* eslint-disable-next-line */}
-          <label className="fw-600 mt-3 mb-1">Region</label>
+          <label className="fw-600 mt-3 mb-1">{t('region')}</label>
           <FormControl
             fullWidth
             id="location"
@@ -227,9 +194,6 @@ export default function CreateProfileForm(props: {
                 e: React.ChangeEvent<HTMLInputElement>,
                 newValue: string | null,
               ) => formik.setFieldValue("location", newValue)}
-              // onInputChange={(e, newInputValue) => {
-              //   setRegionInputValue(newInputValue);
-              // }}
               onBlur={formik.handleBlur}
               sx={{
                 "& fieldset": {
@@ -289,7 +253,7 @@ export default function CreateProfileForm(props: {
           {/* eslint-disable-next-line */}
 
           <div></div>
-          <label className="fw-600 mt-3 mb-3">User type</label>
+          <label className="fw-600 mt-3 mb-3">{t("user_type")}</label>
           <div
             id={styles["profile-radio"]}
             className="profile-radio-btn mx-auto"
@@ -304,7 +268,8 @@ export default function CreateProfileForm(props: {
                 onChange={(e) => formik.setFieldValue("isBroker", false)}
               />
               <label htmlFor="investor">
-                <i className="bi bi-person h2 m-0"></i>I am an Investor
+                <i className="bi bi-person h2 m-0"></i>
+                {t("investor")}
               </label>
             </div>
             <div className="w-100">
@@ -316,7 +281,8 @@ export default function CreateProfileForm(props: {
                 onChange={(e) => formik.setFieldValue("isBroker", true)}
               />
               <label htmlFor="broker">
-                <i className="bi bi-person-check h2 m-0"></i>I am a Broker
+                <i className="bi bi-person-check h2 m-0"></i>
+                {t("broker")}
               </label>
             </div>
           </div>
