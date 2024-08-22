@@ -1,17 +1,13 @@
 import React from "react";
 import styles from "@/styles/modules/modal.module.scss";
 
-interface CustomModalProps {
+interface AlertModalProps {
   message: string;
   onCancel: () => void;
   onOk: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({
-  message,
-  onCancel,
-  onOk,
-}) => {
+const AlertModal: React.FC<AlertModalProps> = ({ message, onCancel, onOk }) => {
   return (
     <div className={styles["modal-overlay"]}>
       <div className={styles["modal-content"]}>
@@ -29,4 +25,4 @@ const CustomModal: React.FC<CustomModalProps> = ({
   );
 };
 
-export default React.memo(CustomModal);
+export default React.memo(AlertModal);

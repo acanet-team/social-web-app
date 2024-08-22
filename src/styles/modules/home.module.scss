@@ -1,5 +1,6 @@
 #home .home-tabs {
   width: 100%;
+  display: flex;
 }
 
 #home .home-tabs .button-tab {
@@ -16,10 +17,6 @@
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-}
-
-#home .home-tabs .button-tab:hover {
-  background-color: #1a123789;
 }
 
 #home .home-tabs .button-tab > * {
