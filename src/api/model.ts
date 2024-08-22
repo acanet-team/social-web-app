@@ -2,6 +2,7 @@ import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 import { IHttpOptions } from "./index";
 import { IUser } from "./onboard/model";
 import type { IBrokers } from "./newsfeed/model";
+import type { BrokerProfile, User, UserProfile } from "./profile/model";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?
@@ -96,5 +97,20 @@ export type Regions = {
       },
     ];
     type: string;
+  };
+};
+
+export type AllProfileResponse = {
+  status: number;
+  message: string;
+  data: {
+    user: User;
+    userProfile: UserProfile;
+    brokerProfile: BrokerProfile;
+    followersCount: number;
+    followingsCount: number;
+    // rating: string;
+    // coursesEnrolledCount: string;
+    // followed: boolean;
   };
 };

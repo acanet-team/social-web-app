@@ -1,31 +1,25 @@
-#home .home-tabs {
+.group-tabs {
   width: 100%;
+  // margin-left: 40px;
 }
 
-#home .home-tabs .button-tab {
-  width: 50%;
+.group-tabs .button-tab {
+  width: 33%;
   height: 50px;
   opacity: 0.6;
   font-weight: 700;
-  background-color: #fbfcfe !important;
-  color: #111 !important;
+  // background-color: #fbfcfe !important;
+  // color: #ADB5BD !important;
   border: none !important;
   position: relative;
   float: inline-start;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#home .home-tabs .button-tab:hover {
-  background-color: #1a123789;
-}
-
-#home .home-tabs .button-tab > * {
-  width: 100%;
-  height: 100%;
-  padding: 12px;
+.group-tabs .button-tab:hover {
+  cursor: pointer;
 }
 
 .tab-active {
@@ -43,17 +37,13 @@
   left: 50%;
   transform: translate(-50%, 0);
   color: #000000;
-
 }
 
 :global(.theme-dark) {
-  #home .home-tabs .button-tab {
-    background-color: var(--theme-color) !important;
-    color: #fff !important;
-    border-bottom: 0.3px solid #dddddd8f !important;
-  }
-
   .tab-active::before {
     border: 2px solid #fff;
+  }
+  .icon-profile {
+    color: white !important;
   }
 }

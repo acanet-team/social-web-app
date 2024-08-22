@@ -52,6 +52,8 @@ export default function Header(props: { isOnboarding: boolean }) {
     // Calling next/auth sign out
     signOut({ callbackUrl: "/login" });
   };
+
+  const userId = session?.user?.id;
   return (
     <div className="nav-header shadow-xs border-0">
       <div className="nav-top">
@@ -267,6 +269,16 @@ export default function Header(props: { isOnboarding: boolean }) {
                 </div>
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block"></li>
+                  <li>
+                    <Link
+                      href={`/profile/${userId}`}
+                      className="nav-content-bttn open-font"
+                    >
+                      <i className="feather-user btn-round-md bg-blue-gradiant me-3"></i>
+
+                      <span>My Profile</span>
+                    </Link>
+                  </li>
                   <li>
                     <Link href="/" className="nav-content-bttn open-font">
                       <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>

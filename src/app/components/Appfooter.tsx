@@ -8,6 +8,7 @@ import { userInfo } from "os";
 export default function Appfooter() {
   const session = useAuthStore((state) => state.session);
   const [photo, setPhoto] = useState<string>();
+  const userId = session?.user?.id; //fix
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
     const photo = userInfo?.session?.user?.photo?.path;
@@ -15,6 +16,9 @@ export default function Appfooter() {
   }, []);
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
+      <Link href={`/profile/${userId}`} className="nav-content-bttn nav-center">
+        <i className="feather-user"></i>
+      </Link>
       <Link href="/home" className="nav-content-bttn nav-center">
         <i className="feather-home"></i>
       </Link>

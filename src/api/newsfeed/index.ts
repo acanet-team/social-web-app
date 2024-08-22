@@ -41,11 +41,7 @@ export const getTopics = (
   let url = `/v1/interest-topic?order=DESC`;
   page ? (url += `&page=${page}&take=20`) : null;
   search ? (url += `&keyword=${search}`) : null;
-  return httpClient.fetch({
-    url: url,
-    method: "GET",
-    contentType: "json",
-  });
+  return httpClient.get(url);
 };
 
 export const createNewPostRequest = (values: CreatePostRequest) => {
