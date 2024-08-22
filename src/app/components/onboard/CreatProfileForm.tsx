@@ -31,7 +31,6 @@ export default function CreateProfileForm(props: {
   onNext: () => void;
 }) {
   const { data: session, update: updateSession } = useSession();
-  console.log(session);
   const { showLoading, hideLoading } = useLoading();
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
   const t = useTranslations("CreateProfile");
@@ -251,8 +250,6 @@ export default function CreateProfileForm(props: {
           ) : null}
 
           {/* eslint-disable-next-line */}
-
-          <div></div>
           <label className="fw-600 mt-3 mb-3">{t("user_type")}</label>
           <div
             id={styles["profile-radio"]}

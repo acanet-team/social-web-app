@@ -11,6 +11,7 @@ import { Comments } from "./Comments";
 import DotWaveLoader from "../DotWaveLoader";
 import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
+import RoundedNumber from "../RoundedNumber";
 
 export default function PostCard(props: {
   postId: string;
@@ -257,13 +258,12 @@ export default function PostCard(props: {
         >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
           <span className="d-none-xss">
-            {/* {comment > 1000 ? Math.round(comment / 1000).toFixed(1) : comment}
-            {comment >= 1000 ? "k" : ""} {comment < 2 ? "Comment" : "Comments"} */}
-            {commentNum > 1000
+            {/* {commentNum > 1000
               ? Math.round(commentNum / 1000).toFixed(1)
               : commentNum}
             {commentNum >= 1000 ? "k" : ""}{" "}
-            {commentNum < 2 ? "Comment" : "Comments"}
+            {commentNum < 2 ? "Comment" : "Comments"} */}
+            <RoundedNumber num={commentNum} unit="Comment" />
           </span>
         </div>
         {/* <div

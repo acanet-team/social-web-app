@@ -54,7 +54,7 @@ export default function Header(props: { isOnboarding: boolean }) {
     signOut({ callbackUrl: "/login" });
   };
   return (
-    <div className="nav-header shadow-xs border-0">
+    <div className="nav-header shadow-xs border-0 nunito-font">
       <div className="nav-top">
         <Link
           href="/"

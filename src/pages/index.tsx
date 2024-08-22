@@ -3,7 +3,6 @@ import Contacts from "@/app/components/Contacts";
 import CreatePost from "@/app/components/newsfeed/Createpost";
 import FetchBrokers from "@/app/components/newsfeed/FetchBrokers";
 import Posts from "@/app/components/newsfeed/Posts";
-import RootLayout from "@/layout/root";
 import styles from "@/styles/modules/home.module.scss";
 import { TabEnum } from "@/types/enum";
 import "bootstrap-icons/font/bootstrap-icons.css";
