@@ -33,7 +33,7 @@ export default function Profile({
   const [curTab, setCurTab] = useState<string>("about");
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
-  const [role, setRole] = useState(false);
+  const [role, setRole] = useState(true);
   const [show, setShow] = useState(false);
   const [textHover, setTextHover] = useState(false);
 
@@ -239,6 +239,7 @@ export default function Profile({
                 gap: "2px",
                 alignItems: "center",
                 justifyContent: "center",
+                width: "120px",
               }}
             >
               <Image
@@ -263,6 +264,7 @@ export default function Profile({
                 gap: "2px",
                 alignItems: "center",
                 justifyContent: "center",
+                width: "120px",
               }}
             >
               <Image
@@ -361,9 +363,10 @@ export default function Profile({
       )}
       {show && (
         <ModalEditBanner
-          onCancel={handleCancel}
-          onOk={handleSubmit}
+          handleClose={handleCancel}
+          handleShow={handleOpenModal}
           title="Edit Banner"
+          show={show}
         />
       )}
     </>
@@ -371,7 +374,7 @@ export default function Profile({
 }
 export async function getServerSideProps(context: NextPageContext) {
   const { id } = context.query;
-  // const profileRes = await getProfile(id as string);
+  const profileRes = await getProfile(id as string);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,

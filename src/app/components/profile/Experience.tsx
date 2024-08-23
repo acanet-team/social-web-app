@@ -1,10 +1,11 @@
 import { dataExperiencesProfile } from "@/app/fakeData/profile";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { TruncateText } from "../TruncateText";
 import styles from "@/styles/modules/profile.module.scss";
 import { FormatDate } from "../FormatDate";
 import type { BrokerProfile } from "@/api/profile/model";
+import { ModalExperience } from "./ModalExperience";
 
 // export const Experience = ({
 //   dataBrokerProfile,
@@ -13,6 +14,8 @@ import type { BrokerProfile } from "@/api/profile/model";
 // }) => {
 export const Experience = ({ role }: { role: boolean }) => {
   const [showAllExperiences, setshowAllExperiences] = useState<boolean>(false);
+  const [show, setShow] = useState(false);
+  const [iconEdit, setShowIconEdit] = useState(false);
 
   const experiencesToShow = showAllExperiences
     ? dataExperiencesProfile
@@ -46,6 +49,18 @@ export const Experience = ({ role }: { role: boolean }) => {
     return result;
   };
 
+  const handleOpenModal = useCallback(() => {
+    setShow(true);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    setShow(false);
+  }, []);
+
+  const handleShowEdit = useCallback(() => {
+    setShowIconEdit((iconEdit) => !iconEdit);
+  }, [show]);
+
   // const curDate = new Date();
   // const getFormattedCurrentDate = (curDate: Date): string => {
   //   const date = new Date();
@@ -57,32 +72,33 @@ export const Experience = ({ role }: { role: boolean }) => {
   // const currentDate = getFormattedCurrentDate(curDate);
 
   return (
-    <div
-      className="card p-4"
-      style={{
-        background: "#FFFFFF",
-        borderRadius: "15px",
-        marginTop: "40px",
-      }}
-    >
+    <>
       <div
+        className="card p-4"
         style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          background: "#FFFFFF",
+          borderRadius: "15px",
+          marginTop: "40px",
         }}
       >
-        <h2 className="m-0 fw-600 mb-4">Experience</h2>
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "4px",
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          {/* <Image
+          <h2 className="m-0 fw-600 mb-4">Experience</h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "4px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {/* <Image
             src="/assets/images/profile/icons8-plus-100 3.png"
             width={35}
             height={35}
@@ -92,19 +108,23 @@ export const Experience = ({ role }: { role: boolean }) => {
               objectFit: "cover",
             }}
           /> */}
-          {role === true && (
-            <>
-              <h1>
-                <i className={`bi bi-plus-lg ${styles["icon-profile"]}`}></i>
-              </h1>
-              <h4>
-                <i
-                  className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                ></i>
-              </h4>
-            </>
-          )}
-          {/* <Image
+            {role === true && (
+              <>
+                <h1>
+                  <i
+                    className={`bi bi-plus-lg ${styles["icon-profile"]}`}
+                    onClick={() => handleOpenModal()}
+                  ></i>
+                </h1>
+                <h4>
+                  <i
+                    className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                    onClick={() => handleShowEdit()}
+                  ></i>
+                </h4>
+              </>
+            )}
+            {/* <Image
             src="/assets/images/profile/icons8-edit-100 6.png"
             width={20}
             height={20}
@@ -114,19 +134,19 @@ export const Experience = ({ role }: { role: boolean }) => {
               objectFit: "cover",
             }}
           /> */}
+          </div>
         </div>
-      </div>
-      {experiencesToShow.map((experience, index) => (
-        <>
-          <div
-            key={experience.id}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "12px",
-            }}
-          >
-            {/* <Image
+        {experiencesToShow.map((experience, index) => (
+          <>
+            <div
+              key={experience.id}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "12px",
+              }}
+            >
+              {/* <Image
               src={experience.logo || "/assets/images/profile/alabaster_global_logo.png"}
               width={48}
               height={48}
@@ -135,129 +155,147 @@ export const Experience = ({ role }: { role: boolean }) => {
                 objectFit: "cover",
               }}
             /> */}
-            <Image
-              src="/assets/images/profile/alabaster_global_logo.png"
-              width={48}
-              height={48}
-              alt=""
-              style={{
-                objectFit: "cover",
-              }}
-            />
-            <div>
-              {/* <p className="m-0 fw-600 font-xss">{experience.name}</p> */}
-              <p className="m-0 fw-600 font-xss">{experience.company_name}</p>
-              <div
+              <Image
+                src="/assets/images/profile/alabaster_global_logo.png"
+                width={48}
+                height={48}
+                alt=""
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: "8px",
+                  objectFit: "cover",
                 }}
-              >
-                <p className="m-0 font-xsss lh-20">{experience.industry}</p>
-                <span
+              />
+              <div>
+                <div
                   style={{
-                    display: "inline-block",
-                    width: "3px",
-                    height: "3px",
-                    borderRadius: "100%",
-                    backgroundColor: "#000",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                   }}
-                ></span>
-                <p className="m-0 font-xsss lh-20">
-                  {experience.employment_type}
-                </p>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <p className="m-0 font-xsss lh-20 text-gray-follow">
-                  {/* {FormatDate(experience.startDate)} -{" "}
+                >
+                  {/* <p className="m-0 fw-600 font-xss">{experience.name}</p> */}
+                  <p className="m-0 fw-600 font-xss">
+                    {experience.company_name}
+                  </p>
+                  {iconEdit && (
+                    <i
+                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                      onClick={() => handleOpenModal()}
+                    ></i>
+                  )}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <p className="m-0 font-xsss lh-20">{experience.industry}</p>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "3px",
+                      height: "3px",
+                      borderRadius: "100%",
+                      backgroundColor: "#000",
+                    }}
+                  ></span>
+                  <p className="m-0 font-xsss lh-20">
+                    {experience.employment_type}
+                  </p>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <p className="m-0 font-xsss lh-20 text-gray-follow">
+                    {/* {FormatDate(experience.startDate)} -{" "}
                   {experience.isWorking
                     ? "Present"
                     : FormatDate(experience.endDate)} */}
-                  {FormatDate(experience.start_date)} -{" "}
-                  {FormatDate(experience.end_date)}
-                </p>
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "3px",
-                    height: "3px",
-                    borderRadius: "100%",
-                    backgroundColor: "#000",
-                    color: "#8b8d8d",
-                  }}
-                ></span>
+                    {FormatDate(experience.start_date)} -{" "}
+                    {FormatDate(experience.end_date)}
+                  </p>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "3px",
+                      height: "3px",
+                      borderRadius: "100%",
+                      backgroundColor: "#000",
+                      color: "#8b8d8d",
+                    }}
+                  ></span>
+                  <p className="m-0 font-xsss lh-20 text-gray-follow">
+                    {/* {calculateDuration(experience.startDate, experience.endDate)} */}
+                    {calculateDuration(
+                      experience.start_date,
+                      experience.end_date,
+                    )}
+                  </p>
+                </div>
                 <p className="m-0 font-xsss lh-20 text-gray-follow">
-                  {/* {calculateDuration(experience.startDate, experience.endDate)} */}
-                  {calculateDuration(
-                    experience.start_date,
-                    experience.end_date,
-                  )}
+                  {experience.location}
                 </p>
+                <TruncateText
+                  content={experience.description}
+                  wordLimit={20}
+                  className="font-xsss lh-20"
+                />
               </div>
-              <p className="m-0 font-xsss lh-20 text-gray-follow">
-                {experience.location}
-              </p>
-              <TruncateText
-                content={experience.description}
-                wordLimit={20}
-                className="font-xsss lh-20"
-              />
             </div>
-          </div>
-          {index < experiencesToShow.length - 1 && (
-            <hr
-              style={{
-                border: "none",
-                borderTop: "2px solid #d1d1d1",
-                marginTop: "20px",
-              }}
-            />
-          )}
-        </>
-      ))}
-      {!showAllExperiences &&
-        // dataBrokerProfile.company.length - experiencesToShow.length > 0 && (
-        dataExperiencesProfile.length - experiencesToShow.length > 0 && (
-          <>
-            <hr
-              style={{
-                border: "none",
-                borderTop: "2px solid #d1d1d1",
-                marginTop: "20px",
-              }}
-            />
-            <button
-              onClick={() => setshowAllExperiences(!showAllExperiences)}
-              style={{
-                border: "none",
-                cursor: "pointer",
-                backgroundColor: "transparent",
-                display: "flex",
-                flexDirection: "row",
-                gap: "4px",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <p className="m-0 font-xss fw-600">
-                Show all{" "}
-                {/* {dataBrokerProfile.company.length - experiencesToShow.length}{" "} */}
-                {dataExperiencesProfile.length - experiencesToShow.length}{" "}
-                experiences
-              </p>
+            {index < experiencesToShow.length - 1 && (
+              <hr
+                style={{
+                  border: "none",
+                  borderTop: "2px solid #d1d1d1",
+                  marginTop: "20px",
+                }}
+              />
+            )}
+          </>
+        ))}
+        {!showAllExperiences &&
+          // dataBrokerProfile.company.length - experiencesToShow.length > 0 && (
+          dataExperiencesProfile.length - experiencesToShow.length > 0 && (
+            <>
+              <hr
+                style={{
+                  border: "none",
+                  borderTop: "2px solid #d1d1d1",
+                  marginTop: "20px",
+                }}
+              />
+              <button
+                onClick={() => setshowAllExperiences(!showAllExperiences)}
+                style={{
+                  border: "none",
+                  cursor: "pointer",
+                  backgroundColor: "transparent",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "4px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p className="m-0 font-xss fw-600">
+                  Show all{" "}
+                  {/* {dataBrokerProfile.company.length - experiencesToShow.length}{" "} */}
+                  {dataExperiencesProfile.length - experiencesToShow.length}{" "}
+                  experiences
+                </p>
 
-              <i className={`bi bi-arrow-right ${styles["icon-profile"]}`}></i>
+                <i
+                  className={`bi bi-arrow-right ${styles["icon-profile"]}`}
+                ></i>
 
-              {/* <Image
+                {/* <Image
                 src="/assets/images/profile/arrow-right-small.png"
                 width={16}
                 height={16}
@@ -267,9 +305,18 @@ export const Experience = ({ role }: { role: boolean }) => {
                   objectFit: "cover",
                 }}
               /> */}
-            </button>
-          </>
-        )}
-    </div>
+              </button>
+            </>
+          )}
+      </div>
+      {show && (
+        <ModalExperience
+          handleClose={handleCancel}
+          handleShow={handleOpenModal}
+          title="Experience"
+          show={show}
+        />
+      )}
+    </>
   );
 };

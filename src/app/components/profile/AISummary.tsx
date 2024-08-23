@@ -52,6 +52,7 @@ const AiSummary = ({ role }: { role: boolean }) => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <p className="m-0 fw-700 font-xssss">Contact</p>

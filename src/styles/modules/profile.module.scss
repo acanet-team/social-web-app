@@ -46,4 +46,22 @@
   .icon-profile {
     color: white !important;
   }
+  
+}
+.profile-img {
+  object-fit: cover;
+  border-radius: 100%;
+  width: 150px !important;
+  height: 150px !important;
+}
+.cover-img {
+  object-fit: cover;
+  border-radius: 15px;
+  width: 100% !important;
+  height: 215px !important;
+}
+.style-img {
+  display: flex;
+  justify-content: center;
+  align-items: "center";
 }

@@ -1,6 +1,6 @@
 export const dataLicenseProfile = [
   {
-    id: 89328892,
+    id_credential: 89328892,
     license_name: "Professional Broker License",
     license_logo: "/assets/images/profile/image 15.png",
     license_granted_date: "10-2022",
@@ -8,7 +8,7 @@ export const dataLicenseProfile = [
     issuing_organization: "VNDirect",
   },
   {
-    id: 89328893,
+    id_credential: 89328893,
     license_name: "Professional Broker License",
     license_logo: "/assets/images/profile/image 15.png",
     license_granted_date: "10-2022",
@@ -16,7 +16,7 @@ export const dataLicenseProfile = [
     issuing_organization: "VNDirect",
   },
   {
-    id: 89328894,
+    id_credential: 89328894,
     license_name: "Professional Broker License",
     license_logo: "/assets/images/profile/image 15.png",
     license_granted_date: "10-2022",
