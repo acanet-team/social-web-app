@@ -11,6 +11,8 @@ import { useLoading } from "@/context/Loading/context";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { title } from "process";
+import ImageUpload from "@/components/ImageUpload";
+import { S3_GROUP_BANNER } from "@/utils/const";
 
 interface CommunityFormProps {
   title: string;
@@ -114,6 +116,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
         <form onSubmit={formik.handleSubmit}>
+          <ImageUpload folderUpload={S3_GROUP_BANNER} onChange={console.log} />
           <label className="fw-600 mb-1" htmlFor="name">
             {t("group_name")}
           </label>
