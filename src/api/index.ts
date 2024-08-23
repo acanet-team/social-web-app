@@ -68,19 +68,19 @@ class HttpClient {
     const formData =
       contentType === "multi-form" ? new FormData() : (null as any);
     if (contentType === "multi-form" && body) {
-      Object.keys(body).forEach((key) => {
-        if (key === "images") {
-          if (body[key] instanceof Array) {
-            body[key].forEach((image: File) => {
-              formData.append("images", image, image.name);
-            });
-          }
-        } else {
-          if (body[key] !== null) {
-            formData.append(key, body[key]);
-          }
-        }
-      });
+      // Object.keys(body).forEach((key) => {
+      //   if (key === "images") {
+      //     if (body[key] instanceof Array) {
+      //       body[key].forEach((image: File) => {
+      //         formData.append("images", image, image.name);
+      //       });
+      //     }
+      //   } else {
+      //     if (body[key] !== null) {
+      //       formData.append(key, body[key]);
+      //     }
+      //   }
+      // });
     } else {
       if (!headers.get("Accept")) {
         headers.append("Accept", "application/json");
@@ -100,7 +100,7 @@ class HttpClient {
       headers,
     };
     if (contentType === "multi-form") {
-      reqOptions.body = formData;
+      reqOptions.body = body as any;
     } else if (typeof body === "object") {
       reqOptions.body = JSON.stringify(body);
     }
