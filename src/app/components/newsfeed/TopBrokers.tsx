@@ -65,7 +65,7 @@ export const TopBrokers = (props: {
               ? (followerNum / 1000).toFixed(1)
               : followerNum}{" "}
             {followerNum >= 1000 ? "k" : ""}{" "}
-            {followerNum > 0 ? "followers" : "follower"}
+            {followerNum > 1 ? "followers" : "follower"}
           </p>
           <span
             className={`${styles["follow-btn"]} mt-2 mb-0 px-3 py-2 z-index-1 rounded-xxl text-white font-xsssss text-uppersace fw-700 ls-3`}

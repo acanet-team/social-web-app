@@ -9,6 +9,10 @@ import { CommunityEnum } from "@/types";
 import { useTranslations } from "next-intl";
 import CommunitySection from "@/app/components/communities/CommunitySection";
 import { useSession } from "next-auth/react";
+import { getCommunities } from "@/api/community";
+import { type } from "os";
+import page from "./courses/investor/page";
+import { removePropertiesEmpty } from "@/utils/Helpers";
 
 const TAKE = 10;
 
@@ -41,7 +45,7 @@ const Communities: NextPage = ({
 
   return (
     <div id={styles.community} className="nunito-font">
-      <h1 className="fs-2 fw-bolder my-3">{t("community")}</h1>
+      <h1 className="fs-2 fw-bolder mb-3 mt-1">{t("community")}</h1>
       <div className="card shadow-xss w-100 border-0">
         <div className={`${styles["community-tabs"]} card-body`}>
           <div
@@ -58,7 +62,7 @@ const Communities: NextPage = ({
           </div>
           {isBroker ? (
             <div
-              className={`${styles["button-tab"]} ${curTab === CommunityEnum.owned ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              className={`${styles["button-tab"]} ${curTab === CommunityEnum.owned ? styles["tab-active"] : ""} ${styles.owned} d-flex justify-content-center cursor-pointer`}
               onClick={(e) => onSelectTabHandler(e)}
             >
               {t("owned_community")}
@@ -84,75 +88,20 @@ const Communities: NextPage = ({
 export default Communities;
 
 export async function getServerSideProps(context: NextPageContext) {
-  // Calling api
-  const groupList = [
-    {
-      imageUrl: "user.png",
-      name: "Aliqa Macale",
-      nickName: "lyly2195$$$",
-      memberCount: 12205,
-      fee: "Free",
-      communityName: "Crypto To The Moon",
-      shortDesc: "Join our group to catch the last ride to the moon",
-      bgImage: "bb-9.jpg",
-    },
-    {
-      imageUrl: "user.png",
-      name: "Hendrix Stamp",
-      nickName: "lyly2195$$$",
-      memberCount: 12205,
-      fee: "Free",
-      communityName: "Crypto To The Moon",
-      shortDesc: "Join our group to catch the last ride to the moon",
-      bgImage: "bb-9.jpg",
-    },
-    {
-      imageUrl: "user.png",
-      name: "Stephen Grider",
-      nickName: "lyly2195$$$",
-      memberCount: 12205,
-      fee: "Free",
-      communityName: "Crypto To The Moon",
-      shortDesc: "Join our group to catch the last ride to the moon",
-      bgImage: "bb-9.jpg",
-    },
-    {
-      imageUrl: "user.png",
-      name: "Mohannad Zitoun",
-      nickName: "lyly2195$$$",
-      memberCount: 12205,
-      fee: "Free",
-      communityName: "Crypto To The Moon",
-      shortDesc: "Join our group to catch the last ride to the moon",
-      bgImage: "bb-9.jpg",
-    },
-    {
-      imageUrl: "user.png",
-      name: "Aliqa Macale",
-      nickName: "lyly2195$$$",
-      memberCount: 12205,
-      fee: "Free",
-      communityName: "Crypto To The Moon",
-      shortDesc: "Join our group to catch the last ride to the moon",
-      bgImage: "bb-9.jpg",
-    },
-    {
-      imageUrl: "user.png",
-      name: "Surfiya Zakir",
-      nickName: "lyly2195$$$",
-      memberCount: 12205,
-      fee: "Free",
-      communityName: "Crypto To The Moon",
-      shortDesc: "Join our group to catch the last ride to the moon",
-      bgImage: "bb-9.jpg",
-    },
-  ];
+  const res = await getCommunities({
+    page: 1,
+    take: TAKE,
+    type: "not_joined",
+    brokerId: "",
+    search: "",
+    feeType: "",
+  });
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
-      communityPosts: groupList,
-      totalPage: 1,
-      page: 1,
+      communityPosts: res.data?.docs || [],
+      totalPage: res.data?.meta.totalPage || 1,
+      page: res.data?.meta.page || 1,
     },
   };
 }

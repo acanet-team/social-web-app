@@ -10,10 +10,9 @@ import * as Yup from "yup";
 import { useLoading } from "@/context/Loading/context";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { title } from "process";
 
 interface CommunityFormProps {
-  title: string;
+  isEditing: string;
   show: boolean;
   handleClose: () => void;
   handleShow: () => void;
@@ -23,17 +22,20 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   handleClose,
   handleShow,
   show,
-  title,
+  isEditing,
 }) => {
   const t = useTranslations("Community");
   const [groupInfo, setgroupInfo] = useState<ICommunity>({} as ICommunity);
   const { showLoading, hideLoading } = useLoading();
-  const [fee, setFee] = useState<string>("");
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
 
+  const fetchCommunity = async () => {};
+
   useEffect(() => {
+    // Fetch group data
+    fetchCommunity();
     const handleResize = () => {
       setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
     };
@@ -58,7 +60,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       description: Yup.string()
         .required(t("error_missing_description"))
         .min(4, () => t("error_invalid_description"))
-        .max(250, () => t("error_invalid_description")),
+        .max(350, () => t("error_invalid_description")),
       feeNum: Yup.number()
         .required(t("error_missing_fee"))
         .transform((value) =>
@@ -107,9 +109,9 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             onClick={handleClose}
           ></i>
         )}
-        <Modal.Title>
+        {/* <Modal.Title>
           <h1 className="m-0 fw-bold">{title}</h1>
-        </Modal.Title>
+        </Modal.Title> */}
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
@@ -230,7 +232,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         <Button
           variant="primary"
           onClick={handleClose}
-          className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
+          className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w150 border-0 my-3 ms-auto"
         >
           Save
         </Button>

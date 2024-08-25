@@ -37,7 +37,8 @@ const Home = ({
           <div className="row feed-body">
             <div className="col-xl-8 col-xxl-9 col-lg-8">
               <FetchBrokers brokers={topBrokers} />
-              <div className={`${styles["home-tabs"]} bg-light`}>
+              <CreatePost userSession={session} />
+              <div className={styles["home-tabs"]}>
                 <div
                   className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                   onClick={(e) => onSelectTabHandler(e)}
@@ -51,7 +52,6 @@ const Home = ({
                   Suggestion
                 </div>
               </div>
-              <CreatePost userSession={session} />
               <Posts
                 posts={posts}
                 feedType={curTab}

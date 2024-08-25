@@ -4,12 +4,11 @@ import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 
 function ModalTemplate(props: {
-  title: string;
   show: boolean;
   handleClose: () => void;
   handleShow: () => void;
 }) {
-  const { title, show, handleClose, handleShow } = props;
+  const { show, handleClose, handleShow } = props;
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
@@ -41,9 +40,6 @@ function ModalTemplate(props: {
             onClick={handleClose}
           ></i>
         )}
-        <Modal.Title>
-          <h1 className="m-0 fw-bold">{title}</h1>
-        </Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
