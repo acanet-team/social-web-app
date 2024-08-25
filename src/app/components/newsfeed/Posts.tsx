@@ -26,7 +26,7 @@ export default function Posts(props: {
   useEffect(() => {
     // setPosts(prev => [...posts, ...prev]);
     setPosts((prev) => {
-      const newPosts = combineUniqueById(posts, prev);
+      const newPosts = combineUniqueById(prev, posts);
       return newPosts;
     });
   }, [post]);

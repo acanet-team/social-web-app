@@ -29,6 +29,7 @@ export const removePropertiesEmpty = (object: any) => {
   }
   return objectToProcess;
 };
+
 export const cleanPath = (path: string) => {
   if (path.includes("https://lh3.googleusercontent.com")) {
     return path.replace("https://acanet-v1-public-test.s3.amazonaws.com/", "");

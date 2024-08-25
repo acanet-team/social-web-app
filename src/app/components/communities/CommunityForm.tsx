@@ -1,5 +1,5 @@
 import React, { useEffect, useState, type ReactNode } from "react";
-import styles from "@/styles/modules/modalExample.module.scss";
+import styles from "@/styles/modules/modalTemplate.module.scss";
 import classes from "@/styles/modules/createProfile.module.scss";
 import { useFormik } from "formik";
 import { throwToast } from "@/utils/throw-toast";
@@ -14,7 +14,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { S3_GROUP_BANNER } from "@/utils/const";
 
 interface CommunityFormProps {
-  title: string;
+  isEditing: string;
   show: boolean;
   handleClose: () => void;
   handleShow: () => void;
@@ -24,17 +24,20 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   handleClose,
   handleShow,
   show,
-  title,
+  isEditing,
 }) => {
   const t = useTranslations("Community");
   const [groupInfo, setgroupInfo] = useState<ICommunity>({} as ICommunity);
   const { showLoading, hideLoading } = useLoading();
-  const [fee, setFee] = useState<string>("");
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
 
+  const fetchCommunity = async () => {};
+
   useEffect(() => {
+    // Fetch group data
+    fetchCommunity();
     const handleResize = () => {
       setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
     };
@@ -59,7 +62,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       description: Yup.string()
         .required(t("error_missing_description"))
         .min(4, () => t("error_invalid_description"))
-        .max(250, () => t("error_invalid_description")),
+        .max(350, () => t("error_invalid_description")),
       feeNum: Yup.number()
         .required(t("error_missing_fee"))
         .transform((value) =>
@@ -108,9 +111,9 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             onClick={handleClose}
           ></i>
         )}
-        <Modal.Title>
-          <h1 className="m-0 fw-bold">Modal heading</h1>
-        </Modal.Title>
+        {/* <Modal.Title>
+          <h1 className="m-0 fw-bold">{title}</h1>
+        </Modal.Title> */}
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
@@ -232,7 +235,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         <Button
           variant="primary"
           onClick={handleClose}
-          className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
+          className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w150 border-0 my-3 ms-auto"
         >
           Save
         </Button>
