@@ -10,8 +10,6 @@ import { useTranslations } from "next-intl";
 import CommunitySection from "@/app/components/communities/CommunitySection";
 import { useSession } from "next-auth/react";
 import { getCommunities } from "@/api/community";
-import { type } from "os";
-import page from "./courses/investor/page";
 import { removePropertiesEmpty } from "@/utils/Helpers";
 
 const TAKE = 10;

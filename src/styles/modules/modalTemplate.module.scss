@@ -4,7 +4,7 @@
 
 .modal-content {
   background: white;
-  padding: 2.5rem;
+  padding: 0 2.5rem 2.5rem 2.5rem;
   position: relative;
 }
 
@@ -33,6 +33,10 @@
   border: none !important;
 }
 
+.modal-footer {
+  padding-right: 0 !important;
+}
+
 :global(.theme-dark) {
   .modal-header, .modal-content, .modal-footer {
     background-color: var(--theme-dark-color-bg) !important;
@@ -48,5 +52,9 @@
   .modal-header {
     display: flex;
     justify-content: center;
+  }
+
+  .modal-content {
+    padding: 0 0.7rem 1.5rem 1.5rem;
   }
 }

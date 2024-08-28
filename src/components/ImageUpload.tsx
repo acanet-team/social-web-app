@@ -1,19 +1,34 @@
 import { useLoading } from "@/context/Loading/context";
 import styles from "@/styles/modules/image-upload.module.scss";
-import { ChangeEventHandler, useRef, useState } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { ImageCropModal } from "./ImageCropModal";
 
 interface Props {
   folderUpload: string;
   onChange: (file: File) => void;
+  aspect: number;
+  uploadAvatar: boolean;
+  previewImage: string;
 }
 
-function ImageUpload({ folderUpload, onChange }: Props) {
+function ImageUpload({
+  folderUpload,
+  onChange,
+  aspect,
+  uploadAvatar,
+  previewImage,
+}: Props) {
   const { showLoading, hideLoading } = useLoading();
   const [selectedImage, setSelectedImage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewImgUrl, setPreviewImgUrl] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
+
+  useEffect(() => {
+    if (previewImage) {
+      setPreviewImgUrl(previewImage);
+    }
+  }, [previewImage]);
 
   const fileToDataString = (file: File) => {
     return new Promise<string>((resolve, reject) => {
@@ -58,7 +73,9 @@ function ImageUpload({ folderUpload, onChange }: Props) {
   };
 
   return (
-    <div className={styles["wrapper"]}>
+    <div
+      className={uploadAvatar ? styles["avatar-wrapper"] : styles["wrapper"]}
+    >
       <form>
         <div className="d-flex flex-column align-items-center justify-content-center">
           <i
@@ -90,7 +107,7 @@ function ImageUpload({ folderUpload, onChange }: Props) {
         onCancel={onCancel}
         cropped={onCropped}
         imageUrl={selectedImage}
-        aspect={960 / 250}
+        aspect={aspect}
       />
     </div>
   );

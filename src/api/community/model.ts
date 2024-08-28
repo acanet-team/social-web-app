@@ -9,6 +9,32 @@ export interface GetCommunitiesParams {
   feeType: string | "";
 }
 
+export interface GetACommunityParams<ICommunity> {
+  data: ICommunity;
+}
+
+export interface PostCreateCommunityParams {
+  name: string;
+  description: string;
+  fee: string;
+  avatar: File | null;
+  coverImage: File | null;
+}
+
+export interface CreateCommunityResponse<ICommunity> {
+  status: number;
+  message: string;
+  data: ICommunity;
+  // {
+  //   id: string;
+  //   name: string;
+  //   avatar_id: string;
+  //   cover_image_id: string;
+  //   description: string;
+  //   fee: number;
+  // };
+}
+
 interface Photo {
   id: string;
   path: string;

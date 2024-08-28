@@ -48,6 +48,10 @@
   transform: translate(-50%, 0);
 }
 
+#community a {
+  color: var(--theme-light-font-color);
+}
+
 :global(.theme-dark) {
   #community {
     background-color: var(--theme-color) !important;
