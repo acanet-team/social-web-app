@@ -27,7 +27,7 @@ export default function CreateProfileForm(props: {
       setUserInfo({
         ...session.user,
         fullName: `${session?.user?.lastName} ${session?.user?.firstName}`,
-        avatar: session.user.photo.path || "/assets/images/user.png",
+        avatar: session.user.photo?.path || "/assets/images/user.png",
       });
     }
   }, [session]);
