@@ -6,43 +6,60 @@ export interface User {
   firstName: string;
   lastName: string;
   photo: {
-    isPublic: boolean;
-    isDeleted: boolean;
     id: string;
     path: string;
     mimetype: string;
+    isPublic: boolean;
+    isDeleted: boolean;
     ownerId: number;
+    courseId: number;
     category: string;
+    post_id: string;
+  };
+  profileCoverPhoto: {
+    id: string;
+    path: string;
+    mimetype: string;
+    isPublic: boolean;
+    isDeleted: boolean;
+    ownerId: number;
+    courseId: number;
+    category: string;
+    post_id: string;
   };
   role: {
     id: number;
     name: string;
-    __entity: string;
   };
   status: {
     id: number;
     name: string;
-    __entity: string;
   };
-  onboarding_data: {
-    step: string;
-    time: string;
-  };
+  onboarding_data: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  isFirstLogin: boolean;
+  isBroker: boolean;
+  referBy: string;
+  refCode: string;
+  phone: string;
+  userInterestTopicRelations: string[];
+  whiteList: {};
 }
+
 export interface UserProfile {
   id: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  user: User;
   nickName: string;
   birthDate: string;
   gender: string;
   location: string;
   shortDesc: string;
-  additionalData: Record<string, any>;
+  additionalData: {};
   brokerProfile: BrokerProfile | null;
 }
 
@@ -51,19 +68,21 @@ export interface BrokerProfile {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  summary: string | null;
-  location: string | null;
   user: User;
   school: School[];
-  company: Company[];
-  socialMedia: SocialMedia[];
-  licenses: License[];
-  skills: Skill[];
-  servicesOffer: ServiceOffer[];
   rank: {
     id: string;
     name: string;
   };
+  licenses: License[];
+  company: Company[];
+  socialMedia: SocialMedia[];
+  skills: Skill[];
+  servicesOffer: Service[];
+  summary: string | null;
+  location: string | null;
+  about: string;
+  interestTopics: InterestTopics[];
 }
 
 export interface School {
@@ -73,24 +92,12 @@ export interface School {
   startDate: string;
   endDate: string;
   isGraduated: boolean;
+  major: string;
+  location: string;
+  description: string;
+  degree: string;
 }
 
-export interface Company {
-  id: string;
-  logo: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  isWorking: boolean;
-}
-export interface SocialMedia {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  name: string;
-  mediaUrl: string;
-}
 export interface License {
   id: string;
   credentialID: string;
@@ -101,16 +108,57 @@ export interface License {
   licenseIssueDate: string;
   licenseExpirationDate: string;
   shortDesc: string;
-  additionalData: Record<string, any>;
-}
-export interface Skill {
-  // interestTopicId: string;
-  // topicName: string;
+  additionalData: {};
 }
 
-export interface ServiceOffer {}
-
-export interface Rank {
+export interface Company {
   id: string;
+  logo: string;
   name: string;
+  startDate: string;
+  endDate: string;
+  isWorking: boolean;
+  position: string;
+  location: string;
+  description: string;
+  workingType: string;
+}
+
+export interface SocialMedia {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  name: string;
+  mediaUrl: string;
+}
+
+export interface Skill {
+  id: string;
+  interestTopics: InterestTopics;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface Service {
+  id: string;
+  topicName: string;
+}
+export interface InterestTopics {
+  id: string;
+  topicName: string;
+}
+
+export interface FormDt {
+  id?: string;
+  logo: File | string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  isWorking: boolean;
+  position: string;
+  location: string;
+  description: string;
+  workingType: string;
 }

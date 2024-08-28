@@ -103,5 +103,19 @@
   },
   "Post": {
     "Explore_More": "Explore plus"
+  },
+  "MyProfile": {
+    "follow": "Suivre",
+    "messages": "Messages",
+    "about": "À propos",
+    "experience": "Expérience",
+    "education": "Éducation",
+    "license&certifications": "Licence & Certifications",
+    "socialMedia": "Médias sociaux",
+    "AI summary": "Résumé IA",
+    "contact": "Contact",
+    "servicesOffer": "Services proposés",
+    "location": "Emplacement",
+    "interestTopic": "Sujet d'intérêt"
   }
 }

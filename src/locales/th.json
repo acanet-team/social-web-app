@@ -113,6 +113,21 @@
     "error_missing_nickname": "กรุณากรอกชื่อเล่นที่ถูกต้อง"
   },
   "NavBar": {
-    "newsfeed": "ฟีดข่าว"
+    "newsfeed": "ฟีดข่าว",
+    "my profile": "โปรไฟล์ของฉัน"
+  },
+  "MyProfile": {
+    "follow": "ติดตาม",
+    "messages": "ข้อความ",
+    "about": "เกี่ยวกับ",
+    "experience": "ประสบการณ์",
+    "education": "การศึกษา",
+    "license&certifications": "ใบอนุญาต & การรับรอง",
+    "socialMedia": "โซเชียลมีเดีย",
+    "AI summary": "สรุป AI",
+    "contact": "ติดต่อ",
+    "servicesOffer": "บริการที่เสนอ",
+    "location": "สถานที่",
+    "interestTopic": "หัวข้อที่สนใจ"
   }
 }

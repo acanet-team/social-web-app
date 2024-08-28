@@ -5,6 +5,7 @@ import style from "@/styles/modules/profile.module.scss";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
+import ImageUpload from "@/components/ImageUpload";
 
 function ModalEditBanner(props: {
   title: string;
@@ -85,6 +86,9 @@ function ModalEditBanner(props: {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
+        {/* <ImageUpload folderUpload={""} onChange={function (file: File): void {
+          throw new Error("Function not implemented.");
+        } } /> */}
         <div style={{ overflowY: "auto", maxHeight: "100%" }}>
           <div className="profile-picture">
             <div

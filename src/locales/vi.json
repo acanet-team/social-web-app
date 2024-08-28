@@ -113,6 +113,21 @@
     "error_missing_nickname": "Vui lòng điền một biệt hiệu hợp lệ."
   },
   "NavBar": {
-    "newsfeed": "Nguồn cấp tin tức"
+    "newsfeed": "Nguồn cấp tin tức",
+    "my profile": "Hồ sơ của tôi"
+  },
+  "MyProfile": {
+    "follow": "Theo dõi",
+    "messages": "Tin nhắn",
+    "about": "Giới thiệu",
+    "experience": "Kinh nghiệm",
+    "education": "Học vấn",
+    "license&certifications": "Chứng chỉ & Bằng cấp",
+    "socialMedia": "Mạng xã hội",
+    "AI summary": "Tóm tắt AI",
+    "contact": "Liên hệ",
+    "servicesOffer": "Dịch vụ cung cấp",
+    "location": "Vị trí",
+    "interestTopic": "Chủ đề quan tâm"
   }
 }

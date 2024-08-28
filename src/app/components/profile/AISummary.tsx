@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
+import type { BrokerProfile, User } from "@/api/profile/model";
+import { useTranslations } from "next-intl";
 
-const AiSummary = ({ role }: { role: boolean }) => {
+const AiSummary = ({
+  dataBrokerProfile,
+  role,
+  dataUser,
+}: {
+  dataBrokerProfile: BrokerProfile;
+  role: boolean;
+  dataUser: User;
+}) => {
+  const t = useTranslations("MyProfile");
+  const [showAllInterestTopics, setShowAllInterestTopics] =
+    useState<boolean>(false);
+  const [showAllServiceOffer, setShowAllServiceOffer] =
+    useState<boolean>(false);
+  const interestTopics = dataBrokerProfile.interestTopics ?? [];
+  const skills = dataBrokerProfile.skills ?? [];
+
+  // const interestToShow = showAllInterestTopics
+  //   ? interestTopics
+  //   : interestTopics.slice(0, 3);
+  // const serviceToShow = showAllServiceOffer ? skills : skills.slice(0, 2);
+
   return (
     <div
       className="card p-4"
@@ -21,7 +44,7 @@ const AiSummary = ({ role }: { role: boolean }) => {
           gap: "2px",
         }}
       >
-        <p className="m-0 fw-700 font-xsss">AI summary</p>
+        <p className="m-0 fw-700 font-xsss">{t("AI summary")}</p>
         <Image
           src="/assets/images/profile/icons8-lightning-96 1.png"
           width={25}
@@ -55,7 +78,7 @@ const AiSummary = ({ role }: { role: boolean }) => {
             alignItems: "center",
           }}
         >
-          <p className="m-0 fw-700 font-xssss">Contact</p>
+          <p className="m-0 fw-700 font-xssss">{t("contact")}</p>
           <div
             style={{
               display: "flex",
@@ -65,16 +88,6 @@ const AiSummary = ({ role }: { role: boolean }) => {
               alignItems: "center",
             }}
           >
-            {/* <Image
-              src="/assets/images/profile/icons8-plus-100 3.png"
-              width={25}
-              height={25}
-              alt=""
-              className=""
-              style={{
-                objectFit: "cover",
-              }}
-            /> */}
             {role === true && (
               <>
                 <h1>
@@ -87,40 +100,48 @@ const AiSummary = ({ role }: { role: boolean }) => {
                 </h4>
               </>
             )}
-            {/* <Image
-              src="/assets/images/profile/icons8-edit-100 6.png"
-              width={15}
-              height={15}
-              alt=""
-              className=""
-              style={{
-                objectFit: "cover",
-              }}
-            /> */}
           </div>
         </div>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">abc@gmail.com</p>
-      </div>
-      <div className="mb-2">
-        <p className="m-0 fw-700 font-xssss">Service</p>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">Stock Broker</p>
         <p className="m-0 fw-500 font-xssss text-gray-follow">
-          Real estate Broker
+          {dataUser?.email}
         </p>
       </div>
+
       <div className="mb-2">
-        <p className="m-0 fw-700 font-xssss">Location</p>
+        <p className="m-0 fw-700 font-xssss">{t("servicesOffer")}</p>
+        {skills.map((service) => (
+          <div key={service.id}>
+            <p className="m-0 fw-500 font-xssss text-gray-follow">
+              {service.interestTopics?.topicName}
+            </p>
+          </div>
+        ))}
+        {/* {!showAllServiceOffer &&
+          dataBrokerProfile.skills.length - serviceToShow.length > 0 && (
+            <span onClick={() => setShowAllServiceOffer(true)}>....</span>
+          )} */}
+      </div>
+
+      <div className="mb-2">
+        <p className="m-0 fw-700 font-xssss">{t("location")}</p>
         <p className="m-0 fw-500 font-xssss text-gray-follow">
-          Ho Chi Minh City, Vietnam
+          {dataBrokerProfile?.location}
         </p>
       </div>
       <div className="">
-        <p className="m-0 fw-700 font-xssss">Interested Topic</p>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">VNIndex</p>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">NASDAQ</p>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">
-          Fundamental Analysis
-        </p>
+        <p className="m-0 fw-700 font-xssss">{t("interestTopic")}</p>
+        {interestTopics.map((topic) => (
+          <div key={topic.id}>
+            <p className="m-0 fw-500 font-xssss text-gray-follow">
+              {topic.topicName}
+            </p>
+          </div>
+        ))}
+        {/* {!showAllInterestTopics &&
+          dataBrokerProfile.interestTopics.length - interestToShow.length >
+            0 && (
+            <span onClick={() => setShowAllInterestTopics(true)}>....</span>
+          )} */}
       </div>
     </div>
   );

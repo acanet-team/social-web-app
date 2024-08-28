@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 
 type TruncateTextProps = {
-  content: string;
+  content?: string;
   wordLimit: number;
   className: string;
 };
 
 export const TruncateText: React.FC<TruncateTextProps> = ({
-  content,
+  content = "",
   wordLimit,
   className,
 }) => {

@@ -3,53 +3,67 @@ import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { TruncateText } from "../TruncateText";
 import styles from "@/styles/modules/profile.module.scss";
-import { FormatDate } from "../FormatDate";
-import type { BrokerProfile } from "@/api/profile/model";
+import type { BrokerProfile, FormDt } from "@/api/profile/model";
 import { ModalExperience } from "./ModalExperience";
+import dayjs from "dayjs";
+import { useTranslations } from "next-intl";
 
-// export const Experience = ({
-//   dataBrokerProfile,
-// }: {
-//   dataBrokerProfile: BrokerProfile;
-// }) => {
-export const Experience = ({ role }: { role: boolean }) => {
+export const Experience = ({
+  dataBrokerProfile,
+  role,
+}: {
+  dataBrokerProfile: BrokerProfile;
+  role: boolean;
+}) => {
+  const t = useTranslations("MyProfile");
   const [showAllExperiences, setshowAllExperiences] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  // const [editId, setEditId] = useState("");
+  const [formDt, setFormDt] = useState<FormDt>({
+    id: "",
+    logo: "",
+    name: "",
+    startDate: "",
+    endDate: "",
+    isWorking: true,
+    position: "",
+    location: "",
+    description: "",
+    workingType: "",
+  });
 
-  const experiencesToShow = showAllExperiences
-    ? dataExperiencesProfile
-    : dataExperiencesProfile.slice(0, 5);
+  const company = dataBrokerProfile.company ?? [];
 
-  // const experiencesToShow = showAllExperiences
-  //   ? dataBrokerProfile.company
-  //   : dataBrokerProfile.company.slice(0, 5);
+  const experiencesToShow = showAllExperiences ? company : company.slice(0, 5);
 
-  const calculateDuration = (startDate: string, endDate: string): string => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+  const calculateDuration = useCallback(
+    (startDate: string, endDate: string): string => {
+      const start = dayjs(startDate);
+      const end = dayjs(endDate);
 
-    let years = end.getFullYear() - start.getFullYear();
-    let months = end.getMonth() - start.getMonth();
+      let years = end.diff(start, "year");
 
-    if (months < 0) {
-      years--;
-      months += 12;
-    }
-    let result = "";
-    if (years > 0) {
-      result += `${years} yrs`;
-    }
-    if (months > 0) {
-      if (result.length > 0) {
-        result += " ";
+      let months = end.diff(start.add(years, "year"), "month");
+
+      let result = "0";
+      if (years > 0) {
+        result += `${years} yr${years > 1 ? "s" : ""}`;
       }
-      result += `${months} mos`;
-    }
-    return result;
-  };
+      if (months > 0) {
+        if (result.length > 0) {
+          result += " ";
+        }
+        result += `${months} mo${months > 1 ? "s" : ""}`;
+      }
 
-  const handleOpenModal = useCallback(() => {
+      return result;
+    },
+    [],
+  );
+  const handleAddModal = useCallback(() => {
+    setIsEditing(false);
     setShow(true);
   }, []);
 
@@ -57,19 +71,16 @@ export const Experience = ({ role }: { role: boolean }) => {
     setShow(false);
   }, []);
 
-  const handleShowEdit = useCallback(() => {
-    setShowIconEdit((iconEdit) => !iconEdit);
-  }, [show]);
+  const handleEditModal = useCallback((experience: FormDt) => {
+    setIsEditing(true);
+    setShow(true);
 
-  // const curDate = new Date();
-  // const getFormattedCurrentDate = (curDate: Date): string => {
-  //   const date = new Date();
-  //   const year = date.getFullYear();
-  //   const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Tháng (01-12)
-  //   const day = date.getDate().toString().padStart(2, "0"); // Ngày (01-31)
-  //   return `${year}-${month}-${day}`;
-  // };
-  // const currentDate = getFormattedCurrentDate(curDate);
+    setFormDt(experience);
+  }, []);
+
+  const handleOpenEdit = useCallback(() => {
+    setShowIconEdit(true);
+  }, []);
 
   return (
     <>
@@ -88,7 +99,7 @@ export const Experience = ({ role }: { role: boolean }) => {
             justifyContent: "space-between",
           }}
         >
-          <h2 className="m-0 fw-600 mb-4">Experience</h2>
+          <h2 className="m-0 fw-600 mb-4">{t("experience")}</h2>
           <div
             style={{
               display: "flex",
@@ -98,42 +109,22 @@ export const Experience = ({ role }: { role: boolean }) => {
               alignItems: "center",
             }}
           >
-            {/* <Image
-            src="/assets/images/profile/icons8-plus-100 3.png"
-            width={35}
-            height={35}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          /> */}
             {role === true && (
               <>
                 <h1>
                   <i
                     className={`bi bi-plus-lg ${styles["icon-profile"]}`}
-                    onClick={() => handleOpenModal()}
+                    onClick={() => handleAddModal()}
                   ></i>
                 </h1>
                 <h4>
                   <i
                     className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                    onClick={() => handleShowEdit()}
+                    onClick={() => handleOpenEdit()}
                   ></i>
                 </h4>
               </>
             )}
-            {/* <Image
-            src="/assets/images/profile/icons8-edit-100 6.png"
-            width={20}
-            height={20}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          /> */}
           </div>
         </div>
         {experiencesToShow.map((experience, index) => (
@@ -146,41 +137,44 @@ export const Experience = ({ role }: { role: boolean }) => {
                 gap: "12px",
               }}
             >
-              {/* <Image
-              src={experience.logo || "/assets/images/profile/alabaster_global_logo.png"}
-              width={48}
-              height={48}
-              alt={experience.name}
-              style={{
-                objectFit: "cover",
-              }}
-            /> */}
               <Image
-                src="/assets/images/profile/alabaster_global_logo.png"
+                src={
+                  experience.logo ||
+                  "/assets/images/profile/alabaster_global_logo.png"
+                }
                 width={48}
                 height={48}
-                alt=""
+                alt={experience.name}
                 style={{
                   objectFit: "cover",
                 }}
               />
-              <div>
+              <div className="w-100">
                 <div
                   style={{
+                    width: "100%",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
                   }}
                 >
-                  {/* <p className="m-0 fw-600 font-xss">{experience.name}</p> */}
-                  <p className="m-0 fw-600 font-xss">
-                    {experience.company_name}
-                  </p>
+                  <p className="m-0 fw-600 font-xss">{experience.name}</p>
                   {iconEdit && (
-                    <i
-                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                      onClick={() => handleOpenModal()}
-                    ></i>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "4px",
+                      }}
+                    >
+                      <i
+                        className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                        onClick={() => handleEditModal(experience)}
+                      ></i>
+                      <i
+                        className={`bi bi-trash3-fill ${styles["icon-profile"]}`}
+                      ></i>
+                    </div>
                   )}
                 </div>
                 <div
@@ -191,7 +185,7 @@ export const Experience = ({ role }: { role: boolean }) => {
                     gap: "8px",
                   }}
                 >
-                  <p className="m-0 font-xsss lh-20">{experience.industry}</p>
+                  <p className="m-0 font-xsss lh-20">{experience.position}</p>
                   <span
                     style={{
                       display: "inline-block",
@@ -202,7 +196,7 @@ export const Experience = ({ role }: { role: boolean }) => {
                     }}
                   ></span>
                   <p className="m-0 font-xsss lh-20">
-                    {experience.employment_type}
+                    {experience.workingType}
                   </p>
                 </div>
                 <div
@@ -214,12 +208,10 @@ export const Experience = ({ role }: { role: boolean }) => {
                   }}
                 >
                   <p className="m-0 font-xsss lh-20 text-gray-follow">
-                    {/* {FormatDate(experience.startDate)} -{" "}
-                  {experience.isWorking
-                    ? "Present"
-                    : FormatDate(experience.endDate)} */}
-                    {FormatDate(experience.start_date)} -{" "}
-                    {FormatDate(experience.end_date)}
+                    {dayjs(experience.startDate).format("MMM-YYYY")} -{" "}
+                    {experience.isWorking
+                      ? "Present"
+                      : dayjs(experience.endDate).format("MMM-YYYY")}
                   </p>
                   <span
                     style={{
@@ -232,10 +224,9 @@ export const Experience = ({ role }: { role: boolean }) => {
                     }}
                   ></span>
                   <p className="m-0 font-xsss lh-20 text-gray-follow">
-                    {/* {calculateDuration(experience.startDate, experience.endDate)} */}
                     {calculateDuration(
-                      experience.start_date,
-                      experience.end_date,
+                      experience.startDate,
+                      experience.endDate,
                     )}
                   </p>
                 </div>
@@ -261,8 +252,7 @@ export const Experience = ({ role }: { role: boolean }) => {
           </>
         ))}
         {!showAllExperiences &&
-          // dataBrokerProfile.company.length - experiencesToShow.length > 0 && (
-          dataExperiencesProfile.length - experiencesToShow.length > 0 && (
+          company.length - experiencesToShow.length > 0 && (
             <>
               <hr
                 style={{
@@ -286,7 +276,6 @@ export const Experience = ({ role }: { role: boolean }) => {
               >
                 <p className="m-0 font-xss fw-600">
                   Show all{" "}
-                  {/* {dataBrokerProfile.company.length - experiencesToShow.length}{" "} */}
                   {dataExperiencesProfile.length - experiencesToShow.length}{" "}
                   experiences
                 </p>
@@ -294,17 +283,6 @@ export const Experience = ({ role }: { role: boolean }) => {
                 <i
                   className={`bi bi-arrow-right ${styles["icon-profile"]}`}
                 ></i>
-
-                {/* <Image
-                src="/assets/images/profile/arrow-right-small.png"
-                width={16}
-                height={16}
-                alt=""
-                className=""
-                style={{
-                  objectFit: "cover",
-                }}
-              /> */}
               </button>
             </>
           )}
@@ -312,9 +290,11 @@ export const Experience = ({ role }: { role: boolean }) => {
       {show && (
         <ModalExperience
           handleClose={handleCancel}
-          handleShow={handleOpenModal}
-          title="Experience"
+          isEditing={isEditing}
+          title={isEditing ? "Edit experience" : "Create experience"}
           show={show}
+          dataBrokerProfile={dataBrokerProfile}
+          formDt={formDt}
         />
       )}
     </>

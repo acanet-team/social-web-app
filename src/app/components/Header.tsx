@@ -291,7 +291,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                     >
                       <i className="feather-user btn-round-md bg-blue-gradiant me-3"></i>
 
-                      <span>My Profile</span>
+                      <span>{t("my profile")}</span>
                     </Link>
                   </li>
                   <li>

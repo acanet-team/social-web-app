@@ -128,7 +128,8 @@
     "settings": "Settings",
     "logout": "Log out",
     "chat": "Chat",
-    "account": "Account"
+    "account": "Account",
+    "my profile": "My Profile"
   },
   "Community": {
     "community": "Communities",
@@ -148,5 +149,19 @@
     "error_invalid_description": "Description must be between 4 and 250 characters.",
     "error_missing_fee": "Please fill out a joining fee.",
     "error_joining_fee": "Joining fee must be greater than 0."
+  },
+  "MyProfile": {
+    "follow": "Follow",
+    "messages": "Messages",
+    "about": "About",
+    "experience": "Experience",
+    "education": "Education",
+    "license&certifications": "License & Certificate",
+    "socialMedia": "Social Media",
+    "AI summary": "AI summary",
+    "contact": "Contact",
+    "servicesOffer": "Services offer",
+    "location": "Location",
+    "interestTopic": "Interest Topic"
   }
 }

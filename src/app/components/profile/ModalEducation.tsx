@@ -4,12 +4,15 @@ import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
 import { Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import ImageUpload from "@/components/ImageUpload";
+import dayjs from "dayjs";
 
 interface ModalEducationProp {
   title: string;
   show: boolean;
   handleClose: () => void;
   handleShow: () => void;
+  isEditing: boolean;
 }
 
 export const ModalEducation: React.FC<ModalEducationProp> = ({
@@ -17,8 +20,25 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
   handleShow,
   show,
   title,
+  isEditing,
 }) => {
-  const [isWorking, setIsWorking] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    logo: "",
+    startDate: "",
+    endDate: "",
+    isGraduated: true,
+    degree: "",
+    description: "",
+  });
+
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+
+  const handleImageChange = (file: File) => {
+    setUploadedImage(file);
+    console.log("Uploaded Image: ", file);
+    // setFormData(prev => ({ ...prev, logo: file }));
+  };
 
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
@@ -35,6 +55,22 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      isGraduated: e.target.value === "true",
+    });
+  };
 
   return (
     <>
@@ -62,6 +98,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
+            <ImageUpload folderUpload={""} onChange={handleImageChange} />
             <p className="m-0 py-1 fw-600 font-xss">Education Name</p>
             <input
               className="px-2"
@@ -71,7 +108,8 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 borderRadius: "4px",
                 height: "32px",
               }}
-              value={""}
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Please enter your education name"
             />
 
@@ -85,7 +123,8 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   borderRadius: "4px",
                   height: "32px",
                 }}
-                value={""}
+                value={formData.degree}
+                onChange={handleChange}
                 placeholder="Please enter your degree name"
               />
             </div>
@@ -99,28 +138,28 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   alignItems: "center",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss">Is Studying</p>
+                <p className="m-0 py-1 fw-600 font-xss">Is Graduated</p>
                 <div>
                   <input
-                    className=""
+                    className="isGraduated"
                     type="radio"
-                    name="true"
-                    id=""
+                    name="isGraduated"
+                    id="true"
                     value="true"
-                    checked={isWorking === true}
-                    onChange={() => setIsWorking(true)}
+                    checked={formData.isGraduated === true}
+                    onChange={handleRadioChange}
                   />
                   <span className="m-2 py-1">True</span>
                 </div>
                 <div>
                   <input
-                    className="py-1"
+                    className="isGraduated"
                     type="radio"
-                    name="false"
-                    id=""
+                    name="isGraduated"
+                    id="false"
                     value="false"
-                    checked={isWorking === false}
-                    onChange={() => setIsWorking(false)}
+                    checked={formData.isGraduated === false}
+                    onChange={handleRadioChange}
                   />
                   <span className="m-2">False</span>
                 </div>
@@ -139,31 +178,31 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 }}
               >
                 <p className="m-0 py-1 fw-600 font-xss ">Start Year</p>
-                <input
-                  className="px-2"
-                  style={{
-                    width: "100%",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    height: "32px",
-                  }}
-                  value={""}
-                  placeholder="Please enter your start year"
+                <DatePicker
+                  className="w__100"
+                  value={dayjs(formData.startDate)}
+                  onChange={(date) =>
+                    setFormData({
+                      ...formData,
+                      startDate: date ? dayjs(date).toISOString() : "",
+                    })
+                  }
+                  views={["day", "month", "year"]}
                 />
               </div>
-              {!isWorking && (
+              {!formData.isGraduated && (
                 <div style={{ width: "48.5%" }}>
                   <p className="m-0 py-1 fw-600 font-xss">End Year</p>
-                  <input
-                    className="px-2"
-                    style={{
-                      width: "100%",
-                      border: "1px solid #ddd",
-                      borderRadius: "4px",
-                      height: "32px",
-                    }}
-                    value={""}
-                    placeholder="Please enter your end year"
+                  <DatePicker
+                    className="w__100"
+                    value={dayjs(formData.endDate)}
+                    onChange={(date) =>
+                      setFormData({
+                        ...formData,
+                        endDate: date ? dayjs(date).format("DD-MM-YYYY") : "",
+                      })
+                    }
+                    views={["day", "month", "year"]}
                   />
                 </div>
               )}
@@ -171,7 +210,9 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
             <p className="m-0 py-1 fw-600 font-xss">Description</p>
             <textarea
               className="px-2"
-              value={""}
+              value={formData.description}
+              name="description"
+              onChange={handleChange}
               placeholder="Please enter your description"
               maxLength={1000}
               style={{

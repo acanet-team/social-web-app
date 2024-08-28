@@ -12,24 +12,24 @@ import { getProfile } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import SocialMedia from "@/app/components/profile/SocialMedia";
 import ModalEditBanner from "@/app/components/profile/ModalEditBanner";
+import { useTranslations } from "next-intl";
 
 export default function Profile({
-  // dataBrokerProfile,
-  // dataUserProfile,
-  // dataUser,
-  // followersCount,
+  dataBrokerProfile,
+  dataUserProfile,
+  dataUser,
+  followersCount,
   idParam,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  // console.log("555555555");
-  // console.log(dataBrokerProfile);
-  // console.log(dataUserProfile);
+  const t = useTranslations("MyProfile");
 
   const formatNumber = (number: number): string => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
+  console.log("fsdfj");
+  console.log(dataBrokerProfile);
 
-  // const numbersFollowers = formatNumber(followersCount);
-  const numbersFollowers = formatNumber(15106);
+  const numbersFollowers = formatNumber(followersCount);
   const [curTab, setCurTab] = useState<string>("about");
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
@@ -39,12 +39,9 @@ export default function Profile({
 
   useEffect(() => {
     if (session) {
-      console.log("ddddd", session);
       setId(session?.user?.id);
     }
   }, [session]);
-  console.log("aaaa", idParam, typeof idParam);
-  console.log("bbbb", id, typeof id);
 
   useEffect(() => {
     if (Number(idParam) === id) {
@@ -95,7 +92,10 @@ export default function Profile({
           }}
         >
           <Image
-            src="/assets/images/profile/u-bg.png"
+            src={
+              dataUser?.profileCoverPhoto?.path ||
+              "/assets/images/profile/u-bg.png"
+            }
             width={1075}
             height={250}
             alt=""
@@ -107,14 +107,10 @@ export default function Profile({
             }}
           />
           <Image
-            // src={
-            //   dataUser?.photo?.path || "/assets/images/profile/user-12.png"
-            // }
-            src={"/assets/images/profile/ava.png"}
+            src={dataUser?.photo?.path || "/assets/images/profile/ava.png"}
             width={119}
             height={119}
-            // alt={dataUserProfile?.nickName}
-            alt=""
+            alt={dataUserProfile?.nickName}
             className=""
             style={{
               objectFit: "cover",
@@ -144,12 +140,10 @@ export default function Profile({
             >
               <div>
                 <h2 className="m-0 fw-700 ">
-                  {/* {dataUser?.lastName} {dataUser?.firstName} */}
-                  Trịnh Văn Quyết
+                  {dataUser?.lastName} {dataUser?.firstName}
                 </h2>
                 <div className="font-xssss text-gray">
-                  {/* @{dataUserProfile?.nickName} */}
-                  nickname
+                  @{dataUserProfile?.nickName}
                 </div>
               </div>
               <div
@@ -205,19 +199,8 @@ export default function Profile({
                 ></i>
               </h4>
             )}
-            {/* <Image
-            src="/assets/images/profile/icons8-edit-100 6.png"
-            width={20}
-            height={20}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          /> */}
           </div>
 
-          {/* <p className="m-0 font-xss fw-400">Stock Broker</p> */}
           <div className="font-xsss fw-600 text-gray-follow">
             {numbersFollowers} followers
           </div>
@@ -252,7 +235,7 @@ export default function Profile({
                   objectFit: "cover",
                 }}
               />
-              <span className="text-white font-xss fw-600">Follow</span>
+              <span className="text-white font-xss fw-600">{t("follow")}</span>
             </button>
             <button
               className="px-3 bg-white"
@@ -277,7 +260,9 @@ export default function Profile({
                   objectFit: "cover",
                 }}
               />
-              <span className="text-blue-button font-xss fw-600">Message</span>
+              <span className="text-blue-button font-xss fw-600">
+                {t("messages")}
+              </span>
             </button>
           </div>
         </div>
@@ -347,17 +332,18 @@ export default function Profile({
                 </div>
               </div>
             </div>
-            <AISummary role={role} />
-            <SocialMedia role={role} />
+            <AISummary
+              role={role}
+              dataBrokerProfile={dataBrokerProfile}
+              dataUser={dataUser}
+            />
+            <SocialMedia role={role} dataBrokerProfile={dataBrokerProfile} />
           </div>
           <div className="col-md-9 col-12">
-            <About role={role} />
-            {/* <Experience dataBrokerProfile={dataBrokerProfile} />
-          <Education dataBrokerProfile={dataBrokerProfile} />
-          <License dataBrokerProfile={dataBrokerProfile} /> */}
-            <Experience role={role} />
-            <Education role={role} />
-            <License role={role} />
+            <About role={role} dataBrokerProfile={dataBrokerProfile} />
+            <Experience role={role} dataBrokerProfile={dataBrokerProfile} />
+            <Education role={role} dataBrokerProfile={dataBrokerProfile} />
+            <License role={role} dataBrokerProfile={dataBrokerProfile} />
           </div>
         </div>
       )}
@@ -378,10 +364,10 @@ export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
-      // dataBrokerProfile: profileRes?.data?.brokerProfile || [],
-      // dataUserProfile: profileRes?.data?.userProfile || [],
-      // dataUser: profileRes?.data?.user || [],
-      // followersCount: profileRes?.data?.followersCount,
+      dataBrokerProfile: profileRes?.data?.brokerProfile || [],
+      dataUserProfile: profileRes?.data?.userProfile || [],
+      dataUser: profileRes?.data?.user || [],
+      followersCount: profileRes?.data?.followersCount,
       idParam: id,
     },
   };

@@ -2,23 +2,81 @@ import React, { useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { Select } from "@mui/material";
+import { Select, MenuItem, type SelectChangeEvent } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import type { BrokerProfile, FormDt } from "@/api/profile/model";
+import dayjs from "dayjs";
+import { createNewExperiences, updateExperiences } from "@/api/profile";
+import { throwToast } from "@/utils/throw-toast";
+import ImageUpload from "@/components/ImageUpload";
 
 interface ModalExperienceProp {
   title: string;
   show: boolean;
   handleClose: () => void;
-  handleShow: () => void;
+  isEditing: boolean;
+  dataBrokerProfile: BrokerProfile;
+  formDt: FormDt;
 }
 
-export const ModalExperience: React.FC<ModalExperienceProp> = ({
+export const ModalExperience: FC<ModalExperienceProp> = ({
   handleClose,
-  handleShow,
+  isEditing,
   show,
   title,
+  dataBrokerProfile,
+  formDt,
 }) => {
-  const [isWorking, setIsWorking] = useState(true);
+  const initialFormData = isEditing
+    ? formDt
+    : {
+        logo: "",
+        name: "",
+        startDate: "",
+        endDate: "",
+        isWorking: true,
+        position: "",
+        location: "",
+        description: "",
+        workingType: "",
+      };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+
+  const handleImageChange = (file: File) => {
+    setUploadedImage(file);
+    console.log("Uploaded Image: ", file);
+    // setFormData({
+    //   ...formData,
+    //   logo: uploadedImage,
+    // });
+    setFormData((prev) => ({ ...prev, logo: file }));
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    setFormData({
+      ...formData,
+      workingType: event.target.value,
+    });
+  };
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      isWorking: e.target.value === "true",
+    });
+  };
 
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
@@ -35,6 +93,59 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const submitAddExperience = async () => {
+    try {
+      const newExperience = {
+        company: [
+          {
+            logo: "",
+            name: formData.name,
+            startDate: new Date(formData.startDate),
+            endDate: formData.isWorking
+              ? new Date("")
+              : new Date(formData.startDate),
+            isWorking: formData.isWorking,
+            position: formData.position,
+            location: formData.location,
+            description: formData.description,
+            workingType: formData.workingType,
+          },
+        ],
+      };
+      await createNewExperiences(newExperience);
+      handleClose();
+    } catch (error) {
+      throwToast("Error creating experience", "error");
+    }
+  };
+
+  const submitEditExperience = async () => {
+    try {
+      const newExperience = {
+        company: [
+          {
+            id: formData.id,
+            logo: "",
+            name: formData.name,
+            startDate: new Date(formData.startDate),
+            endDate: formData.isWorking
+              ? new Date("")
+              : new Date(formData.startDate),
+            isWorking: formData.isWorking,
+            position: formData.position,
+            location: formData.location,
+            description: formData.description,
+            workingType: formData.workingType,
+          },
+        ],
+      };
+      await updateExperiences(newExperience);
+      handleClose();
+    } catch (error) {
+      throwToast("Error updating experience", "error");
+    }
+  };
 
   return (
     <>
@@ -62,6 +173,16 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
+            <ImageUpload folderUpload={""} onChange={handleImageChange} />
+            {/* {uploadedImage && (
+              <div>
+                <p>Image uploaded successfully!</p>
+                <img
+                  src={URL.createObjectURL(uploadedImage)}
+                  alt="Uploaded Image"
+                />
+              </div>
+            )} */}
             <p className="m-0 py-1 fw-600 font-xss">Company Name</p>
             <input
               className="px-2"
@@ -71,7 +192,9 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
                 borderRadius: "4px",
                 height: "32px",
               }}
-              value={""}
+              value={formData.name}
+              name="name"
+              onChange={handleChange}
               placeholder="Please enter your company name"
             />
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
@@ -85,28 +208,28 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
                     borderRadius: "4px",
                     height: "32px",
                   }}
-                  value={""}
+                  value={formData.position}
+                  name="position"
+                  onChange={handleChange}
                   placeholder="Please enter your industry name"
                 />
               </div>
               <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xss">Employment Type</p>
-                <Select style={{ width: "100%", height: "32px" }}>
-                  <option className="p-1" value="Full-Time">
-                    Full-Time
-                  </option>
-                  <option className="p-1" value="Part-Time">
-                    Part-Time
-                  </option>
-                  <option className="p-1" value="Casual">
-                    Casual
-                  </option>
-                  <option className="p-1" value="Contractor">
-                    Contractor
-                  </option>
-                  <option className="p-1" value="Self-employed">
-                    Self-employed
-                  </option>
+                <Select
+                  value={formData.workingType}
+                  onChange={handleSelectChange}
+                  displayEmpty
+                  style={{ width: "100%", height: "32px" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Working Type
+                  </MenuItem>
+                  <MenuItem value="FULL_TIME">Full-Time</MenuItem>
+                  <MenuItem value="PART_TIME">Part-Time</MenuItem>
+                  <MenuItem value="CASUAL">Casual</MenuItem>
+                  <MenuItem value="CONTRACT">Contractor</MenuItem>
+                  <MenuItem value="SELF-EMPLOYED">Self-employed</MenuItem>
                 </Select>
               </div>
             </div>
@@ -124,11 +247,11 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
                   <input
                     className=""
                     type="radio"
-                    name="true"
-                    id=""
+                    name="isWorking"
+                    id="true"
                     value="true"
-                    checked={isWorking === true}
-                    onChange={() => setIsWorking(true)}
+                    checked={formData.isWorking === true}
+                    onChange={handleRadioChange}
                   />
                   <span className="m-2 py-1">True</span>
                 </div>
@@ -136,11 +259,11 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
                   <input
                     className="py-1"
                     type="radio"
-                    name="false"
-                    id=""
+                    name="isWorking"
+                    id="false"
                     value="false"
-                    checked={isWorking === false}
-                    onChange={() => setIsWorking(false)}
+                    checked={formData.isWorking === false}
+                    onChange={handleRadioChange}
                   />
                   <span className="m-2">False</span>
                 </div>
@@ -158,17 +281,31 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
                   width: "48.5%",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss ">Start Date</p>
+                <p className="m-0 py-1 fw-600 font-xss">Start Date</p>
                 <DatePicker
                   className="w__100"
+                  value={dayjs(formData.startDate)}
+                  onChange={(date) =>
+                    setFormData({
+                      ...formData,
+                      startDate: date ? dayjs(date).toISOString() : "",
+                    })
+                  }
                   views={["day", "month", "year"]}
                 />
               </div>
-              {!isWorking && (
+              {!formData.isWorking && (
                 <div style={{ width: "48.5%" }}>
                   <p className="m-0 py-1 fw-600 font-xss">End Date</p>
                   <DatePicker
                     className="w__100"
+                    value={dayjs(formData.endDate)}
+                    onChange={(date) =>
+                      setFormData({
+                        ...formData,
+                        endDate: date ? dayjs(date).format("DD-MM-YYYY") : "",
+                      })
+                    }
                     views={["day", "month", "year"]}
                   />
                 </div>
@@ -183,13 +320,17 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
                 border: "1px solid #ddd",
                 borderRadius: "4px",
               }}
-              value={""}
+              value={formData.location}
+              name="location"
+              onChange={handleChange}
               placeholder="Please enter your location"
             />
             <p className="m-0 py-1 fw-600 font-xss">Description</p>
             <textarea
               className="px-2"
-              value={""}
+              value={formData.description}
+              name="description"
+              onChange={handleChange}
               placeholder="Please enter your description"
               maxLength={1000}
               style={{
@@ -203,7 +344,12 @@ export const ModalExperience: React.FC<ModalExperienceProp> = ({
         <Modal.Footer className={styles["modal-footer"]}>
           <Button
             variant="primary"
-            onClick={handleClose}
+            onClick={
+              () => console.log(formData)
+              // isEditing
+              //   ? () => submitEditExperience
+              //   : () => submitAddExperience()
+            }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
             Save

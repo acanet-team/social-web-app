@@ -114,3 +114,28 @@ export type AllProfileResponse = {
     // followed: boolean;
   };
 };
+export type shortDescParams = {
+  brokerProfile: {
+    about: string;
+  };
+};
+export type socialMediaParams = {
+  socialMedia: {
+    name: string;
+    mediaUrl: string;
+  }[];
+};
+export type experienceParams = {
+  company: {
+    id?: string;
+    logo: string;
+    name: string;
+    startDate: Date;
+    endDate: Date;
+    isWorking: boolean;
+    position: string;
+    location: string;
+    description: string;
+    workingType: string;
+  }[];
+};

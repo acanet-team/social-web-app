@@ -2,8 +2,19 @@ import React, { useCallback, useState } from "react";
 import styles from "@/styles/modules/profile.module.scss";
 import Image from "next/image";
 import { ModalSocialMedia } from "./ModalSocialMedia";
+import type { BrokerProfile } from "@/api/profile/model";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-const SocialMedia = ({ role }: { role: boolean }) => {
+const SocialMedia = ({
+  dataBrokerProfile,
+  role,
+}: {
+  dataBrokerProfile: BrokerProfile;
+  role: boolean;
+}) => {
+  const socialMedia = dataBrokerProfile.socialMedia ?? [];
+  const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
 
   const handleOpenModal = useCallback(() => {
@@ -33,7 +44,7 @@ const SocialMedia = ({ role }: { role: boolean }) => {
             alignItems: "center",
           }}
         >
-          <p className="m-0 mb-1 fw-700 font-xssss">Social Medias</p>
+          <p className="m-0 mb-1 fw-700 font-xssss">{t("socialMedia")}</p>
           <div
             style={{
               display: "flex",
@@ -43,16 +54,6 @@ const SocialMedia = ({ role }: { role: boolean }) => {
               alignItems: "center",
             }}
           >
-            {/* <Image
-      src="/assets/images/profile/icons8-plus-100 3.png"
-      width={25}
-      height={25}
-      alt=""
-      className=""
-      style={{
-        objectFit: "cover",
-      }}
-    /> */}
             {role === true && (
               <>
                 <h1>
@@ -69,88 +70,49 @@ const SocialMedia = ({ role }: { role: boolean }) => {
                 </h4>
               </>
             )}
-            {/* <Image
-      src="/assets/images/profile/icons8-edit-100 6.png"
-      width={15}
-      height={15}
-      alt=""
-      className=""
-      style={{
-        objectFit: "cover",
-      }}
-    /> */}
           </div>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          <Image
-            src="/assets/images/profile/zalo.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          />
-          <Image
-            src="/assets/images/profile/zalo.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          />
-          <Image
-            src="/assets/images/profile/zalo.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          />
-          <Image
-            src="/assets/images/profile/zalo.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          />
-          <Image
-            src="/assets/images/profile/zalo.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          />
-          <Image
-            src="/assets/images/profile/zalo.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
-          />
+          {socialMedia.map((socialMedia) => (
+            <div key={socialMedia.id}>
+              {socialMedia.mediaUrl && (
+                <>
+                  <Link href={socialMedia.mediaUrl}>
+                    {socialMedia.name === "Facebook" ? (
+                      <i className="bi bi-facebook"></i>
+                    ) : socialMedia.name === "Twitter" ? (
+                      <i className="bi bi-twitter-x"></i>
+                    ) : socialMedia.name === "LinkedIn" ? (
+                      <i className="bi bi-linkedin"></i>
+                    ) : socialMedia.name === "Instagram" ? (
+                      <i className="bi bi-instagram"></i>
+                    ) : socialMedia.name === "Github" ? (
+                      <i className="bi bi-github"></i>
+                    ) : socialMedia.name === "Google" ? (
+                      <i className="bi bi-google"></i>
+                    ) : socialMedia.name === "Skype" ? (
+                      <i className="bi bi-skype"></i>
+                    ) : socialMedia.name === "Youtube" ? (
+                      <i className="bi bi-youtube"></i>
+                    ) : (
+                      ""
+                    )}
+                  </Link>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 
       {show && (
         <ModalSocialMedia
+          dataBrokerProfile={dataBrokerProfile}
           handleClose={handleCancel}
           handleShow={handleOpenModal}
           title="Education"
           show={show}
+          setShow={setShow}
         />
       )}
     </>

@@ -1,30 +1,51 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  type SetStateAction,
+} from "react";
 import { TruncateText } from "../TruncateText";
 import styles from "@/styles/modules/profile.module.scss";
 import Image from "next/image";
-import { ModalAbout } from "./ModalAbout";
+import type { BrokerProfile } from "@/api/profile/model";
+import { useTranslations } from "next-intl";
+import { throwToast } from "@/utils/throw-toast";
+import { updateNewAbout } from "@/api/profile";
 
-export const About = ({ role }: { role: boolean }) => {
+export const About = ({
+  dataBrokerProfile,
+  role,
+}: {
+  // setAboutText: React.Dispatch<React.SetStateAction<string>>;
+  dataBrokerProfile: BrokerProfile;
+  role: boolean;
+}) => {
+  const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
   const [aboutText, setAboutText] = useState("");
 
   useEffect(() => {
-    setAboutText(
-      "Educational pursuits at Oxford and MIT, coupled with formative years at McKinsey and in investment banking, following the successful establishment and sale of Misfit, a US-based tech company, and leadership roles at Facebook and GoJek as Country CEO for Vietnam, have got myself drawn to endeavors that prioritize people development and collaborative ideation.",
-    );
+    setAboutText(dataBrokerProfile.about);
   }, []);
 
-  const handleOpen = useCallback(() => {
-    setShow((show) => !show);
-  }, [show]);
+  const handleOpen = () => {
+    setShow(true);
+  };
 
-  const handleCancel = useCallback(() => {
-    setShow(false);
-  }, []);
-
-  const handleSubmit = useCallback(() => {
-    // setShow(false);
-  }, []);
+  const submitAbout = async () => {
+    if (aboutText.trim() === "") {
+      throwToast("Please enter some text for your about", "error");
+      return;
+    }
+    try {
+      const newAbout = await updateNewAbout(aboutText);
+      setShow(false);
+      throwToast("About updated successfully", "success");
+      // setAboutText("");
+    } catch (error) {
+      throwToast("Error updating", "error");
+    }
+  };
 
   return (
     <>
@@ -46,7 +67,7 @@ export const About = ({ role }: { role: boolean }) => {
             justifyContent: "space-between",
           }}
         >
-          <h2 className="m-0 fw-600">About</h2>
+          <h2 className="m-0 fw-600">{t("about")}</h2>
           {role === true && (
             <h4>
               <i
@@ -57,7 +78,7 @@ export const About = ({ role }: { role: boolean }) => {
           )}
         </div>
         <div>
-          {show ? (
+          {!show ? (
             <TruncateText
               content={aboutText}
               wordLimit={150}
@@ -77,12 +98,11 @@ export const About = ({ role }: { role: boolean }) => {
                 <textarea
                   className="w-100 m-0 font-xsss fw-400 lh-20 theme-dark-bg d-flex"
                   onChange={(event) => {
-                    console.log("mmm", event.target.value);
                     setAboutText(event.target.value);
                   }}
                   rows={5}
                   value={aboutText}
-                  maxLength={1000}
+                  maxLength={5000}
                   style={{
                     resize: "none",
                     border: "none",
@@ -101,23 +121,15 @@ export const About = ({ role }: { role: boolean }) => {
                   className="px-4 py-1 bg-blue-button text-white font-xsss"
                   style={{ marginRight: "0px", border: "none" }}
                 >
-                  <p className="m-0">Save</p>
+                  <p className="m-0" onClick={() => submitAbout()}>
+                    Save
+                  </p>
                 </button>
               </div>
             </div>
           )}
         </div>
       </div>
-      {/* {show && (
-        <ModalAbout
-          handleClose={handleCancel}
-          handleShow={handleOpen}
-          title={"Edit About"}
-          show={show}
-          data={text}
-          setText={setText}
-        />
-      )} */}
     </>
   );
 };
