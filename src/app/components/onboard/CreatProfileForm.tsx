@@ -13,19 +13,6 @@ import * as Yup from "yup";
 import { throwToast } from "@/utils/throw-toast";
 import { useTranslations } from "next-intl";
 
-// interface FormValues {
-//   nickName: string;
-//   location: string;
-//   isBroker: Boolean;
-//   email: string;
-// }
-// interface FormErrors {
-//   nickName?: string;
-//   location?: string;
-//   isBroker?: string;
-//   email?: string;
-// }
-
 export default function CreateProfileForm(props: {
   regions: any[];
   onNext: () => void;
@@ -42,41 +29,8 @@ export default function CreateProfileForm(props: {
         fullName: `${session?.user?.lastName} ${session?.user?.firstName}`,
         avatar: session.user.photo.path || "/assets/images/user.png",
       });
-      // formik.setValues({
-      //   email: session.user.email,
-      //   nickName: session.user.nickName,
-      //   location: session.user.location,
-      //   isBroker: session.user.isBroker,
-      // });
     }
   }, [session]);
-
-  // Form validation
-  // const validate = (values: FormValues) => {
-  //   const errors: FormErrors = {};
-  //   if (!values.location) {
-  //     errors.location = "Please choose a location.";
-  //   }
-  //   if (values.isBroker === null) {
-  //     errors.isBroker = "Please choose the user type.";
-  //   }
-  //   console.log("val", values);
-  //   if (!values.nickName) {
-  //     errors.nickName = "Please fill out a valid nickname.";
-  //   } else if (values.nickName.length > 20 || values.nickName.length < 8) {
-  //     errors.nickName = "Nick name must be between 8 and 20 characters.";
-  //   }
-
-  //   if (!values.email) {
-  //     errors.email = "Please fill out a valid email.";
-  //   } else if (
-  //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-  //   ) {
-  //     errors.email = "Invalid email address";
-  //   }
-
-  //   return errors;
-  // };
 
   const errorFieldMap: { [key: string]: string } = {
     ER1018: "nickName",

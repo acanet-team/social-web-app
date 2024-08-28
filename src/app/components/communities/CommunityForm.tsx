@@ -1,40 +1,69 @@
-import React, { useEffect, useState, type ReactNode } from "react";
-import styles from "@/styles/modules/modalExample.module.scss";
+import React, { useEffect, useState } from "react";
+import styles from "@/styles/modules/modalTemplate.module.scss";
 import classes from "@/styles/modules/createProfile.module.scss";
 import { useFormik } from "formik";
 import { throwToast } from "@/utils/throw-toast";
 import { FormControl, FormHelperText, TextField } from "@mui/material";
 import { useTranslations } from "next-intl";
-import type { ICommunity } from "@/types";
+import type { ICommunityForm } from "@/types";
 import * as Yup from "yup";
 import { useLoading } from "@/context/Loading/context";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ImageUpload from "@/components/ImageUpload";
-import { S3_GROUP_BANNER } from "@/utils/const";
+import { S3_GROUP_AVATAR, S3_GROUP_BANNER } from "@/utils/const";
+import { createCommunity, editCommunity, getACommunity } from "@/api/community";
+import type { ICommunity } from "@/api/community/model";
 
 interface CommunityFormProps {
-  title: string;
+  isEditing: string;
   show: boolean;
   handleClose: () => void;
   handleShow: () => void;
+  setCommunities: React.Dispatch<React.SetStateAction<ICommunity[]>>;
 }
 
 const CommunityForm: React.FC<CommunityFormProps> = ({
   handleClose,
   handleShow,
   show,
-  title,
+  isEditing,
+  setCommunities,
 }) => {
   const t = useTranslations("Community");
   const [groupInfo, setgroupInfo] = useState<ICommunity>({} as ICommunity);
   const { showLoading, hideLoading } = useLoading();
-  const [fee, setFee] = useState<string>("");
+  const [uploadedCoverImage, setUploadedCoverImage] = useState<File | null>(
+    null,
+  );
+  const [uploadedAvatarImage, setUploadedAvatarImage] = useState<File | null>(
+    null,
+  );
+  const [previewCover, setPreviewCover] = useState<string>("");
+  const [previewAvatar, setPreviewAvatar] = useState<string>("");
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
 
+  const fetchCommunity = async () => {
+    try {
+      showLoading();
+      if (isEditing) {
+        const response = await getACommunity(isEditing);
+        setgroupInfo(response.data);
+        setPreviewCover(response.data?.coverImage?.path);
+        setPreviewAvatar(response.data?.avatar?.path);
+        console.log("group data", response);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      hideLoading();
+    }
+  };
+
   useEffect(() => {
+    // Fetch group data
+    fetchCommunity();
     const handleResize = () => {
       setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
     };
@@ -43,48 +72,89 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required(t("error_missing_community_name"))
+      .min(4, () => t("error_invalid_community_name"))
+      .max(40, () => t("error_invalid_community_name")),
+    description: Yup.string()
+      .required(t("error_missing_description"))
+      .min(4, () => t("error_invalid_description"))
+      .max(350, () => t("error_invalid_description")),
+    hasFee: Yup.boolean(),
+    feeNum: Yup.lazy((value, { parent }) =>
+      parent.hasFee
+        ? Yup.number()
+            .required(t("error_missing_fee"))
+            .transform((originalValue, transformedValue) => {
+              console.log(
+                "Original Value:",
+                originalValue,
+                typeof originalValue,
+              );
+              // Convert string to number before validation
+              const numValue = Number(originalValue);
+              console.log("Transformed Value:", numValue, typeof numValue);
+              return isNaN(numValue) ? 0 : numValue;
+            })
+            .min(0.01, t("error_joining_fee"))
+        : Yup.mixed().notRequired(),
+    ),
+  });
+
   const formik = useFormik({
     initialValues: {
-      name: groupInfo.name,
-      description: groupInfo.description,
-      hasFee: groupInfo.hasFee,
-      feeNum: Number(groupInfo.feeNum),
+      name: isEditing ? groupInfo.name : "",
+      description: isEditing ? groupInfo.description : "",
+      hasFee: groupInfo.fee > 0 ? true : false,
+      feeNum: isEditing ? Number(groupInfo.fee) : null,
     },
     enableReinitialize: true,
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .required(t("error_missing_community_name"))
-        .min(4, () => t("error_invalid_community_name"))
-        .max(40, () => t("error_invalid_community_name")),
-      description: Yup.string()
-        .required(t("error_missing_description"))
-        .min(4, () => t("error_invalid_description"))
-        .max(250, () => t("error_invalid_description")),
-      feeNum: Yup.number()
-        .required(t("error_missing_fee"))
-        .transform((value) =>
-          isNaN(value) || value === null || value === undefined ? 0 : value,
-        )
-        .min(0.01, () => t("error_joining_fee")),
-    }),
+    validationSchema,
     onSubmit: async (values, { setFieldError }) => {
-      const communityData = {
-        name: values.name?.toLowerCase().trim(),
-        description: values.description?.toLowerCase().trim(),
-        hasFee: values.hasFee === true ? true : false,
-        feeNum: Number(values.feeNum),
-      };
+      const communityData = new FormData();
+      communityData.append("name", values.name?.toLowerCase().trim());
+      communityData.append(
+        "description",
+        values.description?.toLowerCase().trim(),
+      );
+      communityData.append(
+        "fee",
+        values.hasFee ? String(Number(values.feeNum)) : "0",
+      );
+      if (uploadedAvatarImage) {
+        communityData.append("avatar", uploadedAvatarImage);
+      }
+      if (uploadedCoverImage) {
+        communityData.append("coverImage", uploadedCoverImage);
+      }
+      if (isEditing) {
+        communityData.append("communityId", isEditing);
+      }
       try {
-        showLoading();
-        // await createProfileRequest(profileValues);
-        // const successMessage = "Your profile has been updated.";
-        // throwToast(successMessage, "success");
-        // Save data in auth store
-        // updateProfile(values);
+        // Calling api to edit/create a community
+        if (isEditing) {
+          const editedCommunity = await editCommunity(communityData);
+          console.log(editedCommunity);
+          setCommunities(
+            (prev: ICommunity[]) =>
+              prev.map((group: ICommunity) =>
+                group.id === editedCommunity.data.id
+                  ? editedCommunity.data
+                  : group,
+              ) as ICommunity[],
+          );
+        } else {
+          const newCommunity = await createCommunity(communityData);
+          setCommunities(
+            (prev) => [newCommunity.data, ...prev] as ICommunity[],
+          );
+        }
+        handleClose();
       } catch (err) {
         console.log(err);
+        throwToast(err.message, "error");
       } finally {
-        hideLoading();
       }
     },
   });
@@ -108,15 +178,34 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             onClick={handleClose}
           ></i>
         )}
-        <Modal.Title>
-          <h1 className="m-0 fw-bold">Modal heading</h1>
-        </Modal.Title>
+        {/* <Modal.Title>
+          <h1 className="m-0 fw-bold">{title}</h1>
+        </Modal.Title> */}
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
         <form onSubmit={formik.handleSubmit}>
-          <ImageUpload folderUpload={S3_GROUP_BANNER} onChange={console.log} />
           <label className="fw-600 mb-1" htmlFor="name">
+            {t("avatar_image")}
+          </label>
+          <ImageUpload
+            previewImage={isEditing ? previewAvatar : ""}
+            uploadAvatar={true}
+            folderUpload={S3_GROUP_AVATAR}
+            aspect={1}
+            onChange={(e) => setUploadedAvatarImage(e)}
+          />
+          <label className="fw-600 mt-3 mb-1" htmlFor="name">
+            {t("cover_image")}
+          </label>
+          <ImageUpload
+            previewImage={isEditing ? previewCover : ""}
+            uploadAvatar={false}
+            folderUpload={S3_GROUP_BANNER}
+            aspect={960 / 250}
+            onChange={(e) => setUploadedCoverImage(e)}
+          />
+          <label className="fw-600 mt-3 mb-1" htmlFor="name">
             {t("group_name")}
           </label>
           <input
@@ -154,7 +243,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           ) : null}
 
           {/* eslint-disable-next-line */}
-          <label className="fw-600 mt-3 mb-3">{t("group_type")}</label>
+          <label className="fw-600 mt-3 mb-1">{t("group_type")}</label>
           <div
             id={classes["profile-radio"]}
             className="profile-radio-btn mx-auto"
@@ -165,8 +254,11 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 name="hasFee"
                 id="free"
                 value="false"
-                defaultChecked
-                onChange={(e) => formik.setFieldValue("hasFee", false)}
+                checked={formik.values.hasFee === false ? true : false}
+                onChange={() => {
+                  console.log(formik.values.hasFee);
+                  formik.setFieldValue("hasFee", false);
+                }}
               />
               <label htmlFor="free">
                 <i className="bi bi-shield h2 m-0"></i>
@@ -179,7 +271,8 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 name="hasFee"
                 id="paid"
                 value="true"
-                onChange={(e) => formik.setFieldValue("hasFee", true)}
+                checked={formik.values.hasFee === false ? false : true}
+                onChange={() => formik.setFieldValue("hasFee", true)}
               />
               <label htmlFor="paid">
                 <i className="bi bi-shield-check h2 m-0"></i>
@@ -202,13 +295,22 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 inputProps={{
                   step: "0.01",
                 }}
+                // onBlur={(e) =>
+                //   formik.setFieldValue(
+                //     "feeNum",
+                //     Number(e.target.value).toFixed(2)
+                //   )
+                // }
                 onBlur={(e) =>
                   formik.setFieldValue(
                     "feeNum",
-                    Number(e.target.value).toFixed(2),
+                    Number(Number(e.target.value).toFixed(2)),
                   )
                 }
-                onChange={(e) => formik.setFieldValue("feeNum", e.target.value)}
+                // onChange={(e) => formik.setFieldValue("feeNum", e.target.value)}
+                onChange={(e) =>
+                  formik.setFieldValue("feeNum", Number(e.target.value))
+                }
                 InputProps={{
                   style: {
                     borderRadius: "10px",
@@ -226,17 +328,16 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
               ) : null}
             </div>
           )}
+          <Modal.Footer className={styles["modal-footer"]}>
+            <button
+              type="submit"
+              className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w150 border-0 my-3 ms-auto"
+            >
+              Save
+            </button>
+          </Modal.Footer>
         </form>
       </Modal.Body>
-      <Modal.Footer className={styles["modal-footer"]}>
-        <Button
-          variant="primary"
-          onClick={handleClose}
-          className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
-        >
-          Save
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

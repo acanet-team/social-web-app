@@ -9,6 +9,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const TAKE = 10;
 
@@ -20,10 +21,11 @@ const Home = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [curTab, setCurTab] = useState<string>("suggestion");
   const { data: session } = useSession() as any;
+  const t = useTranslations("FeedTabs");
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
-    if (chosenTab === "For you") {
+    if (chosenTab === t("for_you")) {
       setCurTab("for_you");
     } else {
       setCurTab("suggestion");
@@ -37,21 +39,22 @@ const Home = ({
           <div className="row feed-body">
             <div className="col-xl-8 col-xxl-9 col-lg-8">
               <FetchBrokers brokers={topBrokers} />
-              <div className={`${styles["home-tabs"]} bg-light`}>
+              <CreatePost userSession={session} />
+              {/* Tabs */}
+              <div className={styles["home-tabs"]}>
                 <div
                   className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                   onClick={(e) => onSelectTabHandler(e)}
                 >
-                  For you
+                  {t("for_you")}
                 </div>
                 <div
                   className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                   onClick={(e) => onSelectTabHandler(e)}
                 >
-                  Suggestion
+                  {t("suggestion")}
                 </div>
               </div>
-              <CreatePost userSession={session} />
               <Posts
                 posts={posts}
                 feedType={curTab}

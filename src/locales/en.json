@@ -135,6 +135,8 @@
     "popular_community": "Popular",
     "following_community": "Following",
     "owned_community": "Your Communities",
+    "avatar_image": "Avatar Image",
+    "cover_image": "Cover Image",
     "group_name": "Community Name",
     "group_desc": "Community Description",
     "group_overview": "Community Overview",
@@ -145,8 +147,17 @@
     "error_missing_community_name": "Please fill out a community name.",
     "error_invalid_community_name": "Name must be between 4 and 40 characters.",
     "error_missing_description": "Please fill out a community description.",
-    "error_invalid_description": "Description must be between 4 and 250 characters.",
+    "error_invalid_description": "Description must be between 4 and 350 characters.",
     "error_missing_fee": "Please fill out a joining fee.",
     "error_joining_fee": "Joining fee must be greater than 0."
+  },
+  "FeedTabs": {
+    "for_you": "For you",
+    "suggestion": "Suggestion"
+  },
+  "CommunityTabs": {
+    "posts": "Posts",
+    "members": "Members",
+    "requests": "Pending Requests"
   }
 }
