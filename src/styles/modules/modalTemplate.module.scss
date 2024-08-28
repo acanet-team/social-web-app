@@ -4,7 +4,7 @@
 
 .modal-content {
   background: white;
-  padding: 2.5rem;
+  padding: 0 2.5rem 2.5rem 2.5rem;
   position: relative;
 }
 
@@ -13,7 +13,7 @@
 }
 
 .modal-header {
-  padding: 20px;
+  padding: 25px;
   position: relative;
 }
 
@@ -27,6 +27,14 @@
 .modal-back__btn::before {
   font-weight: 500 !important;
   font-size: 30px;
+}
+
+.modal-footer, .modal-header {
+  border: none !important;
+}
+
+.modal-footer {
+  padding-right: 0 !important;
 }
 
 :global(.theme-dark) {
@@ -44,5 +52,9 @@
   .modal-header {
     display: flex;
     justify-content: center;
+  }
+
+  .modal-content {
+    padding: 0 0.7rem 1.5rem 1.5rem;
   }
 }

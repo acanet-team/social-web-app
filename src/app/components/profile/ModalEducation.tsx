@@ -98,7 +98,13 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <ImageUpload folderUpload={""} onChange={handleImageChange} />
+            <ImageUpload
+              folderUpload={""}
+              onChange={handleImageChange}
+              aspect={0}
+              uploadAvatar={false}
+              previewImage={""}
+            />
             <p className="m-0 py-1 fw-600 font-xss">Education Name</p>
             <input
               className="px-2"

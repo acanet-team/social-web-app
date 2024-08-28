@@ -26,7 +26,7 @@ export default function Posts(props: {
   useEffect(() => {
     // setPosts(prev => [...posts, ...prev]);
     setPosts((prev) => {
-      const newPosts = combineUniqueById(posts, prev);
+      const newPosts = combineUniqueById(prev, posts);
       return newPosts;
     });
   }, [post]);
@@ -53,7 +53,7 @@ export default function Posts(props: {
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight) {
+      if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
         setPage((page) => page + 1);
       }
     }

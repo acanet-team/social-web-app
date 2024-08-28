@@ -1,5 +1,6 @@
 import httpClient from "@/api";
 import { type ISession } from "@/api/auth/auth.model";
+import { RouterProgressBar } from "@/components/RouterProgressBar";
 import Loading from "@/context/Loading";
 import { LoadingProvider } from "@/context/Loading/context";
 import RootLayout from "@/layout/root";
@@ -40,9 +41,8 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       >
         <ToastContainer />
         <LoadingProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            {getLayout(<Component {...pageProps} />)}
-          </LocalizationProvider>
+          <RouterProgressBar />
+          {getLayout(<Component {...pageProps} />)}
           <Loading />
         </LoadingProvider>
       </NextIntlClientProvider>
@@ -54,7 +54,9 @@ MyApp.getInitialProps = async (appContext: any) => {
   const appProps = await App.getInitialProps(appContext);
   const session = (await getSession(appContext)) as unknown as ISession;
   if (session) {
-    setCookie(appContext.ctx, "acanet_token", session?.accessToken);
+    setCookie(appContext.ctx, "acanet_token", session?.accessToken, {
+      path: "/",
+    });
     httpClient.setAuthorization(session.accessToken);
   }
   return { ...appProps, session };

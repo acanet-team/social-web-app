@@ -29,7 +29,7 @@ export type IUser = {
   deletedAt: string;
 };
 
-export type ICommunity = {
+export type ICommunityForm = {
   name: string;
   description: string;
   hasFee: boolean;

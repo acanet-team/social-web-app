@@ -47,6 +47,7 @@
   .text-current {
     color: #fff !important;
   }
+  
   button {
     color: var(--theme-color-shade) !important;
     background-color: #fff;
@@ -378,4 +379,5 @@
   --theme-light-color-bg: #f5f5f5;
   --theme-light-color-text: #212529;
   --theme-dark-color-bg-btn: rgb(28, 30, 33);
+  --theme-light-font-color: #111111c8;
 }

@@ -173,7 +173,13 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <ImageUpload folderUpload={""} onChange={handleImageChange} />
+            <ImageUpload
+              folderUpload={""}
+              onChange={handleImageChange}
+              aspect={0}
+              uploadAvatar={false}
+              previewImage={""}
+            />
             {/* {uploadedImage && (
               <div>
                 <p>Image uploaded successfully!</p>
