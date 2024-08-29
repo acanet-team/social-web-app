@@ -59,7 +59,7 @@ export type subcribeTopicsParam<T> = {
 
 export type BaseResponse<T> = {
   status: number;
-  success: boolean;
+  success?: boolean;
   message: string;
   data: T;
 };

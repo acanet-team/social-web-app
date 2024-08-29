@@ -14,3 +14,12 @@ export enum CommunityViewEnum {
   members = "members",
   requests = "requests",
 }
+
+export enum CommunityJoiningStatus {
+  not_join = "",
+  pending = "pending_request", // Đang gửi yêu cầu vào nhóm
+  joined = "joined", // Đã vào nhóm
+  invited = "invited", // Đã gửi lời mời vào nhóm
+  rejected = "rejected", // Bị từ chối
+  banned = "banned", // Bị ban
+}

@@ -79,11 +79,13 @@ export interface Photo {
 }
 export interface IUserInfo {
   id: number | null;
+  userId: number;
   email: string;
   provider: string;
   socialId: string;
   firstName: string;
   lastName: string;
+  nickName?: string;
   photo: Photo;
   role: Role;
   status: Status;

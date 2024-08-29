@@ -19,7 +19,7 @@ class Group extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     return (
-      <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+      <div className="card w-100 shadow-xss rounded-3 border-0 mb-3">
         <div className="card-body d-flex align-items-center p-4">
           <h4 className="fw-700 mb-0 font-xssss text-grey-900">
             Suggest Pages
@@ -37,7 +37,7 @@ class Group extends Component {
               <img
                 src={`assets/images/${value.imageUrl}`}
                 alt="group"
-                className="img-fluid rounded-xxl mb-2"
+                className="img-fluid rounded-3 mb-2"
               />
             </div>
             <div className="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">

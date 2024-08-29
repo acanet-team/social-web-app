@@ -7,7 +7,7 @@ export const getMe = () => {
 };
 
 export const logOut = (headers: Headers = undefined as unknown as Headers) => {
-  return httpClient.post("api/v1/auth/logout", { headers });
+  return httpClient.post("/v1/auth/logout", { headers });
 };
 
 export const refreshToken = (refreshToken: string) => {

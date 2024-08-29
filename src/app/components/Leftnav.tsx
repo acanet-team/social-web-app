@@ -11,7 +11,7 @@ export default function Leftnav() {
     <nav className={`navigation scroll-bar ${navClass}`}>
       <div className="container ps-0 pe-0">
         <div className="nav-content">
-          <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
+          <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1 mb-2 mt-2">
             <div className="nav-caption fw-600 font-xssss text-grey-500">
               <span>{t("newsfeed")}</span>
             </div>
@@ -69,7 +69,7 @@ export default function Leftnav() {
             </ul>
           </div>
 
-          <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
+          <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1">
             <div className="nav-caption fw-600 font-xssss text-grey-500">
               <span>{t("account")}</span>
             </div>
@@ -113,7 +113,7 @@ export default function Leftnav() {
   //   <div className="navigation scroll-bar">
   //     <div className="container ps-0 pe-0">
   //       <div className="nav-content">
-  //         <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
+  //         <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1 mb-2 mt-2">
   //           <div className="nav-caption fw-600 font-xssss text-grey-500">
   //             <span>Newsfeed</span>
   //             <ul className="mb-1 top-content">
@@ -162,7 +162,7 @@ export default function Leftnav() {
   //           </div>
   //         </div>
 
-  //         <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2">
+  //         <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1 mb-2">
   //           <div className="nav-caption fw-600 font-xssss text-grey-500">
   //             <span>More </span>Pages
   //           </div>
@@ -207,7 +207,7 @@ export default function Leftnav() {
   //           </ul>
   //         </div>
 
-  //         <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
+  //         <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1">
   //           <div className="nav-caption fw-600 font-xssss text-grey-500">
   //             <span></span> Account
   //           </div>

@@ -91,7 +91,7 @@ export default function Posts(props: {
               </span>
             </div>
             <button
-              className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-xxl border-0 d-block mb-5 mx-auto"
+              className="main-btn bg-current text-center text-white fw-600 p-2 w150 rounded-3 border-0 d-block mb-5 mx-auto"
               onClick={() => (window.location.href = "/")}
             >
               {t("Explore_More")}
@@ -101,6 +101,8 @@ export default function Posts(props: {
           posts.map((p) => (
             <div key={p.id}>
               <PostCard
+                groupOwnerId=""
+                groupName=""
                 postId={p.id}
                 nickName={
                   p.user.nickName || p.user.firstName + " " + p.user.lastName

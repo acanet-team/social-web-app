@@ -44,7 +44,7 @@ export const TopBrokers = (props: {
       className={styles["image-slider-container"]}
       id={styles["top-brokers"]}
     >
-      <div className="card w140 h200 d-block border-0 shadow-md bg-light rounded-xxl overflow-hidden cursor-pointer my-3 me-3">
+      <div className="card w140 h200 d-block border-0 shadow-md bg-light rounded-3 overflow-hidden cursor-pointer my-3 me-3">
         <div className="card-body d-block w-100 ps-4 pe-4 pb-4 text-center">
           <figure className="avatar overflow-hidden ms-auto me-auto mb-0 position-relative w75 z-index-1">
             <Image
@@ -68,7 +68,7 @@ export const TopBrokers = (props: {
             {followerNum > 1 ? "followers" : "follower"}
           </p>
           <span
-            className={`${styles["follow-btn"]} mt-2 mb-0 px-3 py-2 z-index-1 rounded-xxl text-white font-xsssss text-uppersace fw-700 ls-3`}
+            className={`${styles["follow-btn"]} mt-2 mb-0 px-3 py-2 z-index-1 rounded-3 text-white font-xsssss text-uppersace fw-700 ls-3`}
             onClick={(e) => onFollowBrokerHandler(e, brokerId)}
           >
             {isFollowing ? "Following" : "+ Follow"}

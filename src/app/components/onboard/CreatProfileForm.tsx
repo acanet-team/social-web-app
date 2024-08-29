@@ -151,7 +151,7 @@ export default function CreateProfileForm(props: {
               sx={{
                 "& fieldset": {
                   border: "2px #eee solid",
-                  borderRadius: "10px",
+                  borderRadius: "5px",
                 },
                 "& .MuiOutlinedInput-root": {
                   padding: 0,

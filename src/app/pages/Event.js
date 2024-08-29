@@ -75,7 +75,7 @@ class Event extends Component {
             <div className="middle-sidebar-left pe-0">
               <div className="row">
                 <div className="col-xl-12">
-                  <div className="card w-100 border-0 shadow-none rounded-xxl border-0 mb-3 overflow-hidden ">
+                  <div className="card w-100 border-0 shadow-none rounded-3 border-0 mb-3 overflow-hidden ">
                     <div style={{ height: "400px", width: "100%" }}>
                       <GoogleMapReact
                         defaultCenter={this.props.center}
@@ -93,7 +93,7 @@ class Event extends Component {
 
                 {eventList.map((value, index) => (
                   <div key={index} className="col-lg-4 col-md-6 pe-2 ps-2">
-                    <div className="card p-3 bg-white w-100 hover-card border-0 shadow-xss rounded-xxl border-0 mb-3 overflow-hidden ">
+                    <div className="card p-3 bg-white w-100 hover-card border-0 shadow-xss rounded-3 border-0 mb-3 overflow-hidden ">
                       <div className="card-image w-100">
                         <img
                           src={`assets/images/${value.imageUrl}`}
@@ -102,7 +102,7 @@ class Event extends Component {
                         />
                       </div>
                       <div className="card-body d-flex ps-0 pe-0 pb-0">
-                        <div className="bg-greylight me-3 p-3 border-light-md rounded-xxl theme-dark-bg">
+                        <div className="bg-greylight me-3 p-3 border-light-md rounded-3 theme-dark-bg">
                           <h4 className="fw-700 font-lg ls-3 text-grey-900 mb-0">
                             <span className="ls-3 d-block font-xsss text-grey-500 fw-500">
                               {value.month}
