@@ -127,7 +127,7 @@ export type socialMediaParams = {
 };
 export type experienceParams = {
   company: {
-    id?: string;
+    id?: string | undefined;
     logo: string;
     name: string;
     startDate: Date;
@@ -137,6 +137,32 @@ export type experienceParams = {
     location: string;
     description: string;
     workingType: string;
+  }[];
+};
+export type educationParams = {
+  education: {
+    id?: string | undefined;
+    name: string;
+    logo: string;
+    startDate: Date;
+    endDate: Date;
+    isGraduated: boolean;
+    major: string;
+    degree: string;
+    description: string;
+  }[];
+};
+export type licenseParams = {
+  licenses: {
+    id?: string | undefined;
+    logo: string;
+    licenseType: string;
+    licenseIssuer: string;
+    licenseState: string;
+    licenseIssueDate: Date;
+    licenseStatus: string;
+    licenseExpirationDate: Date;
+    credentialID: string;
   }[];
 };
 export interface Meta {

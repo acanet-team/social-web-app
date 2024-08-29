@@ -1,14 +1,23 @@
-import React, { useEffect, useState, type FC } from "react";
+import React, { useCallback, useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
 import { Select, MenuItem, type SelectChangeEvent } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import type { BrokerProfile, FormDt } from "@/api/profile/model";
+import type {
+  BrokerProfile,
+  Company,
+  FormDtCompany,
+} from "@/api/profile/model";
 import dayjs from "dayjs";
-import { createNewExperiences, updateExperiences } from "@/api/profile";
+import {
+  createNewExperiences,
+  updateExperiences,
+  deleteCompany,
+} from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import ImageUpload from "@/components/ImageUpload";
+import type { experienceParams } from "@/api/model";
 
 interface ModalExperienceProp {
   title: string;
@@ -16,7 +25,9 @@ interface ModalExperienceProp {
   handleClose: () => void;
   isEditing: boolean;
   dataBrokerProfile: BrokerProfile;
-  formDt: FormDt;
+  formDt: FormDtCompany;
+  setCompany: React.Dispatch<React.SetStateAction<FormDtCompany[]>>;
+  // editId: string;
 }
 
 export const ModalExperience: FC<ModalExperienceProp> = ({
@@ -26,6 +37,8 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
   title,
   dataBrokerProfile,
   formDt,
+  setCompany,
+  // editId,
 }) => {
   const initialFormData = isEditing
     ? formDt
@@ -96,24 +109,25 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
 
   const submitAddExperience = async () => {
     try {
-      const newExperience = {
-        company: [
-          {
-            logo: "",
-            name: formData.name,
-            startDate: new Date(formData.startDate),
-            endDate: formData.isWorking
-              ? new Date("")
-              : new Date(formData.startDate),
-            isWorking: formData.isWorking,
-            position: formData.position,
-            location: formData.location,
-            description: formData.description,
-            workingType: formData.workingType,
-          },
-        ],
+      const experience = {
+        logo: "",
+        name: formData.name,
+        startDate: new Date(formData.startDate),
+        endDate: formData.isWorking
+          ? new Date("")
+          : new Date(formData.startDate),
+        isWorking: formData.isWorking,
+        position: formData.position,
+        location: formData.location,
+        description: formData.description,
+        workingType: formData.workingType,
       };
+      const newExperience = {
+        company: [experience],
+      };
+
       await createNewExperiences(newExperience);
+      setCompany((prevCompanies) => [experience, ...prevCompanies]);
       handleClose();
     } catch (error) {
       throwToast("Error creating experience", "error");
@@ -122,31 +136,73 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
 
   const submitEditExperience = async () => {
     try {
-      const newExperience = {
-        company: [
-          {
-            id: formData.id,
-            logo: "",
-            name: formData.name,
-            startDate: new Date(formData.startDate),
-            endDate: formData.isWorking
-              ? new Date("")
-              : new Date(formData.startDate),
-            isWorking: formData.isWorking,
-            position: formData.position,
-            location: formData.location,
-            description: formData.description,
-            workingType: formData.workingType,
-          },
-        ],
+      const experience = {
+        id: formData.id,
+        logo: "",
+        name: formData.name,
+        startDate: new Date(formData.startDate),
+        endDate: formData.isWorking
+          ? new Date("")
+          : new Date(formData.startDate),
+        isWorking: formData.isWorking,
+        position: formData.position,
+        location: formData.location,
+        description: formData.description,
+        workingType: formData.workingType,
       };
+      const newExperience = {
+        company: [experience],
+      };
+
       await updateExperiences(newExperience);
+      setCompany((prevCompanies) =>
+        prevCompanies.map((comp) =>
+          comp.id === initialFormData.id ? experience : comp,
+        ),
+      );
       handleClose();
     } catch (error) {
       throwToast("Error updating experience", "error");
     }
   };
 
+  // const submitAddOrUpdateExperience = async () => {
+  //   try {
+  //     const experience = {
+  //         logo: "",
+  //         name: formData.name,
+  //         startDate: new Date(formData.startDate),
+  //         endDate: formData.isWorking
+  //           ? new Date("")
+  //           : new Date(formData.startDate),
+  //         isWorking: formData.isWorking,
+  //         position: formData.position,
+  //         location: formData.location,
+  //         description: formData.description,
+  //         workingType: formData.workingType,
+  //     };
+
+  //     const newExperience = {
+  //       company: [experience],
+  //     };
+  //     if (isEditing) {
+  //       experience.id = initialFormData.id;
+  //       // experience.id = initialFormData.id;
+  //       await updateExperiences(newExperience);
+  //       setCompany((prevCompanies) =>
+  //         prevCompanies.map((comp) =>
+  //           comp.id === initialFormData.id ? experience : comp
+  //         )
+  //       );
+  //     } else {
+  //       await createNewExperiences(newExperience);
+  //       setCompany((prevCompanies) => [experience, ...prevCompanies]);
+  //     }
+  //     handleClose();
+  //   } catch (error) {
+  //     throwToast("Error handling experience", "error");
+  //   }
+  // };
   return (
     <>
       <Modal
@@ -351,10 +407,11 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
           <Button
             variant="primary"
             onClick={
-              () => console.log(formData)
-              // isEditing
-              //   ? () => submitEditExperience
-              //   : () => submitAddExperience()
+              // () => console.log(formData)
+              isEditing
+                ? () => submitEditExperience()
+                : () => submitAddExperience()
+              // () => submitAddOrUpdateExperience()
             }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >

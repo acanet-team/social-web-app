@@ -8,11 +8,15 @@ import { Experience } from "@/app/components/profile/Experience";
 import Education from "@/app/components/profile/Education";
 import AISummary from "@/app/components/profile/AISummary";
 import License from "@/app/components/profile/License";
-import { getProfile } from "@/api/profile";
+import { getMyPosts, getProfile } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import SocialMedia from "@/app/components/profile/SocialMedia";
 import ModalEditBanner from "@/app/components/profile/ModalEditBanner";
 import { useTranslations } from "next-intl";
+import { createGetAllTopicsRequest } from "@/api/onboard";
+import Posts from "@/app/components/newsfeed/Posts";
+
+const TAKE = 10;
 
 export default function Profile({
   dataBrokerProfile,
@@ -20,14 +24,16 @@ export default function Profile({
   dataUser,
   followersCount,
   idParam,
+  interestTopic,
+  myPosts,
+  totalPage,
+  page,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
 
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
-  console.log("fsdfj");
-  console.log(dataBrokerProfile);
 
   const numbersFollowers = formatNumber(followersCount);
   const [curTab, setCurTab] = useState<string>("about");
@@ -336,6 +342,7 @@ export default function Profile({
               role={role}
               dataBrokerProfile={dataBrokerProfile}
               dataUser={dataUser}
+              listInterestTopic={interestTopic}
             />
             <SocialMedia role={role} dataBrokerProfile={dataBrokerProfile} />
           </div>
@@ -347,6 +354,19 @@ export default function Profile({
           </div>
         </div>
       )}
+      {curTab === TabPnum.Posts && (
+        <>
+          <Posts
+            posts={myPosts}
+            feedType={curTab}
+            take={TAKE}
+            allPage={totalPage}
+            curPage={page}
+          />
+        </>
+        // console.log("mypost",myPosts)
+      )}
+      {curTab === TabPnum.Communities && <></>}
       {show && (
         <ModalEditBanner
           handleClose={handleCancel}
@@ -360,7 +380,11 @@ export default function Profile({
 }
 export async function getServerSideProps(context: NextPageContext) {
   const { id } = context.query;
+  console.log("user id", id);
   const profileRes = await getProfile(id as string);
+  const interestTopic: any = await createGetAllTopicsRequest(1, 100);
+  const myPost = await getMyPosts(1, TAKE, "owner", Number(id));
+  console.log("owner post", myPost);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
@@ -369,6 +393,10 @@ export async function getServerSideProps(context: NextPageContext) {
       dataUser: profileRes?.data?.user || [],
       followersCount: profileRes?.data?.followersCount,
       idParam: id,
+      interestTopic: interestTopic?.data.docs || [],
+      myPosts: myPost?.data?.docs || [],
+      totalPage: myPost?.data?.meta?.totalPage,
+      page: myPost?.data?.meta.page,
     },
   };
 }

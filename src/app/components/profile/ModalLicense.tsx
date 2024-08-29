@@ -2,23 +2,43 @@ import React, { useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { Select } from "@mui/material";
+import { MenuItem, Select, type SelectChangeEvent } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import type { FormDtLicense } from "@/api/profile/model";
+import ImageUpload from "@/components/ImageUpload";
+import dayjs from "dayjs";
+import { throwToast } from "@/utils/throw-toast";
+import { createNewLicense, updateLicense } from "@/api/profile";
 
 interface ModalLisenceProp {
   title: string;
   show: boolean;
   handleClose: () => void;
-  handleShow: () => void;
+  isEditing: boolean;
+  formDt: FormDtLicense;
+  setLicenses: React.Dispatch<React.SetStateAction<FormDtLicense[]>>;
 }
 
 export const ModalLicense: React.FC<ModalLisenceProp> = ({
   handleClose,
-  handleShow,
+  isEditing,
   show,
   title,
+  formDt,
+  setLicenses,
 }) => {
-  const [isWorking, setIsWorking] = useState(true);
+  const initialFormData = isEditing
+    ? formDt
+    : {
+        licenseType: "",
+        logo: "",
+        licenseIssuer: "",
+        licenseState: "",
+        licenseIssueDate: "",
+        licenseStatus: "",
+        licenseExpirationDate: "",
+        credentialID: "",
+      };
 
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
@@ -35,6 +55,89 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+
+  const handleImageChange = (file: File) => {
+    setUploadedImage(file);
+    console.log("Uploaded Image: ", file);
+    // setFormData({
+    //   ...formData,
+    //   logo: uploadedImage,
+    // });
+    setFormData((prev) => ({ ...prev, logo: file }));
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    setFormData({
+      ...formData,
+      licenseStatus: event.target.value,
+    });
+  };
+
+  const submitAddLicense = async () => {
+    try {
+      const license = {
+        licenseType: formData.licenseType,
+        logo: "",
+        licenseIssuer: formData.licenseIssuer,
+        licenseState: formData.licenseState,
+        licenseIssueDate: new Date(formData.licenseIssueDate),
+        licenseStatus: formData.licenseStatus,
+        licenseExpirationDate: formData.licenseExpirationDate
+          ? new Date("")
+          : new Date(formData.licenseExpirationDate),
+        credentialID: formData.credentialID,
+      };
+      const newLicense = {
+        licenses: [license],
+      };
+      await createNewLicense(newLicense);
+      setLicenses((prev) => [license, ...prev]);
+      handleClose();
+    } catch (error) {
+      throwToast("Error creating license", "error");
+    }
+  };
+
+  const submitEditLicense = async () => {
+    try {
+      const license = {
+        id: formData.id,
+        licenseType: formData.licenseType,
+        logo: "",
+        licenseIssuer: formData.licenseIssuer,
+        licenseState: formData.licenseState,
+        licenseIssueDate: new Date(formData.licenseIssueDate),
+        licenseStatus: formData.licenseStatus,
+        licenseExpirationDate: formData.licenseExpirationDate
+          ? new Date("")
+          : new Date(formData.licenseExpirationDate),
+        credentialID: formData.credentialID,
+      };
+      const newLicense = {
+        licenses: [license],
+      };
+      await updateLicense(newLicense);
+      setLicenses((prev) =>
+        prev.map((cer) => (cer.id === initialFormData.id ? license : cer)),
+      );
+      handleClose();
+    } catch (error) {
+      throwToast("Error updating license", "error");
+    }
+  };
 
   return (
     <>
@@ -62,11 +165,16 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
+            <ImageUpload
+              folderUpload={""}
+              onChange={handleImageChange}
+              aspect={0}
+              uploadAvatar={false}
+              previewImage={""}
+            />
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">
-                  License and Certification Name
-                </p>
+                <p className="m-0 py-1 fw-600 font-xss">Certification Name</p>
                 <input
                   className="px-2"
                   style={{
@@ -75,7 +183,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     borderRadius: "4px",
                     height: "32px",
                   }}
-                  value={""}
+                  value={formData.licenseType}
+                  name="licenseType"
+                  onChange={handleChange}
                   placeholder="Please enter your license or certification name"
                 />
               </div>
@@ -90,7 +200,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     borderRadius: "4px",
                     height: "32px",
                   }}
-                  value={""}
+                  value={formData.licenseIssuer}
+                  name="licenseIssuer"
+                  onChange={handleChange}
                   placeholder="Please enter your issuing organization"
                 />
               </div>
@@ -98,20 +210,38 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xss ">Issued year</p>
-                <input
-                  className="px-2"
-                  style={{
-                    width: "100%",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    height: "32px",
-                  }}
-                  value={""}
-                  placeholder="Please enter your issued year"
+                <DatePicker
+                  className="w__100"
+                  value={dayjs(formData.licenseIssueDate)}
+                  onChange={(date) =>
+                    setFormData({
+                      ...formData,
+                      licenseIssueDate: date ? dayjs(date).toISOString() : "",
+                    })
+                  }
+                  views={["day", "month", "year"]}
                 />
               </div>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">Credential</p>
+                <p className="m-0 py-1 fw-600 font-xss ">Expiration year</p>
+                <DatePicker
+                  className="w__100"
+                  value={dayjs(formData.licenseExpirationDate)}
+                  onChange={(date) =>
+                    setFormData({
+                      ...formData,
+                      licenseExpirationDate: date
+                        ? dayjs(date).toISOString()
+                        : "",
+                    })
+                  }
+                  views={["day", "month", "year"]}
+                />
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+              <div style={{ width: "50%" }}>
+                <p className="m-0 py-1 fw-600 font-xss">Credential ID</p>
                 <input
                   className="px-2"
                   style={{
@@ -120,9 +250,30 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     borderRadius: "4px",
                     height: "32px",
                   }}
-                  value={""}
-                  placeholder="Please enter your credential"
+                  value={formData.credentialID}
+                  name="credentialID"
+                  onChange={handleChange}
+                  placeholder="Please enter your credential id"
                 />
+              </div>
+              <div style={{ width: "50%" }}>
+                <p className="m-0 py-1 fw-600 font-xss">License Status</p>
+                <Select
+                  value={formData.licenseStatus}
+                  onChange={handleSelectChange}
+                  displayEmpty
+                  style={{ width: "100%", height: "32px" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select License Status
+                  </MenuItem>
+                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+                  <MenuItem value="INACTIVE">INACTIVE</MenuItem>
+                  <MenuItem value="PENDING">PENDING</MenuItem>
+                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
+                  <MenuItem value="REVOKED">REVOKED</MenuItem>
+                  <MenuItem value="EXPIRED">EXPIRED</MenuItem>
+                </Select>
               </div>
             </div>
           </form>
@@ -130,7 +281,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
         <Modal.Footer className={styles["modal-footer"]}>
           <Button
             variant="primary"
-            onClick={handleClose}
+            onClick={
+              isEditing ? () => submitEditLicense() : () => submitAddLicense()
+            }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
             Save

@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { dataEducationProfile } from "@/app/fakeData/profile";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
-import type { BrokerProfile } from "@/api/profile/model";
+import type { BrokerProfile, FormDtSchool } from "@/api/profile/model";
 import { ModalEducation } from "./ModalEducation";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
+import { deleteEducation } from "@/api/profile";
 
 const Education = ({
   dataBrokerProfile,
@@ -19,7 +19,19 @@ const Education = ({
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const school = dataBrokerProfile.school ?? [];
+
+  const [formDt, setFormDt] = useState<FormDtSchool>({
+    id: "",
+    name: "",
+    logo: "",
+    startDate: "",
+    endDate: "",
+    isGraduated: true,
+    major: "",
+    degree: "",
+    description: "",
+  });
+  const [school, setSchool] = useState(dataBrokerProfile.school ?? []);
   const educationToShow = showAllEducation ? school : school.slice(0, 2);
 
   const handleAddModal = useCallback(() => {
@@ -31,13 +43,25 @@ const Education = ({
     setShow(false);
   }, []);
 
-  const handleEditModal = useCallback(() => {
+  const handleEditModal = useCallback((school: FormDtSchool) => {
     setIsEditing(true);
     setShow(true);
-  }, [show]);
+    setFormDt(school);
+  }, []);
 
   const handleOpenEdit = useCallback(() => {
     setShowIconEdit(true);
+  }, []);
+
+  const delEdu = useCallback(async (id: string) => {
+    try {
+      if (id) {
+        await deleteEducation(id);
+        setSchool((prev) => prev.filter((edu) => edu.id !== id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   return (
@@ -75,12 +99,14 @@ const Education = ({
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
-                <h4>
-                  <i
-                    className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                    onClick={() => handleOpenEdit}
-                  ></i>
-                </h4>
+                {school.length != 0 && (
+                  <h4>
+                    <i
+                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                      onClick={() => handleOpenEdit()}
+                    ></i>
+                  </h4>
+                )}
               </>
             )}
           </div>
@@ -96,7 +122,10 @@ const Education = ({
               }}
             >
               <Image
-                src={education.logo}
+                src={
+                  education.logo ||
+                  "/assets/images/profile/alabaster_global_logo.png"
+                }
                 width={48}
                 height={48}
                 alt={education.name}
@@ -124,19 +153,25 @@ const Education = ({
                       <>
                         <i
                           className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                          onClick={() => handleEditModal()}
+                          onClick={() => handleEditModal(education)}
                         ></i>
                         <i
                           className={`bi bi-trash3-fill ${styles["icon-profile"]}`}
+                          onClick={() => delEdu(education.id)}
                         ></i>
                       </>
                     )}
                   </div>
                 </div>
-                <p className="m-0 font-xsss lh-20">{education.degree}</p>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <p className="m-0 font-xsss lh-20">{education.degree}</p>
+                  <p className="m-0 font-xsss lh-20">,{education.major}</p>
+                </div>
                 <p className="m-0 font-xsss lh-20 text-gray-follow">
                   {dayjs(education.startDate).format("YYYY")} -{" "}
-                  {dayjs(education.endDate).format("YYYY")}
+                  {education.isGraduated
+                    ? "Present"
+                    : dayjs(education.endDate).format("YYYY")}
                 </p>
                 <p className="m-0 mt-2 font-xsss lh-20 text-gray-follow">
                   Activities and societies {education.description}
@@ -184,15 +219,16 @@ const Education = ({
           </>
         )}
       </div>
-      {/* {show && (
+      {show && (
         <ModalEducation
           handleClose={handleCancel}
-          // handleShow={handleOpenModal}
           isEditing={isEditing}
           title={isEditing ? "Edit education" : "Create education"}
           show={show}
+          formDt={formDt}
+          setSchool={setSchool}
         />
-      )} */}
+      )}
     </>
   );
 };

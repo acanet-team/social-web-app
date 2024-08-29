@@ -101,6 +101,7 @@ export interface School {
 export interface License {
   id: string;
   credentialID: string;
+  logo: string;
   licenseType: string;
   licenseState: string;
   licenseIssuer: string;
@@ -135,7 +136,7 @@ export interface SocialMedia {
 
 export interface Skill {
   id: string;
-  interestTopics: InterestTopics;
+  interestTopic: InterestTopics;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -150,15 +151,70 @@ export interface InterestTopics {
   topicName: string;
 }
 
-export interface FormDt {
+export interface FormDtCompany {
   id?: string;
   logo: File | string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate: string | Date;
+  endDate: string | Date;
   isWorking: boolean;
   position: string;
   location: string;
   description: string;
   workingType: string;
+}
+
+export interface FormDtSchool {
+  id?: string;
+  name: string;
+  logo: File | string;
+  startDate: string | Date;
+  endDate: string | Date;
+  isGraduated: boolean;
+  major: string;
+  degree: string;
+  description: string;
+}
+
+export interface FormDtLicense {
+  id?: string;
+  logo: File | string;
+  licenseType: string;
+  licenseIssuer: string;
+  licenseState: string;
+  licenseIssueDate: string | Date;
+  licenseStatus: string;
+  licenseExpirationDate: string | Date;
+  credentialID: string;
+}
+
+export type ResponseProfilePost<T> = {
+  status: number;
+  message: string;
+  data: {
+    docs: T[];
+    meta: {
+      page: number;
+      take: number;
+      total: number;
+      totalPage: number;
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+    };
+  };
+};
+
+export interface PPost {
+  id: string;
+  user: {
+    userId: number;
+    firstName: string;
+    lastName: string;
+    photo: {
+      id: string;
+      path: string;
+    };
+  };
+  content: string;
+  assets: { id: string; path: string }[];
 }

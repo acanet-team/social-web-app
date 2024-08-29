@@ -2,42 +2,51 @@ import React, { useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import ImageUpload from "@/components/ImageUpload";
 import dayjs from "dayjs";
+import type { FormDtSchool } from "@/api/profile/model";
+import { createNewSchool, updateSchool } from "@/api/profile";
+import { throwToast } from "@/utils/throw-toast";
+import { MenuItem, Select, type SelectChangeEvent } from "@mui/material";
 
 interface ModalEducationProp {
   title: string;
   show: boolean;
   handleClose: () => void;
-  handleShow: () => void;
   isEditing: boolean;
+  formDt: FormDtSchool;
+  setSchool: React.Dispatch<React.SetStateAction<FormDtSchool[]>>;
 }
 
 export const ModalEducation: React.FC<ModalEducationProp> = ({
   handleClose,
-  handleShow,
   show,
   title,
   isEditing,
+  formDt,
+  setSchool,
 }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    logo: "",
-    startDate: "",
-    endDate: "",
-    isGraduated: true,
-    degree: "",
-    description: "",
-  });
+  const initialFormData = isEditing
+    ? formDt
+    : {
+        name: "",
+        logo: "",
+        startDate: "",
+        endDate: "",
+        isGraduated: true,
+        major: "",
+        degree: "",
+        description: "",
+      };
+  const [formData, setFormData] = useState(initialFormData);
 
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
   const handleImageChange = (file: File) => {
     setUploadedImage(file);
     console.log("Uploaded Image: ", file);
-    // setFormData(prev => ({ ...prev, logo: file }));
+    setFormData((prev) => ({ ...prev, logo: file }));
   };
 
   const [fullscreen, setFullscreen] = useState(
@@ -70,6 +79,66 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
       ...formData,
       isGraduated: e.target.value === "true",
     });
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    setFormData({
+      ...formData,
+      degree: event.target.value,
+    });
+  };
+
+  const submitAddSchool = async () => {
+    try {
+      const school = {
+        name: formData.name,
+        logo: "",
+        startDate: new Date(formData.startDate),
+        endDate: formData.isGraduated
+          ? new Date("")
+          : new Date(formData.endDate),
+        isGraduated: formData.isGraduated,
+        major: formData.major,
+        degree: formData.degree,
+        description: formData.description,
+      };
+      const newSchool = {
+        education: [school],
+      };
+      await createNewSchool(newSchool);
+      setSchool((prev) => [school, ...prev]);
+      handleClose();
+    } catch (error) {
+      throwToast("Error creating education", "error");
+    }
+  };
+
+  const submitEditSchool = async () => {
+    try {
+      const school = {
+        id: formData.id,
+        name: formData.name,
+        logo: "",
+        startDate: new Date(formData.startDate),
+        endDate: formData.isGraduated
+          ? new Date("")
+          : new Date(formData.endDate),
+        isGraduated: formData.isGraduated,
+        major: formData.major,
+        degree: formData.degree,
+        description: formData.description,
+      };
+      const newSchool = {
+        education: [school],
+      };
+      await updateSchool(newSchool);
+      setSchool((prev) =>
+        prev.map((edu) => (edu.id === initialFormData.id ? school : edu)),
+      );
+      handleClose();
+    } catch (error) {
+      throwToast("Error creating education", "error");
+    }
   };
 
   return (
@@ -115,24 +184,56 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 height: "32px",
               }}
               value={formData.name}
+              name="name"
               onChange={handleChange}
               placeholder="Please enter your education name"
             />
 
             <div style={{ width: "100%" }}>
-              <p className="m-0 py-1 fw-600 font-xss">Degree</p>
-              <input
-                className="px-2"
-                style={{
-                  width: "100%",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  height: "32px",
-                }}
-                value={formData.degree}
-                onChange={handleChange}
-                placeholder="Please enter your degree name"
-              />
+              <div>
+                <p className="m-0 py-1 fw-600 font-xss">Degree</p>
+                <Select
+                  value={formData.degree}
+                  onChange={handleSelectChange}
+                  displayEmpty
+                  style={{ width: "100%", height: "32px" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Degree
+                  </MenuItem>
+                  <MenuItem value="INTERMEDIATE">INTERMEDIATE</MenuItem>
+                  <MenuItem value="ADVANCED">ADVANCED</MenuItem>
+                  <MenuItem value="ENGINEERING DEGREE">
+                    ENGINEERING DEGREE
+                  </MenuItem>
+                  <MenuItem value="BACHELOR's DEGREE">
+                    BACHELOR`&apos;`S DEGREE
+                  </MenuItem>
+                  <MenuItem value="MASTER'S DEGREE">
+                    MASTER`&apos;`S DEGREE
+                  </MenuItem>
+                  <MenuItem value="DOCTOR">DOCTOR</MenuItem>
+                  <MenuItem value="DEGREE">DEGREE</MenuItem>
+                  <MenuItem value="PHD">PHD</MenuItem>
+                  <MenuItem value="OTHER">OTHER</MenuItem>
+                </Select>
+              </div>
+              <div>
+                <p className="m-0 py-1 fw-600 font-xss">Major</p>
+                <input
+                  className="px-2"
+                  style={{
+                    width: "100%",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    height: "32px",
+                  }}
+                  value={formData.major}
+                  onChange={handleChange}
+                  name="major"
+                  placeholder="Please enter your major name"
+                />
+              </div>
             </div>
 
             <div>
@@ -232,7 +333,9 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
         <Modal.Footer className={styles["modal-footer"]}>
           <Button
             variant="primary"
-            onClick={handleClose}
+            onClick={
+              isEditing ? () => submitEditSchool() : () => submitAddSchool()
+            }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
             Save

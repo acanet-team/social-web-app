@@ -42,7 +42,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <ToastContainer />
         <LoadingProvider>
           <RouterProgressBar />
-          {getLayout(<Component {...pageProps} />)}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {getLayout(<Component {...pageProps} />)}
+          </LocalizationProvider>
           <Loading />
         </LoadingProvider>
       </NextIntlClientProvider>

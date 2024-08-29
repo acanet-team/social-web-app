@@ -3,10 +3,11 @@ import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { TruncateText } from "../TruncateText";
 import styles from "@/styles/modules/profile.module.scss";
-import type { BrokerProfile, FormDt } from "@/api/profile/model";
+import type { BrokerProfile, FormDtCompany } from "@/api/profile/model";
 import { ModalExperience } from "./ModalExperience";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
+import { deleteCompany } from "@/api/profile";
 
 export const Experience = ({
   dataBrokerProfile,
@@ -20,8 +21,7 @@ export const Experience = ({
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  // const [editId, setEditId] = useState("");
-  const [formDt, setFormDt] = useState<FormDt>({
+  const [formDt, setFormDt] = useState<FormDtCompany>({
     id: "",
     logo: "",
     name: "",
@@ -34,7 +34,7 @@ export const Experience = ({
     workingType: "",
   });
 
-  const company = dataBrokerProfile.company ?? [];
+  const [company, setCompany] = useState(dataBrokerProfile.company ?? []);
 
   const experiencesToShow = showAllExperiences ? company : company.slice(0, 5);
 
@@ -71,15 +71,25 @@ export const Experience = ({
     setShow(false);
   }, []);
 
-  const handleEditModal = useCallback((experience: FormDt) => {
+  const handleEditModal = useCallback((experience: FormDtCompany) => {
     setIsEditing(true);
     setShow(true);
-
     setFormDt(experience);
   }, []);
 
   const handleOpenEdit = useCallback(() => {
     setShowIconEdit(true);
+  }, []);
+
+  const delCompany = useCallback(async (id: string) => {
+    try {
+      if (id) {
+        await deleteCompany(id);
+        setCompany((prev) => prev.filter((com) => com.id !== id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   return (
@@ -117,12 +127,14 @@ export const Experience = ({
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
-                <h4>
-                  <i
-                    className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                    onClick={() => handleOpenEdit()}
-                  ></i>
-                </h4>
+                {company.length != 0 && (
+                  <h4>
+                    <i
+                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                      onClick={() => handleOpenEdit()}
+                    ></i>
+                  </h4>
+                )}
               </>
             )}
           </div>
@@ -173,6 +185,7 @@ export const Experience = ({
                       ></i>
                       <i
                         className={`bi bi-trash3-fill ${styles["icon-profile"]}`}
+                        onClick={() => delCompany(experience.id)}
                       ></i>
                     </div>
                   )}
@@ -295,6 +308,8 @@ export const Experience = ({
           show={show}
           dataBrokerProfile={dataBrokerProfile}
           formDt={formDt}
+          setCompany={setCompany}
+          // editId={editId}``
         />
       )}
     </>
