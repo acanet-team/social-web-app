@@ -85,7 +85,7 @@ export default function CommunityCard(props: {
               @{nickName}
             </div>
             <div className="fw-500 font-xsss fst-italic text-dark mt-0 lh-3">
-              {membersCount?.toLocaleString() || 1}{" "}
+              {membersCount?.toLocaleString("en-US") || 1}{" "}
               {membersCount > 1 ? `${tBase("members")}` : tBase("member")}
             </div>
           </div>
@@ -118,7 +118,7 @@ export default function CommunityCard(props: {
                   alt="logo"
                 />
                 <span className="ms-2 fw-bolder text-dark">
-                  {fee?.toLocaleString()}
+                  {fee?.toLocaleString("en-US")}
                 </span>
               </div>
             )}

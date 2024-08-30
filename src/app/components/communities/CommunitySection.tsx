@@ -154,14 +154,12 @@ export default function CommunitySection(props: {
 
   const onFilterHandler = (e: SelectChangeEvent) => {
     const localeFilterValue = e.target.value;
-    console.log("original", localeFilterValue);
     const filterValue =
       localeFilterValue === tForm("filter_free")
         ? "free"
         : localeFilterValue === tForm("filter_paid")
           ? "paid"
           : "";
-    console.log("filter", filterValue);
     setFilterValue(filterValue);
     setShownFilterValue(localeFilterValue);
   };

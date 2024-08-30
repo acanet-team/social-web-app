@@ -20,6 +20,9 @@ export default function Posts(props: {
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [hasFetchedInitialData, setHasFetchedInitialData] =
+    useState<boolean>(false);
+  const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const t = useTranslations("Post");
   const post = usePostStore((state) => state.posts);
 
@@ -53,21 +56,15 @@ export default function Posts(props: {
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+      if (
+        scrollTop + clientHeight >= scrollHeight &&
+        !isLoading &&
+        page < totalPage
+      ) {
         setPage((page) => page + 1);
       }
     }
   };
-
-  useEffect(() => {
-    fetchPosts(page);
-  }, [page, props.feedType]);
-
-  useEffect(() => {
-    setPage(1);
-    setTotalPage(2);
-    setPosts([]);
-  }, [props.feedType]);
 
   useEffect(() => {
     if (document.documentElement && page < totalPage) {
@@ -78,7 +75,37 @@ export default function Posts(props: {
         window.removeEventListener("scroll", onScrollHandler);
       }
     };
-  }, [page, totalPage, props.feedType]);
+  }, [page, totalPage, isLoading]);
+
+  // Reset states and fetch data on tab (feedType) change
+  useEffect(() => {
+    if (hasFetchedInitialData) {
+      setPage(1);
+      setTotalPage(2);
+      setPosts([]);
+      setReadyToFetch(true);
+    }
+  }, [props.feedType]);
+
+  useEffect(() => {
+    if (readyToFetch) {
+      fetchPosts(1);
+      setReadyToFetch(false);
+    }
+  }, [readyToFetch]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchPosts(page);
+    }
+  }, [page]);
+
+  // Avoid fetching data on initial render
+  useEffect(() => {
+    if (!hasFetchedInitialData) {
+      setHasFetchedInitialData(true);
+    }
+  }, []);
 
   return (
     <>
