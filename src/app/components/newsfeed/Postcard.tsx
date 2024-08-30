@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
 import RoundedNumber from "../RoundedNumber";
 import type { IPost } from "@/api/newsfeed/model";
+import { useTranslations } from "next-intl";
 
 export default function PostCard(props: {
   postId: string;
@@ -59,6 +60,7 @@ export default function PostCard(props: {
   const settingsRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
   const [userId, setUserId] = useState<number>();
+  const tBase = useTranslations("Base");
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -266,8 +268,6 @@ export default function PostCard(props: {
             {likeNum >= 1000 ? Math.round(likeNum / 1000).toFixed(1) : likeNum}
           </span>
           <span className="like-thousand">{likeNum >= 1000 ? "k" : ""}</span>
-          &nbsp;
-          {likeNum < 2 ? "Like" : "Likes"}
         </div>
         <div
           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
@@ -280,7 +280,11 @@ export default function PostCard(props: {
               : commentNum}
             {commentNum >= 1000 ? "k" : ""}{" "}
             {commentNum < 2 ? "Comment" : "Comments"} */}
-            <RoundedNumber num={commentNum} unit="Comment" />
+            <RoundedNumber
+              num={commentNum}
+              unitSingular={tBase("comment")}
+              unitPlural={tBase("comments")}
+            />
           </span>
         </div>
         {/* <div

@@ -328,7 +328,7 @@ const CreatePost = (props: {
             options={topics}
             value={selectedTopic}
             onChange={handleTopicChange}
-            placeholder="Select a topic"
+            placeholder={t("select_Topic")}
             isMulti={false}
             classNamePrefix={`${style["topic-select"]}`}
             onInputChange={(searchTerm) => {

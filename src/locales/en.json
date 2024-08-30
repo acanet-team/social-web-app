@@ -1,4 +1,26 @@
 {
+  "Base": {
+    "member": "member",
+    "members": "members",
+    "free": "Free",
+    "like": "Like",
+    "likes": "Likes",
+    "comment": "Comment",
+    "comments": "Comments",
+    "follower": "follower",
+    "followers": "followers"
+  },
+  "Time": {
+    "now": "now",
+    "minute": "minute",
+    "minutes": "minutes",
+    "day": "day",
+    "days": "days",
+    "hour": "hour",
+    "hours": "hours",
+    "week": "week",
+    "weeks": "weeks"
+  },
   "RootLayout": {
     "home_link": "Home",
     "about_link": "About",
@@ -92,7 +114,7 @@
     "Photo_Video": "Photo/Video",
     "live_Video": "Live Video",
     "create_Post": "Create Post",
-    "select_Topic": "Select Topic",
+    "select_Topic": "Select a topic",
     "no_topics": "No topics found.",
     "loading_topics": "Loading topics...",
     "please_enter_text": "Please enter some text for your post.",
@@ -185,6 +207,15 @@
   },
   "Form": {
     "search": "Search",
-    "add_new": "Add new"
+    "add_new": "Add new",
+    "filter": "Filter",
+    "filter_none": "None",
+    "filter_free": "Free",
+    "filter_paid": "Paid"
+  },
+  "Comment": {
+    "no_comment": "No comment found.",
+    "write_comment": "Write a comment",
+    "error_post_comment": "Failed to send the message"
   }
 }

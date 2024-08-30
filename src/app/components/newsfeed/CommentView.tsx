@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/commentView.module.scss";
 import { TimeSinceDate } from "@/utils/time-since-date";
+import { useTranslations } from "next-intl";
 
 export default function CommentView(props: {
   commentId: string;
@@ -31,6 +32,7 @@ export default function CommentView(props: {
   const timePassed = TimeSinceDate(createdAt);
   const [userId, setUserId] = useState<number>();
   const settingsRef = useRef<HTMLButtonElement>(null);
+  const tComment = useTranslations("Comment");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -80,7 +82,7 @@ export default function CommentView(props: {
         {/* Post time/error massage */}
         {status === "failed" ? (
           <div className={`${styles["comment-msg"]} text-danger`}>
-            Failed to send the message
+            {tComment("error_post_comment")}
           </div>
         ) : (
           <div className={styles["comment-msg"]}>{timePassed}</div>

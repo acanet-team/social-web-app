@@ -38,6 +38,7 @@ export default function CommunityCard(props: {
     onEditGroupHandler,
   } = props;
   const t = useTranslations("Community");
+  const tBase = useTranslations("Base");
   const [joiningStatus, setJoiningStatus] = useState(communityStatus);
   const onJoinCommunityHandler = async (e: any, groupId: string) => {
     try {
@@ -85,7 +86,7 @@ export default function CommunityCard(props: {
             </div>
             <div className="fw-500 font-xsss fst-italic text-dark mt-0 lh-3">
               {membersCount?.toLocaleString() || 1}{" "}
-              {membersCount > 1 ? "members" : "member"}
+              {membersCount > 1 ? `${tBase("members")}` : tBase("member")}
             </div>
           </div>
           <div className="d-flex align-items-center d-flex flex-column">
@@ -107,7 +108,7 @@ export default function CommunityCard(props: {
             </button>
             {/* eslint-disable react/no-unescaped-entities */}
             {fee === 0 ? (
-              <div className="text-success fw-bolder">Free</div>
+              <div className="text-success fw-bolder">{tBase("free")}</div>
             ) : (
               <div className="d-flex align-items-center">
                 <Image
