@@ -19,7 +19,8 @@ interface CommunityFormProps {
   show: boolean;
   handleClose: () => void;
   handleShow: () => void;
-  setCommunities: React.Dispatch<React.SetStateAction<ICommunity[]>>;
+  setCommunities?: React.Dispatch<React.SetStateAction<ICommunity[]>>;
+  setCommunity?: React.Dispatch<React.SetStateAction<ICommunity>>;
 }
 
 const CommunityForm: React.FC<CommunityFormProps> = ({
@@ -28,6 +29,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   show,
   isEditing,
   setCommunities,
+  setCommunity,
 }) => {
   const t = useTranslations("Community");
   const [groupInfo, setgroupInfo] = useState<ICommunity>({} as ICommunity);
@@ -135,20 +137,22 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         // Calling api to edit/create a community
         if (isEditing) {
           const editedCommunity = await editCommunity(communityData);
-          console.log(editedCommunity);
-          setCommunities(
-            (prev: ICommunity[]) =>
-              prev.map((group: ICommunity) =>
-                group.id === editedCommunity.data.id
-                  ? editedCommunity.data
-                  : group,
-              ) as ICommunity[],
-          );
+          setCommunities &&
+            setCommunities(
+              (prev: ICommunity[]) =>
+                prev.map((group: ICommunity) =>
+                  group.id === editedCommunity.data.id
+                    ? editedCommunity.data
+                    : group,
+                ) as ICommunity[],
+            );
+          setCommunity && setCommunity(editedCommunity.data);
         } else {
           const newCommunity = await createCommunity(communityData);
-          setCommunities(
-            (prev) => [newCommunity.data, ...prev] as ICommunity[],
-          );
+          setCommunities &&
+            setCommunities(
+              (prev) => [newCommunity.data, ...prev] as ICommunity[],
+            );
         }
         handleClose();
       } catch (err) {

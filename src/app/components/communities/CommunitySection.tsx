@@ -16,6 +16,7 @@ import type { ICommunity } from "@/api/community/model";
 import { getCommunities } from "@/api/community";
 import { useSession } from "next-auth/react";
 import CommunityCard from "./CommunityCard";
+import { useTranslations } from "next-intl";
 
 export default function CommunitySection(props: {
   isBroker: boolean;
@@ -25,6 +26,7 @@ export default function CommunitySection(props: {
   allPage: number;
   take: number;
 }) {
+  const tForm = useTranslations("Form");
   const [communityArr, setCommunityArr] = useState<ICommunity[]>(
     props.communities,
   );
@@ -165,7 +167,6 @@ export default function CommunitySection(props: {
     if (e.key === "Enter") {
       e.preventDefault();
       if (searchRef.current) {
-        // console.log(searchRef.current.value);
         setSearchValue(searchRef.current.value);
       }
     }
@@ -202,7 +203,7 @@ export default function CommunitySection(props: {
         >
           <TextField
             id="outlined-basic"
-            label="Search"
+            label={tForm("search")}
             variant="outlined"
             className="w-100"
             inputRef={searchRef}
@@ -215,6 +216,7 @@ export default function CommunitySection(props: {
                   borderColor: "#ddd",
                 },
               },
+              ".MuiFormLabel-root": { fontSize: "15px" },
             }}
           />
         </Box>
@@ -263,7 +265,7 @@ export default function CommunitySection(props: {
             className={`${styles["new-community__btn"]} btn btn-primary text-white`}
             onClick={onCreateGroupHandler}
           >
-            + Add new
+            + {tForm("add_new")}
           </button>
         )}
       </div>

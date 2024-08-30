@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Image from "next/image";
-import type { NextPageContext } from "next";
 import type { ICommunity } from "@/api/community/model";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { CommunityViewEnum } from "@/types";
 import styles from "@/styles/modules/memberTable.module.scss";
+import CommunityForm from "./communities/CommunityForm";
 
 export default function CommunityHeader(props: {
   community: ICommunity;
   setCurTab: React.Dispatch<React.SetStateAction<string>>;
   curTab: string;
+  pendingRequests: number;
+  groupId: string;
 }) {
-  const { community, setCurTab, curTab } = props;
-  const coverImage = community.coverImage?.path;
-  const avatar = community.avatar?.path;
+  const { community, setCurTab, curTab, pendingRequests, groupId } = props;
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [curCommunity, setCurCommunity] = useState(community);
+  const coverImage = curCommunity.coverImage?.path;
+  const avatar = curCommunity.avatar?.path;
   const t = useTranslations("CommunityTabs");
 
   const onSelectTabHandler = (e: any) => {
@@ -27,6 +31,14 @@ export default function CommunityHeader(props: {
       setCurTab("requests");
     }
   };
+
+  const handleClose = useCallback(() => {
+    setShowModal(false);
+  }, []);
+
+  const handleShow = useCallback(() => {
+    setShowModal(true);
+  }, []);
 
   return (
     <div className="card w-100 border-0 p-0 bg-white shadow-xss rounded-3">
@@ -55,20 +67,23 @@ export default function CommunityHeader(props: {
           />
         </figure>
         <h4 className={`${styles["community-name"]} fw-700 font-sm`}>
-          {community.name}
+          {curCommunity.name}
           <div className="fw-500 font-xsss text-grey-600 my-3 d-block">
             <span className="me-2">
-              {community.fee > 0 ? "Paid Community" : "Free Community"}
+              {curCommunity.fee > 0 ? "Paid Community" : "Free Community"}
             </span>{" "}
             |{" "}
             <span className="ms-2">
-              {community.membersCount.toLocaleString()}{" "}
-              {community.membersCount > 1 ? "members" : "member"}
+              {curCommunity.membersCount.toLocaleString()}{" "}
+              {curCommunity.membersCount > 1 ? "members" : "member"}
             </span>
           </div>
         </h4>
 
-        <div className="d-flex align-items-center justify-content-center position-absolute right-15 top-0 me-2">
+        <div
+          onClick={handleShow}
+          className="d-flex align-items-center justify-content-center position-absolute right-15 top-0 me-2"
+        >
           <i className="bi bi-pencil ms-2 cursor-pointer"></i>
         </div>
       </div>
@@ -102,7 +117,7 @@ export default function CommunityHeader(props: {
               {t("members")}
             </Link>
           </li>
-          <li className="list-inline-item me-5">
+          <li className="list-inline-item me-5 position-relative">
             <Link
               className={`${curTab === CommunityViewEnum.requests ? "active" : ""} fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block`}
               href="#"
@@ -112,9 +127,23 @@ export default function CommunityHeader(props: {
             >
               {t("requests")}
             </Link>
+            <span
+              className={`${styles["pending-requests"]} position-absolute text-danger`}
+            >
+              {pendingRequests}
+            </span>
           </li>
         </ul>
       </div>
+      {showModal && (
+        <CommunityForm
+          isEditing={groupId}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          show={showModal}
+          setCommunity={setCurCommunity}
+        />
+      )}
     </div>
   );
 }

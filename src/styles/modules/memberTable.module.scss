@@ -8,6 +8,13 @@
   left: 20px;
 }
 
+.pending-requests {
+  font-size: 12px;
+  right: -16px;
+  top: 10px;
+  font-weight: 800;
+}
+
 // Community table
 .community-table {
   padding: 1rem 1.5rem 1.5rem 1.5rem;
@@ -28,8 +35,12 @@
   font-size: 13px;
 }
 
+.name-col {
+  min-width: 150px;
+}
+
 .action-col {
-  width: 80px;
+  min-width: 80px;
 }
 
 .email-col {
@@ -54,7 +65,7 @@
   .member-tab {
     margin-top: 30px;
   }
-  
+
   .community-table {
     padding: 1rem 1rem 0 1rem;
     margin-bottom: 100px;
@@ -68,7 +79,7 @@
 
   .mobile-page__bookmark {
     position: absolute;
-    left: 20px;
+    left: 15px;
     bottom: 70px;
     margin-left: 0.5rem;
   }

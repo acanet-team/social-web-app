@@ -345,15 +345,6 @@ export default function Header(props: { isOnboarding: boolean }) {
                   </li>
                   <li>
                     <Link
-                      href="/defaultanalytics"
-                      className="nav-content-bttn open-font h-auto"
-                    >
-                      <i className="font-xl text-current feather-pie-chart me-3"></i>
-                      <span>Analytics</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/defaultmessage"
                       className="nav-content-bttn open-font h-auto"
                     >

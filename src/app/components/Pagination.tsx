@@ -53,7 +53,7 @@ export default function Pagination(props: {
 
   return (
     <div className="mt-5">
-      <ul className={isTable ? classes.pagination : styles.pagination}>
+      <ul className={isTable ? classes["table-pagination"] : styles.pagination}>
         <button
           disabled={totalPage === 1 || page === 1 ? true : false}
           onClick={onFirstPageHandler}
@@ -69,7 +69,7 @@ export default function Pagination(props: {
         {pages.map((pageNumber) => (
           <li
             key={pageNumber}
-            className={pageNumber === page ? styles.selected : ""}
+            className={pageNumber === page ? "selected" : ""}
             onClick={() => onChoosePageHandler(pageNumber)}
           >
             {pageNumber}
