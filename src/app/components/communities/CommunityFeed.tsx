@@ -4,6 +4,10 @@ import DotWaveLoader from "../DotWaveLoader";
 import PostCard from "../newsfeed/Postcard";
 import { getCommunityPosts } from "@/api/community";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import type { IPost } from "@/api/newsfeed/model";
+import CreatePost from "../newsfeed/Createpost";
+import CommunityOverview from "../CommunityOverview";
+import type { ICommunity } from "@/api/community/model";
 
 export default function CommunityFeed(props: {
   posts: any;
@@ -11,8 +15,11 @@ export default function CommunityFeed(props: {
   allPage: number;
   curPage: number;
   groupId: string;
+  userSession: {};
+  // groupOwnerId: number;
+  groupData: ICommunity;
 }) {
-  const [posts, setPosts] = useState<any[]>(props.posts);
+  const [posts, setPosts] = useState<IPost[]>(props.posts);
   const [take, setTake] = useState<number>(props.take);
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
@@ -20,26 +27,21 @@ export default function CommunityFeed(props: {
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
 
-  // useEffect(() => {
-  //   // setPosts(prev => [...posts, ...prev]);
-  //   setPosts((prev) => {
-  //     const newPosts = combineUniqueById(prev, posts);
-  //     return newPosts;
-  //   });
-  // }, [post]);
-
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
     try {
       const response: any = await getCommunityPosts(
-        1,
+        page,
         take,
         "community",
         props.groupId,
       );
       console.log("posts", response);
-      setPosts((prev) => {
-        const newPosts = combineUniqueById(prev, response.data.docs);
+      setPosts((prev: IPost[]) => {
+        const newPosts: IPost[] = combineUniqueById(
+          prev,
+          response.data.docs,
+        ) as IPost[];
         return newPosts;
       });
       setTotalPage(response.data.meta.totalPage);
@@ -71,19 +73,6 @@ export default function CommunityFeed(props: {
   }, [page]);
 
   useEffect(() => {
-    if (hasFetchedInitialData) {
-      setPage(1);
-      setTotalPage(2);
-      setPosts([]);
-    }
-  }, []);
-  // useEffect(() => {
-  //   setPage(1);
-  //   setTotalPage(2);
-  //   setPosts([]);
-  // }, [props.feedType]);
-
-  useEffect(() => {
     if (document.documentElement && page < totalPage) {
       window.addEventListener("scroll", onScrollHandler);
     }
@@ -102,34 +91,50 @@ export default function CommunityFeed(props: {
   }, []);
 
   return (
-    <>
-      <div>
-        {posts.map((p) => (
-          <div key={p.id}>
-            <PostCard
-              postId={p.id}
-              nickName={
-                p.user.nickName || p.user.firstName + " " + p.user.lastName
-              }
-              author={p.user.userId}
-              avatar={
-                p.user?.photo?.id
-                  ? cleanPath(p.user?.photo?.path)
-                  : "/assets/images/user.png"
-              }
-              content={p.content}
-              assets={p?.assets}
-              createdAt={p.createdAt}
-              like={p.favoriteCount}
-              comment={p.commentCount}
-              columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
-              liked={p.liked}
-              setPostHandler={setPosts}
-            />
-          </div>
-        ))}
+    <div className="row g-0 g-sm-4">
+      <div className="col-xl-3 col-xxl-3 col-lg-4 pe-0">
+        <CommunityOverview groupData={props.groupData} />
+        {/* <Profilephoto /> */}
       </div>
-      {isLoading && <DotWaveLoader />}
-    </>
+      <div className="col-xl-9 col-xxl-9 col-lg-8">
+        <div>
+          <CreatePost
+            userSession={props.userSession}
+            groupId={props.groupId}
+            updatePostArr={setPosts}
+          />
+          {!isLoading && posts.length === 0 && (
+            <div className="mt-5 text-center">No posts found.</div>
+          )}
+          {posts.map((p) => (
+            <div key={p.id}>
+              <PostCard
+                groupOwnerId={props.groupData?.owner?.userId || ""}
+                groupName={p.community?.name || ""}
+                postId={p.id}
+                nickName={
+                  p.user?.nickName || p.user?.firstName + " " + p.user?.lastName
+                }
+                author={p.user?.userId}
+                avatar={
+                  p.user?.photo?.id
+                    ? cleanPath(p.user?.photo?.path)
+                    : "/assets/images/user.png"
+                }
+                content={p.content}
+                assets={p?.assets}
+                createdAt={p.createdAt}
+                like={p.favoriteCount}
+                comment={p.commentCount}
+                columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
+                liked={p.liked}
+                setPostHandler={setPosts}
+              />
+            </div>
+          ))}
+        </div>
+        {isLoading && <DotWaveLoader />}
+      </div>
+    </div>
   );
 }

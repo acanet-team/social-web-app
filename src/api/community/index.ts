@@ -1,14 +1,20 @@
-import { removePropertiesEmpty } from "@/utils/Helpers";
 import {
   GetCommunitiesParams,
+  type CommunityMembersResponse,
   type CreateCommunityResponse,
   type GetACommunityParams,
+  type getAllCommunityMembersParams,
   type GetCommunityResponse,
   type ICommunity,
-  type PostCreateCommunityParams,
+  type joinCommunityParams,
+  type RemoveCommunityParams,
+  type RequestJoinCommunityParams,
 } from "./model";
 import httpClient from "..";
 import type { IPost, ResponseDto } from "../newsfeed/model";
+import type { BaseResponse } from "../model";
+import { removePropertiesEmpty } from "@/utils/Helpers";
+import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 export const getCommunities = ({
   page,
@@ -65,5 +71,49 @@ export const getCommunityPosts = (
 ) => {
   return httpClient.get<ResponseDto<IPost>>(
     `/v1/post?page=${page}&take=${take}&newsFeedType=${type}&communityId=${communityId}`,
+  );
+};
+
+export const joinCommunity = (communityId: joinCommunityParams) => {
+  return httpClient.post<joinCommunityParams, BaseResponse<T>>(
+    `/v1/community/join`,
+    communityId,
+  );
+};
+
+export const getCommunityMembers = ({
+  page,
+  take,
+  communityStatus,
+  search,
+  communityId,
+}: getAllCommunityMembersParams) => {
+  const data = removePropertiesEmpty({
+    page,
+    take,
+    communityStatus,
+    search,
+    communityId,
+  });
+  return httpClient.get<BaseResponse<CommunityMembersResponse>>(
+    `/v1/community/join`,
+    {
+      query: data,
+    },
+  );
+};
+
+export const removeCommunityMember = (values: RemoveCommunityParams) => {
+  return httpClient.fetch({
+    url: `/v1/community/join`,
+    method: "DELETE",
+    body: values,
+  });
+};
+
+export const requestJoinCommunity = (values: RequestJoinCommunityParams) => {
+  return httpClient.patch<RequestJoinCommunityParams, BaseResponse<T>>(
+    `/v1/community/join`,
+    values,
   );
 };

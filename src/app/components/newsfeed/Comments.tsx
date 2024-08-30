@@ -1,14 +1,13 @@
-"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/comments.module.scss";
 import CommentView from "./CommentView";
-import useAuthStore from "@/store/auth";
 import Image from "next/image";
 import WaveLoader from "../WaveLoader";
 import { postComment, getComments, deleteComment } from "@/api/newsfeed";
 import AlertModal from "../AlertModal";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 /* eslint-disable react/display-name */
 export const Comments = (props: {
@@ -30,6 +29,8 @@ export const Comments = (props: {
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
+  const tModal = useTranslations("Modal");
+  const tComment = useTranslations("Comment");
 
   useEffect(() => {
     if (session) {
@@ -176,7 +177,6 @@ export const Comments = (props: {
     } catch (err) {
       console.log(err);
     }
-    // Delete comment from DOM
   }, [commentId]);
 
   return (
@@ -188,7 +188,7 @@ export const Comments = (props: {
         {comments?.length === 0 && (
           <div className="text-center pointer align-items-center text-dark lh-26 font-xss">
             <span className="d-none-xs font-xsss fw-600 text-grey-700">
-              No comment found.
+              {tComment("no_comment")}
             </span>
           </div>
         )}
@@ -219,12 +219,12 @@ export const Comments = (props: {
           alt={""}
         />
         <div
-          className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-xxl bg-light`}
+          className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-3 bg-light`}
         >
           <textarea
             id="comment"
-            className="py-2 ps-2 rounded-xxl border-none bg-light"
-            placeholder="Write a comment"
+            className="py-2 ps-2 rounded-3 border-none bg-light"
+            placeholder={tComment("write_comment")}
             name="comment"
             rows={1}
             ref={commentRef}
@@ -244,7 +244,7 @@ export const Comments = (props: {
       {/* Delete modal */}
       {showModal && (
         <AlertModal
-          message="Are you sure you want to proceed?"
+          message={tModal("modal_comment_delete")}
           onCancel={handleCancel}
           onOk={onProceedDelete}
         />

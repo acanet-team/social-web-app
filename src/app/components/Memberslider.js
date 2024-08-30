@@ -65,7 +65,7 @@ class Memberslider extends Component {
         {memberList.map((value, index) => (
           <div
             key={index}
-            className="card w200 d-block border-0 shadow-xss rounded-xxl overflow-hidden mb-3 me-3"
+            className="card w200 d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3 me-3"
           >
             <div
               className="card-body position-relative h100 bg-image-cover bg-image-center"

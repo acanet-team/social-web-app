@@ -1,5 +1,6 @@
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 import { Photo, Role, IUserInfo } from "../onboard/model";
+import type { ICommunityInfo } from "../community/model";
 export interface likeParams {
   postId: string;
   action: "favorite" | "unfavorite";
@@ -67,9 +68,12 @@ export interface IPost {
   content: string;
   favoriteCount: number;
   commentCount: number;
+  community?: ICommunityInfo;
   assets: Photo[];
   createBy: IUserInfo;
   comments: Comment[];
+  liked: boolean;
+  user: IUserInfo;
   createdAt: string;
   updatedAt: string;
 }

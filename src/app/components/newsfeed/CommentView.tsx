@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/commentView.module.scss";
 import { TimeSinceDate } from "@/utils/time-since-date";
+import { useTranslations } from "next-intl";
 
 export default function CommentView(props: {
   commentId: string;
@@ -31,6 +32,7 @@ export default function CommentView(props: {
   const timePassed = TimeSinceDate(createdAt);
   const [userId, setUserId] = useState<number>();
   const settingsRef = useRef<HTMLButtonElement>(null);
+  const tComment = useTranslations("Comment");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -66,7 +68,7 @@ export default function CommentView(props: {
       />
       <div className="d-flex flex-column">
         <div
-          className={`${status === "failed" ? styles["comment-failed"] : ""} ${styles["content-container"]} rounded-xxl d-flex flex-column`}
+          className={`${status === "failed" ? styles["comment-failed"] : ""} ${styles["content-container"]} rounded-3 d-flex flex-column`}
         >
           <div className="fw-bolder">{nickName}</div>
           <div style={{ wordBreak: "break-word" }}>{content}</div>
@@ -80,7 +82,7 @@ export default function CommentView(props: {
         {/* Post time/error massage */}
         {status === "failed" ? (
           <div className={`${styles["comment-msg"]} text-danger`}>
-            Failed to send the message
+            {tComment("error_post_comment")}
           </div>
         ) : (
           <div className={styles["comment-msg"]}>{timePassed}</div>
@@ -97,7 +99,7 @@ export default function CommentView(props: {
           <i className="bi bi-three-dots-vertical"></i>
           {openSettings && (
             <div
-              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-xxl`}
+              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-3`}
               onClick={() => onClickDelete(commentId)}
             >
               Delete

@@ -1,5 +1,4 @@
 import { combineUniqueById } from "@/utils/combine-arrs";
-import Image from "next/image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DotWaveLoader from "../DotWaveLoader";
 import Box from "@mui/material/Box";
@@ -16,7 +15,8 @@ import CommunityForm from "@/app/components/communities/CommunityForm";
 import type { ICommunity } from "@/api/community/model";
 import { getCommunities } from "@/api/community";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import CommunityCard from "./CommunityCard";
+import { useTranslations } from "next-intl";
 
 export default function CommunitySection(props: {
   isBroker: boolean;
@@ -26,6 +26,7 @@ export default function CommunitySection(props: {
   allPage: number;
   take: number;
 }) {
+  const tForm = useTranslations("Form");
   const [communityArr, setCommunityArr] = useState<ICommunity[]>(
     props.communities,
   );
@@ -34,16 +35,21 @@ export default function CommunitySection(props: {
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [filterValue, setFilterValue] = React.useState<string>("");
+  const [shownFilterValue, setShownFilterValue] = React.useState<string>("");
   // const [filterValue, setFilterValue] = React.useState<string[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<string>("");
   const [brokerId, setBrokerId] = useState<number | "">("");
   const searchRef = useRef<HTMLInputElement>(null);
-  const filters = ["None", "Free", "Paid"];
+  const filters = [
+    tForm("filter_none"),
+    tForm("filter_free"),
+    tForm("filter_paid"),
+  ];
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
-  const [readyToFetch, setReadyToFetch] = useState(false);
+  const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -53,7 +59,6 @@ export default function CommunitySection(props: {
   }, [session]);
 
   const fetchCommunities = async (page = 1) => {
-    console.log(`Fetching communities for page ${page}`);
     setIsLoading(true);
     try {
       const response = await getCommunities({
@@ -62,9 +67,9 @@ export default function CommunitySection(props: {
         type: props.communityType === "popular" ? "not_joined" : "joined",
         brokerId: props.communityType === "owned" ? brokerId : "",
         search: searchValue,
-        feeType: filterValue === "None" ? "" : filterValue.toLowerCase(),
+        feeType: filterValue ? filterValue.toLowerCase() : "",
       });
-      console.log("Communities fetched:", response);
+      // console.log("Communities fetched:", response);
       setCommunityArr((prev) => {
         const newCommunities = combineUniqueById(
           prev,
@@ -110,6 +115,7 @@ export default function CommunitySection(props: {
   useEffect(() => {
     if (hasFetchedInitialData) {
       setFilterValue("");
+      setShownFilterValue(tForm("filter_none"));
       setSearchValue("");
       setPage(1);
       setTotalPage(2);
@@ -126,12 +132,12 @@ export default function CommunitySection(props: {
   }, [readyToFetch]);
 
   useEffect(() => {
-    if (searchValue || filterValue) {
+    if (searchValue || filterValue || shownFilterValue) {
       setPage(1);
       setCommunityArr([]);
       fetchCommunities(1);
     }
-  }, [searchValue, filterValue]);
+  }, [searchValue, filterValue, shownFilterValue]);
 
   useEffect(() => {
     if (page > 1) {
@@ -146,12 +152,16 @@ export default function CommunitySection(props: {
     }
   }, []);
 
-  const onJoinCommunityHandler = () => {
-    // Calling api
-  };
-
   const onFilterHandler = (e: SelectChangeEvent) => {
-    setFilterValue(e.target.value);
+    const localeFilterValue = e.target.value;
+    const filterValue =
+      localeFilterValue === tForm("filter_free")
+        ? "free"
+        : localeFilterValue === tForm("filter_paid")
+          ? "paid"
+          : "";
+    setFilterValue(filterValue);
+    setShownFilterValue(localeFilterValue);
   };
   // const onFilterHandler = (e: SelectChangeEvent) => {
   //   setFilterValue((prev: string[]) => {
@@ -171,7 +181,6 @@ export default function CommunitySection(props: {
     if (e.key === "Enter") {
       e.preventDefault();
       if (searchRef.current) {
-        // console.log(searchRef.current.value);
         setSearchValue(searchRef.current.value);
       }
     }
@@ -194,6 +203,7 @@ export default function CommunitySection(props: {
     handleShow();
     setIsEditing(groupId);
   };
+
   return (
     <>
       {/* Search */}
@@ -207,7 +217,7 @@ export default function CommunitySection(props: {
         >
           <TextField
             id="outlined-basic"
-            label="Search"
+            label={tForm("search")}
             variant="outlined"
             className="w-100"
             inputRef={searchRef}
@@ -220,6 +230,7 @@ export default function CommunitySection(props: {
                   borderColor: "#ddd",
                 },
               },
+              ".MuiFormLabel-root": { fontSize: "15px" },
             }}
           />
         </Box>
@@ -233,12 +244,14 @@ export default function CommunitySection(props: {
           className={styles["filter-box"]}
         >
           <InputLabel id="filter">
-            <i className="bi bi-filter me-1"></i>Filter
+            <i className="bi bi-filter me-1"></i>
+            {tForm("filter")}
           </InputLabel>
           <Select
             labelId="filter"
             id="filter"
-            value={filterValue}
+            value={shownFilterValue}
+            // value={filterValue}
             // value={filterValue[0] || ""}
             onChange={onFilterHandler}
             input={<OutlinedInput label="Filter&nbsp" />}
@@ -257,7 +270,7 @@ export default function CommunitySection(props: {
           >
             {filters.map((name) => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={filterValue.indexOf(name) > -1} />
+                <Checkbox checked={shownFilterValue.indexOf(name) > -1} />
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
@@ -268,7 +281,7 @@ export default function CommunitySection(props: {
             className={`${styles["new-community__btn"]} btn btn-primary text-white`}
             onClick={onCreateGroupHandler}
           >
-            + Add new
+            + {tForm("add_new")}
           </button>
         )}
       </div>
@@ -283,107 +296,22 @@ export default function CommunitySection(props: {
               {communityArr.length > 0 &&
                 communityArr.map((group, index) => (
                   <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
-                    <div className="card d-block border-0 shadow-md h-100 rounded-3 overflow-hidden">
-                      <div
-                        className="card-body position-relative h100 bg-image-cover bg-image-center"
-                        style={{
-                          backgroundImage: `url(${
-                            group.coverImage?.path
-                              ? group.coverImage?.path
-                              : `/assets/images/e-1.jpg`
-                          })`,
-                        }}
-                      ></div>
-                      <div className="card-body d-block w-100 pl-10 pe-4 py-0 text-left position-relative">
-                        <figure
-                          className="avatar position-absolute w75 z-index-1 left-15"
-                          style={{ marginTop: `-40px` }}
-                        >
-                          <Image
-                            src={
-                              group.avatar?.path
-                                ? group.avatar?.path
-                                : `/assets/images/user.png`
-                            }
-                            alt="avater"
-                            width={75}
-                            height={75}
-                            className="float-right p-1 bg-white rounded-circle"
-                            style={{ objectFit: "cover" }}
-                          />
-                        </figure>
-                        <div className="clearfix"></div>
-                        <div className="mt-2 d-flex justify-content-between align-items-center">
-                          <div className="me-3 e-sm-2 d-flex flex-column align-items-between">
-                            <h4 className="fw-700 font-xss mt-2 mb-1">
-                              {group?.owner?.firstName +
-                                " " +
-                                group?.owner?.lastName}
-                            </h4>
-                            <div className="fw-500 font-xsss text-grey-500 mt-0 mb-1 lh-3">
-                              @{group?.owner?.nickName}
-                            </div>
-                            <div className="fw-500 font-xsss fst-italic text-dark mt-0 lh-3">
-                              {group.membersCount?.toLocaleString() || 1}{" "}
-                              {group.membersCount > 1 ? "members" : "member"}
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center d-flex flex-column">
-                            <button
-                              disabled={
-                                group.communityStatus === "joined" ||
-                                group.communityStatus === "pending_request"
-                                  ? true
-                                  : false
-                              }
-                              className={`${group.communityStatus === "joined" ? "btn-secondary" : group.communityStatus === "pending_request" ? "btn-dark" : "btn-primary"} btn text-white px-3 rounded-xxl py-1 mb-2`}
-                              onClick={onJoinCommunityHandler}
-                            >
-                              {group.communityStatus === "joined"
-                                ? "Joined"
-                                : group.communityStatus === "pending_request"
-                                  ? "Pending"
-                                  : "Join"}
-                            </button>
-                            {/* eslint-disable react/no-unescaped-entities */}
-                            {group.fee === 0 ? (
-                              <div className="text-success fw-bolder">Free</div>
-                            ) : (
-                              <div className="d-flex align-items-center">
-                                <Image
-                                  width={25}
-                                  height={25}
-                                  src={
-                                    "/assets/images/logo/logo-only-transparent.png"
-                                  }
-                                  alt="logo"
-                                />
-                                <span className="ms-2 fw-bolder text-dark">
-                                  {group.fee?.toLocaleString()}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card-body h-100 mt-2 ps-4 pb-4 cursor-pointer">
-                        <div className="d-flex align-items-center">
-                          <Link href={`/communities/detail/${group.id}`}>
-                            <h3 className="fw-bold fs-3 m-0 mb-2">
-                              {group.name}
-                            </h3>
-                          </Link>
-                          {props.isBroker &&
-                            props.communityType === "owned" && (
-                              <i
-                                className="bi bi-pencil ms-2 cursor-pointer"
-                                onClick={() => onEditGroupHandler(group.id)}
-                              ></i>
-                            )}
-                        </div>
-                        <p>{group.description}</p>
-                      </div>
-                    </div>
+                    <CommunityCard
+                      groupId={group.id}
+                      name={group.name}
+                      coverImg={group.coverImage?.path}
+                      avatar={group.avatar?.path}
+                      firstName={group.owner?.firstName}
+                      lastName={group.owner?.lastName}
+                      nickName={group.owner?.nickName}
+                      membersCount={group.membersCount}
+                      communityStatus={group.communityStatus}
+                      fee={group.fee}
+                      description={group.description}
+                      isBroker={props.isBroker}
+                      communityType={props.communityType}
+                      onEditGroupHandler={onEditGroupHandler}
+                    />
                   </div>
                 ))}
             </div>

@@ -182,7 +182,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         <i className="feather-bell font-xl text-current"></i>
       </span>
       <div
-        className={`dropdown-menu p-4 right-0 rounded-xxl border-0 shadow-lg ${notiClass}`}
+        className={`dropdown-menu p-4 right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
         aria-labelledby="dropdownMenu3"
       >
         <h4 className="fw-700 font-xss mb-4 pe-auto">Notification</h4>
@@ -276,7 +276,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         >
           <div className="container ps-0 pe-0">
             <div className="nav-content">
-              <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
+              <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1 mb-2 mt-2">
                 <div className="nav-caption fw-600 font-xsss text-grey-500">
                   <span>{t("newsfeed")}</span>
                 </div>
@@ -328,7 +328,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                 </ul>
               </div>
 
-              <div className="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1">
+              <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1">
                 <div className="nav-caption fw-600 font-xsss text-grey-500">
                   <span>{t("account")}</span>
                 </div>
@@ -341,15 +341,6 @@ export default function Header(props: { isOnboarding: boolean }) {
                     >
                       <i className="font-xl text-current feather-settings me-3"></i>
                       <span>{t("settings")}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/defaultanalytics"
-                      className="nav-content-bttn open-font h-auto"
-                    >
-                      <i className="font-xl text-current feather-pie-chart me-3"></i>
-                      <span>Analytics</span>
                     </Link>
                   </li>
                   <li>

@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import { usePostStore } from "@/store/newFeed";
 import { throwToast } from "@/utils/throw-toast";
+import type { IPost } from "@/api/newsfeed/model";
+import { userInfo } from "os";
 
 interface UserInfo {
   user?: {
@@ -20,7 +22,11 @@ interface UserInfo {
   };
 }
 
-const CreatePost = (props: { userSession: any }) => {
+const CreatePost = (props: {
+  userSession: any;
+  groupId: string;
+  updatePostArr: React.Dispatch<React.SetStateAction<IPost[]>> | null;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [postText, setPostText] = useState("");
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
@@ -73,7 +79,6 @@ const CreatePost = (props: { userSession: any }) => {
 
     try {
       const response = await getTopics(page, search);
-      console.log("topics", response);
 
       if (response) {
         const newTopics = response["data"]["docs"].map((topic) => ({
@@ -163,11 +168,23 @@ const CreatePost = (props: { userSession: any }) => {
     }
 
     try {
-      const newFeed = await createNewPostRequest({
-        content: postText,
-        images: uploadedImages,
-        interestTopicId: interestTopicId,
+      const postData = new FormData();
+      postData.append("content", postText);
+      uploadedImages.forEach((image) => {
+        postData.append("images", image);
       });
+      postData.append("interestTopicId", interestTopicId);
+
+      if (props.groupId) {
+        postData.append("communityId", props.groupId);
+      }
+      const newFeed = await createNewPostRequest(postData);
+      // Add new post to feed
+      if (props.groupId && props.updatePostArr) {
+        props.updatePostArr(
+          (prev: IPost[]) => [newFeed.data, ...prev] as IPost[],
+        );
+      }
       addPost(newFeed.data as any);
       setShowModal(false);
       throwToast(t("post_create_success"), "success");
@@ -175,6 +192,7 @@ const CreatePost = (props: { userSession: any }) => {
       setUploadedImages([]);
       setSelectedTopic(null);
     } catch (error) {
+      console.log("error", error);
       throwToast(t("post_create_error"), "error");
     }
   };
@@ -210,7 +228,7 @@ const CreatePost = (props: { userSession: any }) => {
           }}
           value={postText}
           name="message"
-          className="h100 w-100 rounded-xxl p-3 ps-5 font-xsss text-dark fw-400 border-light-md theme-dark-bg"
+          className="h100 w-100 rounded-3 p-3 ps-5 font-xsss text-dark fw-400 border-light-md theme-dark-bg"
           placeholder={t("Whats_on_your_mind")}
           style={{ resize: "none" }}
         ></textarea>
@@ -310,7 +328,7 @@ const CreatePost = (props: { userSession: any }) => {
             options={topics}
             value={selectedTopic}
             onChange={handleTopicChange}
-            placeholder="Select a topic"
+            placeholder={t("select_Topic")}
             isMulti={false}
             classNamePrefix={`${style["topic-select"]}`}
             onInputChange={(searchTerm) => {
@@ -329,7 +347,7 @@ const CreatePost = (props: { userSession: any }) => {
                   curTheme === "theme-light" ? "#fff" : "#1a1237",
                 borderColor: "#f1f1f1",
                 borderWidth: "2px",
-                borderRadius: "10px",
+                borderRadius: "5px",
                 boxShadow: "shadow-md",
                 fontSize: "15px",
                 cursor: "pointer",
@@ -359,7 +377,7 @@ const CreatePost = (props: { userSession: any }) => {
             className="main-btn font-xsss fw-600 text-white card-body px-4 py-2 d-flex align-items-center justify-content-center cursor-pointer"
             onClick={submitPost}
           >
-            <i className="rounded-xxl font-xs text-white feather-edit-3"></i>
+            <i className="rounded-3 font-xs text-white feather-edit-3"></i>
             {t("create_Post")}
           </label>
         </div>

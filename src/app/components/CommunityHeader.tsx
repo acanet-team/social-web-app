@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Image from "next/image";
-import type { NextPageContext } from "next";
 import type { ICommunity } from "@/api/community/model";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { CommunityViewEnum } from "@/types";
+import styles from "@/styles/modules/memberTable.module.scss";
+import CommunityForm from "./communities/CommunityForm";
 
 export default function CommunityHeader(props: {
   community: ICommunity;
   setCurTab: React.Dispatch<React.SetStateAction<string>>;
+  curTab: string;
+  pendingRequests: number;
+  groupId: string;
 }) {
-  const { community, setCurTab } = props;
-  const coverImage = community.coverImage?.path;
-  const avatar = community.avatar?.path;
+  const { community, setCurTab, curTab, pendingRequests, groupId } = props;
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [curCommunity, setCurCommunity] = useState(community);
+  const coverImage = curCommunity.coverImage?.path;
+  const avatar = curCommunity.avatar?.path;
   const t = useTranslations("CommunityTabs");
+  const tBase = useTranslations("Base");
+  const tCommunity = useTranslations("Community");
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -25,8 +34,16 @@ export default function CommunityHeader(props: {
     }
   };
 
+  const handleClose = useCallback(() => {
+    setShowModal(false);
+  }, []);
+
+  const handleShow = useCallback(() => {
+    setShowModal(true);
+  }, []);
+
   return (
-    <div className="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
+    <div className="card w-100 border-0 p-0 bg-white shadow-xss rounded-3">
       <div className="card-body h250 p-0 overflow-hidden mb-3">
         <Image
           src={coverImage ? coverImage : "/assets/images/u-bg.jpg"}
@@ -37,10 +54,9 @@ export default function CommunityHeader(props: {
           style={{ objectFit: "cover" }}
         />
       </div>
-      <div className="card-body p-0 position-relative">
+      <div className="card-body p-0 position-relative mb-2">
         <figure
-          className="avatar position-absolute w100 z-index-1"
-          style={{ top: "-40%", left: "30px" }}
+          className={`${styles["community-avatar"]} avatar position-absolute w100 z-index-1`}
         >
           <Image
             src={avatar ? avatar : "/assets/images/user.png"}
@@ -48,41 +64,47 @@ export default function CommunityHeader(props: {
             width={100}
             height={100}
             priority={true}
-            className="float-right p-1 bg-white rounded-xxl w-100"
+            className="float-right p-1 bg-white rounded-3 w-100"
             style={{ objectFit: "cover" }}
           />
         </figure>
-        <h4 className="fw-700 font-sm" style={{ margin: "60px 0 0 30px" }}>
-          {community.name}
-          <div className="fw-500 font-xsss text-grey-600 mt-2 mb-3 d-block">
+        <h4 className={`${styles["community-name"]} fw-700 font-sm`}>
+          {curCommunity.name}
+          <div className="fw-500 font-xsss text-grey-600 my-3 d-block">
             <span className="me-2">
-              {community.fee > 0 ? "Paid Community" : "Free Community"}
+              {curCommunity.fee > 0 ? tCommunity("paid") : tCommunity("free")}
             </span>{" "}
             |{" "}
             <span className="ms-2">
-              {community.membersCount.toLocaleString()}{" "}
-              {community.membersCount > 1 ? "members" : "member"}
+              {curCommunity.membersCount.toLocaleString()}{" "}
+              {curCommunity.membersCount > 1
+                ? tBase("members")
+                : tBase("member")}
             </span>
           </div>
         </h4>
 
-        <div className="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
+        <div
+          onClick={handleShow}
+          className="d-flex align-items-center justify-content-center position-absolute right-15 top-0 me-2"
+        >
           <i className="bi bi-pencil ms-2 cursor-pointer"></i>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="card-body d-block w-100 shadow-none mb-0 p-0 border-top-xs">
+      <div className="card-body w-100 d-block w-100 shadow-none mb-0 p-0 border-top-xs">
         <ul
-          className="nav nav-tabs h55 d-flex product-info-tab border-bottom-0 ps-4"
+          className="nav nav-tabs h55 d-flex justify-content-between justify-content-sm-start product-info-tab border-bottom-0 ps-sm-4 ps-3"
           id="pills-tab"
           role="tablist"
         >
           <li className="active list-inline-item me-5">
             <Link
-              className="fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block active"
-              href=""
+              className={`${curTab === CommunityViewEnum.posts ? "active" : ""} fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block`}
+              href="#"
               data-toggle="tab"
+              scroll={false}
               onClick={onSelectTabHandler}
             >
               {t("posts")}
@@ -90,32 +112,42 @@ export default function CommunityHeader(props: {
           </li>
           <li className="list-inline-item me-5">
             <Link
-              className="fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block"
-              href=""
+              className={`${curTab === CommunityViewEnum.members ? "active" : ""} fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block`}
+              href="#"
+              scroll={false}
               data-toggle="tab"
               onClick={onSelectTabHandler}
             >
               {t("members")}
             </Link>
           </li>
-          <li className="list-inline-item me-5">
+          <li className="list-inline-item me-5 position-relative">
             <Link
-              className="fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block"
-              href=""
+              className={`${curTab === CommunityViewEnum.requests ? "active" : ""} fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block`}
+              href="#"
+              scroll={false}
               data-toggle="tab"
               onClick={onSelectTabHandler}
             >
               {t("requests")}
             </Link>
+            <span
+              className={`${styles["pending-requests"]} position-absolute text-danger`}
+            >
+              {pendingRequests}
+            </span>
           </li>
         </ul>
       </div>
+      {showModal && (
+        <CommunityForm
+          isEditing={groupId}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          show={showModal}
+          setCommunity={setCurCommunity}
+        />
+      )}
     </div>
   );
-}
-
-export async function getServerSideProps(context: NextPageContext) {
-  return {
-    props: {},
-  };
 }

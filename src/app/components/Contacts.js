@@ -22,7 +22,7 @@ const contactList = [
 
 export default function Contacts() {
   return (
-    <div className="card w-100 shadow-xss rounded-xxl border-0 mb-sm-3 mb-5">
+    <div className="card w-100 shadow-xss rounded-3 border-0 mb-sm-3 mb-5">
       <div className="card-body d-flex align-items-center p-4">
         <h4 className="fw-700 mb-0 font-xssss text-grey-900">
           Confirm Friend
@@ -37,7 +37,7 @@ export default function Contacts() {
       {contactList.map((value, index) => (
         <div
           key={index}
-          className="card-body bg-transparent-card d-flex p-3 bg-light ms-3 me-3 rounded-xxl mb-3"
+          className="card-body bg-transparent-card d-flex p-3 bg-light ms-3 me-3 rounded-3 mb-3"
         >
           <figure className="avatar me-2 mb-0">
             <img

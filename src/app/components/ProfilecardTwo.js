@@ -6,7 +6,7 @@ class ProfilecardTwo extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     return (
-      <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3 overflow-hidden">
+      <div className="card w-100 shadow-xss rounded-3 border-0 mb-3 mt-3 overflow-hidden">
         <div
           className="card-body position-relative h240 bg-image-cover bg-image-center"
           style={{
@@ -72,7 +72,7 @@ class ProfilecardTwo extends Component {
               <i className="ti-more font-md"></i>
             </a>
             <div
-              className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg"
+              className="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg"
               aria-labelledby="dropdownMenu8"
             >
               <div className="card-body p-0 d-flex">

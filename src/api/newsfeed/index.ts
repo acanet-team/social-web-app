@@ -48,11 +48,8 @@ export const getTopics = (
   });
 };
 
-export const createNewPostRequest = (values: CreatePostRequest) => {
-  return httpClient.fetch<ResponseDto<Post>>({
-    url: "/v1/post",
-    method: "POST",
-    body: { ...values },
+export const createNewPostRequest = (values: FormData) => {
+  return httpClient.post<FormData, ResponseDto<Post>>("/v1/post", values, {
     contentType: "multi-form",
   });
 };

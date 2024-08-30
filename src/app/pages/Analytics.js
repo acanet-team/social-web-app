@@ -85,7 +85,7 @@ class Analytics extends Component {
             <div className="middle-sidebar-left pe-0">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="card w-100 border-0 shadow-none p-5 rounded-xxl bg-lightblue2 mb-3">
+                  <div className="card w-100 border-0 shadow-none p-5 rounded-3 bg-lightblue2 mb-3">
                     <div className="row">
                       <div className="col-lg-6">
                         <img
@@ -115,7 +115,7 @@ class Analytics extends Component {
                 </div>
                 <div className="col-lg-3 pe-2">
                   <div
-                    className="card w-100 border-0 shadow-none p-4 rounded-xxl mb-3"
+                    className="card w-100 border-0 shadow-none p-4 rounded-3 mb-3"
                     style={{ background: `#e5f6ff` }}
                   >
                     <div className="card-body d-flex p-0">
@@ -131,7 +131,7 @@ class Analytics extends Component {
                 </div>
                 <div className="col-lg-3 pe-2 ps-2">
                   <div
-                    className="card w-100 border-0 shadow-none p-4 rounded-xxl mb-3"
+                    className="card w-100 border-0 shadow-none p-4 rounded-3 mb-3"
                     style={{ background: `#f6f3ff` }}
                   >
                     <div className="card-body d-flex p-0">
@@ -147,7 +147,7 @@ class Analytics extends Component {
                 </div>
                 <div className="col-lg-3 pe-2 ps-2">
                   <div
-                    className="card w-100 border-0 shadow-none p-4 rounded-xxl mb-3"
+                    className="card w-100 border-0 shadow-none p-4 rounded-3 mb-3"
                     style={{ background: `#e2f6e9` }}
                   >
                     <div className="card-body d-flex p-0">
@@ -163,7 +163,7 @@ class Analytics extends Component {
                 </div>
                 <div className="col-lg-3 ps-2">
                   <div
-                    className="card w-100 border-0 shadow-none p-4 rounded-xxl mb-3"
+                    className="card w-100 border-0 shadow-none p-4 rounded-3 mb-3"
                     style={{ background: `#fff0e9` }}
                   >
                     <div className="card-body d-flex p-0">
@@ -179,7 +179,7 @@ class Analytics extends Component {
                 </div>
 
                 <div className="col-lg-12 mb-3">
-                  <div className="card w-100 p-3 border-0 mb-3 rounded-xxl bg-lightblue2 shadow-none overflow-hidden">
+                  <div className="card w-100 p-3 border-0 mb-3 rounded-3 bg-lightblue2 shadow-none overflow-hidden">
                     <Chart
                       options={this.state.options}
                       series={this.state.series}

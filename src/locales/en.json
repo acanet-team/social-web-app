@@ -1,4 +1,26 @@
 {
+  "Base": {
+    "member": "member",
+    "members": "members",
+    "free": "Free",
+    "like": "Like",
+    "likes": "Likes",
+    "comment": "Comment",
+    "comments": "Comments",
+    "follower": "follower",
+    "followers": "followers"
+  },
+  "Time": {
+    "now": "now",
+    "minute": "minute",
+    "minutes": "minutes",
+    "day": "day",
+    "days": "days",
+    "hour": "hour",
+    "hours": "hours",
+    "week": "week",
+    "weeks": "weeks"
+  },
   "RootLayout": {
     "home_link": "Home",
     "about_link": "About",
@@ -92,7 +114,7 @@
     "Photo_Video": "Photo/Video",
     "live_Video": "Live Video",
     "create_Post": "Create Post",
-    "select_Topic": "Select Topic",
+    "select_Topic": "Select a topic",
     "no_topics": "No topics found.",
     "loading_topics": "Loading topics...",
     "please_enter_text": "Please enter some text for your post.",
@@ -149,7 +171,21 @@
     "error_missing_description": "Please fill out a community description.",
     "error_invalid_description": "Description must be between 4 and 350 characters.",
     "error_missing_fee": "Please fill out a joining fee.",
-    "error_joining_fee": "Joining fee must be greater than 0."
+    "error_joining_fee": "Joining fee must be greater than 0.",
+    "joined": "Joined",
+    "pending": "Pending",
+    "join": "Join",
+    "approve_member_notification": "Member added to your community.",
+    "delete_member_notification": "Member successfully removed.",
+    "invite new user": "Invite new user",
+    "table_name": "Name",
+    "table_joined": "Joined",
+    "table_phone": "Phone",
+    "table_email": "Email",
+    "table_action": "Action",
+    "about": "About",
+    "private": "Private",
+    "owner": "Owner"
   },
   "FeedTabs": {
     "for_you": "For you",
@@ -159,5 +195,27 @@
     "posts": "Posts",
     "members": "Members",
     "requests": "Pending Requests"
+  },
+  "Modal": {
+    "modal_question": "Do you want to proceed?",
+    "modal_yes": "Yes",
+    "modal_no": "No",
+    "modal_comment_delete": "Confirm deleting comment?",
+    "modal_post_delete": "Confirm deleting post?",
+    "modal_member_delete": "Confirm deleting member?",
+    "modal_member_reject": "Confirm rejecting member?"
+  },
+  "Form": {
+    "search": "Search",
+    "add_new": "Add new",
+    "filter": "Filter",
+    "filter_none": "None",
+    "filter_free": "Free",
+    "filter_paid": "Paid"
+  },
+  "Comment": {
+    "no_comment": "No comment found.",
+    "write_comment": "Write a comment",
+    "error_post_comment": "Failed to send the message"
   }
 }

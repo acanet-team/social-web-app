@@ -30,7 +30,7 @@ class Events extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     return (
-      <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+      <div className="card w-100 shadow-xss rounded-3 border-0 mb-3">
         <div className="card-body d-flex align-items-center p-4">
           <h4 className="fw-700 mb-0 font-xssss text-grey-900">Events</h4>
           <a
@@ -45,7 +45,7 @@ class Events extends Component {
             key={index}
             className="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden"
           >
-            <div className={`bg-success me-2 p-3 rounded-xxl ${value.status}`}>
+            <div className={`bg-success me-2 p-3 rounded-3 ${value.status}`}>
               <h4 className="fw-700 font-lg ls-3 lh-1 text-white mb-0">
                 <span className="ls-1 d-block font-xsss text-white fw-600">
                   {value.month}
