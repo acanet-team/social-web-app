@@ -1,15 +1,10 @@
-import Profilephoto from "@/app/components/Profilephoto";
 import CommunityHeader from "@/app/components/CommunityHeader";
-
 import React, { Fragment, useState } from "react";
-import DotWaveLoader from "@/app/components/DotWaveLoader";
-import CreatePost from "@/app/components/newsfeed/Createpost";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import { getACommunity, getCommunityPosts } from "@/api/community";
 import { useSession } from "next-auth/react";
-import CommunityOverview from "@/app/components/CommunityOverview";
 import CommunityFeed from "@/app/components/communities/CommunityFeed";
-import page from "@/pages/courses/investor/page";
+import MemberTable from "@/app/components/communities/MemberTable";
 
 const TAKE = 10;
 export default function CommunityView({
@@ -19,37 +14,35 @@ export default function CommunityView({
   totalPage,
   groupId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log("group feed", communityFeed);
-  const [curTab, setCurTab] = useState<string>("suggestion");
+  console.log("group data", communityMetaData);
+  const [curTab, setCurTab] = useState<string>("posts");
   const { data: session } = useSession() as any;
 
   return (
     <Fragment>
-      <div className="middle-sidebar-left nunito-font pe-0">
-        <div className="row">
-          <div className="col-xl-12 mb-3">
-            <CommunityHeader
-              community={communityMetaData}
-              setCurTab={setCurTab}
-            />
-          </div>
-
-          <div className="col-xl-4 col-xxl-3 col-lg-4 pe-0">
-            <CommunityOverview />
-            <Profilephoto />
-          </div>
-          <div className="col-xl-8 col-xxl-9 col-lg-8">
-            <CreatePost userSession={session} />
-            <CommunityFeed
-              posts={communityFeed}
-              take={TAKE}
-              allPage={totalPage}
-              curPage={page}
-              groupId={groupId}
-            />
-            <DotWaveLoader />
-          </div>
+      <div className="pe-0 mb-5">
+        <div className="mb-3">
+          <CommunityHeader
+            community={communityMetaData}
+            setCurTab={setCurTab}
+            curTab={curTab}
+          />
         </div>
+
+        {curTab === "posts" && (
+          <CommunityFeed
+            userSession={session}
+            posts={communityFeed}
+            take={TAKE}
+            allPage={totalPage}
+            curPage={page}
+            groupId={groupId}
+            // groupOwnerId={communityMetaData.owner?.userId}
+            groupData={communityMetaData}
+          />
+        )}
+
+        {curTab !== "posts" && <MemberTable tab={curTab} groupId={groupId} />}
       </div>
     </Fragment>
   );

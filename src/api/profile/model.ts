@@ -187,34 +187,3 @@ export interface FormDtLicense {
   licenseExpirationDate: string | Date;
   credentialID: string;
 }
-
-export type ResponseProfilePost<T> = {
-  status: number;
-  message: string;
-  data: {
-    docs: T[];
-    meta: {
-      page: number;
-      take: number;
-      total: number;
-      totalPage: number;
-      hasPreviousPage: boolean;
-      hasNextPage: boolean;
-    };
-  };
-};
-
-export interface PPost {
-  id: string;
-  user: {
-    userId: number;
-    firstName: string;
-    lastName: string;
-    photo: {
-      id: string;
-      path: string;
-    };
-  };
-  content: string;
-  assets: { id: string; path: string }[];
-}

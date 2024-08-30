@@ -6,7 +6,7 @@ class ProfilecardOne extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     return (
-      <div className="card w-100 shadow-xss rounded-xxl overflow-hidden border-0 mb-3 mt-3 pb-3">
+      <div className="card w-100 shadow-xss rounded-3 overflow-hidden border-0 mb-3 mt-3 pb-3">
         <div
           className="card-body position-relative h150 bg-image-cover bg-image-center"
           style={{

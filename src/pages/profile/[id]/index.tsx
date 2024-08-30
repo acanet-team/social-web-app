@@ -8,13 +8,15 @@ import { Experience } from "@/app/components/profile/Experience";
 import Education from "@/app/components/profile/Education";
 import AISummary from "@/app/components/profile/AISummary";
 import License from "@/app/components/profile/License";
-import { getMyPosts, getProfile } from "@/api/profile";
+import { getMyGroups, getMyPosts, getProfile } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import SocialMedia from "@/app/components/profile/SocialMedia";
 import ModalEditBanner from "@/app/components/profile/ModalEditBanner";
 import { useTranslations } from "next-intl";
 import { createGetAllTopicsRequest } from "@/api/onboard";
 import Posts from "@/app/components/newsfeed/Posts";
+import PostProfile from "@/app/components/profile/PostProfile";
+import GroupProfile from "@/app/components/profile/GroupProfile";
 
 const TAKE = 10;
 
@@ -28,6 +30,9 @@ export default function Profile({
   myPosts,
   totalPage,
   page,
+  dataMyGroups,
+  curPageGroup,
+  allPageGroup,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
 
@@ -36,10 +41,12 @@ export default function Profile({
   };
 
   const numbersFollowers = formatNumber(followersCount);
-  const [curTab, setCurTab] = useState<string>("about");
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
-  const [role, setRole] = useState(true);
+  const [role, setRole] = useState(false);
+  const [curTab, setCurTab] = useState<string>(
+    dataUser.role.name === "broker" ? "about" : "posts",
+  );
   const [show, setShow] = useState(false);
   const [textHover, setTextHover] = useState(false);
 
@@ -286,14 +293,14 @@ export default function Profile({
           >
             <p>Posts</p>
           </div>
-          {/* {dataUser.role.name === "broker" && ( */}
-          <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.About ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-            onClick={(e) => onSelectTabHandler(e)}
-          >
-            <p>About</p>
-          </div>
-          {/* )} */}
+          {dataUser.role.name === "broker" && (
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.About ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>About</p>
+            </div>
+          )}
           <div
             className={`${styles["button-tab"]} ${curTab === TabPnum.Communities ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
@@ -355,18 +362,25 @@ export default function Profile({
         </div>
       )}
       {curTab === TabPnum.Posts && (
-        <>
-          <Posts
-            posts={myPosts}
-            feedType={curTab}
-            take={TAKE}
-            allPage={totalPage}
-            curPage={page}
-          />
-        </>
-        // console.log("mypost",myPosts)
+        <PostProfile
+          myPosts={myPosts}
+          totalPages={totalPage}
+          curPage={page}
+          id={idParam as string}
+          take={TAKE}
+        />
       )}
-      {curTab === TabPnum.Communities && <></>}
+      {curTab === TabPnum.Communities && (
+        <GroupProfile
+          isBroker={dataUser.role.name === "broker"}
+          communities={dataMyGroups}
+          communityType="owned"
+          curPage={curPageGroup}
+          allPage={allPageGroup}
+          take={TAKE}
+          id={Number(idParam)}
+        />
+      )}
       {show && (
         <ModalEditBanner
           handleClose={handleCancel}
@@ -382,9 +396,18 @@ export async function getServerSideProps(context: NextPageContext) {
   const { id } = context.query;
   console.log("user id", id);
   const profileRes = await getProfile(id as string);
+  console.log("profile res", profileRes);
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   const myPost = await getMyPosts(1, TAKE, "owner", Number(id));
-  console.log("owner post", myPost);
+  const myGroup = await getMyGroups({
+    page: 1,
+    take: TAKE,
+    type: "",
+    brokerId: Number(id),
+    search: "",
+    feeType: "",
+  });
+  console.log("myGroupp", myGroup);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
@@ -397,6 +420,9 @@ export async function getServerSideProps(context: NextPageContext) {
       myPosts: myPost?.data?.docs || [],
       totalPage: myPost?.data?.meta?.totalPage,
       page: myPost?.data?.meta.page,
+      dataMyGroups: myGroup?.data?.docs || [],
+      curPageGroup: myGroup?.data?.meta.page || 1,
+      allPageGroup: myGroup?.data?.meta.totalPage || 1,
     },
   };
 }

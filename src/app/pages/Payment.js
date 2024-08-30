@@ -40,7 +40,7 @@ class Payment extends Component {
                         <div className="cleafrfix"></div>
                         <div className="card border-0 shadow-none mb-4 mt-3">
                           <div className="card-body d-block text-left p-0">
-                            <div className="item w-100 h150 bg-white rounded-xxl overflow-hidden text-left shadow-md ps-3 pt-2 align-items-end flex-column d-flex">
+                            <div className="item w-100 h150 bg-white rounded-3 overflow-hidden text-left shadow-md ps-3 pt-2 align-items-end flex-column d-flex">
                               <div className="card border-0 shadow-none p-0 bg-transparent-card text-left w-100">
                                 <div className="row">
                                   <div className="col-6">
@@ -73,7 +73,7 @@ class Payment extends Component {
 
                         <div className="card border-0 shadow-none mb-4">
                           <div className="card-bod6 d-block text-left 2 fw-600-0">
-                            <div className="item w-100 h150 bg-gold-gradiant rounded-xxl overflow-hidden text-left shadow-md ps-3 pt-2 align-items-end flex-column d-flex">
+                            <div className="item w-100 h150 bg-gold-gradiant rounded-3 overflow-hidden text-left shadow-md ps-3 pt-2 align-items-end flex-column d-flex">
                               <div className="card bg-transparent border-0 bg-transparent-card shadow-none p-0 text-left w-100">
                                 <div className="row">
                                   <div className="col-6">
@@ -87,7 +87,7 @@ class Payment extends Component {
                                     <img
                                       src="assets/images/chip.png"
                                       alt="icon"
-                                      className="w30 float-right d-inline-block mt-2 me-2 rounded-xxl"
+                                      className="w30 float-right d-inline-block mt-2 me-2 rounded-3"
                                     />
                                   </div>
                                 </div>
@@ -106,7 +106,7 @@ class Payment extends Component {
 
                         <div className="card border-0 mb-4 shadow-none">
                           <div className="card-body d-block text-left p-0">
-                            <div className="item w-100 h150 bg-primary rounded-xxl text-left shadow-md ps-3 pt-2 align-items-end flex-column d-flex">
+                            <div className="item w-100 h150 bg-primary rounded-3 text-left shadow-md ps-3 pt-2 align-items-end flex-column d-flex">
                               <div className="card bg-transparent border-0 bg-transparent-card shadow-none p-0 text-left w-100">
                                 <div className="row">
                                   <div className="col-6">
@@ -139,16 +139,16 @@ class Payment extends Component {
 
                         <a
                           href="/payment"
-                          className="rounded-xxl border-dashed mb-2 p-3 w-100 fw-600 fw-700 text-center font-xssss mont-font text-uppercase ls-3 text-grey-900 d-block  text-dark"
+                          className="rounded-3 border-dashed mb-2 p-3 w-100 fw-600 fw-700 text-center font-xssss mont-font text-uppercase ls-3 text-grey-900 d-block  text-dark"
                         >
                           Add Card
                         </a>
                       </div>
                       <div className="col-lg-6 offset-lg-1">
-                        <div className="rounded-xxl bg-greylight h-100 p-3">
+                        <div className="rounded-3 bg-greylight h-100 p-3">
                           <div className="col-lg-12 ps-0"></div>
                           <div className="col-lg-12">
-                            <div className="item ms-auto me-auto mt-3 w-100 h150 bg-white rounded-xxl text-left shadow-lg ps-3 pt-2 align-items-end flex-column d-flex">
+                            <div className="item ms-auto me-auto mt-3 w-100 h150 bg-white rounded-3 text-left shadow-lg ps-3 pt-2 align-items-end flex-column d-flex">
                               <div className="card border-0 bg-transparent-card shadow-none p-0 text-left w-100">
                                 <div className="row">
                                   <div className="col-6 ps-2">

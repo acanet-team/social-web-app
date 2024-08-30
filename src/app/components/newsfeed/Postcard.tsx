@@ -12,6 +12,7 @@ import DotWaveLoader from "../DotWaveLoader";
 import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
 import RoundedNumber from "../RoundedNumber";
+import type { IPost } from "@/api/newsfeed/model";
 
 export default function PostCard(props: {
   postId: string;
@@ -25,6 +26,8 @@ export default function PostCard(props: {
   createdAt: string;
   columnsCount: number;
   liked: boolean;
+  groupName: string;
+  groupOwnerId: number | "";
   setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
 }) {
   const {
@@ -39,6 +42,8 @@ export default function PostCard(props: {
     createdAt,
     columnsCount = 1,
     liked,
+    groupName,
+    groupOwnerId,
     setPostHandler,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
@@ -154,7 +159,7 @@ export default function PostCard(props: {
 
   return (
     <div
-      className={`${styles.post} post-card card w-100 shadow-xss rounded-xxl border-0 p-3 mb-3`}
+      className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-3 mb-3`}
     >
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
@@ -166,13 +171,25 @@ export default function PostCard(props: {
             className="shadow-sm rounded-circle w45"
           />
         </figure>
-        <h4 className="fw-700 text-grey-900 font-xsss mt-1">
-          {nickName}
-          <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-            {createdAt ? TimeSinceDate(createdAt) : ""}
-          </span>
-        </h4>
-        {userId && userId === author && (
+        {groupName ? (
+          <h4 className="fw-700 text-grey-900 font-xsss mt-1">
+            @{nickName}
+            <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
+              {createdAt ? TimeSinceDate(createdAt) : ""}
+            </span>
+          </h4>
+        ) : (
+          <h4 className="fw-700 text-grey-900 font-xss mt-1">
+            {groupName}
+            <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-600">
+              @{nickName}
+            </span>
+            <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
+              {createdAt ? TimeSinceDate(createdAt) : ""}
+            </span>
+          </h4>
+        )}
+        {userId && (userId === author || userId === groupOwnerId) && (
           <div
             className="ms-auto pointer position-relative"
             onClick={() => setOpenSettings((open) => !open)}
@@ -181,7 +198,7 @@ export default function PostCard(props: {
             <i className="bi bi-three-dots h1 me-2"></i>
             {openSettings && (
               <div
-                className={`${styles["delete-post__btn"]} font-xsss border-0 py-2 px-3 py-1 rounded-xxl cursor-pointer`}
+                className={`${styles["delete-post__btn"]} font-xsss border-0 py-2 px-3 py-1 rounded-3 cursor-pointer`}
                 onClick={(e) => onDeletePost(e, postId)}
               >
                 Delete
@@ -278,7 +295,7 @@ export default function PostCard(props: {
         </div> */}
 
         {/* <div
-          className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg right-0"
+          className="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg right-0"
           aria-labelledby={`dropdownMenu${props.id}`}
         >
           <h4 className="fw-700 font-xss text-grey-900 d-flex align-items-center">

@@ -226,7 +226,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             {t("group_desc")}
           </label>
           <textarea
-            className={`${formik.touched.description && formik.errors.description ? " border-danger" : ""} w-100 rounded-xxl text-dark border-light-md fw-400 theme-dark-bg d-flex`}
+            className={`${formik.touched.description && formik.errors.description ? " border-danger" : ""} w-100 rounded-3 text-dark border-light-md fw-400 theme-dark-bg d-flex`}
             name="description"
             id="description"
             rows={4}
@@ -313,7 +313,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 }
                 InputProps={{
                   style: {
-                    borderRadius: "10px",
+                    borderRadius: "5px",
                   },
                   className: `${formik.touched.hasFee && formik.errors.hasFee ? "border-danger" : ""}`,
                 }}
@@ -331,7 +331,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           <Modal.Footer className={styles["modal-footer"]}>
             <button
               type="submit"
-              className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w150 border-0 my-3 ms-auto"
+              className="main-btn bg-current text-center text-white fw-600 rounded-3 p-3 w150 border-0 my-3 ms-auto"
             >
               Save
             </button>

@@ -25,14 +25,6 @@ export interface CreateCommunityResponse<ICommunity> {
   status: number;
   message: string;
   data: ICommunity;
-  // {
-  //   id: string;
-  //   name: string;
-  //   avatar_id: string;
-  //   cover_image_id: string;
-  //   description: string;
-  //   fee: number;
-  // };
 }
 
 interface Photo {
@@ -40,7 +32,7 @@ interface Photo {
   path: string;
 }
 
-interface Owner {
+interface IUserInfo {
   userId: number;
   firstName: string;
   lastName: string;
@@ -50,7 +42,7 @@ interface Owner {
 
 export interface ICommunity {
   id: string;
-  owner: Owner;
+  owner: IUserInfo;
   name: string;
   description: string;
   avatar: Photo;
@@ -60,9 +52,63 @@ export interface ICommunity {
   communityStatus: string;
 }
 
+export interface ICommunityInfo {
+  avatar: Photo;
+  coverImage: Photo;
+  communityId: string;
+  description: string;
+  fee: number;
+  name: string;
+}
+
 export interface GetCommunityResponse<ICommunity> {
   data: {
     docs: ICommunity[];
     meta: Meta;
   };
+}
+
+interface ICommunityUser {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  nickName: string;
+  gmail: string;
+  phone: string;
+}
+
+export interface ICommunityMember {
+  id: string;
+  user: ICommunityUser;
+  communityId: string;
+  communityRole: string;
+  communityStatus: string;
+  createdAt: string;
+}
+
+export interface joinCommunityParams {
+  communityId: string;
+}
+
+export interface getAllCommunityMembersParams {
+  page: number;
+  take: number;
+  communityStatus: string;
+  search: string;
+  communityId: string;
+}
+
+export interface ICommunityMember {
+  id: string;
+  user: ICommunityUser;
+  communityId: string;
+  communityRole: string;
+  communityStatus: string;
+  createdAt: string;
+}
+
+export interface CommunityMembersResponse {
+  docs: ICommunityMember[];
+  meta: Meta;
+  totalPendingRequest: number;
 }

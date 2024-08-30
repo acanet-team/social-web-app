@@ -48,7 +48,7 @@ function ModalTemplate(props: {
         <Button
           variant="primary"
           onClick={handleClose}
-          className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
+          className="main-btn bg-current text-center text-white fw-600 rounded-3 p-3 w175 border-0 my-3 mx-auto"
         >
           Save
         </Button>

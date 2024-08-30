@@ -51,7 +51,7 @@ class Videos extends Component {
                   {videoList.map((value, index) => (
                     <div
                       key={index}
-                      className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3"
+                      className="card w-100 shadow-xss rounded-3 border-0 p-4 mb-3"
                     >
                       <div className="card-body p-0 d-flex">
                         <figure className="avatar me-3">

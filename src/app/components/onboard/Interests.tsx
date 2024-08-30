@@ -107,7 +107,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="onboard-wrap">
-              <div className="card w-100 border-0 bg-white shadow-md rounded-xxl p-0 mb-4">
+              <div className="card w-100 border-0 bg-white shadow-md rounded-3 p-0 mb-4">
                 <Pagetitle
                   title={t("interest_title")}
                   intro={t("interest_description")}

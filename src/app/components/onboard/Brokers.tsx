@@ -60,7 +60,12 @@ export default function Brokers(props: { onNextHandler: () => void }) {
             rank={b.rank}
           />
         ))}
-      <Pagination pageUpdateFn={setPage} page={page} totalPage={totalPage} />
+      <Pagination
+        pageUpdateFn={setPage}
+        page={page}
+        totalPage={totalPage}
+        isTable={false}
+      />
 
       <div className="btn mt-3 mb-5 mx-auto">
         <button

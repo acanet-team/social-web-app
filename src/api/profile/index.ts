@@ -9,8 +9,13 @@ import type {
   shortDescParams,
   socialMediaParams,
 } from "../model";
-import type { BrokerProfile, PPost, ResponseProfilePost } from "./model";
 import type { IPost, ResponseDto } from "../newsfeed/model";
+import type {
+  GetCommunitiesParams,
+  GetCommunityResponse,
+  ICommunity,
+} from "../community/model";
+import { removePropertiesEmpty } from "@/utils/Helpers";
 
 export const getProfile = (id: string) => {
   return httpClient.get<AllProfileResponse>(`/v1/user-profile/user/${id}`);
@@ -91,4 +96,25 @@ export const getMyPosts = (
   return httpClient.get<ResponseDto<IPost>>(
     `/v1/post?page=${page}&take=${take}&newsFeedType=${type}&ownerId=${ownerId}`,
   );
+};
+
+export const getMyGroups = ({
+  page,
+  take,
+  type,
+  brokerId,
+  search,
+  feeType,
+}: GetCommunitiesParams) => {
+  const data = removePropertiesEmpty({
+    page,
+    take,
+    type,
+    brokerId,
+    search,
+    feeType,
+  });
+  return httpClient.get<GetCommunityResponse<ICommunity>>(`/v1/community`, {
+    query: data,
+  });
 };

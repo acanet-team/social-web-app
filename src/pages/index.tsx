@@ -39,7 +39,11 @@ const Home = ({
           <div className="row feed-body">
             <div className="col-xl-8 col-xxl-9 col-lg-8">
               <FetchBrokers brokers={topBrokers} />
-              <CreatePost userSession={session} />
+              <CreatePost
+                userSession={session}
+                groupId=""
+                updatePostArr={null}
+              />
               {/* Tabs */}
               <div className={styles["home-tabs"]}>
                 <div

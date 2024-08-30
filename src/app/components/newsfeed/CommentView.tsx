@@ -66,7 +66,7 @@ export default function CommentView(props: {
       />
       <div className="d-flex flex-column">
         <div
-          className={`${status === "failed" ? styles["comment-failed"] : ""} ${styles["content-container"]} rounded-xxl d-flex flex-column`}
+          className={`${status === "failed" ? styles["comment-failed"] : ""} ${styles["content-container"]} rounded-3 d-flex flex-column`}
         >
           <div className="fw-bolder">{nickName}</div>
           <div style={{ wordBreak: "break-word" }}>{content}</div>
@@ -97,7 +97,7 @@ export default function CommentView(props: {
           <i className="bi bi-three-dots-vertical"></i>
           {openSettings && (
             <div
-              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-xxl`}
+              className={`${styles["delete-comment__btn"]} border-0 py-2 px-3 py-1 rounded-3`}
               onClick={() => onClickDelete(commentId)}
             >
               Delete

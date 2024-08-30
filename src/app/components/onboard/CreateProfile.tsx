@@ -41,7 +41,7 @@ export default function CreateProfile(props: { onNextHandler: () => void }) {
         <div className="middle-sidebar-bottom">
           <div className="middle-sidebar-left">
             <div className="onboard-wrap">
-              <div className="card w-100 border-0 bg-white shadow-md rounded-xxls p-0 mb-4">
+              <div className="card w-100 border-0 bg-white shadow-md rounded-3s p-0 mb-4">
                 <Pagetitle
                   title={t("create_profile_title")}
                   intro={t("create_profile_desc")}

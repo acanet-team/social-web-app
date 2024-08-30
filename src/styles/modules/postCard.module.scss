@@ -22,7 +22,7 @@
 }
 
 .post :global(.bi-heart-fill::before) {
-  color: var(--theme-color-shade) !important;
+  color: #fa5252 !important;
 }
 
 :global(.theme-dark) {
@@ -86,4 +86,3 @@
       rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   }
 }
-

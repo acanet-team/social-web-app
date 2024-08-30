@@ -1,13 +1,15 @@
-"use client";
 import React from "react";
 import styles from "@/styles/modules/paginatiton.module.scss";
+import classes from "@/styles/modules/paginationTable.module.scss";
+import { isTable } from "drizzle-orm";
 
 export default function Pagination(props: {
   pageUpdateFn: any;
   page: number;
   totalPage: number;
+  isTable: boolean;
 }) {
-  const { pageUpdateFn, page, totalPage } = { ...props };
+  const { pageUpdateFn, page, totalPage, isTable } = { ...props };
 
   const maxPagesToShow = 5;
   let startPage = Math.max(1, page - Math.floor(maxPagesToShow / 2));
@@ -51,7 +53,7 @@ export default function Pagination(props: {
 
   return (
     <div className="mt-5">
-      <ul className={styles.pagination}>
+      <ul className={isTable ? classes.pagination : styles.pagination}>
         <button
           disabled={totalPage === 1 || page === 1 ? true : false}
           onClick={onFirstPageHandler}

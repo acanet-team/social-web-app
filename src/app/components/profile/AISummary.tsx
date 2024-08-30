@@ -18,7 +18,7 @@ const AiSummary = ({
 }) => {
   const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
-  console.log("dataBrokerProfile", dataBrokerProfile);
+  // console.log("dataBrokerProfile", dataBrokerProfile);
   const [showAllInterestTopics, setShowAllInterestTopics] =
     useState<boolean>(false);
   const [showAllServiceOffer, setShowAllServiceOffer] =

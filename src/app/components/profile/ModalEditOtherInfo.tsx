@@ -19,6 +19,15 @@ const MenuProps = {
   },
 };
 
+function getStyles(name: string, personName: string[], theme: Theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 interface ModalEditOtherProps {
   title: string;
   show: boolean;
@@ -176,23 +185,27 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
             </FormControl>
 
             <p className="m-0 py-1 fw-600 font-xss">Interest Topic</p>
-            <FormControl className="w-100" style={{ height: "32px" }}>
+            <FormControl className="w-100">
               <Select
                 multiple
                 displayEmpty
-                value={topic}
-                onChange={handleChangeSelectTopic}
+                value={service}
+                onChange={handleChangeSelectService}
                 input={<OutlinedInput />}
                 renderValue={(selected) => {
                   if (selected.length === 0) {
-                    return <em>Select Interest Topic</em>;
+                    return <em>Select service offer</em>;
                   }
                   return selected.join(", ");
                 }}
                 MenuProps={MenuProps}
               >
                 {listInterestTopics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.topicName}>
+                  <MenuItem
+                    key={topic.id}
+                    value={topic.topicName}
+                    // style={getStyles(name, personName, theme)}
+                  >
                     {topic.topicName}
                   </MenuItem>
                 ))}

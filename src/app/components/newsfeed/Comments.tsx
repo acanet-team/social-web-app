@@ -219,11 +219,11 @@ export const Comments = (props: {
           alt={""}
         />
         <div
-          className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-xxl bg-light`}
+          className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-3 bg-light`}
         >
           <textarea
             id="comment"
-            className="py-2 ps-2 rounded-xxl border-none bg-light"
+            className="py-2 ps-2 rounded-3 border-none bg-light"
             placeholder="Write a comment"
             name="comment"
             rows={1}
