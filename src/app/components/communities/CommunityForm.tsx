@@ -182,9 +182,6 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             onClick={handleClose}
           ></i>
         )}
-        {/* <Modal.Title>
-          <h1 className="m-0 fw-bold">{title}</h1>
-        </Modal.Title> */}
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
@@ -348,7 +345,12 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
 
 export default React.memo(CommunityForm);
 
-// import React, { useEffect, useState } from "react";
+// import React, {
+//   useEffect,
+//   useRef,
+//   useState,
+//   type ChangeEventHandler,
+// } from "react";
 // import styles from "@/styles/modules/modalTemplate.module.scss";
 // import classes from "@/styles/modules/createProfile.module.scss";
 // import { useFormik } from "formik";
@@ -364,6 +366,7 @@ export default React.memo(CommunityForm);
 // import { createCommunity, editCommunity, getACommunity } from "@/api/community";
 // import type { ICommunity } from "@/api/community/model";
 // import Image from "next/image";
+// import { ImageCropModal } from "@/components/ImageCropModal";
 
 // interface CommunityFormProps {
 //   isEditing: string;
@@ -396,6 +399,11 @@ export default React.memo(CommunityForm);
 //   const [fullscreen, setFullscreen] = useState(
 //     window.innerWidth <= 768 ? "sm-down" : undefined
 //   );
+//   const coverInputRef = useRef<HTMLInputElement>(null);
+//   const avatarInputRef = useRef<HTMLInputElement>(null);
+//   const [selectedImage, setSelectedImage] = useState("");
+//   const [openImageCrop, setOpenImageCrop] = useState(false);
+//   const [imageType, setImageType] = useState<string | null >(null);
 
 //   const fetchCommunity = async () => {
 //     try {
@@ -523,13 +531,61 @@ export default React.memo(CommunityForm);
 //     });
 //   };
 
-//   const onChangeCoverHandler = async () => {
+//   const handleFileChange = async (
+//     event: React.ChangeEvent<HTMLInputElement>,
+//     type: string
+//   ) => {
+//     const file = event.target.files as FileList;
+//     if (!file) {
+//       return;
+//     }
 //     try {
+//       setImageType(type);
 //       const imgUrl = await fileToDataString(file?.[0] as File);
 //       setSelectedImage(imgUrl);
-//       setOpenImageCrop(true);
+//       // setOpenImageCrop(true);
 //     } catch (error) {
 //       console.log(error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (selectedImage && imageType) {
+//       setOpenImageCrop(true);
+//     }
+//   }, [selectedImage, imageType]);
+
+//   const onCropped = async (image: File) => {
+//     console.log('image type', imageType);
+//     const imgUrl = await fileToDataString(image);
+//     if (imageType === 'avatar') {
+//       setUploadedAvatarImage(image);
+//       setPreviewAvatar(imgUrl);
+//       if (avatarInputRef.current) {
+//         avatarInputRef.current.value = "";
+//       }
+//     }
+//     if (imageType === 'cover') {
+//       setUploadedCoverImage(image);
+//       setPreviewCover(imgUrl);
+//       if (coverInputRef.current) {
+//         coverInputRef.current.value = "";
+//       }
+//     }
+//     setOpenImageCrop(false);
+//   };
+
+//   const onCancel = () => {
+//     setOpenImageCrop(false);
+//     if (imageType === 'avatar') {
+//       if (avatarInputRef.current) {
+//         avatarInputRef.current.value = "";
+//       }
+//     }
+//     if (imageType === 'cover') {
+//       if (coverInputRef.current) {
+//         coverInputRef.current.value = "";
+//       }
 //     }
 //   };
 
@@ -559,6 +615,7 @@ export default React.memo(CommunityForm);
 //       <Modal.Body className={styles["modal-content"]}>
 //         {/* Content */}
 //         <form onSubmit={formik.handleSubmit}>
+//           {/* Images upload */}
 //           <div className="position-relative h100 w-100 bg-image-cover bg-image-center">
 //             <div
 //               className="h100 rounded-3"
@@ -568,10 +625,18 @@ export default React.memo(CommunityForm);
 //                 })`,
 //               }}
 //             ></div>
-//             <i
-//               className="bi bi-pencil h3 m-0 position-absolute top-0 right-0"
-//               onClick={onChangeCoverHandler}
-//             ></i>
+//             <label htmlFor="cover" className="cursor-pointer">
+//               <i className="bi bi-pencil h3 m-0 position-absolute top-0 right-0"></i>
+//             </label>
+//             <input
+//               id="cover"
+//               ref={coverInputRef}
+//               className="visually-hidden"
+//               type="file"
+//               onChange={(e) => handleFileChange(e, "cover")}
+//               accept="image/*"
+//               style={{ display: "none" }}
+//             />
 //             <figure
 //               className="avatar position-absolute w75 z-index-1 left-15"
 //               style={{ marginTop: `-40px` }}
@@ -584,9 +649,27 @@ export default React.memo(CommunityForm);
 //                 className="float-right p-1 bg-white rounded-circle position-relative"
 //                 style={{ objectFit: "cover" }}
 //               />
-//               <i className="bi bi-pencil h3 m-0 position-absolute right-0 bottom-0"></i>
+//               <label htmlFor="avatar" className="cursor-pointer">
+//                 <i className="bi bi-pencil h3 m-0 position-absolute right-0 bottom-0"></i>
+//               </label>
+//               <input
+//                 id="avatar"
+//                 ref={avatarInputRef}
+//                 className="visually-hidden"
+//                 type="file"
+//                 onChange={(e) => handleFileChange(e, "avatar")}
+//                 accept="image/*"
+//                 style={{ display: "none" }}
+//               />
 //             </figure>
 //           </div>
+//           <ImageCropModal
+//             isOpen={openImageCrop}
+//             onCancel={onCancel}
+//             cropped={onCropped}
+//             imageUrl={selectedImage}
+//             aspect={imageType === 'avatar' ? 1 : 960 / 250}
+//           />
 //           {/* <div className="position-relative w-100">
 //             <ImageUpload
 //               previewImage={isEditing ? previewCover : ""}
@@ -609,10 +692,11 @@ export default React.memo(CommunityForm);
 //             </div>
 //           </div> */}
 
+//           {/* Form inputs */}
 //           <label
 //             className="fw-600 mb-1"
 //             htmlFor="name"
-//             style={{ marginTop: "60px" }}
+//             style={{ marginTop: "80px" }}
 //           >
 //             {t("group_name")}
 //           </label>

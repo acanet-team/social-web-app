@@ -64,7 +64,12 @@ export default function CommunitySection(props: {
       const response = await getCommunities({
         page,
         take,
-        type: props.communityType === "popular" ? "not_joined" : "joined",
+        type:
+          props.communityType === "popular"
+            ? "not_joined"
+            : props.communityType === "following"
+              ? "joined"
+              : "",
         brokerId: props.communityType === "owned" ? brokerId : "",
         search: searchValue,
         feeType: filterValue ? filterValue.toLowerCase() : "",

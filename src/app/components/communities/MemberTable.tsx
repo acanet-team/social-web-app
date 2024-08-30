@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import type { ICommunityMember } from "@/api/community/model";
 import styles from "@/styles/modules/memberTable.module.scss";
 import { useLoading } from "@/context/Loading/context";
 import Pagination from "../Pagination";
@@ -14,6 +13,7 @@ import { useTranslations } from "next-intl";
 import AlertModal from "../AlertModal";
 import { throwToast } from "@/utils/throw-toast";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 const TAKE = 5;
 export default function MemberTable(props: {
@@ -243,7 +243,16 @@ export default function MemberTable(props: {
                 return (
                   <tr key={m.id} className="d-flex">
                     <td className={`${styles["name-col"]} col-2`}>
-                      {m.user.firstName + " " + m.user.lastName}
+                      <Image
+                        src={m.user?.photo?.path || `/assets/images/user.png`}
+                        width={40}
+                        height={40}
+                        style={{ objectFit: "cover", borderRadius: "10px" }}
+                        alt="avatar"
+                      />
+                      <span className="ms-2">
+                        {m.user.firstName + " " + m.user.lastName}
+                      </span>
                     </td>
                     <td className="col-2">
                       {new Date(m.createdAt).toLocaleString("en-US", {
