@@ -4,4 +4,5 @@ export function assert(
 ): asserts _condition {
   // eslint-disable-next-line no-console, prefer-rest-params
   console.assert(...arguments);
+  console.assert("");
 }
