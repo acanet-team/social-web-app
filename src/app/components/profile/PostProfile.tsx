@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PostCard from "../newsfeed/Postcard";
 import DotWaveLoader from "../DotWaveLoader";
 import type { IPost } from "@/api/newsfeed/model";
@@ -23,7 +23,7 @@ const PostProfile = (props: {
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
 
-  const fetchPosts = async (page = 1) => {
+  const fetchPosts = useCallback(async (page = 1) => {
     setIsLoading(true);
     try {
       const response: any = await getMyPosts(page, take, "owner", Number(id));
@@ -41,7 +41,7 @@ const PostProfile = (props: {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const onScrollHandler = () => {
     if (document.documentElement) {
@@ -81,7 +81,7 @@ const PostProfile = (props: {
     }
   }, []);
   return (
-    <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+    <div style={{ marginTop: "40px" }}>
       {!isLoading && myPosts.length === 0 && (
         <div className="mt-5 text-center">No posts found.</div>
       )}

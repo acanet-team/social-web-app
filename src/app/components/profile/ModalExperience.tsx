@@ -2,7 +2,14 @@ import React, { useCallback, useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { Select, MenuItem, type SelectChangeEvent } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  type SelectChangeEvent,
+  Autocomplete,
+  TextField,
+  Box,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import type {
   BrokerProfile,
@@ -13,11 +20,12 @@ import dayjs from "dayjs";
 import {
   createNewExperiences,
   updateExperiences,
-  deleteCompany,
+  getFind,
 } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import ImageUpload from "@/components/ImageUpload";
-import type { experienceParams } from "@/api/model";
+import { useFormik } from "formik";
+import WaveLoader from "../WaveLoader";
 
 interface ModalExperienceProp {
   title: string;
@@ -27,7 +35,7 @@ interface ModalExperienceProp {
   dataBrokerProfile: BrokerProfile;
   formDt: FormDtCompany;
   setCompany: React.Dispatch<React.SetStateAction<FormDtCompany[]>>;
-  // editId: string;
+  idUser: string;
 }
 
 export const ModalExperience: FC<ModalExperienceProp> = ({
@@ -38,58 +46,60 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
   dataBrokerProfile,
   formDt,
   setCompany,
-  // editId,
+  idUser,
 }) => {
-  const initialFormData = isEditing
-    ? formDt
-    : {
-        logo: "",
-        name: "",
-        startDate: "",
-        endDate: "",
-        isWorking: true,
-        position: "",
-        location: "",
-        description: "",
-        workingType: "",
-      };
+  const [formData, setFormData] = useState(formDt);
 
-  const [formData, setFormData] = useState(initialFormData);
+  // const formik = useFormik({
+  //   initialValues: {
+  //     id: formDt.id,
+  //     logo: formDt.logo,
+  //     name: formDt.name,
+  //     startDate: formDt.startDate,
+  //     endDate: formDt.endDate,
+  //     isWorking: formDt.isWorking,
+  //     position: formDt.position,
+  //     location: formDt.location,
+  //     description: formDt.description,
+  //     workingType: formDt.workingType,
+  //   },
+  //   onSubmit: async (values) => {}
+  // });
 
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [experience, setExperience] = useState<
+    { name: string; logo: string }[]
+  >([]);
 
-  const handleImageChange = (file: File) => {
-    setUploadedImage(file);
-    console.log("Uploaded Image: ", file);
-    // setFormData({
-    //   ...formData,
-    //   logo: uploadedImage,
-    // });
-    setFormData((prev) => ({ ...prev, logo: file }));
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [formData],
+  );
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleSelectChange = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setFormData({
+        ...formData,
+        workingType: event.target.value,
+      });
+    },
+    [formData],
+  );
 
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setFormData({
-      ...formData,
-      workingType: event.target.value,
-    });
-  };
-
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      isWorking: e.target.value === "true",
-    });
-  };
+  const handleRadioChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({
+        ...formData,
+        isWorking: e.target.value === "true",
+      });
+    },
+    [formData],
+  );
 
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
@@ -107,10 +117,23 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const submitAddExperience = async () => {
+  const findCompany = async (keyword: string) => {
+    setIsLoading(true);
+    try {
+      const res = await getFind("COMPANY", keyword);
+      setExperience(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const submitAddExperience = useCallback(async () => {
+    setIsLoading(true);
     try {
       const experience = {
-        logo: "",
+        logo: formData.logo,
         name: formData.name,
         startDate: new Date(formData.startDate),
         endDate: formData.isWorking
@@ -131,14 +154,17 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
       handleClose();
     } catch (error) {
       throwToast("Error creating experience", "error");
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [formData]);
 
-  const submitEditExperience = async () => {
+  const submitEditExperience = useCallback(async () => {
+    setIsLoading(true);
     try {
       const experience = {
         id: formData.id,
-        logo: "",
+        logo: formData.logo,
         name: formData.name,
         startDate: new Date(formData.startDate),
         endDate: formData.isWorking
@@ -157,52 +183,16 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
       await updateExperiences(newExperience);
       setCompany((prevCompanies) =>
         prevCompanies.map((comp) =>
-          comp.id === initialFormData.id ? experience : comp,
+          comp.id === formData.id ? experience : comp,
         ),
       );
       handleClose();
     } catch (error) {
       throwToast("Error updating experience", "error");
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  // const submitAddOrUpdateExperience = async () => {
-  //   try {
-  //     const experience = {
-  //         logo: "",
-  //         name: formData.name,
-  //         startDate: new Date(formData.startDate),
-  //         endDate: formData.isWorking
-  //           ? new Date("")
-  //           : new Date(formData.startDate),
-  //         isWorking: formData.isWorking,
-  //         position: formData.position,
-  //         location: formData.location,
-  //         description: formData.description,
-  //         workingType: formData.workingType,
-  //     };
-
-  //     const newExperience = {
-  //       company: [experience],
-  //     };
-  //     if (isEditing) {
-  //       experience.id = initialFormData.id;
-  //       // experience.id = initialFormData.id;
-  //       await updateExperiences(newExperience);
-  //       setCompany((prevCompanies) =>
-  //         prevCompanies.map((comp) =>
-  //           comp.id === initialFormData.id ? experience : comp
-  //         )
-  //       );
-  //     } else {
-  //       await createNewExperiences(newExperience);
-  //       setCompany((prevCompanies) => [experience, ...prevCompanies]);
-  //     }
-  //     handleClose();
-  //   } catch (error) {
-  //     throwToast("Error handling experience", "error");
-  //   }
-  // };
+  }, [formData]);
   return (
     <>
       <Modal
@@ -229,13 +219,13 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <ImageUpload
+            {/* <ImageUpload
               folderUpload={""}
               onChange={handleImageChange}
               aspect={0}
               uploadAvatar={false}
               previewImage={""}
-            />
+            /> */}
             {/* {uploadedImage && (
               <div>
                 <p>Image uploaded successfully!</p>
@@ -246,18 +236,66 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               </div>
             )} */}
             <p className="m-0 py-1 fw-600 font-xss">Company Name</p>
-            <input
-              className="px-2"
-              style={{
-                width: "100%",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                height: "32px",
+            <Autocomplete
+              // value={formData.name}
+              disableClearable
+              disablePortal
+              options={experience}
+              className="w-100"
+              getOptionLabel={(option) => {
+                if (typeof option === "object" && "name" in option) {
+                  return option.name;
+                }
+                return "";
               }}
-              value={formData.name}
-              name="name"
-              onChange={handleChange}
-              placeholder="Please enter your company name"
+              freeSolo
+              onChange={(event, newValue) => {
+                if (typeof newValue === "string") {
+                  setFormData({
+                    ...formData,
+                    name: newValue,
+                    logo: "",
+                  });
+                } else if (newValue) {
+                  setFormData({
+                    ...formData,
+                    name: newValue.name || "",
+                    logo: newValue.logo || "",
+                  });
+                }
+              }}
+              onInputChange={(event, newInputValue) => {
+                setFormData({
+                  ...formData,
+                  name: newInputValue,
+                  logo: "",
+                });
+              }}
+              renderOption={(props, option) => {
+                const { key, ...optionProps } = props;
+                return (
+                  <Box
+                    key={key}
+                    component="li"
+                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                    {...optionProps}
+                  >
+                    <img loading="lazy" width="20" src={option.logo} alt="" />
+                    {option.name}
+                  </Box>
+                );
+              }}
+              renderInput={(params) => (
+                <>
+                  <TextField
+                    {...params}
+                    label="Enter the company name"
+                    onChange={(e) => {
+                      findCompany(e.target.value);
+                    }}
+                  />
+                </>
+              )}
             />
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
@@ -411,7 +449,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               isEditing
                 ? () => submitEditExperience()
                 : () => submitAddExperience()
-              // () => submitAddOrUpdateExperience()
+              // () => findCompany()
             }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
@@ -419,6 +457,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <WaveLoader />}
     </>
   );
 };

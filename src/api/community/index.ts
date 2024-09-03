@@ -7,6 +7,8 @@ import {
   type GetCommunityResponse,
   type ICommunity,
   type joinCommunityParams,
+  type RemoveCommunityParams,
+  type RequestJoinCommunityParams,
 } from "./model";
 import httpClient from "..";
 import type { IPost, ResponseDto } from "../newsfeed/model";
@@ -98,5 +100,20 @@ export const getCommunityMembers = ({
     {
       query: data,
     },
+  );
+};
+
+export const removeCommunityMember = (values: RemoveCommunityParams) => {
+  return httpClient.fetch({
+    url: `/v1/community/join`,
+    method: "DELETE",
+    body: values,
+  });
+};
+
+export const requestJoinCommunity = (values: RequestJoinCommunityParams) => {
+  return httpClient.patch<RequestJoinCommunityParams, BaseResponse<T>>(
+    `/v1/community/join`,
+    values,
   );
 };

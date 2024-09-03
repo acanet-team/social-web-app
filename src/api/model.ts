@@ -114,11 +114,27 @@ export type AllProfileResponse = {
     // followed: boolean;
   };
 };
-export type shortDescParams = {
-  brokerProfile: {
-    about: string;
-  };
+
+export type AllFindResponse = {
+  status: number;
+  message: string;
+  data: [{ name: string; logo: string }];
 };
+export type shortDescParams = {
+  about: string;
+};
+export type topicParam = {
+  brokerProfile: {
+    location: string;
+    skills: string[];
+  };
+  interestTopics: string[];
+};
+
+export interface UpdateOtherProfileParams {
+  brokerProfile: BrokerProfile;
+  interestTopics: string[];
+}
 export type socialMediaParams = {
   socialMedia: {
     name: string;

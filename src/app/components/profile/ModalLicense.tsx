@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type FC } from "react";
+import React, { useCallback, useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
@@ -9,6 +9,7 @@ import ImageUpload from "@/components/ImageUpload";
 import dayjs from "dayjs";
 import { throwToast } from "@/utils/throw-toast";
 import { createNewLicense, updateLicense } from "@/api/profile";
+import WaveLoader from "../WaveLoader";
 
 interface ModalLisenceProp {
   title: string;
@@ -27,19 +28,6 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
   formDt,
   setLicenses,
 }) => {
-  const initialFormData = isEditing
-    ? formDt
-    : {
-        licenseType: "",
-        logo: "",
-        licenseIssuer: "",
-        licenseState: "",
-        licenseIssueDate: "",
-        licenseStatus: "",
-        licenseExpirationDate: "",
-        credentialID: "",
-      };
-
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
@@ -56,37 +44,38 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const [formData, setFormData] = useState(initialFormData);
-
+  const [formData, setFormData] = useState(formDt);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
   const handleImageChange = (file: File) => {
     setUploadedImage(file);
     console.log("Uploaded Image: ", file);
-    // setFormData({
-    //   ...formData,
-    //   logo: uploadedImage,
-    // });
     setFormData((prev) => ({ ...prev, logo: file }));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [formData],
+  );
 
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setFormData({
-      ...formData,
-      licenseStatus: event.target.value,
-    });
-  };
+  const handleSelectChange = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setFormData({
+        ...formData,
+        licenseStatus: event.target.value,
+      });
+    },
+    [formData],
+  );
 
-  const submitAddLicense = async () => {
+  const submitAddLicense = useCallback(async () => {
+    setIsLoading(true);
     try {
       const license = {
         licenseType: formData.licenseType,
@@ -108,10 +97,13 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
       handleClose();
     } catch (error) {
       throwToast("Error creating license", "error");
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [formData]);
 
-  const submitEditLicense = async () => {
+  const submitEditLicense = useCallback(async () => {
+    setIsLoading(true);
     try {
       const license = {
         id: formData.id,
@@ -131,13 +123,15 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
       };
       await updateLicense(newLicense);
       setLicenses((prev) =>
-        prev.map((cer) => (cer.id === initialFormData.id ? license : cer)),
+        prev.map((cer) => (cer.id === formDt.id ? license : cer)),
       );
       handleClose();
     } catch (error) {
       throwToast("Error updating license", "error");
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [formData]);
 
   return (
     <>
@@ -290,6 +284,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <WaveLoader />}
     </>
   );
 };

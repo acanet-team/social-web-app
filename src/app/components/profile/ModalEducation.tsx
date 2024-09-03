@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type FC } from "react";
+import React, { useCallback, useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
@@ -6,9 +6,18 @@ import { DatePicker } from "@mui/x-date-pickers";
 import ImageUpload from "@/components/ImageUpload";
 import dayjs from "dayjs";
 import type { FormDtSchool } from "@/api/profile/model";
-import { createNewSchool, updateSchool } from "@/api/profile";
+import { createNewSchool, getFind, updateSchool } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
-import { MenuItem, Select, type SelectChangeEvent } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  MenuItem,
+  Select,
+  TextField,
+  type SelectChangeEvent,
+} from "@mui/material";
+import { useFormik } from "formik";
+import WaveLoader from "../WaveLoader";
 
 interface ModalEducationProp {
   title: string;
@@ -27,27 +36,11 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
   formDt,
   setSchool,
 }) => {
-  const initialFormData = isEditing
-    ? formDt
-    : {
-        name: "",
-        logo: "",
-        startDate: "",
-        endDate: "",
-        isGraduated: true,
-        major: "",
-        degree: "",
-        description: "",
-      };
-  const [formData, setFormData] = useState(initialFormData);
-
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-
-  const handleImageChange = (file: File) => {
-    setUploadedImage(file);
-    console.log("Uploaded Image: ", file);
-    setFormData((prev) => ({ ...prev, logo: file }));
-  };
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [formData, setFormData] = useState(formDt);
+  const [education, setEducation] = useState<{ name: string; logo: string }[]>(
+    [],
+  );
 
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
@@ -65,34 +58,54 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [formData],
+  );
+
+  const handleRadioChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({
+        ...formData,
+        isGraduated: e.target.value === "true",
+      });
+    },
+    [formData],
+  );
+
+  const handleSelectChange = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setFormData({
+        ...formData,
+        degree: event.target.value,
+      });
+    },
+    [formData],
+  );
+
+  const findEducation = async (keyword: string) => {
+    setIsLoading(true);
+    try {
+      const res = await getFind("SCHOOL", keyword);
+      setEducation(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      isGraduated: e.target.value === "true",
-    });
-  };
-
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setFormData({
-      ...formData,
-      degree: event.target.value,
-    });
-  };
-
-  const submitAddSchool = async () => {
+  const submitAddSchool = useCallback(async () => {
+    setIsLoading(true);
     try {
       const school = {
         name: formData.name,
-        logo: "",
+        logo: formData.logo,
         startDate: new Date(formData.startDate),
         endDate: formData.isGraduated
           ? new Date("")
@@ -110,15 +123,18 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
       handleClose();
     } catch (error) {
       throwToast("Error creating education", "error");
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [formData]);
 
-  const submitEditSchool = async () => {
+  const submitEditSchool = useCallback(async () => {
+    setIsLoading(true);
     try {
       const school = {
         id: formData.id,
         name: formData.name,
-        logo: "",
+        logo: formData.logo,
         startDate: new Date(formData.startDate),
         endDate: formData.isGraduated
           ? new Date("")
@@ -133,13 +149,15 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
       };
       await updateSchool(newSchool);
       setSchool((prev) =>
-        prev.map((edu) => (edu.id === initialFormData.id ? school : edu)),
+        prev.map((edu) => (edu.id === formDt.id ? school : edu)),
       );
       handleClose();
     } catch (error) {
       throwToast("Error creating education", "error");
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [formData]);
 
   return (
     <>
@@ -167,26 +185,66 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <ImageUpload
-              folderUpload={""}
-              onChange={handleImageChange}
-              aspect={0}
-              uploadAvatar={false}
-              previewImage={""}
-            />
             <p className="m-0 py-1 fw-600 font-xss">Education Name</p>
-            <input
-              className="px-2"
-              style={{
-                width: "100%",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                height: "32px",
+            <Autocomplete
+              // value={formData.name}
+              disablePortal
+              options={education}
+              className="w-100"
+              getOptionLabel={(option) => {
+                if (typeof option === "object" && "name" in option) {
+                  return option.name;
+                }
+                return "";
               }}
-              value={formData.name}
-              name="name"
-              onChange={handleChange}
-              placeholder="Please enter your education name"
+              freeSolo
+              onChange={(event, newValue) => {
+                if (typeof newValue === "string") {
+                  setFormData({
+                    ...formData,
+                    name: newValue,
+                    logo: "",
+                  });
+                } else if (newValue) {
+                  setFormData({
+                    ...formData,
+                    name: newValue.name || "",
+                    logo: newValue.logo || "",
+                  });
+                }
+              }}
+              onInputChange={(event, newInputValue) => {
+                setFormData({
+                  ...formData,
+                  name: newInputValue,
+                  logo: "",
+                });
+              }}
+              renderOption={(props, option) => {
+                const { key, ...optionProps } = props;
+                return (
+                  <Box
+                    key={key}
+                    component="li"
+                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                    {...optionProps}
+                  >
+                    <img loading="lazy" width="20" src={option.logo} alt="" />
+                    {option.name}
+                  </Box>
+                );
+              }}
+              renderInput={(params) => (
+                <>
+                  <TextField
+                    {...params}
+                    label="Enter the education name"
+                    onChange={(e) => {
+                      findEducation(e.target.value);
+                    }}
+                  />
+                </>
+              )}
             />
 
             <div style={{ width: "100%" }}>
@@ -207,10 +265,10 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                     ENGINEERING DEGREE
                   </MenuItem>
                   <MenuItem value="BACHELOR's DEGREE">
-                    BACHELOR`&apos;`S DEGREE
+                    BACHELOR&apos;S DEGREE
                   </MenuItem>
                   <MenuItem value="MASTER'S DEGREE">
-                    MASTER`&apos;`S DEGREE
+                    MASTER&apos;S DEGREE
                   </MenuItem>
                   <MenuItem value="DOCTOR">DOCTOR</MenuItem>
                   <MenuItem value="DEGREE">DEGREE</MenuItem>
@@ -342,6 +400,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <WaveLoader />}
     </>
   );
 };

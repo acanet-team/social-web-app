@@ -1,6 +1,7 @@
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 import httpClient from "../index";
 import type {
+  AllFindResponse,
   AllProfileResponse,
   BaseResponse,
   educationParams,
@@ -8,6 +9,7 @@ import type {
   licenseParams,
   shortDescParams,
   socialMediaParams,
+  topicParam,
 } from "../model";
 import type { IPost, ResponseDto } from "../newsfeed/model";
 import type {
@@ -21,20 +23,42 @@ export const getProfile = (id: string) => {
   return httpClient.get<AllProfileResponse>(`/v1/user-profile/user/${id}`);
 };
 
-export const updateNewAbout = (about: string) => {
-  const brokerProfile = { about };
-
-  return httpClient.patch<shortDescParams, BaseResponse<T>>(
+export const updateProfile = (formData: FormData) => {
+  return httpClient.patch<FormData, BaseResponse<T>>(
     `/v1/user-profile/update-profile`,
-    { brokerProfile },
+    formData,
+    {
+      contentType: "multi-form",
+    },
   );
 };
 
-export const putSocialMedia = (name: string, mediaUrl: string) => {
-  const socialMedia = [{ name, mediaUrl }];
-  return httpClient.put<socialMediaParams, BaseResponse<T>>(
-    `/v1/user-profile/update-social-media`,
-    { socialMedia },
+export const updateOtherProfile = (formData: FormData) => {
+  return httpClient.patch<FormData, BaseResponse<T>>(
+    `/v1/user-profile/update-profile`,
+    formData,
+    {
+      contentType: "multi-form",
+    },
+  );
+};
+
+export const putSocialMedia = (
+  social: Record<string, { url: string; id: string }>,
+) => {
+  const socialMedia = Object.entries(social).map(([name, { url, id }]) => ({
+    name,
+    mediaUrl: url,
+    id,
+  }));
+  return httpClient.put(`/v1/user-profile/update-social-media`, {
+    socialMedia,
+  });
+};
+
+export const getFind = (type: string, keyword: string) => {
+  return httpClient.get<AllFindResponse>(
+    `/v1/user-profile/search/${type}/${keyword}`,
   );
 };
 

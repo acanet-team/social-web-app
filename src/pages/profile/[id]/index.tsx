@@ -35,7 +35,7 @@ export default function Profile({
   allPageGroup,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
-
+  console.log("ahha", dataBrokerProfile);
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -85,6 +85,13 @@ export default function Profile({
     setShow(false);
   }, []);
 
+  const [avatar, setAvatar] = useState(
+    dataUser?.photo?.path || "/assets/images/profile/ava.png",
+  );
+  const [coverImg, setCoverImg] = useState(
+    dataUser?.profileCoverPhoto?.path || "/assets/images/profile/u-bg.png",
+  );
+
   return (
     <>
       <div
@@ -105,10 +112,7 @@ export default function Profile({
           }}
         >
           <Image
-            src={
-              dataUser?.profileCoverPhoto?.path ||
-              "/assets/images/profile/u-bg.png"
-            }
+            src={coverImg}
             width={1075}
             height={250}
             alt=""
@@ -120,7 +124,7 @@ export default function Profile({
             }}
           />
           <Image
-            src={dataUser?.photo?.path || "/assets/images/profile/ava.png"}
+            src={avatar}
             width={119}
             height={119}
             alt={dataUserProfile?.nickName}
@@ -355,7 +359,11 @@ export default function Profile({
           </div>
           <div className="col-md-9 col-12">
             <About role={role} dataBrokerProfile={dataBrokerProfile} />
-            <Experience role={role} dataBrokerProfile={dataBrokerProfile} />
+            <Experience
+              role={role}
+              dataBrokerProfile={dataBrokerProfile}
+              id={idParam as string}
+            />
             <Education role={role} dataBrokerProfile={dataBrokerProfile} />
             <License role={role} dataBrokerProfile={dataBrokerProfile} />
           </div>
@@ -374,7 +382,9 @@ export default function Profile({
         <GroupProfile
           isBroker={dataUser.role.name === "broker"}
           communities={dataMyGroups}
-          communityType="owned"
+          communityType={
+            dataUser.role.name === "broker" ? "owned" : "following"
+          }
           curPage={curPageGroup}
           allPage={allPageGroup}
           take={TAKE}
@@ -384,9 +394,10 @@ export default function Profile({
       {show && (
         <ModalEditBanner
           handleClose={handleCancel}
-          handleShow={handleOpenModal}
           title="Edit Banner"
           show={show}
+          setAvatar={setAvatar}
+          setCoverImg={setCoverImg}
         />
       )}
     </>

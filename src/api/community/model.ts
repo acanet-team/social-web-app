@@ -112,3 +112,15 @@ export interface CommunityMembersResponse {
   meta: Meta;
   totalPendingRequest: number;
 }
+
+export interface RemoveCommunityParams {
+  [key: string]: unknown;
+  userId: number;
+  communityId: string;
+}
+
+export interface RequestJoinCommunityParams {
+  // [key: string]: unknown;
+  requestId: string;
+  action: string;
+}

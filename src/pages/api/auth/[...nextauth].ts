@@ -28,6 +28,7 @@ const options: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, account, trigger }: any) {
+      console.log(token);
       if (trigger === "update") {
         httpClient.setAuthorization(token.accessToken);
         const userData = await getMe();

@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
-import type { BrokerProfile, InterestTopics, User } from "@/api/profile/model";
-import { Theme, useTheme } from "@mui/material/styles";
+import type {
+  BrokerProfile,
+  InterestTopics,
+  Skill,
+  User,
+} from "@/api/profile/model";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { updateOtherProfile } from "@/api/profile";
+import { throwToast } from "@/utils/throw-toast";
+import WaveLoader from "../WaveLoader";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -19,15 +27,6 @@ const MenuProps = {
   },
 };
 
-function getStyles(name: string, personName: string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 interface ModalEditOtherProps {
   title: string;
   show: boolean;
@@ -35,7 +34,11 @@ interface ModalEditOtherProps {
   dataUser: User;
   dataBrokerProfile: BrokerProfile;
   listInterestTopics: InterestTopics[];
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
+  setInterestTopics: React.Dispatch<React.SetStateAction<InterestTopics[]>>;
+  setSkills: React.Dispatch<React.SetStateAction<Skill[]>>;
 }
+
 const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
   show,
   handleClose,
@@ -43,65 +46,101 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
   dataUser,
   dataBrokerProfile,
   listInterestTopics,
+  setLocation,
+  setInterestTopics,
+  setSkills,
 }) => {
   const [formData, setFormData] = useState({
     location: dataBrokerProfile.location || "",
+    selectedServiceIds: dataBrokerProfile.skills.map(
+      (skill) => skill.interestTopic.id,
+    ),
+    selectedTopicIds: dataBrokerProfile.interestTopics.map((topic) => topic.id),
   });
+
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleResize = () => {
       setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
     };
 
-    if (window) {
-      window.addEventListener("resize", handleResize);
-    }
-
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [e.target.name]: e.target.value,
+      }));
+    },
+    [],
+  );
 
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
-  const [service, setService] = React.useState<string[]>([]);
-  const [topic, setTopic] = React.useState<string[]>([]);
+  const handleChangeSelectTopic = useCallback(
+    (event: SelectChangeEvent<string[]>) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        selectedTopicIds: event.target.value as string[],
+      }));
+    },
+    [],
+  );
 
-  useEffect(() => {
-    const ser = dataBrokerProfile.skills.map(
-      (skill) => skill.interestTopic.topicName,
-    );
-    setService(ser);
-  }, []);
-  useEffect(() => {
-    const isTopic = dataBrokerProfile.interestTopics.map((t) => t.topicName);
-    setTopic(isTopic);
-  }, []);
+  const handleChangeSelectService = useCallback(
+    (event: SelectChangeEvent<string[]>) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        selectedServiceIds: event.target.value as string[],
+      }));
+    },
+    [],
+  );
 
-  const handleChangeSelectTopic = (event: SelectChangeEvent<typeof topic>) => {
-    const {
-      target: { value },
-    } = event;
-    setTopic(typeof value === "string" ? value.split(",") : value);
-  };
-  const handleChangeSelectService = (
-    event: SelectChangeEvent<typeof service>,
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    setService(typeof value === "string" ? value.split(",") : value);
-  };
+  const submitOtherInfo = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const formDt = new FormData();
+      formDt.append("location", formData.location);
+      setLocation(formData.location);
+      formDt.append(
+        "interestTopicIds",
+        JSON.stringify(formData.selectedTopicIds),
+      );
+      setInterestTopics(
+        formData.selectedTopicIds
+          .map((id) =>
+            dataBrokerProfile.interestTopics.find((topic) => topic.id === id),
+          )
+          .filter((topic) => topic !== undefined),
+      );
+      if (formData.selectedServiceIds) {
+        const brokerProfies = {
+          skills: formData.selectedServiceIds,
+        };
+        formDt.append("brokerProfile", JSON.stringify(brokerProfies));
+        setSkills(
+          formData.selectedServiceIds
+            .map((id) =>
+              dataBrokerProfile.skills.find((topic) => topic.id === id),
+            )
+            .filter((topic) => topic !== undefined),
+        );
+      }
+      await updateOtherProfile(formDt);
+      throwToast("Updated successfully", "success");
+      handleClose();
+    } catch (error) {
+      throwToast("Error updating", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [formData, handleClose]);
 
   return (
     <>
@@ -161,51 +200,56 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
               <Select
                 multiple
                 displayEmpty
-                value={service}
+                value={formData.selectedServiceIds}
                 onChange={handleChangeSelectService}
                 input={<OutlinedInput />}
                 renderValue={(selected) => {
                   if (selected.length === 0) {
                     return <em>Select service offer</em>;
                   }
-                  return selected.join(", ");
+                  return selected
+                    .map(
+                      (id) =>
+                        listInterestTopics.find((topic) => topic.id === id)
+                          ?.topicName,
+                    )
+                    .filter((name) => name !== undefined)
+                    .join(", ");
                 }}
                 MenuProps={MenuProps}
               >
                 {listInterestTopics.map((topic) => (
-                  <MenuItem
-                    key={topic.id}
-                    value={topic.topicName}
-                    // style={getStyles(name, personName, theme)}
-                  >
+                  <MenuItem key={topic.id} value={topic.id}>
                     {topic.topicName}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-
             <p className="m-0 py-1 fw-600 font-xss">Interest Topic</p>
             <FormControl className="w-100">
               <Select
                 multiple
                 displayEmpty
-                value={service}
-                onChange={handleChangeSelectService}
+                value={formData.selectedTopicIds}
+                onChange={handleChangeSelectTopic}
                 input={<OutlinedInput />}
                 renderValue={(selected) => {
                   if (selected.length === 0) {
-                    return <em>Select service offer</em>;
+                    return <em>Select topic offer</em>;
                   }
-                  return selected.join(", ");
+                  return selected
+                    .map(
+                      (id) =>
+                        listInterestTopics.find((topic) => topic.id === id)
+                          ?.topicName,
+                    )
+                    .filter((name) => name !== undefined)
+                    .join(", ");
                 }}
                 MenuProps={MenuProps}
               >
                 {listInterestTopics.map((topic) => (
-                  <MenuItem
-                    key={topic.id}
-                    value={topic.topicName}
-                    // style={getStyles(name, personName, theme)}
-                  >
+                  <MenuItem key={topic.id} value={topic.id}>
                     {topic.topicName}
                   </MenuItem>
                 ))}
@@ -216,13 +260,14 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
         <Modal.Footer className={styles["modal-footer"]}>
           <Button
             variant="primary"
-            // onClick={}
+            onClick={submitOtherInfo}
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
             Save
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <WaveLoader />}
     </>
   );
 };

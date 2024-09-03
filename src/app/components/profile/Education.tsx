@@ -6,6 +6,7 @@ import { ModalEducation } from "./ModalEducation";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { deleteEducation } from "@/api/profile";
+import WaveLoader from "../WaveLoader";
 
 const Education = ({
   dataBrokerProfile,
@@ -19,6 +20,7 @@ const Education = ({
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [formDt, setFormDt] = useState<FormDtSchool>({
     id: "",
@@ -54,6 +56,7 @@ const Education = ({
   }, []);
 
   const delEdu = useCallback(async (id: string) => {
+    setIsLoading(true);
     try {
       if (id) {
         await deleteEducation(id);
@@ -61,6 +64,8 @@ const Education = ({
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -229,6 +234,7 @@ const Education = ({
           setSchool={setSchool}
         />
       )}
+      {isLoading && <WaveLoader />}
     </>
   );
 };

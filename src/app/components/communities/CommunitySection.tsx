@@ -16,6 +16,7 @@ import type { ICommunity } from "@/api/community/model";
 import { getCommunities } from "@/api/community";
 import { useSession } from "next-auth/react";
 import CommunityCard from "./CommunityCard";
+import { useTranslations } from "next-intl";
 
 export default function CommunitySection(props: {
   isBroker: boolean;
@@ -25,6 +26,7 @@ export default function CommunitySection(props: {
   allPage: number;
   take: number;
 }) {
+  const tForm = useTranslations("Form");
   const [communityArr, setCommunityArr] = useState<ICommunity[]>(
     props.communities,
   );
@@ -165,7 +167,6 @@ export default function CommunitySection(props: {
     if (e.key === "Enter") {
       e.preventDefault();
       if (searchRef.current) {
-        // console.log(searchRef.current.value);
         setSearchValue(searchRef.current.value);
       }
     }
@@ -192,7 +193,82 @@ export default function CommunitySection(props: {
   return (
     <>
       {/* Search */}
-
+      <div className={`${styles["search-section"]} my-3 d-flex gap-2`}>
+        <Box
+          component="form"
+          sx={{ width: "65%" }}
+          noValidate
+          autoComplete="off"
+          className={styles["search-box"]}
+        >
+          <TextField
+            id="outlined-basic"
+            label={tForm("search")}
+            variant="outlined"
+            className="w-100"
+            inputRef={searchRef}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              onSearchHandler(e)
+            }
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&.MuiInputBase-root fieldset": {
+                  borderColor: "#ddd",
+                },
+              },
+              ".MuiFormLabel-root": { fontSize: "15px" },
+            }}
+          />
+        </Box>
+        {/* Filter */}
+        <FormControl
+          sx={
+            props.communityType === "owned"
+              ? { width: "15%" }
+              : { width: "35%" }
+          }
+          className={styles["filter-box"]}
+        >
+          <InputLabel id="filter">
+            <i className="bi bi-filter me-1"></i>Filter
+          </InputLabel>
+          <Select
+            labelId="filter"
+            id="filter"
+            value={filterValue}
+            // value={filterValue[0] || ""}
+            onChange={onFilterHandler}
+            input={<OutlinedInput label="Filter&nbsp" />}
+            // renderValue={(selected) => selected}
+            renderValue={(selected) => {
+              if (!selected) {
+                return "";
+              }
+              return selected;
+            }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#ddd",
+              },
+            }}
+          >
+            {filters.map((name) => (
+              <MenuItem key={name} value={name}>
+                <Checkbox checked={filterValue.indexOf(name) > -1} />
+                <ListItemText primary={name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {props.isBroker && props.communityType === "owned" && (
+          <button
+            className={`${styles["new-community__btn"]} btn btn-primary text-white`}
+            onClick={onCreateGroupHandler}
+          >
+            + {tForm("add_new")}
+          </button>
+        )}
+      </div>
       {/* Communities */}
       <div className="middle-sidebar-left pe-0">
         <div className="row">
@@ -225,7 +301,7 @@ export default function CommunitySection(props: {
             </div>
           </div>
           {isLoading && <DotWaveLoader />}
-          {/* {show && (
+          {show && (
             <CommunityForm
               isEditing={isEditing}
               handleClose={handleClose}
@@ -233,7 +309,7 @@ export default function CommunitySection(props: {
               show={show}
               setCommunities={setCommunityArr}
             />
-          )} */}
+          )}
         </div>
       </div>
     </>

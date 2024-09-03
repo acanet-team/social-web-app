@@ -1,26 +1,30 @@
 import { dataExperiencesProfile } from "@/app/fakeData/profile";
 import React, { useCallback, useState } from "react";
 import Image from "next/image";
-import { TruncateText } from "../TruncateText";
 import styles from "@/styles/modules/profile.module.scss";
 import type { BrokerProfile, FormDtCompany } from "@/api/profile/model";
 import { ModalExperience } from "./ModalExperience";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { deleteCompany } from "@/api/profile";
+import WaveLoader from "../WaveLoader";
 
 export const Experience = ({
   dataBrokerProfile,
   role,
+  id,
 }: {
   dataBrokerProfile: BrokerProfile;
   role: boolean;
+  id: string;
 }) => {
   const t = useTranslations("MyProfile");
   const [showAllExperiences, setshowAllExperiences] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [expandPost, setExpandPost] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [formDt, setFormDt] = useState<FormDtCompany>({
     id: "",
     logo: "",
@@ -81,16 +85,22 @@ export const Experience = ({
     setShowIconEdit(true);
   }, []);
 
-  const delCompany = useCallback(async (id: string) => {
-    try {
-      if (id) {
-        await deleteCompany(id);
-        setCompany((prev) => prev.filter((com) => com.id !== id));
+  const delCompany = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      try {
+        if (id) {
+          await deleteCompany(id);
+          setCompany((prev) => prev.filter((com) => com.id !== id));
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+    },
+    [id],
+  );
 
   return (
     <>
@@ -246,11 +256,21 @@ export const Experience = ({
                 <p className="m-0 font-xsss lh-20 text-gray-follow">
                   {experience.location}
                 </p>
-                <TruncateText
-                  content={experience.description}
-                  wordLimit={20}
-                  className="font-xsss lh-20"
-                />
+                {expandPost
+                  ? experience.description
+                  : experience.description.length > 20
+                    ? experience.description.substring(0, 20) + "..."
+                    : experience.description}
+                {experience.description.length > 20 && !expandPost ? (
+                  <span
+                    className={"cursor-pointer text-blue"}
+                    onClick={() => setExpandPost((open) => !open)}
+                  >
+                    See more
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             {index < experiencesToShow.length - 1 && (
@@ -309,9 +329,11 @@ export const Experience = ({
           dataBrokerProfile={dataBrokerProfile}
           formDt={formDt}
           setCompany={setCompany}
+          idUser={id}
           // editId={editId}``
         />
       )}
+      {isLoading && <WaveLoader />}
     </>
   );
 };

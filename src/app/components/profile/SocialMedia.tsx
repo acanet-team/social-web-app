@@ -56,12 +56,6 @@ const SocialMedia = ({
           >
             {role === true && (
               <>
-                <h1>
-                  <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]}`}
-                    onClick={() => handleOpenModal()}
-                  ></i>
-                </h1>
                 <h4>
                   <i
                     className={`bi bi-pencil-fill ${styles["icon-profile"]}`}

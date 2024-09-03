@@ -27,7 +27,7 @@
   color: #111 !important;
 }
 
-.pagination li.selected,
+.pagination :global(li.selected),
 .pagination li:hover,
 .pagination li:active,
 .pagination li:focus {
@@ -37,7 +37,7 @@
 }
 
 :global(.theme-dark) {
-  .pagination li.selected,
+  .pagination :global(li.selected),
   .pagination li:hover,
   .pagination li:active,
   .pagination li:focus {

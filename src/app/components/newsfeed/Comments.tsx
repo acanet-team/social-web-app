@@ -1,14 +1,13 @@
-"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/comments.module.scss";
 import CommentView from "./CommentView";
-import useAuthStore from "@/store/auth";
 import Image from "next/image";
 import WaveLoader from "../WaveLoader";
 import { postComment, getComments, deleteComment } from "@/api/newsfeed";
 import AlertModal from "../AlertModal";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 /* eslint-disable react/display-name */
 export const Comments = (props: {
@@ -30,6 +29,7 @@ export const Comments = (props: {
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
+  const tModal = useTranslations("Modal");
 
   useEffect(() => {
     if (session) {
@@ -176,7 +176,6 @@ export const Comments = (props: {
     } catch (err) {
       console.log(err);
     }
-    // Delete comment from DOM
   }, [commentId]);
 
   return (
@@ -244,7 +243,7 @@ export const Comments = (props: {
       {/* Delete modal */}
       {showModal && (
         <AlertModal
-          message="Are you sure you want to proceed?"
+          message={tModal("modal_comment_delete")}
           onCancel={handleCancel}
           onOk={onProceedDelete}
         />

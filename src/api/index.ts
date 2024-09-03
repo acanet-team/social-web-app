@@ -1,7 +1,6 @@
 import { setCookie } from "nookies";
 import { BaseApiResponse } from "./model";
 import { v4 as uuidV4 } from "uuid";
-
 export interface IHttpOptions {
   url: string;
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -23,7 +22,6 @@ export interface IHttpOptions {
   rawError?: boolean;
   autoQuery?: boolean;
 }
-
 class HttpClient {
   accessToken = "";
   setAuthorization = (token: string) => {

@@ -7,6 +7,7 @@ import { ModalLicense } from "./ModalLicense";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { deleteLicense } from "@/api/profile";
+import WaveLoader from "../WaveLoader";
 
 const License = ({
   dataBrokerProfile,
@@ -20,6 +21,7 @@ const License = ({
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [licenses, setLicenses] = useState(dataBrokerProfile.licenses ?? []);
   const [formDt, setFormDt] = useState<FormDtLicense>({
     id: "",
@@ -55,6 +57,7 @@ const License = ({
   }, []);
 
   const delCertifications = useCallback(async (id: string) => {
+    setIsLoading(true);
     try {
       if (id) {
         await deleteLicense(id);
@@ -62,6 +65,8 @@ const License = ({
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -73,6 +78,7 @@ const License = ({
           background: "#FFFFFF",
           borderRadius: "15px",
           marginTop: "40px",
+          marginBottom: "100px",
         }}
       >
         <div
@@ -231,6 +237,7 @@ const License = ({
           setLicenses={setLicenses}
         />
       )}
+      {isLoading && <WaveLoader />}
     </>
   );
 };

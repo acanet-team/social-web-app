@@ -1,12 +1,14 @@
-import React, { useEffect, useState, type FC } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { Select } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
-import type { BrokerProfile } from "@/api/profile/model";
-import { throwToast } from "@/utils/throw-toast";
 import { putSocialMedia } from "@/api/profile";
+import { throwToast } from "@/utils/throw-toast";
+import type { BrokerProfile } from "@/api/profile/model";
+import { removePropertiesEmpty } from "@/utils/Helpers";
+import { v4 as uuidV4 } from "uuid";
+import WaveLoader from "../WaveLoader";
+
 interface ModalSocialProp {
   title: string;
   show: boolean;
@@ -15,17 +17,12 @@ interface ModalSocialProp {
   dataBrokerProfile: BrokerProfile;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
-// interface ModalSocial {
-//   name: string;
-//   mediaUrl: string;
-// }
+
 export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
   handleClose,
-  handleShow,
   show,
   title,
   dataBrokerProfile,
-  setShow,
 }) => {
   const socialNames = [
     "facebook",
@@ -37,7 +34,7 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
     "skype",
     "google",
   ];
-  const [social, setSocial] = useState<Record<string, string>[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
@@ -47,30 +44,42 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
       setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
     };
 
-    if (window) {
-      window.addEventListener("resize", handleResize);
-    }
+    window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  const [social, setSocial] = useState<
+    Record<string, { url: string; id: string }>
+  >(
+    socialNames.reduce(
+      (acc, name) => ({ ...acc, [name]: { url: "", id: uuidV4() } }),
+      {},
+    ),
+  );
 
-  // const inputChanged = (name: string, value: string) => {
-  //   // setSocial((prev) => [
-  //   //   ...new Set([...prev, { name: name, mediaUrl: value }]),
-  //   // ]);
-  //   setSocial(prev => [...prev, {`${name}`: value}]);
-  // };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setSocial((prevSocial) => ({
+        ...prevSocial,
+        [name]: { url: value, id: uuidV4() },
+      }));
+    },
+    [],
+  );
 
-  // const submitSocial = () => {
-  //   const hasUrlSocialArr: any = [];
-  //   console.log("social", social);
-  //   social.forEach((s) => {
-  //     if (s.mediaUrl) {
-  //       hasUrlSocialArr.push(s);
-  //     }
-  //   });
-  //   // console.log('yyyy', hasUrlSocialArr);
-  // };
+  const submitSocial = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await putSocialMedia(removePropertiesEmpty(social));
+      throwToast("Social media updated successfully", "success");
+      handleClose();
+    } catch (error) {
+      throwToast("An error occurred while updating social media", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <>
@@ -99,8 +108,8 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
             <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-              {socialNames.map((name, index) => (
-                <div key={index} style={{ flexBasis: "calc(50% - 20px)" }}>
+              {socialNames.map((name) => (
+                <div key={name} style={{ flexBasis: "calc(50% - 20px)" }}>
                   <div style={{ width: "100%" }}>
                     <p className="m-0 py-1 fw-600 font-xss">{name}</p>
                     <input
@@ -112,11 +121,9 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
                         height: "32px",
                       }}
                       name={name}
-                      // value={}
-                      // onChange={(e) => {
-                      //   inputChanged(name, e.target.value);
-                      // }}
                       placeholder=""
+                      value={social[name]?.url}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -127,15 +134,14 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
         <Modal.Footer className={styles["modal-footer"]}>
           <Button
             variant="primary"
-            // onClick={() => {
-            //   submitSocial();
-            // }}
+            onClick={submitSocial}
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
             Save
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <WaveLoader />}
     </>
   );
 };

@@ -93,7 +93,7 @@ const GroupProfile = (props: {
     setIsEditing(groupId);
   };
   return (
-    <>
+    <div style={{ marginTop: "40px", marginBottom: "100px" }}>
       {!isLoading && communityArr.length === 0 && (
         <div className="text-center mt-5">No community found.</div>
       )}
@@ -119,7 +119,7 @@ const GroupProfile = (props: {
           </div>
         ))}
       {isLoading && <DotWaveLoader />}
-    </>
+    </div>
   );
 };
 

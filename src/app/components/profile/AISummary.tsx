@@ -23,8 +23,12 @@ const AiSummary = ({
     useState<boolean>(false);
   const [showAllServiceOffer, setShowAllServiceOffer] =
     useState<boolean>(false);
-  const interestTopics = dataBrokerProfile.interestTopics ?? [];
-  const skills = dataBrokerProfile.skills ?? [];
+  const [interestTopics, setInterestTopics] = useState(
+    dataBrokerProfile.interestTopics ?? [],
+  );
+  const [skills, setSkills] = useState(dataBrokerProfile.skills ?? []);
+  const [location, setLocation] = useState(dataBrokerProfile.location || "");
+  const [expandPost, setExpandPost] = useState<boolean>(false);
 
   const interestToShow = showAllInterestTopics
     ? interestTopics
@@ -69,12 +73,36 @@ const AiSummary = ({
           }}
         />
       </div>
-      <p className="m-0 fw-400 font-xsss">
-        Diep Kieu Trang is a seasoned tech entrepreneur and executive with
-        extensive experience leading major technology companies. She is known
-        for her expertise in business strategy, leadership, and fostering
-        innovation.{" "}
-      </p>
+      {dataBrokerProfile.summary ? (
+        <>
+          {expandPost
+            ? dataBrokerProfile.summary
+            : dataBrokerProfile.summary.length > 20
+              ? dataBrokerProfile.summary.substring(0, 20) + "..."
+              : dataBrokerProfile.summary}
+          {dataBrokerProfile.summary.length > 20 && !expandPost ? (
+            <span
+              className={"cursor-pointer text-blue"}
+              onClick={() => setExpandPost((open) => !open)}
+            >
+              See more
+            </span>
+          ) : (
+            ""
+          )}
+        </>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "144px",
+          }}
+        >
+          <p className="m-0 fw-400 font-xsss">New report is coming soon</p>
+        </div>
+      )}
       <hr
         style={{
           border: "none",
@@ -139,9 +167,7 @@ const AiSummary = ({
 
       <div className="mb-2">
         <p className="m-0 fw-700 font-xssss">{t("location")}</p>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">
-          {dataBrokerProfile.location}
-        </p>
+        <p className="m-0 fw-500 font-xssss text-gray-follow">{location}</p>
       </div>
       <div className="">
         <p className="m-0 fw-700 font-xssss">{t("interestTopic")}</p>
@@ -165,6 +191,9 @@ const AiSummary = ({
           dataBrokerProfile={dataBrokerProfile}
           listInterestTopics={listInterestTopic}
           show={show}
+          setLocation={setLocation}
+          setSkills={setSkills}
+          setInterestTopics={setInterestTopics}
         />
       )}
     </div>

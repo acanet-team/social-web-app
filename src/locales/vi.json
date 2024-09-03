@@ -102,19 +102,34 @@
     "meta_title": "Thông tin người dùng"
   },
   "Post": {
-    "Explore_More": "Tìm hiểu thêm"
+    "Explore_More": "Khám phá",
+    "No_Posts_Found": "Không tìm thấy bài viết."
   },
   "CreateProfile": {
-    "error_invalid_email": "Địa chỉ email không hợp lệ",
-    "error_missing_email": "Vui lòng điền vào một email hợp lệ.",
-    "error_user_type": "Vui lòng chọn loại người dùng.",
-    "error_location": "Vui lòng chọn một địa điểm.",
-    "error_invalid_nickname": "Tên biệt hiệu phải có từ 8 đến 20 ký tự.",
-    "error_missing_nickname": "Vui lòng điền một biệt hiệu hợp lệ."
+    "create_profile_title": "Chi tiết tài khoản",
+    "create_profile_desc": "Vui lòng điền một số thông tin cơ bản về bạn.",
+    "region": "Địa điểm",
+    "user_type": "Vai trò",
+    "broker": "Tôi là nhà môi giới",
+    "investor": "Tôi là nhà đầu tư",
+    "error_location": "Vui lòng chọn địa điểm.",
+    "error_user_type": "VVui lòng chọn vai trò người dùng.",
+    "error_missing_nickname": "Please fill out a valid nickname.",
+    "error_invalid_nickname": "Biệt danh phải có từ 8 đến 20 ký tự.",
+    "error_missing_email": "Vui lòng điền một email hợp lệ.",
+    "error_invalid_email": "Địa chỉ email không hợp lệ."
   },
   "NavBar": {
-    "newsfeed": "Nguồn cấp tin tức",
-    "my profile": "Hồ sơ của tôi"
+    "my profile": "Hồ sơ của tôi",
+    "newsfeed": "Tin tức",
+    "brokers": "Nhà môi giới",
+    "courses": "Khoá học",
+    "community": "Cộng đồng",
+    "messages": "Tin nhắn",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất",
+    "chat": "Trò chuyện",
+    "account": "Tài khoản"
   },
   "MyProfile": {
     "follow": "Theo dõi",
@@ -129,5 +144,62 @@
     "servicesOffer": "Dịch vụ cung cấp",
     "location": "Vị trí",
     "interestTopic": "Chủ đề quan tâm"
+  },
+  "Community": {
+    "community": "Cộng đồng",
+    "popular_community": "Phổ biến",
+    "following_community": "Đang theo dõi",
+    "owned_community": "Cộng đồng của bạn",
+    "avatar_image": "Ảnh đại diện",
+    "cover_image": "Ảnh bìa",
+    "group_name": "Tên cộng đồng",
+    "group_desc": "Mô tả cộng đồng",
+    "group_overview": "Tổng quan cộng đồng",
+    "group_type": "Loại cộng đồng",
+    "joining_fee": "Phí tham gia",
+    "free": "Cộng đồng miễn phí",
+    "paid": "Cộng đồng trả phí",
+    "error_missing_community_name": "Vui lòng điền tên cộng đồng.",
+    "error_invalid_community_name": "Tên phải có từ 4 đến 40 ký tự.",
+    "error_missing_description": "Vui lòng thêm mô tả cộng đồng.",
+    "error_invalid_description": "Mô tả phải có từ 4 đến 350 ký tự.",
+    "error_missing_fee": "Vui lòng điền phí tham gia.",
+    "error_joining_fee": "Phí tham gia phải lớn hơn 0.",
+    "joined": "Đã tham gia",
+    "pending": "Chờ duyệt",
+    "join": "Tham gia",
+    "approve_member_notification": "Thành viên được thêm vào cộng đồng.",
+    "delete_member_notification": "Xóa thành viên thành công.",
+    "invite new user": "Mời thành viên mới",
+    "table_name": "Tên",
+    "table_joined": "Tham gia",
+    "table_phone": "Điện thoại",
+    "table_email": "Email",
+    "table_action": "Hành động",
+    "about": "Thông tin",
+    "private": "Riêng tư",
+    "owner": "Chủ cộng đồng"
+  },
+  "FeedTabs": {
+    "for_you": "Dành cho bạn",
+    "suggestion": "Đang theo dõi"
+  },
+  "CommunityTabs": {
+    "posts": "Bài viết",
+    "members": "Thành viên",
+    "requests": "Duyệt thành viên"
+  },
+  "Modal": {
+    "modal_question": "Bạn có muốn tiếp tục?",
+    "modal_comment_delete": "Xác nhận xoá bình luận?",
+    "modal_post_delete": "Xác nhận xoá bài viết?",
+    "modal_member_delete": "Xác nhận xoá thành viên?",
+    "modal_member_reject": "Xác nhận từ chối thành viên?",
+    "modal_yes": "Tiếp tục",
+    "modal_no": "Không"
+  },
+  "Form": {
+    "search": "Tìm kiếm",
+    "add_new": "Thêm mới"
   }
 }

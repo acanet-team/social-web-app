@@ -153,7 +153,7 @@ export interface InterestTopics {
 
 export interface FormDtCompany {
   id?: string;
-  logo: File | string;
+  logo: string;
   name: string;
   startDate: string | Date;
   endDate: string | Date;
@@ -167,7 +167,7 @@ export interface FormDtCompany {
 export interface FormDtSchool {
   id?: string;
   name: string;
-  logo: File | string;
+  logo: string;
   startDate: string | Date;
   endDate: string | Date;
   isGraduated: boolean;

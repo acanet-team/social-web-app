@@ -4,13 +4,12 @@ import React, {
   useState,
   type SetStateAction,
 } from "react";
-import { TruncateText } from "../TruncateText";
 import styles from "@/styles/modules/profile.module.scss";
-import Image from "next/image";
 import type { BrokerProfile } from "@/api/profile/model";
 import { useTranslations } from "next-intl";
 import { throwToast } from "@/utils/throw-toast";
-import { updateNewAbout } from "@/api/profile";
+import { updateProfile } from "@/api/profile";
+import WaveLoader from "../WaveLoader";
 
 export const About = ({
   dataBrokerProfile,
@@ -23,13 +22,15 @@ export const About = ({
   const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
   const [aboutText, setAboutText] = useState("");
+  const [expandPost, setExpandPost] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setAboutText(dataBrokerProfile.about);
   }, []);
 
   const handleOpen = () => {
-    setShow(true);
+    setShow(!show);
   };
 
   const submitAbout = async () => {
@@ -37,13 +38,22 @@ export const About = ({
       throwToast("Please enter some text for your about", "error");
       return;
     }
+    setIsLoading(true);
     try {
-      const newAbout = await updateNewAbout(aboutText);
+      const newAboutFormDt = new FormData();
+      if (aboutText) {
+        const brokerProfies = {
+          about: aboutText,
+        };
+        newAboutFormDt.append("brokerProfile", JSON.stringify(brokerProfies));
+      }
+      await updateProfile(newAboutFormDt);
       setShow(false);
       throwToast("About updated successfully", "success");
-      // setAboutText("");
     } catch (error) {
       throwToast("Error updating", "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,11 +89,23 @@ export const About = ({
         </div>
         <div>
           {!show ? (
-            <TruncateText
-              content={aboutText}
-              wordLimit={150}
-              className="m-0 font-xsss fw-400 lh-20"
-            />
+            <>
+              {expandPost
+                ? aboutText
+                : aboutText.length > 150
+                  ? aboutText.substring(0, 150) + "..."
+                  : aboutText}
+              {aboutText.length > 150 && !expandPost ? (
+                <span
+                  className={"cursor-pointer text-blue"}
+                  onClick={() => setExpandPost((open) => !open)}
+                >
+                  See more
+                </span>
+              ) : (
+                ""
+              )}
+            </>
           ) : (
             <div>
               <div
@@ -130,6 +152,7 @@ export const About = ({
           )}
         </div>
       </div>
+      {isLoading && <WaveLoader />}
     </>
   );
 };
