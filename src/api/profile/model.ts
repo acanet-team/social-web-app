@@ -151,6 +151,10 @@ export interface InterestTopics {
   topicName: string;
 }
 
+export interface SSI {
+  company: Company;
+}
+
 export interface FormDtCompany {
   id?: string;
   logo: string;

@@ -19,6 +19,7 @@ const GroupProfile = (props: {
     props.communities,
   );
   const [take, setTake] = useState<number>(props.take);
+  const [isBroker, setIsBroker] = useState<boolean>(props.isBroker);
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [type, setType] = useState<string>(props.communityType);
@@ -33,7 +34,7 @@ const GroupProfile = (props: {
         page,
         take,
         type,
-        brokerId: idBroker,
+        brokerId: isBroker ? idBroker : "",
         search: "",
         feeType: "",
       });
@@ -93,31 +94,33 @@ const GroupProfile = (props: {
     setIsEditing(groupId);
   };
   return (
-    <div style={{ marginTop: "40px", marginBottom: "100px" }}>
+    <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
       {!isLoading && communityArr.length === 0 && (
         <div className="text-center mt-5">No community found.</div>
       )}
-      {communityArr.length > 0 &&
-        communityArr.map((group, index) => (
-          <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
-            <CommunityCard
-              groupId={group.id}
-              name={group.name}
-              coverImg={group.coverImage?.path}
-              avatar={group.avatar?.path}
-              firstName={group.owner?.firstName}
-              lastName={group.owner?.lastName}
-              nickName={group.owner?.nickName}
-              membersCount={group.membersCount}
-              communityStatus={group.communityStatus}
-              fee={group.fee}
-              description={group.description}
-              isBroker={props.isBroker}
-              communityType={props.communityType}
-              onEditGroupHandler={onEditGroupHandler}
-            />
-          </div>
-        ))}
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {communityArr.length > 0 &&
+          communityArr.map((group, index) => (
+            <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
+              <CommunityCard
+                groupId={props.isBroker ? group.id : ""}
+                name={group.name}
+                coverImg={group.coverImage?.path}
+                avatar={group.avatar?.path}
+                firstName={group.owner?.firstName}
+                lastName={group.owner?.lastName}
+                nickName={group.owner?.nickName}
+                membersCount={group.membersCount}
+                communityStatus={group.communityStatus}
+                fee={group.fee}
+                description={group.description}
+                isBroker={props.isBroker}
+                communityType={props.communityType}
+                onEditGroupHandler={onEditGroupHandler}
+              />
+            </div>
+          ))}
+      </div>
       {isLoading && <DotWaveLoader />}
     </div>
   );

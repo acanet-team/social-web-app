@@ -3,6 +3,7 @@ import httpClient from "../index";
 import type {
   AllFindResponse,
   AllProfileResponse,
+  BaseArrayResponse,
   BaseResponse,
   educationParams,
   experienceParams,
@@ -18,6 +19,7 @@ import type {
   ICommunity,
 } from "../community/model";
 import { removePropertiesEmpty } from "@/utils/Helpers";
+import type { FormDtCompany, FormDtLicense, FormDtSchool } from "./model";
 
 export const getProfile = (id: string) => {
   return httpClient.get<AllProfileResponse>(`/v1/user-profile/user/${id}`);
@@ -63,7 +65,7 @@ export const getFind = (type: string, keyword: string) => {
 };
 
 export const createNewExperiences = (experiences: experienceParams) => {
-  return httpClient.post<experienceParams, BaseResponse<T>>(
+  return httpClient.post<experienceParams, BaseArrayResponse<FormDtCompany>>(
     `/v1/user-profile/add-experience`,
     experiences,
   );
@@ -81,7 +83,7 @@ export const deleteCompany = (id: string) => {
 };
 
 export const createNewSchool = (school: educationParams) => {
-  return httpClient.post<educationParams, BaseResponse<T>>(
+  return httpClient.post<educationParams, BaseArrayResponse<FormDtSchool>>(
     `/v1/user-profile/add-education`,
     school,
   );
@@ -96,7 +98,7 @@ export const deleteEducation = (id: string) => {
   return httpClient.delete(`/v1/user-profile/delete-education/${id}`);
 };
 export const createNewLicense = (license: licenseParams) => {
-  return httpClient.post<licenseParams, BaseResponse<T>>(
+  return httpClient.post<licenseParams, BaseArrayResponse<FormDtLicense>>(
     `/v1/user-profile/add-license`,
     license,
   );

@@ -26,7 +26,9 @@ const AiSummary = ({
   const [interestTopics, setInterestTopics] = useState(
     dataBrokerProfile.interestTopics ?? [],
   );
+  // console.log("111111111",interestTopics)
   const [skills, setSkills] = useState(dataBrokerProfile.skills ?? []);
+  // console.log("2222222",skills)
   const [location, setLocation] = useState(dataBrokerProfile.location || "");
   const [expandPost, setExpandPost] = useState<boolean>(false);
 
@@ -50,7 +52,7 @@ const AiSummary = ({
         background: "#FFFFFF",
         paddingLeft: "16px",
         paddingRight: "16px",
-        borderRadius: "15px",
+        borderRadius: "5px",
         marginTop: "40px",
       }}
     >
@@ -131,9 +133,6 @@ const AiSummary = ({
           >
             {role === true && (
               <>
-                {/* <h1>
-                  <i className={`bi bi-plus-lg ${styles["icon-profile"]}`}></i>
-                </h1> */}
                 <h4>
                   <i
                     className={`bi bi-pencil-fill ${styles["icon-profile"]}`}

@@ -81,7 +81,7 @@ const PostProfile = (props: {
     }
   }, []);
   return (
-    <div style={{ marginTop: "40px" }}>
+    <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
       {!isLoading && myPosts.length === 0 && (
         <div className="mt-5 text-center">No posts found.</div>
       )}

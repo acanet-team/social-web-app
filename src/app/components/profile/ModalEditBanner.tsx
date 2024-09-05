@@ -1,25 +1,27 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Box from "@mui/material/Box";
-import Image from "next/image";
 import style from "@/styles/modules/profile.module.scss";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import ImageUpload from "@/components/ImageUpload";
-import { updateProfile } from "@/api/profile";
+import { getProfile, updateProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import WaveLoader from "../WaveLoader";
+import type { BrokerProfile } from "@/api/profile/model";
+import { S3_GROUP_AVATAR, S3_GROUP_BANNER } from "@/utils/const";
 
 function ModalEditBanner(props: {
+  id: string;
   title: string;
   show: boolean;
-  setAvatar: React.Dispatch<React.SetStateAction<string>>;
-  setCoverImg: React.Dispatch<React.SetStateAction<string>>;
+  dataBrokerProfile: BrokerProfile;
+  avatar: string;
+  coverImg: string;
   handleClose: () => void;
-  // handleShow: () => void;
 }) {
-  const { title, show, handleClose, setAvatar, setCoverImg } = props;
+  const { title, show, handleClose, id, avatar, coverImg } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isEditing, setIsEditing] = useState(true);
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
@@ -39,20 +41,22 @@ function ModalEditBanner(props: {
     null,
   );
 
-  const submitBanner = useCallback(async () => {
+  const submitBanner = async () => {
     setIsLoading(true);
     try {
       const formDt = new FormData();
       if (uploadedCoverImage) {
+        console.log("Uploading cover image", uploadedCoverImage);
         formDt.append("coverImage", uploadedCoverImage);
       }
       if (uploadedAvatarImage) {
+        console.log("Uploading avatar image", uploadedAvatarImage);
         formDt.append("avatar", uploadedAvatarImage);
       }
       const dataUpdate = await updateProfile(formDt);
       console.log("ahsfa", dataUpdate);
-      // setAvatar(dataUpdate.avatar)
-      // setCoverImg(dataUpdate.coverImage)
+      // window.location.reload();
+      // await getProfile(id as string);
       handleClose();
       throwToast("About updated successfully", "success");
     } catch (error) {
@@ -60,7 +64,7 @@ function ModalEditBanner(props: {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
   return (
     <>
@@ -87,9 +91,6 @@ function ModalEditBanner(props: {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
-          {/* <ImageUpload folderUpload={""} onChange={function (file: File): void {
-          throw new Error("Function not implemented.");
-        } } /> */}
           <div style={{ overflowY: "auto", maxHeight: "100%" }}>
             <div className="profile-picture">
               <div
@@ -104,11 +105,11 @@ function ModalEditBanner(props: {
 
               <div className={style["style-img"]}>
                 <ImageUpload
-                  folderUpload={""}
+                  folderUpload={S3_GROUP_AVATAR}
                   onChange={(e) => setUploadedAvatarImage(e)}
-                  aspect={1}
+                  aspect={119 / 119}
                   uploadAvatar={true}
-                  previewImage={"avatar"}
+                  previewImage={avatar}
                 />
               </div>
             </div>
@@ -125,10 +126,10 @@ function ModalEditBanner(props: {
 
               <div className={style["style-img"]}>
                 <ImageUpload
-                  previewImage={"coverImg"}
+                  previewImage={coverImg}
                   uploadAvatar={false}
-                  folderUpload={""}
-                  aspect={960 / 250}
+                  folderUpload={S3_GROUP_BANNER}
+                  aspect={1075 / 250}
                   onChange={(e) => setUploadedCoverImage(e)}
                 />
               </div>

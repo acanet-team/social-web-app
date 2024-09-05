@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "@/styles/modules/profile.module.scss";
-import Image from "next/image";
 import { ModalSocialMedia } from "./ModalSocialMedia";
 import type { BrokerProfile } from "@/api/profile/model";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { v4 as uuidV4 } from "uuid";
 
 const SocialMedia = ({
   dataBrokerProfile,
@@ -13,9 +13,34 @@ const SocialMedia = ({
   dataBrokerProfile: BrokerProfile;
   role: boolean;
 }) => {
+  const socialNames = [
+    "facebook",
+    "twitter",
+    "youtube",
+    "github",
+    "linkedin",
+    "instagram",
+    "skype",
+    "google",
+  ];
   const socialMedia = dataBrokerProfile.socialMedia ?? [];
   const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
+  const [social, setSocial] = useState<
+    Record<string, { url: string; id: string }>
+  >(
+    socialNames.reduce(
+      (acc, name) => {
+        const existingMedia = socialMedia.find((item) => item.name === name);
+        acc[name] = {
+          url: existingMedia?.mediaUrl || "",
+          id: existingMedia?.id || uuidV4(),
+        };
+        return acc;
+      },
+      {} as Record<string, { url: string; id: string }>,
+    ),
+  );
 
   const handleOpenModal = useCallback(() => {
     setShow(true);
@@ -24,6 +49,18 @@ const SocialMedia = ({
   const handleCancel = useCallback(() => {
     setShow(false);
   }, []);
+
+  const iconMap: Record<string, string> = {
+    facebook: "bi-facebook",
+    twitter: "bi-twitter-x",
+    linkedIn: "bi-linkedin",
+    instagram: "bi-instagram",
+    github: "bi-github",
+    google: "bi-google",
+    skype: "bi-skype",
+    youtube: "bi-youtube",
+  };
+
   return (
     <>
       <div
@@ -45,57 +82,35 @@ const SocialMedia = ({
           }}
         >
           <p className="m-0 mb-1 fw-700 font-xssss">{t("socialMedia")}</p>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "4px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {role === true && (
-              <>
-                <h4>
-                  <i
-                    className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                    onClick={() => handleOpenModal()}
-                  ></i>
-                </h4>
-              </>
-            )}
-          </div>
+          {role && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "4px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h4>
+                <i
+                  className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                  onClick={handleOpenModal}
+                ></i>
+              </h4>
+            </div>
+          )}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {socialMedia.map((socialMedia) => (
-            <div key={socialMedia.id}>
-              {socialMedia.mediaUrl && (
-                <>
-                  <Link href={socialMedia.mediaUrl}>
-                    {socialMedia.name === "Facebook" ? (
-                      <i className="bi bi-facebook"></i>
-                    ) : socialMedia.name === "Twitter" ? (
-                      <i className="bi bi-twitter-x"></i>
-                    ) : socialMedia.name === "LinkedIn" ? (
-                      <i className="bi bi-linkedin"></i>
-                    ) : socialMedia.name === "Instagram" ? (
-                      <i className="bi bi-instagram"></i>
-                    ) : socialMedia.name === "Github" ? (
-                      <i className="bi bi-github"></i>
-                    ) : socialMedia.name === "Google" ? (
-                      <i className="bi bi-google"></i>
-                    ) : socialMedia.name === "Skype" ? (
-                      <i className="bi bi-skype"></i>
-                    ) : socialMedia.name === "Youtube" ? (
-                      <i className="bi bi-youtube"></i>
-                    ) : (
-                      ""
-                    )}
-                  </Link>
-                </>
-              )}
-            </div>
-          ))}
+          {socialMedia.map((item) =>
+            item.mediaUrl ? (
+              <div key={item.id}>
+                <Link href={item.mediaUrl}>
+                  <i className={`bi ${iconMap[item.name] || ""}`}></i>
+                </Link>
+              </div>
+            ) : null,
+          )}
         </div>
       </div>
 
@@ -103,10 +118,10 @@ const SocialMedia = ({
         <ModalSocialMedia
           dataBrokerProfile={dataBrokerProfile}
           handleClose={handleCancel}
-          handleShow={handleOpenModal}
-          title="Education"
+          title="Edit Social Media"
           show={show}
-          setShow={setShow}
+          social={social}
+          setSocial={setSocial}
         />
       )}
     </>

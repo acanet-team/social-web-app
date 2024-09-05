@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import WaveLoader from "../WaveLoader";
+import type { BaseArrayResponse, BaseResponse } from "@/api/model";
 
 interface ModalEducationProp {
   title: string;
@@ -38,6 +39,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
 }) => {
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [formData, setFormData] = useState(formDt);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [education, setEducation] = useState<{ name: string; logo: string }[]>(
     [],
   );
@@ -57,6 +59,15 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.name) newErrors.name = "Education name is required";
+    if (!formData.degree) newErrors.degree = "Degree is required";
+    if (!formData.startDate) newErrors.startDate = "Start Date is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -84,6 +95,10 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
         ...formData,
         degree: event.target.value,
       });
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        degree: "",
+      }));
     },
     [formData],
   );
@@ -103,24 +118,32 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
   const submitAddSchool = useCallback(async () => {
     setIsLoading(true);
     try {
-      const school = {
-        name: formData.name,
-        logo: formData.logo,
-        startDate: new Date(formData.startDate),
-        endDate: formData.isGraduated
-          ? new Date("")
-          : new Date(formData.endDate),
-        isGraduated: formData.isGraduated,
-        major: formData.major,
-        degree: formData.degree,
-        description: formData.description,
-      };
-      const newSchool = {
-        education: [school],
-      };
-      await createNewSchool(newSchool);
-      setSchool((prev) => [school, ...prev]);
-      handleClose();
+      if (validateForm()) {
+        const school = {
+          name: formData.name,
+          logo: formData.logo,
+          startDate: new Date(formData.startDate),
+          endDate: formData.isGraduated
+            ? new Date("")
+            : new Date(formData.endDate),
+          isGraduated: formData.isGraduated,
+          major: formData.major,
+          degree: formData.degree,
+          description: formData.description,
+        };
+        const newSchool = {
+          education: [school],
+        };
+        const res: BaseArrayResponse<FormDtSchool> =
+          await createNewSchool(newSchool);
+        if (res.data) {
+          setSchool((prev) => {
+            const newEducation: FormDtSchool = res.data[0] as FormDtSchool;
+            return [newEducation, ...prev];
+          });
+        }
+        handleClose();
+      }
     } catch (error) {
       throwToast("Error creating education", "error");
     } finally {
@@ -131,27 +154,29 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
   const submitEditSchool = useCallback(async () => {
     setIsLoading(true);
     try {
-      const school = {
-        id: formData.id,
-        name: formData.name,
-        logo: formData.logo,
-        startDate: new Date(formData.startDate),
-        endDate: formData.isGraduated
-          ? new Date("")
-          : new Date(formData.endDate),
-        isGraduated: formData.isGraduated,
-        major: formData.major,
-        degree: formData.degree,
-        description: formData.description,
-      };
-      const newSchool = {
-        education: [school],
-      };
-      await updateSchool(newSchool);
-      setSchool((prev) =>
-        prev.map((edu) => (edu.id === formDt.id ? school : edu)),
-      );
-      handleClose();
+      if (validateForm()) {
+        const school = {
+          id: formData.id,
+          name: formData.name,
+          logo: formData.logo,
+          startDate: new Date(formData.startDate),
+          endDate: formData.isGraduated
+            ? new Date("")
+            : new Date(formData.endDate),
+          isGraduated: formData.isGraduated,
+          major: formData.major,
+          degree: formData.degree,
+          description: formData.description,
+        };
+        const newSchool = {
+          education: [school],
+        };
+        await updateSchool(newSchool);
+        setSchool((prev) =>
+          prev.map((edu) => (edu.id === formDt.id ? school : edu)),
+        );
+        handleClose();
+      }
     } catch (error) {
       throwToast("Error creating education", "error");
     } finally {
@@ -187,7 +212,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
           <form className="p-1">
             <p className="m-0 py-1 fw-600 font-xss">Education Name</p>
             <Autocomplete
-              // value={formData.name}
+              inputValue={isEditing ? formData.name : undefined}
               disablePortal
               options={education}
               className="w-100"
@@ -238,14 +263,20 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 <>
                   <TextField
                     {...params}
-                    label="Enter the education name"
+                    label="Enter the school name"
+                    value={formData.name}
                     onChange={(e) => {
                       findEducation(e.target.value);
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        name: "",
+                      }));
                     }}
                   />
                 </>
               )}
             />
+            {errors.name && <p className="text-red font-xsss">{errors.name}</p>}
 
             <div style={{ width: "100%" }}>
               <div>
@@ -275,6 +306,9 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   <MenuItem value="PHD">PHD</MenuItem>
                   <MenuItem value="OTHER">OTHER</MenuItem>
                 </Select>
+                {errors.degree && (
+                  <p className="text-red font-xsss">{errors.degree}</p>
+                )}
               </div>
               <div>
                 <p className="m-0 py-1 fw-600 font-xss">Major</p>
@@ -346,14 +380,25 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.startDate)}
-                  onChange={(date) =>
+                  onChange={(date) => {
+                    const formattedDate = date ? dayjs(date).toISOString() : "";
                     setFormData({
                       ...formData,
-                      startDate: date ? dayjs(date).toISOString() : "",
-                    })
-                  }
-                  views={["day", "month", "year"]}
+                      startDate: formattedDate,
+                    });
+
+                    if (formattedDate) {
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        startDate: "",
+                      }));
+                    }
+                  }}
+                  views={["year"]}
                 />
+                {errors.startDate && (
+                  <p className="text-red font-xsss">{errors.startDate}</p>
+                )}
               </div>
               {!formData.isGraduated && (
                 <div style={{ width: "48.5%" }}>
@@ -367,7 +412,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                         endDate: date ? dayjs(date).format("DD-MM-YYYY") : "",
                       })
                     }
-                    views={["day", "month", "year"]}
+                    views={["year"]}
                   />
                 </div>
               )}

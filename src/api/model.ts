@@ -2,7 +2,7 @@ import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 import { IHttpOptions } from "./index";
 import { IUser } from "./onboard/model";
 import type { IBrokers } from "./newsfeed/model";
-import type { BrokerProfile, User, UserProfile } from "./profile/model";
+import type { BrokerProfile, SSI, User, UserProfile } from "./profile/model";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?
@@ -64,6 +64,12 @@ export type BaseResponse<T> = {
   message: string;
   data: T;
 };
+export type BaseArrayResponse<T> = {
+  status: number;
+  success?: boolean;
+  message: string;
+  data: T[];
+};
 
 export type BaseApiResponse<T> = Promise<T>;
 
@@ -109,6 +115,7 @@ export type AllProfileResponse = {
     brokerProfile: BrokerProfile;
     followersCount: number;
     followingsCount: number;
+    ssi?: SSI[];
     // rating: string;
     // coursesEnrolledCount: string;
     // followed: boolean;

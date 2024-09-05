@@ -14,7 +14,6 @@ import SocialMedia from "@/app/components/profile/SocialMedia";
 import ModalEditBanner from "@/app/components/profile/ModalEditBanner";
 import { useTranslations } from "next-intl";
 import { createGetAllTopicsRequest } from "@/api/onboard";
-import Posts from "@/app/components/newsfeed/Posts";
 import PostProfile from "@/app/components/profile/PostProfile";
 import GroupProfile from "@/app/components/profile/GroupProfile";
 
@@ -33,9 +32,9 @@ export default function Profile({
   dataMyGroups,
   curPageGroup,
   allPageGroup,
+  ssi,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
-  console.log("ahha", dataBrokerProfile);
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -101,7 +100,7 @@ export default function Profile({
           paddingLeft: "16px",
           paddingRight: "16px",
           paddingTop: "16px",
-          borderRadius: "15px",
+          borderRadius: "5px",
         }}
       >
         <div
@@ -119,8 +118,8 @@ export default function Profile({
             className="w__100"
             style={{
               objectFit: "cover",
-              borderTopRightRadius: "15px",
-              borderTopLeftRadius: "15px",
+              borderTopRightRadius: "5px",
+              borderTopLeftRadius: "5px",
             }}
           />
           <Image
@@ -316,39 +315,55 @@ export default function Profile({
       {curTab === TabPnum.About && (
         <div className="row">
           <div className="col-md-3 col-12">
-            <div
-              className="card p-4"
-              style={{
-                background: "#FFFFFF",
-                paddingLeft: "16px",
-                paddingRight: "16px",
-                borderRadius: "15px",
-                marginTop: "40px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "12px",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  src="/assets/images/profile/image 2 (1).png"
-                  width={48}
-                  height={48}
-                  alt=""
-                  className=""
+            {ssi && (
+              <>
+                <div
+                  className="card p-4"
                   style={{
-                    objectFit: "cover",
+                    background: "#FFFFFF",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    borderRadius: "5px",
+                    marginTop: "40px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
                   }}
-                />
-                <div>
-                  <p className="m-0 fw-700 font-xsss">Certified SSI Broker</p>
+                >
+                  {ssi.map((ssi) => (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: "12px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Image
+                          src={
+                            ssi.company.logo ||
+                            "/assets/images/profile/image 2 (1).png"
+                          }
+                          width={48}
+                          height={48}
+                          alt=""
+                          className=""
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div>
+                          <p className="m-0 fw-700 font-xsss">
+                            {ssi.company.name || "Certified SSI Broker"}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  ))}
                 </div>
-              </div>
-            </div>
+              </>
+            )}
             <AISummary
               role={role}
               dataBrokerProfile={dataBrokerProfile}
@@ -396,8 +411,10 @@ export default function Profile({
           handleClose={handleCancel}
           title="Edit Banner"
           show={show}
-          setAvatar={setAvatar}
-          setCoverImg={setCoverImg}
+          avatar={avatar}
+          coverImg={coverImg}
+          id={idParam as string}
+          dataBrokerProfile={dataBrokerProfile}
         />
       )}
     </>
@@ -410,11 +427,12 @@ export async function getServerSideProps(context: NextPageContext) {
   console.log("profile res", profileRes);
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   const myPost = await getMyPosts(1, TAKE, "owner", Number(id));
+  const brokerId = profileRes?.data?.user?.role ? Number(id) : "";
   const myGroup = await getMyGroups({
     page: 1,
     take: TAKE,
-    type: "",
-    brokerId: Number(id),
+    type: "joined",
+    brokerId,
     search: "",
     feeType: "",
   });
@@ -426,6 +444,7 @@ export async function getServerSideProps(context: NextPageContext) {
       dataUserProfile: profileRes?.data?.userProfile || [],
       dataUser: profileRes?.data?.user || [],
       followersCount: profileRes?.data?.followersCount,
+      ssi: profileRes?.data?.ssi || null,
       idParam: id,
       interestTopic: interestTopic?.data.docs || [],
       myPosts: myPost?.data?.docs || [],

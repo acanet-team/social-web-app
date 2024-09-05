@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { throwToast } from "@/utils/throw-toast";
 import { createNewLicense, updateLicense } from "@/api/profile";
 import WaveLoader from "../WaveLoader";
+import type { BaseArrayResponse, BaseResponse } from "@/api/model";
 
 interface ModalLisenceProp {
   title: string;
@@ -47,6 +48,19 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
   const [formData, setFormData] = useState(formDt);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.licenseIssueDate)
+      newErrors.licenseIssueDate = "License Issue Date is required";
+    if (!formData.licenseType)
+      newErrors.licenseType = "License type is required";
+    if (!formData.licenseStatus)
+      newErrors.licenseStatus = "License Status is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleImageChange = (file: File) => {
     setUploadedImage(file);
@@ -56,10 +70,15 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value,
+        [name]: value,
       });
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
     },
     [formData],
   );
@@ -70,68 +89,83 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
         ...formData,
         licenseStatus: event.target.value,
       });
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        licenseStatus: "",
+      }));
     },
     [formData],
   );
 
-  const submitAddLicense = useCallback(async () => {
+  const submitAddLicense = async () => {
     setIsLoading(true);
     try {
-      const license = {
-        licenseType: formData.licenseType,
-        logo: "",
-        licenseIssuer: formData.licenseIssuer,
-        licenseState: formData.licenseState,
-        licenseIssueDate: new Date(formData.licenseIssueDate),
-        licenseStatus: formData.licenseStatus,
-        licenseExpirationDate: formData.licenseExpirationDate
-          ? new Date("")
-          : new Date(formData.licenseExpirationDate),
-        credentialID: formData.credentialID,
-      };
-      const newLicense = {
-        licenses: [license],
-      };
-      await createNewLicense(newLicense);
-      setLicenses((prev) => [license, ...prev]);
-      handleClose();
+      if (validateForm()) {
+        const license = {
+          licenseType: formData.licenseType,
+          logo: "",
+          licenseIssuer: formData.licenseIssuer,
+          licenseState: formData.licenseState,
+          licenseIssueDate: new Date(formData.licenseIssueDate),
+          licenseStatus: formData.licenseStatus,
+          licenseExpirationDate: formData.licenseExpirationDate
+            ? new Date("")
+            : new Date(formData.licenseExpirationDate),
+          credentialID: formData.credentialID,
+        };
+        const newLicense = {
+          licenses: [license],
+        };
+        const res: BaseArrayResponse<FormDtLicense> =
+          await createNewLicense(newLicense);
+        if (res.data) {
+          setLicenses((prev) => {
+            const newLicense: FormDtLicense = res.data[0] as FormDtLicense;
+            return [newLicense, ...prev];
+          });
+        }
+        setLicenses((prev) => [license, ...prev]);
+        handleClose();
+      }
     } catch (error) {
       throwToast("Error creating license", "error");
     } finally {
       setIsLoading(false);
     }
-  }, [formData]);
+  };
 
-  const submitEditLicense = useCallback(async () => {
+  const submitEditLicense = async () => {
     setIsLoading(true);
     try {
-      const license = {
-        id: formData.id,
-        licenseType: formData.licenseType,
-        logo: "",
-        licenseIssuer: formData.licenseIssuer,
-        licenseState: formData.licenseState,
-        licenseIssueDate: new Date(formData.licenseIssueDate),
-        licenseStatus: formData.licenseStatus,
-        licenseExpirationDate: formData.licenseExpirationDate
-          ? new Date("")
-          : new Date(formData.licenseExpirationDate),
-        credentialID: formData.credentialID,
-      };
-      const newLicense = {
-        licenses: [license],
-      };
-      await updateLicense(newLicense);
-      setLicenses((prev) =>
-        prev.map((cer) => (cer.id === formDt.id ? license : cer)),
-      );
-      handleClose();
+      if (validateForm()) {
+        const license = {
+          id: formData.id,
+          licenseType: formData.licenseType,
+          logo: "",
+          licenseIssuer: formData.licenseIssuer,
+          licenseState: formData.licenseState,
+          licenseIssueDate: new Date(formData.licenseIssueDate),
+          licenseStatus: formData.licenseStatus,
+          licenseExpirationDate: formData.licenseExpirationDate
+            ? new Date("")
+            : new Date(formData.licenseExpirationDate),
+          credentialID: formData.credentialID,
+        };
+        const newLicense = {
+          licenses: [license],
+        };
+        await updateLicense(newLicense);
+        setLicenses((prev) =>
+          prev.map((cer) => (cer.id === formDt.id ? license : cer)),
+        );
+        handleClose();
+      }
     } catch (error) {
       throwToast("Error updating license", "error");
     } finally {
       setIsLoading(false);
     }
-  }, [formData]);
+  };
 
   return (
     <>
@@ -182,6 +216,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                   onChange={handleChange}
                   placeholder="Please enter your license or certification name"
                 />
+                {errors.licenseType && (
+                  <p className="text-red font-xsss ">{errors.licenseType}</p>
+                )}
               </div>
 
               <div style={{ width: "50%" }}>
@@ -207,14 +244,26 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.licenseIssueDate)}
-                  onChange={(date) =>
+                  onChange={(date) => {
+                    const formattedDate = date ? dayjs(date).toISOString() : "";
                     setFormData({
                       ...formData,
-                      licenseIssueDate: date ? dayjs(date).toISOString() : "",
-                    })
-                  }
+                      licenseIssueDate: formattedDate,
+                    });
+                    if (formattedDate) {
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        licenseIssueDate: "",
+                      }));
+                    }
+                  }}
                   views={["day", "month", "year"]}
                 />
+                {errors.licenseIssueDate && (
+                  <p className="text-red font-xsss ">
+                    {errors.licenseIssueDate}
+                  </p>
+                )}
               </div>
               <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xss ">Expiration year</p>
@@ -268,6 +317,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                   <MenuItem value="REVOKED">REVOKED</MenuItem>
                   <MenuItem value="EXPIRED">EXPIRED</MenuItem>
                 </Select>
+                {errors.licenseStatus && (
+                  <p className="text-red font-xsss ">{errors.licenseStatus}</p>
+                )}
               </div>
             </div>
           </form>

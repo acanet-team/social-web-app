@@ -22,6 +22,7 @@ export const Experience = ({
   const [showAllExperiences, setshowAllExperiences] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
+  const [iconBack, setShowIconBack] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
@@ -42,30 +43,27 @@ export const Experience = ({
 
   const experiencesToShow = showAllExperiences ? company : company.slice(0, 5);
 
-  const calculateDuration = useCallback(
-    (startDate: string, endDate: string): string => {
-      const start = dayjs(startDate);
-      const end = dayjs(endDate);
+  const calculateDuration = (startDate: string, endDate: string): string => {
+    const start = dayjs(startDate);
+    const end = endDate ? dayjs(endDate) : dayjs();
 
-      let years = end.diff(start, "year");
+    let years = end.diff(start, "year");
 
-      let months = end.diff(start.add(years, "year"), "month");
+    let months = end.diff(start.add(years, "year"), "month");
 
-      let result = "0";
-      if (years > 0) {
-        result += `${years} yr${years > 1 ? "s" : ""}`;
+    let result = "";
+    if (years > 0) {
+      result += `${years} yr${years > 1 ? "s" : ""}`;
+    }
+    if (months > 0) {
+      if (result.length > 0) {
+        result += " ";
       }
-      if (months > 0) {
-        if (result.length > 0) {
-          result += " ";
-        }
-        result += `${months} mo${months > 1 ? "s" : ""}`;
-      }
+      result += `${months} mo${months > 1 ? "s" : ""}`;
+    }
 
-      return result;
-    },
-    [],
-  );
+    return result;
+  };
   const handleAddModal = useCallback(() => {
     setIsEditing(false);
     setShow(true);
@@ -83,6 +81,12 @@ export const Experience = ({
 
   const handleOpenEdit = useCallback(() => {
     setShowIconEdit(true);
+    setShowIconBack(true);
+  }, []);
+
+  const handleCloseEdit = useCallback(() => {
+    setShowIconEdit(false);
+    setShowIconBack(false);
   }, []);
 
   const delCompany = useCallback(
@@ -108,7 +112,7 @@ export const Experience = ({
         className="card p-4"
         style={{
           background: "#FFFFFF",
-          borderRadius: "15px",
+          borderRadius: "5px",
           marginTop: "40px",
         }}
       >
@@ -138,12 +142,23 @@ export const Experience = ({
                   ></i>
                 </h1>
                 {company.length != 0 && (
-                  <h4>
-                    <i
-                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                      onClick={() => handleOpenEdit()}
-                    ></i>
-                  </h4>
+                  <>
+                    {iconBack ? (
+                      <h4>
+                        <i
+                          className={`bi bi-arrow-left ${styles["icon-profile"]}`}
+                          onClick={() => handleCloseEdit()}
+                        ></i>
+                      </h4>
+                    ) : (
+                      <h4>
+                        <i
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          onClick={() => handleOpenEdit()}
+                        ></i>
+                      </h4>
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -205,19 +220,23 @@ export const Experience = ({
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    gap: "8px",
+                    // gap: "8px",
                   }}
                 >
                   <p className="m-0 font-xsss lh-20">{experience.position}</p>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      width: "3px",
-                      height: "3px",
-                      borderRadius: "100%",
-                      backgroundColor: "#000",
-                    }}
-                  ></span>
+                  {experience.position && experience.workingType && (
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: "3px",
+                        height: "3px",
+                        borderRadius: "100%",
+                        backgroundColor: "#000",
+                        marginLeft: "8px",
+                        marginRight: "8px",
+                      }}
+                    ></span>
+                  )}
                   <p className="m-0 font-xsss lh-20">
                     {experience.workingType}
                   </p>
@@ -236,16 +255,21 @@ export const Experience = ({
                       ? "Present"
                       : dayjs(experience.endDate).format("MMM-YYYY")}
                   </p>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      width: "3px",
-                      height: "3px",
-                      borderRadius: "100%",
-                      backgroundColor: "#000",
-                      color: "#8b8d8d",
-                    }}
-                  ></span>
+                  {calculateDuration(
+                    experience.startDate,
+                    experience.endDate,
+                  ) && (
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: "3px",
+                        height: "3px",
+                        borderRadius: "100%",
+                        backgroundColor: "#000",
+                        color: "#8b8d8d",
+                      }}
+                    ></span>
+                  )}
                   <p className="m-0 font-xsss lh-20 text-gray-follow">
                     {calculateDuration(
                       experience.startDate,

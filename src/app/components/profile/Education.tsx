@@ -21,6 +21,7 @@ const Education = ({
   const [iconEdit, setShowIconEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [iconBack, setShowIconBack] = useState(false);
 
   const [formDt, setFormDt] = useState<FormDtSchool>({
     id: "",
@@ -53,6 +54,11 @@ const Education = ({
 
   const handleOpenEdit = useCallback(() => {
     setShowIconEdit(true);
+    setShowIconBack(true);
+  }, []);
+  const handleCloseEdit = useCallback(() => {
+    setShowIconEdit(false);
+    setShowIconBack(false);
   }, []);
 
   const delEdu = useCallback(async (id: string) => {
@@ -75,7 +81,7 @@ const Education = ({
         className="card p-4"
         style={{
           background: "#FFFFFF",
-          borderRadius: "15px",
+          borderRadius: "5px",
           marginTop: "40px",
         }}
       >
@@ -105,12 +111,23 @@ const Education = ({
                   ></i>
                 </h1>
                 {school.length != 0 && (
-                  <h4>
-                    <i
-                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                      onClick={() => handleOpenEdit()}
-                    ></i>
-                  </h4>
+                  <>
+                    {iconBack ? (
+                      <h4>
+                        <i
+                          className={`bi bi-arrow-left ${styles["icon-profile"]}`}
+                          onClick={() => handleCloseEdit()}
+                        ></i>
+                      </h4>
+                    ) : (
+                      <h4>
+                        <i
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          onClick={() => handleOpenEdit()}
+                        ></i>
+                      </h4>
+                    )}
+                  </>
                 )}
               </>
             )}

@@ -23,9 +23,8 @@ import {
   getFind,
 } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
-import ImageUpload from "@/components/ImageUpload";
-import { useFormik } from "formik";
 import WaveLoader from "../WaveLoader";
+import type { BaseArrayResponse, BaseResponse } from "@/api/model";
 
 interface ModalExperienceProp {
   title: string;
@@ -49,6 +48,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
   idUser,
 }) => {
   const [formData, setFormData] = useState(formDt);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // const formik = useFormik({
   //   initialValues: {
@@ -73,9 +73,10 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value,
+        [name]: value,
       });
     },
     [formData],
@@ -83,10 +84,15 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
 
   const handleSelectChange = useCallback(
     (event: SelectChangeEvent<string>) => {
+      const value = event.target.value;
       setFormData({
         ...formData,
-        workingType: event.target.value,
+        workingType: value,
       });
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        workingType: "",
+      }));
     },
     [formData],
   );
@@ -129,29 +135,47 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
     }
   };
 
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.name) newErrors.name = "Company name is required";
+    if (!formData.workingType)
+      newErrors.workingType = "Employment type is required";
+    if (!formData.startDate) newErrors.startDate = "Start Date is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const submitAddExperience = useCallback(async () => {
     setIsLoading(true);
     try {
-      const experience = {
-        logo: formData.logo,
-        name: formData.name,
-        startDate: new Date(formData.startDate),
-        endDate: formData.isWorking
-          ? new Date("")
-          : new Date(formData.startDate),
-        isWorking: formData.isWorking,
-        position: formData.position,
-        location: formData.location,
-        description: formData.description,
-        workingType: formData.workingType,
-      };
-      const newExperience = {
-        company: [experience],
-      };
+      if (validateForm()) {
+        const experience = {
+          logo: formData.logo,
+          name: formData.name,
+          startDate: new Date(formData.startDate),
+          endDate: formData.isWorking
+            ? new Date("")
+            : new Date(formData.endDate),
+          isWorking: formData.isWorking,
+          position: formData.position,
+          location: formData.location,
+          description: formData.description,
+          workingType: formData.workingType,
+        };
+        const newExperience = {
+          company: [experience],
+        };
 
-      await createNewExperiences(newExperience);
-      setCompany((prevCompanies) => [experience, ...prevCompanies]);
-      handleClose();
+        const res: BaseArrayResponse<FormDtCompany> =
+          await createNewExperiences(newExperience);
+        if (res.data) {
+          setCompany((prevCompanies) => {
+            const newExperience: FormDtCompany = res.data[0] as FormDtCompany;
+            return [newExperience, ...prevCompanies];
+          });
+        }
+        handleClose();
+      }
     } catch (error) {
       throwToast("Error creating experience", "error");
     } finally {
@@ -162,31 +186,33 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
   const submitEditExperience = useCallback(async () => {
     setIsLoading(true);
     try {
-      const experience = {
-        id: formData.id,
-        logo: formData.logo,
-        name: formData.name,
-        startDate: new Date(formData.startDate),
-        endDate: formData.isWorking
-          ? new Date("")
-          : new Date(formData.startDate),
-        isWorking: formData.isWorking,
-        position: formData.position,
-        location: formData.location,
-        description: formData.description,
-        workingType: formData.workingType,
-      };
-      const newExperience = {
-        company: [experience],
-      };
+      if (validateForm()) {
+        const experience = {
+          id: formData.id,
+          logo: formData.logo,
+          name: formData.name,
+          startDate: new Date(formData.startDate),
+          endDate: formData.isWorking
+            ? new Date("")
+            : new Date(formData.endDate),
+          isWorking: formData.isWorking,
+          position: formData.position,
+          location: formData.location,
+          description: formData.description,
+          workingType: formData.workingType,
+        };
+        const newExperience = {
+          company: [experience],
+        };
 
-      await updateExperiences(newExperience);
-      setCompany((prevCompanies) =>
-        prevCompanies.map((comp) =>
-          comp.id === formData.id ? experience : comp,
-        ),
-      );
-      handleClose();
+        await updateExperiences(newExperience);
+        setCompany((prevCompanies) =>
+          prevCompanies.map((comp) =>
+            comp.id === formData.id ? experience : comp,
+          ),
+        );
+        handleClose();
+      }
     } catch (error) {
       throwToast("Error updating experience", "error");
     } finally {
@@ -237,8 +263,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
             )} */}
             <p className="m-0 py-1 fw-600 font-xss">Company Name</p>
             <Autocomplete
-              // value={formData.name}
-              disableClearable
+              inputValue={isEditing ? formData.name : undefined}
               disablePortal
               options={experience}
               className="w-100"
@@ -290,15 +315,27 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   <TextField
                     {...params}
                     label="Enter the company name"
+                    value={formData.name}
                     onChange={(e) => {
                       findCompany(e.target.value);
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        name: "",
+                      }));
                     }}
                   />
                 </>
               )}
             />
-            <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-              <div style={{ width: "50%" }}>
+            {errors.name && <p className="text-red font-xsss">{errors.name}</p>}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+              }}
+            >
+              <div style={{ width: "100%" }}>
                 <p className="m-0 py-1 fw-600 font-xss">Job Title</p>
                 <input
                   className="px-2"
@@ -314,7 +351,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   placeholder="Please enter your industry name"
                 />
               </div>
-              <div style={{ width: "50%" }}>
+              <div style={{ width: "100%" }}>
                 <p className="m-0 py-1 fw-600 font-xss">Employment Type</p>
                 <Select
                   value={formData.workingType}
@@ -331,6 +368,11 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   <MenuItem value="CONTRACT">Contractor</MenuItem>
                   <MenuItem value="SELF-EMPLOYED">Self-employed</MenuItem>
                 </Select>
+                {errors.workingType && (
+                  <p className="text-red font-xsss font-xsss">
+                    {errors.workingType}
+                  </p>
+                )}
               </div>
             </div>
             <div>
@@ -374,28 +416,39 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                gap: "20px",
               }}
             >
               <div
                 style={{
-                  width: "48.5%",
+                  width: "50%",
                 }}
               >
                 <p className="m-0 py-1 fw-600 font-xss">Start Date</p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.startDate)}
-                  onChange={(date) =>
+                  onChange={(date) => {
+                    const formattedDate = date ? dayjs(date).toISOString() : "";
                     setFormData({
                       ...formData,
-                      startDate: date ? dayjs(date).toISOString() : "",
-                    })
-                  }
+                      startDate: formattedDate,
+                    });
+                    if (formattedDate) {
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        startDate: "",
+                      }));
+                    }
+                  }}
                   views={["day", "month", "year"]}
                 />
+                {errors.startDate && (
+                  <p className="text-red font-xsss">{errors.startDate}</p>
+                )}
               </div>
               {!formData.isWorking && (
-                <div style={{ width: "48.5%" }}>
+                <div style={{ width: "50%" }}>
                   <p className="m-0 py-1 fw-600 font-xss">End Date</p>
                   <DatePicker
                     className="w__100"
@@ -425,6 +478,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               onChange={handleChange}
               placeholder="Please enter your location"
             />
+
             <p className="m-0 py-1 fw-600 font-xss">Description</p>
             <textarea
               className="px-2"

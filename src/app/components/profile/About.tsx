@@ -65,7 +65,7 @@ export const About = ({
           background: "#FFFFFF",
           paddingLeft: "16px",
           paddingRight: "16px",
-          borderRadius: "15px",
+          borderRadius: "5px",
           marginTop: "40px",
         }}
       >

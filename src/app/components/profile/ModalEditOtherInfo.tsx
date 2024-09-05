@@ -72,67 +72,58 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [e.target.name]: e.target.value,
-      }));
-    },
-    [],
-  );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      location: e.target.value,
+    }));
+  };
 
-  const handleChangeSelectTopic = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        selectedTopicIds: event.target.value as string[],
-      }));
-    },
-    [],
-  );
+  const handleChangeSelectTopic = (event: SelectChangeEvent<string[]>) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      selectedTopicIds: event.target.value as string[],
+    }));
+  };
 
-  const handleChangeSelectService = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        selectedServiceIds: event.target.value as string[],
-      }));
-    },
-    [],
-  );
+  const handleChangeSelectService = (event: SelectChangeEvent<string[]>) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      selectedServiceIds: event.target.value as string[],
+    }));
+  };
 
-  const submitOtherInfo = useCallback(async () => {
+  const submitOtherInfo = async () => {
     setIsLoading(true);
     try {
       const formDt = new FormData();
-      formDt.append("location", formData.location);
-      setLocation(formData.location);
-      formDt.append(
-        "interestTopicIds",
-        JSON.stringify(formData.selectedTopicIds),
-      );
-      setInterestTopics(
-        formData.selectedTopicIds
-          .map((id) =>
-            dataBrokerProfile.interestTopics.find((topic) => topic.id === id),
-          )
-          .filter((topic) => topic !== undefined),
-      );
-      if (formData.selectedServiceIds) {
+      formDt.append("interestTopicIds", formData.selectedTopicIds.join(","));
+      if (formData.selectedServiceIds || formData.location) {
         const brokerProfies = {
           skills: formData.selectedServiceIds,
+          location: formData.location,
         };
         formDt.append("brokerProfile", JSON.stringify(brokerProfies));
-        setSkills(
-          formData.selectedServiceIds
-            .map((id) =>
-              dataBrokerProfile.skills.find((topic) => topic.id === id),
-            )
-            .filter((topic) => topic !== undefined),
-        );
+        // setSkills(prev => {...prev, "interestTopic": formData.selectedServiceIds
+        //   .map((id) =>
+        //     listInterestTopics.find((topic) => topic.id === id)
+        //   )
+        //   .filter((topic) => topic !== undefined)}
+        // );
+        //  setSkills(formData.selectedServiceIds
+        //     .map((id) =>
+        //       listInterestTopics.find((topic) => topic.id === id)
+        //     )
+        //     .filter((topic) => topic !== undefined))
       }
       await updateOtherProfile(formDt);
+      setLocation(formData.location);
+      setInterestTopics(
+        formData.selectedTopicIds
+          .map((id) => listInterestTopics.find((topic) => topic.id === id))
+          .filter((topic) => topic !== undefined),
+      );
+      console.log("kkkkkk", formData);
       throwToast("Updated successfully", "success");
       handleClose();
     } catch (error) {
@@ -140,7 +131,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [formData, handleClose]);
+  };
 
   return (
     <>

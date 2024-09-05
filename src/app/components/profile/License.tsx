@@ -20,6 +20,7 @@ const License = ({
   const [showAllLicense, setshowAllLicense] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [iconEdit, setShowIconEdit] = useState(false);
+  const [iconBack, setShowIconBack] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [licenses, setLicenses] = useState(dataBrokerProfile.licenses ?? []);
@@ -54,6 +55,12 @@ const License = ({
 
   const handleOpenEdit = useCallback(() => {
     setShowIconEdit(true);
+    setShowIconBack(true);
+  }, []);
+
+  const handleCloseEdit = useCallback(() => {
+    setShowIconEdit(false);
+    setShowIconBack(false);
   }, []);
 
   const delCertifications = useCallback(async (id: string) => {
@@ -76,7 +83,7 @@ const License = ({
         className="card p-4"
         style={{
           background: "#FFFFFF",
-          borderRadius: "15px",
+          borderRadius: "5px",
           marginTop: "40px",
           marginBottom: "100px",
         }}
@@ -107,12 +114,23 @@ const License = ({
                   ></i>
                 </h1>
                 {licenses.length != 0 && (
-                  <h4>
-                    <i
-                      className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
-                      onClick={() => handleOpenEdit()}
-                    ></i>
-                  </h4>
+                  <>
+                    {iconBack ? (
+                      <h4>
+                        <i
+                          className={`bi bi-arrow-left ${styles["icon-profile"]}`}
+                          onClick={() => handleCloseEdit()}
+                        ></i>
+                      </h4>
+                    ) : (
+                      <h4>
+                        <i
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          onClick={() => handleOpenEdit()}
+                        ></i>
+                      </h4>
+                    )}
+                  </>
                 )}
               </>
             )}
