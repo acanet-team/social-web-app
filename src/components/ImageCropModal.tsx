@@ -24,7 +24,6 @@ export const ImageCropModal = ({
   const [completedCrop, setCompletedCrop] = useState();
   const [aspect, setAspect] = useState(defaultAspect);
   const [imagepreview, setPreviewImage] = useState("");
-  console.log("aaaaaaa", aspect);
 
   const imgRef = useRef(null);
 
@@ -126,6 +125,7 @@ export const ImageCropModal = ({
 
   const getCroppedImg = async (image: any) => {
     const canvas = document.createElement("canvas");
+    console.log("Completed Crop:", completedCrop);
     canvasPreview(image, canvas, completedCrop);
     const blob = await toBlob(canvas);
 

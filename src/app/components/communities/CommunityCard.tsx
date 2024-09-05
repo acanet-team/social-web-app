@@ -4,6 +4,7 @@ import { CommunityJoiningStatus } from "@/types/enum";
 import Link from "next/link";
 import { joinCommunity } from "@/api/community";
 import { useTranslations } from "next-intl";
+import styles from "@/styles/modules/communities.module.scss";
 
 export default function CommunityCard(props: {
   groupId: string;
@@ -132,7 +133,7 @@ export default function CommunityCard(props: {
           </Link>
           {isBroker && communityType === "owned" && (
             <i
-              className="bi bi-pencil ms-2 cursor-pointer"
+              className={`${styles["edit-group__btn"]} bi bi-pencil ms-2 cursor-pointer`}
               onClick={() => onEditGroupHandler(groupId)}
             ></i>
           )}

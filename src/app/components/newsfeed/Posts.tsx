@@ -1,21 +1,22 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
 import { cleanPath } from "@/utils/Helpers";
 import PostCard from "./Postcard";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
-import { usePostStore } from "@/store/newFeed";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import { IPost } from "@/api/newsfeed/model";
 
 export default function Posts(props: {
   posts: any;
+  setPosts: React.Dispatch<React.SetStateAction<any[]>>;
   feedType: string;
   take: number;
   allPage: number;
   curPage: number;
 }): JSX.Element {
-  const [posts, setPosts] = useState<any[]>(props.posts);
+  const { posts, setPosts } = props;
+  // const [posts, setPosts] = useState<any[]>(props.posts);
   const [take, setTake] = useState<number>(props.take);
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
@@ -24,15 +25,15 @@ export default function Posts(props: {
     useState<boolean>(false);
   const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const t = useTranslations("Post");
-  const post = usePostStore((state) => state.posts);
+  // const post = usePostStore((state) => state.posts);
 
-  useEffect(() => {
-    // setPosts(prev => [...posts, ...prev]);
-    setPosts((prev) => {
-      const newPosts = combineUniqueById(prev, posts);
-      return newPosts;
-    });
-  }, [post]);
+  // useEffect(() => {
+  //   // setPosts(prev => [...posts, ...prev]);
+  //   setPosts((prev) => {
+  //     const newPosts = combineUniqueById(prev, posts);
+  //     return newPosts;
+  //   });
+  // }, [post]);
 
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
@@ -125,7 +126,7 @@ export default function Posts(props: {
             </button>
           </div>
         ) : (
-          posts.map((p) => (
+          posts.map((p: IPost) => (
             <div key={p.id}>
               <PostCard
                 groupOwnerId=""
