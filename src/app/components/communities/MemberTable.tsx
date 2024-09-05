@@ -73,8 +73,18 @@ export default function MemberTable(props: {
   }
 
   useEffect(() => {
-    getMembers(page);
-  }, [page, tab, searchValue]);
+    if (page > 1) {
+      getMembers(page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    if (searchValue) {
+      setPage(1);
+      setMembers([]);
+      getMembers(page);
+    }
+  }, [searchValue]);
 
   useEffect(() => {
     setPage(1);
@@ -83,13 +93,8 @@ export default function MemberTable(props: {
       searchRef.current.value = "";
     }
     setMembers([]);
+    getMembers(1);
   }, [tab]);
-
-  useEffect(() => {
-    if (searchValue) {
-      setMembers([]);
-    }
-  }, [searchValue]);
 
   const onSearchHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -242,7 +247,9 @@ export default function MemberTable(props: {
               {members.map((m, index) => {
                 return (
                   <tr key={m.id} className="d-flex">
-                    <td className={`${styles["name-col"]} col-2`}>
+                    <td
+                      className={`${styles["name-col"]} col-2 d-flex align-items-center`}
+                    >
                       <Image
                         src={m.user?.photo?.path || `/assets/images/user.png`}
                         width={40}

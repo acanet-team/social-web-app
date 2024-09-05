@@ -91,7 +91,7 @@ export default function CommunityFeed(props: {
   }, []);
 
   return (
-    <div className="row g-0 g-sm-4">
+    <div className="row g-0 g-sm-4 mb-5">
       <div className="col-xl-3 col-xxl-3 col-lg-4 pe-0">
         <CommunityOverview groupData={props.groupData} />
         {/* <Profilephoto /> */}
