@@ -4,6 +4,7 @@ import { CommunityJoiningStatus } from "@/types/enum";
 import Link from "next/link";
 import { joinCommunity } from "@/api/community";
 import { useTranslations } from "next-intl";
+import styles from "@/styles/modules/communities.module.scss";
 
 export default function CommunityCard(props: {
   groupId: string;
@@ -38,6 +39,7 @@ export default function CommunityCard(props: {
     onEditGroupHandler,
   } = props;
   const t = useTranslations("Community");
+  const tBase = useTranslations("Base");
   const [joiningStatus, setJoiningStatus] = useState(communityStatus);
   const onJoinCommunityHandler = async (e: any, groupId: string) => {
     try {
@@ -84,8 +86,8 @@ export default function CommunityCard(props: {
               @{nickName}
             </div>
             <div className="fw-500 font-xsss fst-italic text-dark mt-0 lh-3">
-              {membersCount?.toLocaleString() || 1}{" "}
-              {membersCount > 1 ? "members" : "member"}
+              {membersCount?.toLocaleString("en-US") || 1}{" "}
+              {membersCount > 1 ? `${tBase("members")}` : tBase("member")}
             </div>
           </div>
           <div className="d-flex align-items-center d-flex flex-column">
@@ -107,7 +109,7 @@ export default function CommunityCard(props: {
             </button>
             {/* eslint-disable react/no-unescaped-entities */}
             {fee === 0 ? (
-              <div className="text-success fw-bolder">Free</div>
+              <div className="text-success fw-bolder">{tBase("free")}</div>
             ) : (
               <div className="d-flex align-items-center">
                 <Image
@@ -117,7 +119,7 @@ export default function CommunityCard(props: {
                   alt="logo"
                 />
                 <span className="ms-2 fw-bolder text-dark">
-                  {fee?.toLocaleString()}
+                  {fee?.toLocaleString("en-US")}
                 </span>
               </div>
             )}
@@ -131,7 +133,7 @@ export default function CommunityCard(props: {
           </Link>
           {isBroker && communityType === "owned" && (
             <i
-              className="bi bi-pencil ms-2 cursor-pointer"
+              className={`${styles["edit-group__btn"]} bi bi-pencil ms-2 cursor-pointer`}
               onClick={() => onEditGroupHandler(groupId)}
             ></i>
           )}

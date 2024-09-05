@@ -10,9 +10,7 @@ import { useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
 import { usePostStore } from "@/store/newFeed";
-import { throwToast } from "@/utils/throw-toast";
 import type { IPost } from "@/api/newsfeed/model";
-import { userInfo } from "os";
 
 interface UserInfo {
   user?: {
@@ -25,6 +23,7 @@ interface UserInfo {
 const CreatePost = (props: {
   userSession: any;
   groupId: string;
+  tab?: string;
   updatePostArr: React.Dispatch<React.SetStateAction<IPost[]>> | null;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -174,18 +173,20 @@ const CreatePost = (props: {
         postData.append("images", image);
       });
       postData.append("interestTopicId", interestTopicId);
-
       if (props.groupId) {
         postData.append("communityId", props.groupId);
       }
       const newFeed = await createNewPostRequest(postData);
-      // Add new post to feed
-      if (props.groupId && props.updatePostArr) {
+      // Add new post to community/for-you feed
+      if ((props.groupId || props.tab === "for_you") && props.updatePostArr) {
         props.updatePostArr(
           (prev: IPost[]) => [newFeed.data, ...prev] as IPost[],
         );
       }
-      addPost(newFeed.data as any);
+      if (imageRef.current) {
+        imageRef.current.value = null || "";
+      }
+      // addPost(newFeed.data as any);
       setShowModal(false);
       throwToast(t("post_create_success"), "success");
       setPostText("");
@@ -328,7 +329,7 @@ const CreatePost = (props: {
             options={topics}
             value={selectedTopic}
             onChange={handleTopicChange}
-            placeholder="Select a topic"
+            placeholder={t("select_Topic")}
             isMulti={false}
             classNamePrefix={`${style["topic-select"]}`}
             onInputChange={(searchTerm) => {

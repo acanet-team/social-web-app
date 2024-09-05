@@ -125,6 +125,7 @@ export const ImageCropModal = ({
 
   const getCroppedImg = async (image: any) => {
     const canvas = document.createElement("canvas");
+    console.log("Completed Crop:", completedCrop);
     canvasPreview(image, canvas, completedCrop);
     const blob = await toBlob(canvas);
 

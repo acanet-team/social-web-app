@@ -10,6 +10,7 @@ import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import type { IPost } from "@/api/newsfeed/model";
 
 const TAKE = 10;
 
@@ -19,6 +20,7 @@ const Home = ({
   page,
   topBrokers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [feedPosts, setPosts] = useState<IPost[]>(posts);
   const [curTab, setCurTab] = useState<string>("suggestion");
   const { data: session } = useSession() as any;
   const t = useTranslations("FeedTabs");
@@ -42,7 +44,9 @@ const Home = ({
               <CreatePost
                 userSession={session}
                 groupId=""
-                updatePostArr={null}
+                // updatePostArr={null}
+                updatePostArr={setPosts}
+                tab={curTab}
               />
               {/* Tabs */}
               <div className={styles["home-tabs"]}>
@@ -60,7 +64,9 @@ const Home = ({
                 </div>
               </div>
               <Posts
-                posts={posts}
+                // posts={posts}
+                posts={feedPosts}
+                setPosts={setPosts}
                 feedType={curTab}
                 take={TAKE}
                 allPage={totalPage}

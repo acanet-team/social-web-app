@@ -30,6 +30,7 @@ export const Comments = (props: {
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
   const tModal = useTranslations("Modal");
+  const tComment = useTranslations("Comment");
 
   useEffect(() => {
     if (session) {
@@ -187,7 +188,7 @@ export const Comments = (props: {
         {comments?.length === 0 && (
           <div className="text-center pointer align-items-center text-dark lh-26 font-xss">
             <span className="d-none-xs font-xsss fw-600 text-grey-700">
-              No comment found.
+              {tComment("no_comment")}
             </span>
           </div>
         )}
@@ -223,7 +224,7 @@ export const Comments = (props: {
           <textarea
             id="comment"
             className="py-2 ps-2 rounded-3 border-none bg-light"
-            placeholder="Write a comment"
+            placeholder={tComment("write_comment")}
             name="comment"
             rows={1}
             ref={commentRef}

@@ -1,4 +1,7 @@
+import { useTranslations } from "next-intl";
+
 export const TimeSinceDate = (date: string | number): string => {
+  const tTime = useTranslations("Time");
   const postDate = new Date(date);
   const timeSincePostDate = new Date().getTime() - postDate.getTime();
 
@@ -9,14 +12,16 @@ export const TimeSinceDate = (date: string | number): string => {
 
   let timePassed;
   if (weeks > 0) {
-    timePassed = `${weeks} week${weeks > 1 ? "s" : ""}`;
+    timePassed = `${weeks} ${weeks > 1 ? tTime("weeks") : tTime("week")}`;
   } else if (days > 0) {
-    timePassed = `${days} day${days > 1 ? "s" : ""}`;
+    timePassed = `${days} ${days > 1 ? tTime("days") : tTime("day")}`;
   } else if (hours > 0) {
-    timePassed = `${hours} hour${hours > 1 ? "s" : ""}`;
+    timePassed = `${hours} ${hours > 1 ? tTime("hours") : tTime("hour")}`;
   } else {
     timePassed =
-      minutes > 0 ? `${minutes} minute${minutes > 1 ? "s" : ""}` : "now";
+      minutes > 0
+        ? `${minutes} ${minutes > 1 ? tTime("minutes") : tTime("minute")}`
+        : tTime("now");
   }
 
   return timePassed;

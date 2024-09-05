@@ -20,6 +20,8 @@ export default function CommunityHeader(props: {
   const coverImage = curCommunity.coverImage?.path;
   const avatar = curCommunity.avatar?.path;
   const t = useTranslations("CommunityTabs");
+  const tBase = useTranslations("Base");
+  const tCommunity = useTranslations("Community");
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -70,12 +72,14 @@ export default function CommunityHeader(props: {
           {curCommunity.name}
           <div className="fw-500 font-xsss text-grey-600 my-3 d-block">
             <span className="me-2">
-              {curCommunity.fee > 0 ? "Paid Community" : "Free Community"}
+              {curCommunity.fee > 0 ? tCommunity("paid") : tCommunity("free")}
             </span>{" "}
             |{" "}
             <span className="ms-2">
               {curCommunity.membersCount.toLocaleString()}{" "}
-              {curCommunity.membersCount > 1 ? "members" : "member"}
+              {curCommunity.membersCount > 1
+                ? tBase("members")
+                : tBase("member")}
             </span>
           </div>
         </h4>

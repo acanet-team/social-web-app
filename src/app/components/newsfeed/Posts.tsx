@@ -1,35 +1,39 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
 import { cleanPath } from "@/utils/Helpers";
 import PostCard from "./Postcard";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
-import { usePostStore } from "@/store/newFeed";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import { IPost } from "@/api/newsfeed/model";
 
 export default function Posts(props: {
   posts: any;
+  setPosts: React.Dispatch<React.SetStateAction<any[]>>;
   feedType: string;
   take: number;
   allPage: number;
   curPage: number;
 }): JSX.Element {
-  const [posts, setPosts] = useState<any[]>(props.posts);
+  const { posts, setPosts } = props;
+  // const [posts, setPosts] = useState<any[]>(props.posts);
   const [take, setTake] = useState<number>(props.take);
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [hasFetchedInitialData, setHasFetchedInitialData] =
+    useState<boolean>(false);
+  const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const t = useTranslations("Post");
-  const post = usePostStore((state) => state.posts);
+  // const post = usePostStore((state) => state.posts);
 
-  useEffect(() => {
-    // setPosts(prev => [...posts, ...prev]);
-    setPosts((prev) => {
-      const newPosts = combineUniqueById(prev, posts);
-      return newPosts;
-    });
-  }, [post]);
+  // useEffect(() => {
+  //   // setPosts(prev => [...posts, ...prev]);
+  //   setPosts((prev) => {
+  //     const newPosts = combineUniqueById(prev, posts);
+  //     return newPosts;
+  //   });
+  // }, [post]);
 
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
@@ -53,21 +57,15 @@ export default function Posts(props: {
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+      if (
+        scrollTop + clientHeight >= scrollHeight &&
+        !isLoading &&
+        page < totalPage
+      ) {
         setPage((page) => page + 1);
       }
     }
   };
-
-  useEffect(() => {
-    fetchPosts(page);
-  }, [page, props.feedType]);
-
-  useEffect(() => {
-    setPage(1);
-    setTotalPage(2);
-    setPosts([]);
-  }, [props.feedType]);
 
   useEffect(() => {
     if (document.documentElement && page < totalPage) {
@@ -78,7 +76,37 @@ export default function Posts(props: {
         window.removeEventListener("scroll", onScrollHandler);
       }
     };
-  }, [page, totalPage, props.feedType]);
+  }, [page, totalPage, isLoading]);
+
+  // Reset states and fetch data on tab (feedType) change
+  useEffect(() => {
+    if (hasFetchedInitialData) {
+      setPage(1);
+      setTotalPage(2);
+      setPosts([]);
+      setReadyToFetch(true);
+    }
+  }, [props.feedType]);
+
+  useEffect(() => {
+    if (readyToFetch) {
+      fetchPosts(1);
+      setReadyToFetch(false);
+    }
+  }, [readyToFetch]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchPosts(page);
+    }
+  }, [page]);
+
+  // Avoid fetching data on initial render
+  useEffect(() => {
+    if (!hasFetchedInitialData) {
+      setHasFetchedInitialData(true);
+    }
+  }, []);
 
   return (
     <>
@@ -98,7 +126,7 @@ export default function Posts(props: {
             </button>
           </div>
         ) : (
-          posts.map((p) => (
+          posts.map((p: IPost) => (
             <div key={p.id}>
               <PostCard
                 groupOwnerId=""

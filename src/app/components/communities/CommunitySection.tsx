@@ -35,13 +35,18 @@ export default function CommunitySection(props: {
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [filterValue, setFilterValue] = React.useState<string>("");
+  const [shownFilterValue, setShownFilterValue] = React.useState<string>("");
   // const [filterValue, setFilterValue] = React.useState<string[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<string>("");
   const [brokerId, setBrokerId] = useState<number | "">("");
   const searchRef = useRef<HTMLInputElement>(null);
-  const filters = ["None", "Free", "Paid"];
+  const filters = [
+    tForm("filter_none"),
+    tForm("filter_free"),
+    tForm("filter_paid"),
+  ];
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
   const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
@@ -59,10 +64,15 @@ export default function CommunitySection(props: {
       const response = await getCommunities({
         page,
         take,
-        type: props.communityType === "popular" ? "not_joined" : "joined",
+        type:
+          props.communityType === "popular"
+            ? "not_joined"
+            : props.communityType === "following"
+              ? "joined"
+              : "",
         brokerId: props.communityType === "owned" ? brokerId : "",
         search: searchValue,
-        feeType: filterValue === "None" ? "" : filterValue.toLowerCase(),
+        feeType: filterValue ? filterValue.toLowerCase() : "",
       });
       // console.log("Communities fetched:", response);
       setCommunityArr((prev) => {
@@ -110,6 +120,7 @@ export default function CommunitySection(props: {
   useEffect(() => {
     if (hasFetchedInitialData) {
       setFilterValue("");
+      setShownFilterValue(tForm("filter_none"));
       setSearchValue("");
       setPage(1);
       setTotalPage(2);
@@ -126,12 +137,12 @@ export default function CommunitySection(props: {
   }, [readyToFetch]);
 
   useEffect(() => {
-    if (searchValue || filterValue) {
+    if (searchValue || filterValue || shownFilterValue) {
       setPage(1);
       setCommunityArr([]);
       fetchCommunities(1);
     }
-  }, [searchValue, filterValue]);
+  }, [searchValue, filterValue, shownFilterValue]);
 
   useEffect(() => {
     if (page > 1) {
@@ -147,7 +158,15 @@ export default function CommunitySection(props: {
   }, []);
 
   const onFilterHandler = (e: SelectChangeEvent) => {
-    setFilterValue(e.target.value);
+    const localeFilterValue = e.target.value;
+    const filterValue =
+      localeFilterValue === tForm("filter_free")
+        ? "free"
+        : localeFilterValue === tForm("filter_paid")
+          ? "paid"
+          : "";
+    setFilterValue(filterValue);
+    setShownFilterValue(localeFilterValue);
   };
   // const onFilterHandler = (e: SelectChangeEvent) => {
   //   setFilterValue((prev: string[]) => {
@@ -230,12 +249,14 @@ export default function CommunitySection(props: {
           className={styles["filter-box"]}
         >
           <InputLabel id="filter">
-            <i className="bi bi-filter me-1"></i>Filter
+            <i className="bi bi-filter me-1"></i>
+            {tForm("filter")}
           </InputLabel>
           <Select
             labelId="filter"
             id="filter"
-            value={filterValue}
+            value={shownFilterValue}
+            // value={filterValue}
             // value={filterValue[0] || ""}
             onChange={onFilterHandler}
             input={<OutlinedInput label="Filter&nbsp" />}
@@ -254,7 +275,7 @@ export default function CommunitySection(props: {
           >
             {filters.map((name) => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={filterValue.indexOf(name) > -1} />
+                <Checkbox checked={shownFilterValue.indexOf(name) > -1} />
                 <ListItemText primary={name} />
               </MenuItem>
             ))}

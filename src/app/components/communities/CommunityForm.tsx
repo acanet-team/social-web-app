@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
-import styles from "@/styles/modules/modalTemplate.module.scss";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEventHandler,
+} from "react";
 import classes from "@/styles/modules/createProfile.module.scss";
 import { useFormik } from "formik";
 import { throwToast } from "@/utils/throw-toast";
-import { FormControl, FormHelperText, TextField } from "@mui/material";
+import { FormHelperText, TextField } from "@mui/material";
 import { useTranslations } from "next-intl";
 import type { ICommunityForm } from "@/types";
 import * as Yup from "yup";
 import { useLoading } from "@/context/Loading/context";
 import Modal from "react-bootstrap/Modal";
-import ImageUpload from "@/components/ImageUpload";
 import { S3_GROUP_AVATAR, S3_GROUP_BANNER } from "@/utils/const";
 import { createCommunity, editCommunity, getACommunity } from "@/api/community";
 import type { ICommunity } from "@/api/community/model";
+import Image from "next/image";
+import { ImageCropModal } from "@/components/ImageCropModal";
+import styles from "@/styles/modules/communityForm.module.scss";
 
 interface CommunityFormProps {
   isEditing: string;
@@ -45,6 +51,11 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [openImageCrop, setOpenImageCrop] = useState(false);
+  const [imageType, setImageType] = useState<string | null>(null);
 
   const fetchCommunity = async () => {
     try {
@@ -163,6 +174,75 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
     },
   });
 
+  const fileToDataString = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onerror = (error) => reject(error);
+      reader.onloadend = () => resolve(reader.result as string);
+    });
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: string,
+  ) => {
+    const file = event.target.files as FileList;
+    if (!file) {
+      return;
+    }
+    try {
+      setImageType(type);
+      const imgUrl = await fileToDataString(file?.[0] as File);
+      setSelectedImage(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedImage && imageType) {
+      setOpenImageCrop(true);
+    }
+  }, [selectedImage, imageType]);
+
+  const onCropped = async (image: File) => {
+    const imgUrl = await fileToDataString(image);
+    if (imageType === "avatar") {
+      setUploadedAvatarImage(image);
+      setPreviewAvatar(imgUrl);
+      if (avatarInputRef.current) {
+        avatarInputRef.current.value = "";
+      }
+    }
+    if (imageType === "cover") {
+      setUploadedCoverImage(image);
+      setPreviewCover(imgUrl);
+      if (coverInputRef.current) {
+        coverInputRef.current.value = "";
+      }
+    }
+    setOpenImageCrop(false);
+    setImageType(null);
+    setSelectedImage("");
+  };
+
+  const onCancel = () => {
+    setOpenImageCrop(false);
+    if (imageType === "avatar") {
+      if (avatarInputRef.current) {
+        avatarInputRef.current.value = "";
+      }
+    }
+    if (imageType === "cover") {
+      if (coverInputRef.current) {
+        coverInputRef.current.value = "";
+      }
+    }
+    setImageType(null);
+    setSelectedImage("");
+  };
+
   return (
     <Modal
       fullscreen={fullscreen}
@@ -180,36 +260,108 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           <i
             className={`${styles["modal-back__btn"]} bi bi-arrow-left h1 m-0`}
             onClick={handleClose}
-          ></i>
+          />
         )}
-        {/* <Modal.Title>
-          <h1 className="m-0 fw-bold">{title}</h1>
-        </Modal.Title> */}
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         {/* Content */}
         <form onSubmit={formik.handleSubmit}>
-          <label className="fw-600 mb-1" htmlFor="name">
-            {t("avatar_image")}
-          </label>
-          <ImageUpload
-            previewImage={isEditing ? previewAvatar : ""}
-            uploadAvatar={true}
-            folderUpload={S3_GROUP_AVATAR}
-            aspect={1}
-            onChange={(e) => setUploadedAvatarImage(e)}
-          />
-          <label className="fw-600 mt-3 mb-1" htmlFor="name">
-            {t("cover_image")}
-          </label>
-          <ImageUpload
-            previewImage={isEditing ? previewCover : ""}
-            uploadAvatar={false}
-            folderUpload={S3_GROUP_BANNER}
-            aspect={960 / 250}
-            onChange={(e) => setUploadedCoverImage(e)}
-          />
-          <label className="fw-600 mt-3 mb-1" htmlFor="name">
+          {/* Images upload */}
+          <div className="position-relative w-100 bg-image-cover bg-image-center">
+            {/* <div
+              className="rounded-3"
+              style={{
+                backgroundImage: `url(${
+                  previewCover
+                    ? previewCover
+                    : `/assets/images/default-upload.jpg`
+                })`,
+                objectFit: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: "#232425",
+                width: "100%",
+                paddingBottom: "26.04%",
+              }}
+            ></div> */}
+            <Image
+              src={
+                previewCover
+                  ? previewCover
+                  : `/assets/images/default-upload.jpg`
+              }
+              width={960}
+              height={250}
+              alt="cover"
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+            />
+            <label htmlFor="cover" className="cursor-pointer">
+              <i
+                className={`${styles["image-edit__btn"]} ${styles["cover-image-edit__btn"]} bi bi-pencil h3 m-0 position-absolute`}
+              ></i>
+            </label>
+            <input
+              id="cover"
+              ref={coverInputRef}
+              className="visually-hidden"
+              type="file"
+              onChange={(e) => handleFileChange(e, "cover")}
+              accept="image/*"
+              style={{ display: "none" }}
+            />
+            <figure
+              className="avatar position-absolute w75 mb-0 z-index-1"
+              style={{ left: "50px", bottom: "-50%" }}
+            >
+              <Image
+                src={
+                  previewAvatar
+                    ? previewAvatar
+                    : `/assets/images/default-avatar.jpg`
+                }
+                alt="avatar"
+                width={100}
+                height={100}
+                className="float-right p-1 bg-white rounded-circle position-relative"
+                style={{ objectFit: "cover", boxShadow: "0 0 2px 2px #eee" }}
+              />
+              <label htmlFor="avatar" className="cursor-pointer">
+                <i
+                  className={`${styles["image-edit__btn"]} ${styles["avatar-image-edit__btn"]} bi bi-pencil h3 m-0 position-absolute right-0 bottom-0`}
+                ></i>
+              </label>
+              <input
+                id="avatar"
+                ref={avatarInputRef}
+                className="visually-hidden"
+                type="file"
+                onChange={(e) => handleFileChange(e, "avatar")}
+                accept="image/*"
+                style={{ display: "none" }}
+              />
+            </figure>
+          </div>
+          {openImageCrop && (
+            <ImageCropModal
+              isOpen={openImageCrop}
+              onCancel={onCancel}
+              cropped={onCropped}
+              imageUrl={selectedImage}
+              aspect={imageType === "cover" ? 960 / 250 : 1}
+            />
+          )}
+
+          {/* Form inputs */}
+          <label
+            className="fw-600 mb-1"
+            htmlFor="name"
+            style={{ marginTop: "70px" }}
+          >
             {t("group_name")}
           </label>
           <input
