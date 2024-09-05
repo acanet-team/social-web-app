@@ -6,7 +6,7 @@ import { getCommunityPosts } from "@/api/community";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import type { IPost } from "@/api/newsfeed/model";
 import CreatePost from "../newsfeed/Createpost";
-import CommunityOverview from "../CommunityOverview";
+import CommunityOverview from "./CommunityOverview";
 import type { ICommunity } from "@/api/community/model";
 
 export default function CommunityFeed(props: {
@@ -16,7 +16,6 @@ export default function CommunityFeed(props: {
   curPage: number;
   groupId: string;
   userSession: {};
-  // groupOwnerId: number;
   groupData: ICommunity;
 }) {
   const [posts, setPosts] = useState<IPost[]>(props.posts);
@@ -24,8 +23,8 @@ export default function CommunityFeed(props: {
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [hasFetchedInitialData, setHasFetchedInitialData] =
-    useState<boolean>(false);
+  // const [hasFetchedInitialData, setHasFetchedInitialData] =
+  //   useState<boolean>(false);
 
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
@@ -83,12 +82,12 @@ export default function CommunityFeed(props: {
     };
   }, [page, totalPage, isLoading]);
 
-  // Avoid fetching data on initial render
-  useEffect(() => {
-    if (!hasFetchedInitialData) {
-      setHasFetchedInitialData(true);
-    }
-  }, []);
+  // // Avoid fetching data on initial render
+  // useEffect(() => {
+  //   if (!hasFetchedInitialData) {
+  //     setHasFetchedInitialData(true);
+  //   }
+  // }, []);
 
   return (
     <div className="row g-0 g-sm-4 mb-5">
@@ -110,7 +109,9 @@ export default function CommunityFeed(props: {
             <div key={p.id}>
               <PostCard
                 groupOwnerId={props.groupData?.owner?.userId || ""}
-                groupName={p.community?.name || ""}
+                groupName={""}
+                groupAvatar={""}
+                groupId={p.community?.communityId || ""}
                 postId={p.id}
                 nickName={
                   p.user?.nickName || p.user?.firstName + " " + p.user?.lastName

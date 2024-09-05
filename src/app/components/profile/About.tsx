@@ -92,10 +92,10 @@ export const About = ({
             <>
               {expandPost
                 ? aboutText
-                : aboutText.length > 150
-                  ? aboutText.substring(0, 150) + "..."
+                : aboutText?.length > 150
+                  ? aboutText?.substring(0, 150) + "..."
                   : aboutText}
-              {aboutText.length > 150 && !expandPost ? (
+              {aboutText?.length > 150 && !expandPost ? (
                 <span
                   className={"cursor-pointer text-blue"}
                   onClick={() => setExpandPost((open) => !open)}

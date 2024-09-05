@@ -24,7 +24,7 @@ export function RouterProgressBar(
       console.log("complete");
       hideLoading();
     }
-    console.log(width);
+    // console.log(width);
   }, [width]);
 
   useEffect(() => {

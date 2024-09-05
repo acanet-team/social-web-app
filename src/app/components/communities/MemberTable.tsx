@@ -20,10 +20,11 @@ const TAKE = 5;
 export default function MemberTable(props: {
   groupId: string;
   tab: string;
+  ownerId: number;
   pendingRequests: number;
   setPendingRequests: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const { tab, groupId, pendingRequests, setPendingRequests } = props;
+  const { tab, groupId, pendingRequests, setPendingRequests, ownerId } = props;
   const t = useTranslations("Community");
   const tModal = useTranslations("Modal");
   const tForm = useTranslations("Form");
@@ -39,30 +40,32 @@ export default function MemberTable(props: {
   const [rejectedRequest, setRejectedRequest] = useState<string>();
   const [curUser, setCurUser] = useState<number>();
   const [openInvite, setOpenInvite] = useState<boolean>(false);
+  const inviteBtnRef = useRef<HTMLButtonElement>(null);
+  const inviteModalRef = useRef<HTMLDivElement>(null);
   const { showLoading, hideLoading } = useLoading();
+  const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
 
   // Calculate current row index
   const startRow = (page - 1) * TAKE + 1;
   const endRow = Math.min(page * TAKE, totalMembers);
 
   useEffect(() => {
-    if (session) {
-      setCurUser(session.user.id);
-    }
-  }, [curUser]);
+    setCurUser(session?.user.id);
+    console.log("refresher", curUser);
+  }, [session]);
 
-  async function getMembers(page: number) {
+  async function getMembers(page = 1, search: string) {
     showLoading();
     try {
       const res = await getCommunityMembers({
         page: page,
         take: TAKE,
         communityStatus: tab === "members" ? "joined" : "pending_request",
-        search: searchValue,
+        // search: searchValue,
+        search: search,
         communityId: groupId,
       });
       setMembers(res.data?.docs || []);
-      console.log("members", res);
       setPendingRequests(res.data.totalPendingRequest);
       setPage(res.data?.meta?.page);
       setTotalPage(res.data.meta.totalPage);
@@ -75,28 +78,35 @@ export default function MemberTable(props: {
   }
 
   useEffect(() => {
-    if (page > 1) {
-      getMembers(page);
+    if (searchRef.current) {
+      searchRef.current.value = "";
     }
-  }, [page]);
+    setSearchValue("");
+    setPage(1);
+    setMembers([]);
+    setReadyToFetch(true);
+  }, [tab]);
+
+  useEffect(() => {
+    if (readyToFetch) {
+      getMembers(1, "");
+      setReadyToFetch(false);
+    }
+  }, [readyToFetch]);
 
   useEffect(() => {
     if (searchValue) {
       setPage(1);
       setMembers([]);
-      getMembers(page);
+      getMembers(1, searchValue);
     }
   }, [searchValue]);
 
   useEffect(() => {
-    setPage(1);
-    setSearchValue("");
-    if (searchRef.current) {
-      searchRef.current.value = "";
+    if (page > 1) {
+      getMembers(page, searchValue);
     }
-    setMembers([]);
-    getMembers(1);
-  }, [tab]);
+  }, [page]);
 
   const onSearchHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -168,6 +178,23 @@ export default function MemberTable(props: {
     [rejectedRequest, deletedUser],
   );
 
+  // Handle clicking outside the invite modal
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      !inviteBtnRef?.current?.contains(event.target as Node) &&
+      !inviteModalRef?.current?.contains(event.target as Node)
+    ) {
+      setOpenInvite(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div>
       <div
@@ -186,7 +213,7 @@ export default function MemberTable(props: {
           </span>
         </div>
 
-        <div className="mb-3 gap-2 d-flex justify-content-sm-end mt-3 mt-sm-0">
+        <div className="mb-3 d-flex justify-content-sm-end mt-3 mt-sm-0 position-relative">
           <Box
             component="form"
             sx={{ width: "300px" }}
@@ -215,11 +242,17 @@ export default function MemberTable(props: {
             />
           </Box>
           <button
-            className="main-btn bg-current font-xsss text-center text-white fw-600 px-2 w175 rounded-3 border-0 d-inline-block"
-            onClick={() => setOpenInvite(true)}
+            className="main-btn ms-3 bg-current font-xsss text-center text-white fw-600 px-2 w175 rounded-3 border-0 d-inline-block"
+            ref={inviteBtnRef}
+            onClick={() => setOpenInvite((open) => !open)}
           >
             + {t("invite new user")}
           </button>
+          {openInvite && (
+            <div ref={inviteModalRef}>
+              <UserInvite />
+            </div>
+          )}
         </div>
       </div>
 
@@ -277,7 +310,7 @@ export default function MemberTable(props: {
                       {m.user.gmail}
                     </td>
                     <td className={`${styles["action-col"]} col-1 px-0`}>
-                      {curUser !== m.user.userId ? (
+                      {curUser !== m.user.userId && curUser === ownerId ? (
                         tab === "members" ? (
                           <i
                             className="bi bi-trash3-fill text-grey-700 h3 m-0 ms-3 cursor-pointer"
@@ -334,7 +367,6 @@ export default function MemberTable(props: {
           onOk={() => onProceedAction("")}
         />
       )}
-      {openInvite && <UserInvite />}
     </div>
   );
 }

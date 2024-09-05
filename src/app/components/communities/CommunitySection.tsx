@@ -17,6 +17,7 @@ import { getCommunities } from "@/api/community";
 import { useSession } from "next-auth/react";
 import CommunityCard from "./CommunityCard";
 import { useTranslations } from "next-intl";
+import page from "@/pages/courses/investor/page";
 
 export default function CommunitySection(props: {
   isBroker: boolean;
@@ -34,14 +35,16 @@ export default function CommunitySection(props: {
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [filterValue, setFilterValue] = React.useState<string>("");
-  const [shownFilterValue, setShownFilterValue] = React.useState<string>("");
   // const [filterValue, setFilterValue] = React.useState<string[]>([]);
-  const [searchValue, setSearchValue] = useState("");
+  const [filterValues, setFilterValues] = useState<{
+    searchValue: string;
+    filterValue: string;
+  }>({ searchValue: "", filterValue: "" });
+  const [shownFilterValue, setShownFilterValue] = React.useState<string>("");
+  const searchRef = useRef<HTMLInputElement>(null);
   const [show, setShow] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<string>("");
   const [brokerId, setBrokerId] = useState<number | "">("");
-  const searchRef = useRef<HTMLInputElement>(null);
   const filters = [
     tForm("filter_none"),
     tForm("filter_free"),
@@ -71,8 +74,10 @@ export default function CommunitySection(props: {
               ? "joined"
               : "",
         brokerId: props.communityType === "owned" ? brokerId : "",
-        search: searchValue,
-        feeType: filterValue ? filterValue.toLowerCase() : "",
+        search: filterValues.searchValue,
+        feeType: filterValues.filterValue
+          ? filterValues.filterValue.toLowerCase()
+          : "",
       });
       // console.log("Communities fetched:", response);
       setCommunityArr((prev) => {
@@ -119,9 +124,11 @@ export default function CommunitySection(props: {
   // Reset states and fetch data on tab (communityType) change
   useEffect(() => {
     if (hasFetchedInitialData) {
-      setFilterValue("");
+      setFilterValues({ searchValue: "", filterValue: "" });
+      if (searchRef.current) {
+        searchRef.current.value = "";
+      }
       setShownFilterValue(tForm("filter_none"));
-      setSearchValue("");
       setPage(1);
       setTotalPage(2);
       setCommunityArr([]);
@@ -137,12 +144,12 @@ export default function CommunitySection(props: {
   }, [readyToFetch]);
 
   useEffect(() => {
-    if (searchValue || filterValue || shownFilterValue) {
+    if (filterValues.searchValue || filterValues.filterValue) {
       setPage(1);
       setCommunityArr([]);
       fetchCommunities(1);
     }
-  }, [searchValue, filterValue, shownFilterValue]);
+  }, [filterValues]);
 
   useEffect(() => {
     if (page > 1) {
@@ -165,7 +172,7 @@ export default function CommunitySection(props: {
         : localeFilterValue === tForm("filter_paid")
           ? "paid"
           : "";
-    setFilterValue(filterValue);
+    setFilterValues((prev) => ({ ...prev, filterValue: filterValue }));
     setShownFilterValue(localeFilterValue);
   };
   // const onFilterHandler = (e: SelectChangeEvent) => {
@@ -185,8 +192,13 @@ export default function CommunitySection(props: {
   const onSearchHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (searchRef.current) {
-        setSearchValue(searchRef.current.value);
+      const inputElement = searchRef.current;
+      if (inputElement) {
+        setFilterValues((prev) => ({
+          ...prev,
+          searchValue: inputElement.value,
+        }));
+        // setSearchValue(searchRef.current.value);
       }
     }
   };

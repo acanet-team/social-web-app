@@ -40,11 +40,11 @@ export default function Posts(props: {
     try {
       const response: any = await getPosts(page, take, props.feedType);
       console.log("posts", response);
-      // setPosts((prev) => [...prev, ...response.data.docs]);
-      setPosts((prev) => {
-        const newPosts = combineUniqueById(prev, response.data.docs);
-        return newPosts;
-      });
+      setPosts((prev) => [...prev, ...response.data.docs]);
+      // setPosts((prev) => {
+      //   const newPosts = combineUniqueById(prev, response.data.docs);
+      //   return newPosts;
+      // });
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -129,8 +129,10 @@ export default function Posts(props: {
           posts.map((p: IPost) => (
             <div key={p.id}>
               <PostCard
-                groupOwnerId=""
-                groupName=""
+                groupOwnerId={""}
+                groupName={p.community?.name || ""}
+                groupAvatar={p.community?.avatar?.path || ""}
+                groupId={p.community?.communityId || ""}
                 postId={p.id}
                 nickName={
                   p.user.nickName || p.user.firstName + " " + p.user.lastName

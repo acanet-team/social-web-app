@@ -88,8 +88,10 @@ const PostProfile = (props: {
       {myPosts.map((myPost) => (
         <div key={""}>
           <PostCard
-            groupOwnerId={""}
-            groupName={""}
+            groupOwnerId=""
+            groupName=""
+            groupId=""
+            groupAvatar={myPost.community?.avatar?.path || ""}
             postId={myPost.id}
             nickName={
               myPost.user.nickName ||
