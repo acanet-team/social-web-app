@@ -185,7 +185,8 @@
     "table_action": "Action",
     "about": "About",
     "private": "Private",
-    "owner": "Owner"
+    "owner": "Owner",
+    "invite_user": "Invite a new user"
   },
   "FeedTabs": {
     "for_you": "For you",

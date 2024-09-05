@@ -119,5 +119,10 @@
     "approve_notification": "สมาชิกถูกเพิ่มในชุมชนของคุณแล้ว",
     "delete_member_notification": "ลบสมาชิกเรียบร้อยแล้ว",
     "approve_member_notification": "เพิ่มสมาชิกในชุมชนของคุณแล้ว"
+  },
+  "Base": {
+    "joined": "",
+    "pending": "",
+    "join": ""
   }
 }

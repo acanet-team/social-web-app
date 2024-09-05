@@ -1,6 +1,6 @@
 .comment-container {
   padding: 10px 5px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-color-light);
 }
 
 .comment-input textarea {
@@ -32,7 +32,7 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: #fff; // Background of the scrollbar track
+    background: var(--light); // Background of the scrollbar track
   }
 
   &::-webkit-scrollbar-thumb {

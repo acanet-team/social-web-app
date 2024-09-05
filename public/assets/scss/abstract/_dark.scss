@@ -231,7 +231,7 @@
 .theme-dark .dropdown-menu-settings,
 .theme-dark .main-content {
   // background-color: #1a2236;
-  background-color: #0f0c26;
+  background-color: var(--theme-dark-color-bg-darker);
 }
 
 .theme-dark .profile-radio-btn label:before,

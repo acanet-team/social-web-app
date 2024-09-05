@@ -42,7 +42,7 @@
 
 :global(.theme-dark) {
   .circle-loader div {
-    border: 6px solid #fff;
-    border-color: #fff transparent transparent transparent;
+    border: 6px solid var(--light);
+    border-color: var(--light) transparent transparent transparent;
   }
 }

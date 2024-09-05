@@ -1,7 +1,7 @@
 .dots-3 {
   width: 30px;
   aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side, var(--theme-color-main) 90%, #fff);
+  --_g: no-repeat radial-gradient(circle closest-side, var(--theme-color-main) 90%, var(--light));
   background: 
     var(--_g) 0%   50%,
     var(--_g) 50%  50%,
@@ -18,6 +18,6 @@
 
 :global(.theme-dark) {
   .dots-3 {
-    --_g: no-repeat radial-gradient(circle closest-side, #fff 90%,var(--theme-color));
+    --_g: no-repeat radial-gradient(circle closest-side, var(--light) 90%,var(--theme-color));
   }
 }

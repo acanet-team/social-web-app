@@ -18,7 +18,7 @@
 // Community table
 .community-table {
   padding: 1rem 1.5rem 1.5rem 1.5rem;
-  background-color: #fff;
+  background-color: var(--light);
 }
 
 .community-table td,
@@ -32,7 +32,7 @@
 }
 
 .member-tab__subtitle {
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .name-col {
@@ -55,7 +55,7 @@
 
   .community-table td,
   .community-table th {
-    color: #fff !important;
+    color: var(--light) !important;
   }
 }
 

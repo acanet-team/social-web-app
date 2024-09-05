@@ -15,11 +15,11 @@
   border-radius: 5px;
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(125, 114, 114, 0.1);
-  background-color: #fff;
+  background-color: var(--light);
 }
 
 .table-pagination button:disabled {
-  background-color: #ddd;
+  background-color: var(--border-color-lighter);
   cursor: not-allowed;
   opacity: 0.5;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
@@ -32,7 +32,7 @@
 .table-pagination li:focus {
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   background: #135fb4;
-  color: #fff;
+  color: var(--light);
 }
 
 :global(.theme-dark) {
@@ -41,7 +41,7 @@
   .table-pagination li:active,
   .table-pagination li:focus {
     background-color: var(--theme-color-shade);
-    color: #fff;
+    color: var(--light);
   }
   .table-pagination li, .table-pagination button {
     color: var(--theme-color-shade);

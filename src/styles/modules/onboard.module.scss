@@ -37,7 +37,7 @@ $text-color-optional: #9fb3c8;
       .step-circle {
         background-color: var(--theme-color-main);
         border: 3px solid var(--theme-color-main);
-        color: #ffffff;
+        color: var(--light)fff;
 
         &:before {
           font-family: "Bootstrap-icons";
@@ -56,7 +56,7 @@ $text-color-optional: #9fb3c8;
 
     &.editing {
       .step-circle {
-        background: #ffffff;
+        background: var(--light)fff;
         border-color: var(--theme-color-main);
         color: var(--theme-color-main);
       }
@@ -130,7 +130,7 @@ $text-color-optional: #9fb3c8;
   .step {
     .step-circle {
       border: 3px solid $text-color-inactive;
-      background-color: #fff;
+      background-color: var(--light);
       color: $text-color-inactive;
     }
 
@@ -138,7 +138,7 @@ $text-color-optional: #9fb3c8;
       .step-circle {
         background-color: var(--theme-color-shade);
         border: 3px solid var(--theme-color-shade);
-        color: #fff;
+        color: var(--light);
       }
     }
 
@@ -146,17 +146,17 @@ $text-color-optional: #9fb3c8;
       .step-circle {
         background-color: var(--theme-color);
         border-color: var(--theme-color-shade);
-        color: #fff; 
+        color: var(--light); 
       }
       .step-title {
-        color: #fff;
+        color: var(--light);
       }
     }
 
     .step-bar-left,
     .step-bar-right {
-      background-color: #fff;
-      border: solid #fff;
+      background-color: var(--light);
+      border: solid var(--light);
     }
 
     &.done .step-bar-right {
@@ -165,7 +165,7 @@ $text-color-optional: #9fb3c8;
     }
     &.done {
       .step-title {
-        color: #fff;
+        color: var(--light);
       }
     }
   }
