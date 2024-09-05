@@ -4,7 +4,6 @@ import React, {
   useState,
   type ChangeEventHandler,
 } from "react";
-import styles from "@/styles/modules/modalTemplate.module.scss";
 import classes from "@/styles/modules/createProfile.module.scss";
 import { useFormik } from "formik";
 import { throwToast } from "@/utils/throw-toast";
@@ -19,6 +18,7 @@ import { createCommunity, editCommunity, getACommunity } from "@/api/community";
 import type { ICommunity } from "@/api/community/model";
 import Image from "next/image";
 import { ImageCropModal } from "@/components/ImageCropModal";
+import styles from "@/styles/modules/communityForm.module.scss";
 
 interface CommunityFormProps {
   isEditing: string;
@@ -268,22 +268,38 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         <form onSubmit={formik.handleSubmit}>
           {/* Images upload */}
           <div className="position-relative w-100 bg-image-cover bg-image-center">
-            <div
-              className="h100 rounded-3"
+            {/* <div
+              className="rounded-3"
               style={{
                 backgroundImage: `url(${
-                  isEditing && previewCover
+                  previewCover
                     ? previewCover
-                    : `/assets/images/e-1.jpg`
+                    : `/assets/images/default-upload.jpg`
                 })`,
-                objectFit: "fill",
+                objectFit: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 backgroundColor: "#232425",
                 width: "100%",
                 paddingBottom: "26.04%",
               }}
-            ></div>
+            ></div> */}
+            <Image
+              src={
+                previewCover
+                  ? previewCover
+                  : `/assets/images/default-upload.jpg`
+              }
+              width={960}
+              height={250}
+              alt="cover"
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+            />
             <label htmlFor="cover" className="cursor-pointer">
               <i
                 className={`${styles["image-edit__btn"]} ${styles["cover-image-edit__btn"]} bi bi-pencil h3 m-0 position-absolute`}
@@ -300,19 +316,19 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             />
             <figure
               className="avatar position-absolute w75 mb-0 z-index-1"
-              style={{ left: "50px", bottom: "-15px" }}
+              style={{ left: "50px", bottom: "-50%" }}
             >
               <Image
                 src={
-                  isEditing && previewAvatar
+                  previewAvatar
                     ? previewAvatar
-                    : `/assets/images/user.png`
+                    : `/assets/images/default-avatar.jpg`
                 }
                 alt="avatar"
                 width={100}
                 height={100}
                 className="float-right p-1 bg-white rounded-circle position-relative"
-                style={{ objectFit: "fill" }}
+                style={{ objectFit: "cover", boxShadow: "0 0 2px 2px #eee" }}
               />
               <label htmlFor="avatar" className="cursor-pointer">
                 <i
@@ -344,7 +360,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           <label
             className="fw-600 mb-1"
             htmlFor="name"
-            style={{ marginTop: "30px" }}
+            style={{ marginTop: "70px" }}
           >
             {t("group_name")}
           </label>
