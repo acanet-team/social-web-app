@@ -186,7 +186,8 @@
     "table_action": "Action",
     "about": "About",
     "private": "Private",
-    "owner": "Owner"
+    "owner": "Owner",
+    "invite_user": "Invite a new user"
   },
   "MyProfile": {
     "follow": "Follow",

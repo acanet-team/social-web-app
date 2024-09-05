@@ -6,7 +6,7 @@
 
 #interest .btn-selected {
   background-color: var(--theme-color-main);
-  color: #fff !important;
+  color: var(--light) !important;
 }
 
 #interest button,
@@ -17,7 +17,7 @@
 }
 
 #interest p {
-  color: #fff;
+  color: var(--light);
 }
 
 #interest-container {
@@ -36,14 +36,14 @@
 
 .interest-options button:hover {
   background-color: var(--theme-color-main);
-  color: #fff;
+  color: var(--light);
   box-shadow: 0px 0px 1px 1px var(--theme-color-main);
   overflow-y: scroll;
 }
 
 :global(.theme-dark) #interest .btn-selected {
   background-color: var(--theme-color-shade) !important;
-  color: #fff !important;
+  color: var(--light) !important;
 }
 
 :global(.theme-dark) #interest button {

@@ -46,11 +46,11 @@
 :global(.theme-dark) {
   #home .home-tabs .button-tab {
     background-color: var(--theme-color) !important;
-    color: #fff !important;
+    color: var(--light) !important;
     border-bottom: 0.3px solid #dddddd8f !important;
   }
 
   .tab-active::before {
-    border: 2px solid #fff;
+    border: 2px solid var(--light);
   }
 }

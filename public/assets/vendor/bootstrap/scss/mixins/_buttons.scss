@@ -16,6 +16,8 @@
   $active-color: color-contrast($active-background),
   $disabled-background: $background,
   $disabled-border: $border,
+  // $disabled-background: #111,
+  // $disabled-border: #111,
   $disabled-color: color-contrast($disabled-background)
 ) {
   color: $color;
@@ -131,3 +133,4 @@
   @include border-radius($border-radius, 0);
 }
 // scss-docs-end btn-size-mixin
+

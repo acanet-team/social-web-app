@@ -1,5 +1,5 @@
 :global(.theme-dark) #load :global {
   .dot-typing {
-    color: #fff !important;
+    color: var(--light) !important;
   }
 }

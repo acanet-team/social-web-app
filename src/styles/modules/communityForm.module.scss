@@ -3,7 +3,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--light);
   padding: 0 2.5rem;
   position: relative;
 }
@@ -93,7 +93,7 @@
   }
   
   .image-edit__btn:hover::before {
-    color: #fff;
+    color: var(--light);
   }
 }
 

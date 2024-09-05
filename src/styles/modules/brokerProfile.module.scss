@@ -1,16 +1,16 @@
 #all-brokers .broker-profile {
   width: 225px;
-  background-color: #fff;
-  border: 1px solid #eee;
+  background-color: var(--light);
+  border: 1px solid var(--border-color-light);
   box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
   border-radius: 5px;
   padding: 8px;
 }
 
 #all-brokers .profile-data {
-  background-color: #eee;
+  background-color: var(--border-color-light);
   color: #111111c8;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color-lighter);
   border-radius: 5px;
   width: 100%;
   padding: 8px;
@@ -26,7 +26,7 @@
 }
 
 #all-brokers .follow-btn:hover {
-  box-shadow: 0 0 2px 1px #eee !important;
+  box-shadow: 0 0 2px 1px var(--border-color-light) !important;
 }
 
 #all-brokers .broker-icon {
@@ -50,7 +50,7 @@
   padding: 8px 0;
   border-radius: 5px;
   background-color: #9e9e9e !important;
-  color: #fff !important;
+  color: var(--light) !important;
 }
 
 #all-brokers .follow-btn:hover {
@@ -59,7 +59,7 @@
 
 #all-brokers .follow-broker {
   background-color: var(--theme-color-main) !important;
-  color: #fff !important;
+  color: var(--light) !important;
   font-weight: 800;
 }
 
@@ -75,9 +75,9 @@
 }
 
 :global(.theme-dark) #all-brokers .broker-stats {
-  color: #fff;
+  color: var(--light);
 }
 
 :global(.theme-dark) #all-brokers .broker-skill {
-  color: #fff;
+  color: var(--light);
 }

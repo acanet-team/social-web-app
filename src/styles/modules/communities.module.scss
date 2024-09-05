@@ -12,7 +12,7 @@
   height: 35px;
   opacity: 0.6;
   font-weight: 700;
-  background-color: #fff;
+  background-color: var(--light);
   color: #111 !important;
   position: relative;
   float: inline-start;
@@ -58,7 +58,7 @@
   }
 
   #community p {
-    color: #fff;
+    color: var(--light);
   }
 
   #community .community-tabs {
@@ -67,23 +67,23 @@
 
   #community .community-tabs .button-tab {
     background-color: var(--theme-color) !important;
-    color: #fff !important;
+    color: var(--light) !important;
     border-bottom: 0.3px solid #dddddd8f !important;
     padding: 20px 0;
   }
 
   #community .tab-active::before {
-    border: 2px solid #fff;
+    border: 2px solid var(--light);
   }
 
   #community .new-community__btn:hover {
     background-color: var(--theme-color-shade);
     border-color: var(--theme-color-shade);
-    color: #fff !important;
+    color: var(--light) !important;
   }
 
   .edit-group__btn {
-    color: #fff;
+    color: var(--light);
   }
 }
 

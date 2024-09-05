@@ -8,7 +8,10 @@
     "comment": "Bình luận",
     "comments": "Bình luận",
     "follower": "theo dõi",
-    "followers": "theo dõi"
+    "followers": "theo dõi",
+    "joined": "",
+    "pending": "",
+    "join": ""
   },
   "Time": {
     "now": "bây giờ",
@@ -200,7 +203,8 @@
     "table_action": "Hành động",
     "about": "Thông tin",
     "private": "Riêng tư",
-    "owner": "Chủ cộng đồng"
+    "owner": "Chủ cộng đồng",
+    "invite_user": "Thêm thành viên mới"
   },
   "FeedTabs": {
     "for_you": "Dành cho bạn",

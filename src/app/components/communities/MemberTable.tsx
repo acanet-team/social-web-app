@@ -14,6 +14,7 @@ import AlertModal from "../AlertModal";
 import { throwToast } from "@/utils/throw-toast";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import UserInvite from "./UserInvite";
 
 const TAKE = 5;
 export default function MemberTable(props: {
@@ -37,6 +38,7 @@ export default function MemberTable(props: {
   const [deletedUser, setDeletedUser] = useState<number | undefined>(undefined);
   const [rejectedRequest, setRejectedRequest] = useState<string>();
   const [curUser, setCurUser] = useState<number>();
+  const [openInvite, setOpenInvite] = useState<boolean>(false);
   const { showLoading, hideLoading } = useLoading();
 
   // Calculate current row index
@@ -173,7 +175,7 @@ export default function MemberTable(props: {
       >
         <div className="d-flex align-items-center">
           <h3
-            className={`${styles["member-tab__title"]} m-0 me-3 text-grey-800 fw-bold d-inline`}
+            className={`${styles["member-tab__title"]} m-0 me-2 text-grey-800 fw-bold d-inline`}
           >
             {tab === "members" ? "All Users" : "Pending Requests"}
           </h3>
@@ -212,7 +214,10 @@ export default function MemberTable(props: {
               }}
             />
           </Box>
-          <button className="main-btn bg-current font-xsss text-center text-white fw-600 px-2 w175 rounded-3 border-0 d-inline-block">
+          <button
+            className="main-btn bg-current font-xsss text-center text-white fw-600 px-2 w175 rounded-3 border-0 d-inline-block"
+            onClick={() => setOpenInvite(true)}
+          >
             + {t("invite new user")}
           </button>
         </div>
@@ -329,6 +334,7 @@ export default function MemberTable(props: {
           onOk={() => onProceedAction("")}
         />
       )}
+      {openInvite && <UserInvite />}
     </div>
   );
 }

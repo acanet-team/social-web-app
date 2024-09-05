@@ -30,7 +30,7 @@
   content: "";
   height: 18px;
   width: 18px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-color-lighter);
   border-radius: 50%;
   position: absolute;
   right: 10px;
@@ -48,7 +48,7 @@
   height: 18px;
   width: 18px;
   border: 5px solid var(--theme-color-main);
-  background-color: #ffffff;
+  background-color: var(--light);
 }
 
 #profile-radio input[type="radio"]:checked + label {

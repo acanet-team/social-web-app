@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Darkbutton from "./Darkbutton";
@@ -17,7 +17,9 @@ export default function Header(props: { isOnboarding: boolean }) {
   const logout = useAuthStore((state) => state.logout);
   const [photo, setPhoto] = useState<string>("");
   const { data: session } = useSession() as any;
+  const modalRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("NavBar");
+  const userId = session?.user?.id;
 
   useEffect(() => {
     if (session) {
@@ -44,17 +46,29 @@ export default function Header(props: { isOnboarding: boolean }) {
     };
   }, []);
 
-  const onOpenSettingHandler = () => {
-    setOpenSettings((open) => !open);
-  };
-
   const onLogOutHandler = () => {
     logout();
     // Calling next/auth sign out
     signOut({ callbackUrl: "/login" });
   };
 
-  const userId = session?.user?.id;
+  const onOpenSettingHandler = () => {
+    setOpenSettings((open) => !open);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setOpenSettings(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="nav-header shadow-xs border-0 nunito-font">
       <div className="nav-top">
@@ -399,7 +413,11 @@ export default function Header(props: { isOnboarding: boolean }) {
           </div>
         </form>
       </div> */}
-      {openSettings && <HeaderSetting />}
+      {openSettings && (
+        <div ref={modalRef}>
+          <HeaderSetting />
+        </div>
+      )}
     </div>
   );
 }

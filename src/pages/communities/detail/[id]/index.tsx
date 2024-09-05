@@ -9,7 +9,6 @@ import {
 import { useSession } from "next-auth/react";
 import CommunityFeed from "@/app/components/communities/CommunityFeed";
 import MemberTable from "@/app/components/communities/MemberTable";
-import { useTranslations } from "next-intl";
 
 const TAKE = 10;
 export default function CommunityView({

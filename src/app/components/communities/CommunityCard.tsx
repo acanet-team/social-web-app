@@ -54,15 +54,15 @@ export default function CommunityCard(props: {
 
   return (
     <div className="card d-block border-0 shadow-md h-100 rounded-3 overflow-hidden">
-      <div
-        className="card-body position-relative h100 bg-image-cover bg-image-center"
-        style={{
-          backgroundImage: `url(${
-            coverImg ? coverImg : `/assets/images/e-1.jpg`
-          })`,
-        }}
-      ></div>
-      <div className="card-body d-block w-100 pl-10 pe-4 py-0 text-left position-relative">
+      <div className="position-relative">
+        <div
+          className="card-body h100 bg-image-cover bg-image-center"
+          style={{
+            backgroundImage: `url(${
+              coverImg ? coverImg : `/assets/images/e-1.jpg`
+            })`,
+          }}
+        ></div>
         <figure
           className="avatar position-absolute w75 z-index-1 left-15"
           style={{ marginTop: `-40px` }}
@@ -76,13 +76,15 @@ export default function CommunityCard(props: {
             style={{ objectFit: "cover" }}
           />
         </figure>
-        <div className="clearfix"></div>
-        <div className="mt-2 d-flex justify-content-between align-items-center">
+      </div>
+
+      <div className="card-body d-block w-100 py-0 text-left position-relative">
+        <div className="mt-3 pl-10 d-flex justify-content-between align-items-start">
           <div className="me-3 e-sm-2 d-flex flex-column align-items-between">
-            <h4 className="fw-700 font-xss mt-2 mb-1">
+            <h4 className="fw-700 font-xss mb-1">
               {firstName + " " + lastName}
             </h4>
-            <div className="fw-500 font-xsss text-grey-500 mt-0 mb-1 lh-3">
+            <div className="fw-500 font-xsss text-break text-grey-500 mt-0 mb-1 lh-3">
               @{nickName}
             </div>
             <div className="fw-500 font-xsss fst-italic text-dark mt-0 lh-3">
@@ -126,7 +128,7 @@ export default function CommunityCard(props: {
           </div>
         </div>
       </div>
-      <div className="card-body h-100 mt-2 ps-4 pb-4 cursor-pointer">
+      <div className="card-body h-100 mt-2 pb-4 cursor-pointer">
         <div className="d-flex align-items-center">
           <Link href={`/communities/detail/${groupId}`}>
             <h3 className="fw-bold fs-3 m-0 mb-2">{name}</h3>

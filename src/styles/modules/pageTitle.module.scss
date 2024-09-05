@@ -1,6 +1,6 @@
 #header-title {
   width: 100%;
-  color: #fff;
+  color: var(--light);
   display: flex;
   flex-direction: column;
   padding: 2.5rem;
@@ -11,21 +11,21 @@
   font-size: 25px;
   letter-spacing: -3%;
   width: 100%;
-  color: #fff;
+  color: var(--light);
 }
 
 #page-title__search {
-  background-color: #ddd;
+  background-color: var(--border-color-lighter);
 }
 
 :global(.theme-dark) {
   #header-title {
-    color: #fff;
+    color: var(--light);
     background-color: var(--theme-color-shade) !important;
   }
 
   .page-intro {
-    color: #fff !important;
+    color: var(--light) !important;
   }
   
 }
