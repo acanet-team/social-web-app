@@ -16,6 +16,8 @@ import { setCookie } from "nookies";
 import { type ReactElement, type ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -40,7 +42,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <ToastContainer />
         <LoadingProvider>
           <RouterProgressBar />
-          {getLayout(<Component {...pageProps} />)}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {getLayout(<Component {...pageProps} />)}
+          </LocalizationProvider>
           <Loading />
         </LoadingProvider>
       </NextIntlClientProvider>

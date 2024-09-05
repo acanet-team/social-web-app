@@ -1,0 +1,158 @@
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  type SetStateAction,
+} from "react";
+import styles from "@/styles/modules/profile.module.scss";
+import type { BrokerProfile } from "@/api/profile/model";
+import { useTranslations } from "next-intl";
+import { throwToast } from "@/utils/throw-toast";
+import { updateProfile } from "@/api/profile";
+import WaveLoader from "../WaveLoader";
+
+export const About = ({
+  dataBrokerProfile,
+  role,
+}: {
+  // setAboutText: React.Dispatch<React.SetStateAction<string>>;
+  dataBrokerProfile: BrokerProfile;
+  role: boolean;
+}) => {
+  const t = useTranslations("MyProfile");
+  const [show, setShow] = useState(false);
+  const [aboutText, setAboutText] = useState("");
+  const [expandPost, setExpandPost] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setAboutText(dataBrokerProfile.about);
+  }, []);
+
+  const handleOpen = () => {
+    setShow(!show);
+  };
+
+  const submitAbout = async () => {
+    if (aboutText.trim() === "") {
+      throwToast("Please enter some text for your about", "error");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const newAboutFormDt = new FormData();
+      if (aboutText) {
+        const brokerProfies = {
+          about: aboutText,
+        };
+        newAboutFormDt.append("brokerProfile", JSON.stringify(brokerProfies));
+      }
+      await updateProfile(newAboutFormDt);
+      setShow(false);
+      throwToast("About updated successfully", "success");
+    } catch (error) {
+      throwToast("Error updating", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div
+        className="card p-4"
+        style={{
+          background: "#FFFFFF",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          borderRadius: "5px",
+          marginTop: "40px",
+        }}
+      >
+        <div
+          className="mb-4"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <h2 className="m-0 fw-600">{t("about")}</h2>
+          {role === true && (
+            <h4>
+              <i
+                className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                onClick={() => handleOpen()}
+              ></i>
+            </h4>
+          )}
+        </div>
+        <div>
+          {!show ? (
+            <>
+              {expandPost
+                ? aboutText
+                : aboutText.length > 150
+                  ? aboutText.substring(0, 150) + "..."
+                  : aboutText}
+              {aboutText.length > 150 && !expandPost ? (
+                <span
+                  className={"cursor-pointer text-blue"}
+                  onClick={() => setExpandPost((open) => !open)}
+                >
+                  See more
+                </span>
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            <div>
+              <div
+                style={{
+                  resize: "none",
+                  border: "1px solid #ddd",
+                  padding: "15px",
+                  borderRadius: "10px",
+                  paddingRight: "0px",
+                }}
+              >
+                <textarea
+                  className="w-100 m-0 font-xsss fw-400 lh-20 theme-dark-bg d-flex"
+                  onChange={(event) => {
+                    setAboutText(event.target.value);
+                  }}
+                  rows={5}
+                  value={aboutText}
+                  maxLength={5000}
+                  style={{
+                    resize: "none",
+                    border: "none",
+                  }}
+                  placeholder="Please write your description"
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "8px",
+                }}
+              >
+                <button
+                  className="px-4 py-1 bg-blue-button text-white font-xsss"
+                  style={{ marginRight: "0px", border: "none" }}
+                >
+                  <p className="m-0" onClick={() => submitAbout()}>
+                    Save
+                  </p>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {isLoading && <WaveLoader />}
+    </>
+  );
+};

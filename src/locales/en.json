@@ -150,7 +150,8 @@
     "settings": "Settings",
     "logout": "Log out",
     "chat": "Chat",
-    "account": "Account"
+    "account": "Account",
+    "my profile": "My Profile"
   },
   "Community": {
     "community": "Communities",
@@ -186,6 +187,20 @@
     "about": "About",
     "private": "Private",
     "owner": "Owner"
+  },
+  "MyProfile": {
+    "follow": "Follow",
+    "messages": "Messages",
+    "about": "About",
+    "experience": "Experience",
+    "education": "Education",
+    "license&certifications": "License & Certificate",
+    "socialMedia": "Social Media",
+    "AI summary": "AI summary",
+    "contact": "Contact",
+    "servicesOffer": "Services offer",
+    "location": "Location",
+    "interestTopic": "Interest Topic"
   },
   "FeedTabs": {
     "for_you": "For you",

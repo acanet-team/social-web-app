@@ -5,10 +5,12 @@ import { useSession } from "next-auth/react";
 import type { IUser } from "@/api/auth/auth.model";
 
 export default function Appfooter() {
-  const { data: session } = useSession();
+  const { data: session } = useSession() as any;
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
+  const [id, setId] = useState();
   useEffect(() => {
     if (session) {
+      setId(session?.user?.id);
       setUserInfo({
         ...session.user,
         avatar: session.user.photo.path || "/assets/images/user.png",
@@ -18,6 +20,9 @@ export default function Appfooter() {
 
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
+      <Link href={`/profile/${id}`} className="nav-content-bttn nav-center">
+        <i className="feather-user"></i>
+      </Link>
       <Link href="/home" className="nav-content-bttn nav-center">
         <i className="feather-home"></i>
       </Link>

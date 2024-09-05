@@ -37,6 +37,7 @@
   .h6,
   label,
   input,
+  span,
   fieldset {
     color: #fff !important;
   }
@@ -118,7 +119,17 @@
   background-color: #cd201f !important;
 }
 .bg-black {
-  background-color: #000;
+  background-color: #000 !important;;
+}
+.bg-blue-button {
+  background: #0A66C2 !important;;
+}
+.bg-white {
+  background: #ffffff !important;;
+}
+
+.text-blue-button {
+  color: #0A66C2 !important;;
 }
 
 .text-facebook {
@@ -142,7 +153,9 @@
 .text-instagram {
   color: #e4405f !important;
 }
-
+.text-white {
+  color: #ffffff !important;;
+}
 .text-current {
   color: var(--theme-color-main) !important;
 }
@@ -163,6 +176,12 @@
 }
 .text-blue {
   color: #2a66f4 !important;
+}
+.text-gray {
+  color: #ADB5BD !important;;
+}
+.text-gray-follow {
+  color: #8b8d8d !important;;
 }
 
 .bg-black-08 {

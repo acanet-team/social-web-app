@@ -142,6 +142,7 @@
     "error_invalid_email": "Địa chỉ email không hợp lệ."
   },
   "NavBar": {
+    "my profile": "Hồ sơ của tôi",
     "newsfeed": "Tin tức",
     "brokers": "Nhà môi giới",
     "courses": "Khoá học",
@@ -151,6 +152,20 @@
     "logout": "Đăng xuất",
     "chat": "Trò chuyện",
     "account": "Tài khoản"
+  },
+  "MyProfile": {
+    "follow": "Theo dõi",
+    "messages": "Tin nhắn",
+    "about": "Giới thiệu",
+    "experience": "Kinh nghiệm",
+    "education": "Học vấn",
+    "license&certifications": "Chứng chỉ & Bằng cấp",
+    "socialMedia": "Mạng xã hội",
+    "AI summary": "Tóm tắt AI",
+    "contact": "Liên hệ",
+    "servicesOffer": "Dịch vụ cung cấp",
+    "location": "Vị trí",
+    "interestTopic": "Chủ đề quan tâm"
   },
   "Community": {
     "community": "Cộng đồng",

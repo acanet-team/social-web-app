@@ -2,6 +2,7 @@ import type { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 import { IHttpOptions } from "./index";
 import { IUser } from "./onboard/model";
 import type { IBrokers } from "./newsfeed/model";
+import type { BrokerProfile, SSI, User, UserProfile } from "./profile/model";
 
 export type RequestConfig = AxiosRequestConfig & {
   isHandleError?: boolean; // is request need auto handle error or not?
@@ -63,6 +64,12 @@ export type BaseResponse<T> = {
   message: string;
   data: T;
 };
+export type BaseArrayResponse<T> = {
+  status: number;
+  success?: boolean;
+  message: string;
+  data: T[];
+};
 
 export type BaseApiResponse<T> = Promise<T>;
 
@@ -99,6 +106,88 @@ export type Regions = {
   };
 };
 
+export type AllProfileResponse = {
+  status: number;
+  message: string;
+  data: {
+    user: User;
+    userProfile: UserProfile;
+    brokerProfile: BrokerProfile;
+    followersCount: number;
+    followingsCount: number;
+    ssi?: SSI[];
+    // rating: string;
+    // coursesEnrolledCount: string;
+    // followed: boolean;
+  };
+};
+
+export type AllFindResponse = {
+  status: number;
+  message: string;
+  data: [{ name: string; logo: string }];
+};
+export type shortDescParams = {
+  about: string;
+};
+export type topicParam = {
+  brokerProfile: {
+    location: string;
+    skills: string[];
+  };
+  interestTopics: string[];
+};
+
+export interface UpdateOtherProfileParams {
+  brokerProfile: BrokerProfile;
+  interestTopics: string[];
+}
+export type socialMediaParams = {
+  socialMedia: {
+    name: string;
+    mediaUrl: string;
+  }[];
+};
+export type experienceParams = {
+  company: {
+    id?: string | undefined;
+    logo: string;
+    name: string;
+    startDate: Date;
+    endDate: Date;
+    isWorking: boolean;
+    position: string;
+    location: string;
+    description: string;
+    workingType: string;
+  }[];
+};
+export type educationParams = {
+  education: {
+    id?: string | undefined;
+    name: string;
+    logo: string;
+    startDate: Date;
+    endDate: Date;
+    isGraduated: boolean;
+    major: string;
+    degree: string;
+    description: string;
+  }[];
+};
+export type licenseParams = {
+  licenses: {
+    id?: string | undefined;
+    logo: string;
+    licenseType: string;
+    licenseIssuer: string;
+    licenseState: string;
+    licenseIssueDate: Date;
+    licenseStatus: string;
+    licenseExpirationDate: Date;
+    credentialID: string;
+  }[];
+};
 export interface Meta {
   page: number;
   take: number;
