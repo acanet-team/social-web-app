@@ -1,8 +1,12 @@
 import { dataLicenseProfile } from "@/app/fakeData/profile";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
-import type { BrokerProfile, FormDtLicense } from "@/api/profile/model";
+import type {
+  BrokerProfile,
+  FormDtLicense,
+  License,
+} from "@/api/profile/model";
 import { ModalLicense } from "./ModalLicense";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -23,7 +27,7 @@ const License = ({
   const [iconBack, setShowIconBack] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [licenses, setLicenses] = useState(dataBrokerProfile.licenses ?? []);
+
   const [formDt, setFormDt] = useState<FormDtLicense>({
     id: "",
     logo: "",
@@ -35,6 +39,10 @@ const License = ({
     licenseExpirationDate: "",
     credentialID: "",
   });
+  const [licenses, setLicenses] = useState<License[]>([]);
+  useEffect(() => {
+    setLicenses(dataBrokerProfile?.licenses ?? []);
+  }, [dataBrokerProfile]);
 
   const licenseToShow = showAllLicense ? licenses : licenses.slice(0, 2);
 

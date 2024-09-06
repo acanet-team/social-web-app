@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { putSocialMedia } from "@/api/profile";
+import { getProfile, putSocialMedia } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
-import type { BrokerProfile } from "@/api/profile/model";
+import type { BrokerProfile, SocialMedia } from "@/api/profile/model";
 import { removePropertiesEmpty } from "@/utils/Helpers";
 import WaveLoader from "../WaveLoader";
 
@@ -83,8 +83,9 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
 
     setIsLoading(true);
     try {
-      await putSocialMedia(removePropertiesEmpty(social));
-      setSocial(social);
+      const res = await putSocialMedia(removePropertiesEmpty(social));
+      console.log("mmmmmmmmmm", res);
+      // await getProfile(idParam);
       throwToast("Social media updated successfully", "success");
       handleClose();
     } catch (error) {

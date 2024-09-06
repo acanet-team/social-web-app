@@ -5,7 +5,7 @@ import DotWaveLoader from "../DotWaveLoader";
 import { getCommunities } from "@/api/community";
 import { combineUniqueById } from "@/utils/combine-arrs";
 
-const GroupProfile = (props: {
+const TabGroupProfile = (props: {
   isBroker: boolean;
   communities: ICommunity[];
   communityType: string;
@@ -126,4 +126,4 @@ const GroupProfile = (props: {
   );
 };
 
-export default GroupProfile;
+export default TabGroupProfile;

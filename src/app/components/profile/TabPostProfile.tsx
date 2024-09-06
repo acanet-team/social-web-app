@@ -6,7 +6,7 @@ import { getMyPosts } from "@/api/profile";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { cleanPath } from "@/utils/Helpers";
 
-const PostProfile = (props: {
+const TabPostProfile = (props: {
   myPosts: any;
   take: number;
   totalPages: number;
@@ -117,4 +117,4 @@ const PostProfile = (props: {
   );
 };
 
-export default PostProfile;
+export default TabPostProfile;

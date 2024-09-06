@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
-import type { BrokerProfile, FormDtSchool } from "@/api/profile/model";
+import type { BrokerProfile, FormDtSchool, School } from "@/api/profile/model";
 import { ModalEducation } from "./ModalEducation";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -34,7 +34,10 @@ const Education = ({
     degree: "",
     description: "",
   });
-  const [school, setSchool] = useState(dataBrokerProfile.school ?? []);
+  const [school, setSchool] = useState<School[]>([]);
+  useEffect(() => {
+    setSchool(dataBrokerProfile?.school);
+  }, [dataBrokerProfile]);
   const educationToShow = showAllEducation ? school : school.slice(0, 2);
 
   const handleAddModal = useCallback(() => {

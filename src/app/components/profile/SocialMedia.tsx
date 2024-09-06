@@ -5,6 +5,7 @@ import type { BrokerProfile } from "@/api/profile/model";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { v4 as uuidV4 } from "uuid";
+import { getProfile } from "@/api/profile";
 
 const SocialMedia = ({
   dataBrokerProfile,
@@ -23,7 +24,7 @@ const SocialMedia = ({
     "skype",
     "google",
   ];
-  const socialMedia = dataBrokerProfile.socialMedia ?? [];
+  const socialMedia = dataBrokerProfile?.socialMedia ?? [];
   const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
   const [social, setSocial] = useState<
@@ -46,7 +47,7 @@ const SocialMedia = ({
     setShow(true);
   }, []);
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = useCallback(async () => {
     setShow(false);
   }, []);
 
@@ -106,7 +107,9 @@ const SocialMedia = ({
             item.mediaUrl ? (
               <div key={item.id}>
                 <Link href={item.mediaUrl}>
-                  <i className={`bi ${iconMap[item.name] || ""}`}></i>
+                  <i
+                    className={`bi ${iconMap[item.name] || ""} text-black`}
+                  ></i>
                 </Link>
               </div>
             ) : null,

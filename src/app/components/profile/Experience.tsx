@@ -1,8 +1,12 @@
 import { dataExperiencesProfile } from "@/app/fakeData/profile";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
-import type { BrokerProfile, FormDtCompany } from "@/api/profile/model";
+import type {
+  BrokerProfile,
+  Company,
+  FormDtCompany,
+} from "@/api/profile/model";
 import { ModalExperience } from "./ModalExperience";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -39,7 +43,10 @@ export const Experience = ({
     workingType: "",
   });
 
-  const [company, setCompany] = useState(dataBrokerProfile.company ?? []);
+  const [company, setCompany] = useState<Company[]>([]);
+  useEffect(() => {
+    setCompany(dataBrokerProfile?.company ?? []);
+  }, [dataBrokerProfile]);
 
   const experiencesToShow = showAllExperiences ? company : company.slice(0, 5);
 
@@ -195,7 +202,14 @@ export const Experience = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <p className="m-0 fw-600 font-xss">{experience.name}</p>
+                  {expandPost ? (
+                    <p className="m-0 fw-600 font-xss">{experience.name}</p>
+                  ) : experience.name.length > 20 ? (
+                    experience.name.substring(0, 20) + "..."
+                  ) : (
+                    experience.name
+                  )}
+
                   {iconEdit && (
                     <div
                       style={{

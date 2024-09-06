@@ -1,7 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
-import type { BrokerProfile, InterestTopics, User } from "@/api/profile/model";
+import {
+  Skill,
+  type BrokerProfile,
+  type InterestTopics,
+  type User,
+} from "@/api/profile/model";
 import { useTranslations } from "next-intl";
 import ModalEditOtherInfo from "./ModalEditOtherInfo";
 
@@ -18,18 +23,20 @@ const AiSummary = ({
 }) => {
   const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
-  // console.log("dataBrokerProfile", dataBrokerProfile);
   const [showAllInterestTopics, setShowAllInterestTopics] =
     useState<boolean>(false);
   const [showAllServiceOffer, setShowAllServiceOffer] =
     useState<boolean>(false);
-  const [interestTopics, setInterestTopics] = useState(
-    dataBrokerProfile.interestTopics ?? [],
-  );
-  // console.log("111111111",interestTopics)
-  const [skills, setSkills] = useState(dataBrokerProfile.skills ?? []);
+  const [interestTopics, setInterestTopics] = useState<InterestTopics[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [location, setLocation] = useState("");
+  useEffect(() => {
+    setInterestTopics(dataBrokerProfile?.interestTopics ?? []);
+    setSkills(dataBrokerProfile?.skills ?? []);
+    setLocation(dataBrokerProfile?.location || "");
+  }, [dataBrokerProfile]);
   // console.log("2222222",skills)
-  const [location, setLocation] = useState(dataBrokerProfile.location || "");
+
   const [expandPost, setExpandPost] = useState<boolean>(false);
 
   const interestToShow = showAllInterestTopics
@@ -75,7 +82,7 @@ const AiSummary = ({
           }}
         />
       </div>
-      {dataBrokerProfile.summary ? (
+      {dataBrokerProfile?.summary ? (
         <>
           {expandPost
             ? dataBrokerProfile.summary

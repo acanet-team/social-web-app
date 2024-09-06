@@ -15,7 +15,6 @@ export const About = ({
   dataBrokerProfile,
   role,
 }: {
-  // setAboutText: React.Dispatch<React.SetStateAction<string>>;
   dataBrokerProfile: BrokerProfile;
   role: boolean;
 }) => {
@@ -26,8 +25,8 @@ export const About = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setAboutText(dataBrokerProfile.about);
-  }, []);
+    setAboutText(dataBrokerProfile?.about);
+  }, [dataBrokerProfile?.about]);
 
   const handleOpen = () => {
     setShow(!show);
@@ -92,10 +91,10 @@ export const About = ({
             <>
               {expandPost
                 ? aboutText
-                : aboutText.length > 150
+                : aboutText?.length > 150
                   ? aboutText.substring(0, 150) + "..."
                   : aboutText}
-              {aboutText.length > 150 && !expandPost ? (
+              {aboutText?.length > 150 && !expandPost ? (
                 <span
                   className={"cursor-pointer text-blue"}
                   onClick={() => setExpandPost((open) => !open)}
