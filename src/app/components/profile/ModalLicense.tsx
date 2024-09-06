@@ -193,13 +193,13 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <ImageUpload
+            {/* <ImageUpload
               folderUpload={""}
               onChange={handleImageChange}
               aspect={0}
               uploadAvatar={false}
               previewImage={""}
-            />
+            /> */}
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xss">Certification Name</p>
