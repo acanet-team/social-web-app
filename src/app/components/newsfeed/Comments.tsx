@@ -169,12 +169,13 @@ const Comments = forwardRef(
           const res: any = await postComment(values);
           console.log("new comment", res.data);
           newComment.id = res.data.id;
-          setComments((prevState) => [newComment, ...prevState]);
+          setComments((prevState) => [...prevState, newComment]);
           // props.setCommentNum((prevState: number) => prevState + 1);
           props.setCommentNum("add");
           // Scroll to top of the comment section
           if (commentListRef.current) {
-            commentListRef.current.scrollTop = 0;
+            commentListRef.current.scrollTop =
+              commentListRef.current.scrollHeight;
           }
         } catch (err) {
           setComments((prevState) => [

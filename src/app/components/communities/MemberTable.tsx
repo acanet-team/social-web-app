@@ -45,6 +45,8 @@ export default function MemberTable(props: {
   const inviteModalRef = useRef<HTMLDivElement>(null);
   const { showLoading, hideLoading } = useLoading();
   const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
+  const [switchTab, setSwitchTab] = useState<boolean>(false);
+  const [firstMount, setfirstMount] = useState<boolean>(false);
 
   // Calculate current row index
   const startRow = (page - 1) * TAKE + 1;
@@ -78,7 +80,39 @@ export default function MemberTable(props: {
     }
   }
 
+  // useEffect(() => {
+  //   if (searchRef.current) {
+  //     searchRef.current.value = "";
+  //   }
+  //   setSearchValue("");
+  //   setPage(1);
+  //   setMembers([]);
+  //   setReadyToFetch(true);
+  // }, [tab]);
+
+  // useEffect(() => {
+  //   if (readyToFetch) {
+  //     getMembers(1, "");
+  //     setReadyToFetch(false);
+  //   }
+  // }, [readyToFetch]);
+
+  // useEffect(() => {
+  //   if (searchValue) {
+  //     setPage(1);
+  //     setMembers([]);
+  //     getMembers(1, searchValue);
+  //   }
+  // }, [searchValue]);
+
+  // useEffect(() => {
+  //   if (page > 1) {
+  //     getMembers(page, searchValue);
+  //   }
+  // }, [page]);
+
   useEffect(() => {
+    setSwitchTab(true);
     if (searchRef.current) {
       searchRef.current.value = "";
     }
@@ -92,23 +126,19 @@ export default function MemberTable(props: {
     if (readyToFetch) {
       getMembers(1, "");
       setReadyToFetch(false);
+      setSwitchTab(false);
     }
   }, [readyToFetch]);
 
-  // useEffect(() => {
-  //   if (searchValue) {
-  //     setPage(1);
-  //     setMembers([]);
-  //     getMembers(1, searchValue);
-  //   }
-  // }, [searchValue]);
-
   useEffect(() => {
-    // if (searchValue) {
-    setPage(1);
-    setMembers([]);
-    getMembers(1, searchValue);
-    // }
+    if (searchValue === "" && !switchTab && firstMount) {
+      getMembers(1, "");
+    }
+    if (searchValue) {
+      setPage(1);
+      setMembers([]);
+      getMembers(1, searchValue);
+    }
   }, [searchValue]);
 
   useEffect(() => {
@@ -116,6 +146,10 @@ export default function MemberTable(props: {
       getMembers(page, searchValue);
     }
   }, [page]);
+
+  useEffect(() => {
+    setfirstMount(true);
+  }, []);
 
   const onSearchHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
