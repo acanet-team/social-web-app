@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  type SetStateAction,
-} from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/profile.module.scss";
 import type { BrokerProfile } from "@/api/profile/model";
 import { useTranslations } from "next-intl";
@@ -26,7 +21,7 @@ export const About = ({
 
   useEffect(() => {
     setAboutText(dataBrokerProfile?.about);
-  }, [dataBrokerProfile?.about]);
+  }, [dataBrokerProfile]);
 
   const handleOpen = () => {
     setShow(!show);
@@ -80,7 +75,7 @@ export const About = ({
           {role === true && (
             <h4>
               <i
-                className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                 onClick={() => handleOpen()}
               ></i>
             </h4>
@@ -89,35 +84,29 @@ export const About = ({
         <div>
           {!show ? (
             <>
-              {expandPost
-                ? aboutText
-                : aboutText?.length > 150
-                  ? aboutText?.substring(0, 150) + "..."
-                  : aboutText}
-              {aboutText?.length > 150 && !expandPost ? (
-                <span
-                  className={"cursor-pointer text-blue"}
-                  onClick={() => setExpandPost((open) => !open)}
-                >
-                  See more
-                </span>
-              ) : (
-                ""
-              )}
+              <p>
+                {expandPost
+                  ? aboutText
+                  : aboutText?.length > 150
+                    ? aboutText?.substring(0, 150) + "..."
+                    : aboutText}
+                {aboutText?.length > 150 && !expandPost ? (
+                  <span
+                    className={"cursor-pointer text-blue"}
+                    onClick={() => setExpandPost((open) => !open)}
+                  >
+                    {t("See more")}
+                  </span>
+                ) : (
+                  ""
+                )}
+              </p>
             </>
           ) : (
             <div>
-              <div
-                style={{
-                  resize: "none",
-                  border: "1px solid #ddd",
-                  padding: "15px",
-                  borderRadius: "10px",
-                  paddingRight: "0px",
-                }}
-              >
+              <div style={{}}>
                 <textarea
-                  className="w-100 m-0 font-xsss fw-400 lh-20 theme-dark-bg d-flex"
+                  className="w-100 m-0 font-xsss fw-400 lh-20 d-flex"
                   onChange={(event) => {
                     setAboutText(event.target.value);
                   }}
@@ -126,7 +115,11 @@ export const About = ({
                   maxLength={5000}
                   style={{
                     resize: "none",
-                    border: "none",
+                    border: "1px solid #ddd",
+                    paddingTop: "5px",
+                    paddingLeft: "5px",
+                    borderRadius: "10px",
+                    paddingRight: "0px",
                   }}
                   placeholder="Please write your description"
                 />
@@ -143,7 +136,7 @@ export const About = ({
                   style={{ marginRight: "0px", border: "none" }}
                 >
                   <p className="m-0" onClick={() => submitAbout()}>
-                    Save
+                    {t("save")}
                   </p>
                 </button>
               </div>

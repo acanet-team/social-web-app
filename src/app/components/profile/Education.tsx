@@ -109,7 +109,7 @@ const Education = ({
               <>
                 <h1>
                   <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]}`}
+                    className={`bi bi-plus-lg ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
@@ -118,14 +118,14 @@ const Education = ({
                     {iconBack ? (
                       <h4>
                         <i
-                          className={`bi bi-arrow-left ${styles["icon-profile"]}`}
+                          className={`bi bi-arrow-left ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleCloseEdit()}
                         ></i>
                       </h4>
                     ) : (
                       <h4>
                         <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleOpenEdit()}
                         ></i>
                       </h4>
@@ -177,11 +177,11 @@ const Education = ({
                     {iconEdit && (
                       <>
                         <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleEditModal(education)}
                         ></i>
                         <i
-                          className={`bi bi-trash3-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => delEdu(education.id)}
                         ></i>
                       </>
@@ -199,7 +199,7 @@ const Education = ({
                     : dayjs(education.endDate).format("YYYY")}
                 </p>
                 <p className="m-0 mt-2 font-xsss lh-20 text-gray-follow">
-                  Activities and societies {education.description}
+                  {t("Activities and societies")} {education.description}
                 </p>
               </div>
             </div>
@@ -237,9 +237,12 @@ const Education = ({
               }}
             >
               <p className="m-0 font-xss fw-600">
-                Show all {school.length - educationToShow.length} educations
+                {t("Show all")} {school.length - educationToShow.length}{" "}
+                {t("educations")}
               </p>
-              <i className={`bi bi-arrow-right ${styles["icon-profile"]}`}></i>
+              <i
+                className={`bi bi-arrow-right ${styles["icon-profile"]} cursor-pointer`}
+              ></i>
             </button>
           </>
         )}

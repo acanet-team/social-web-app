@@ -19,6 +19,7 @@ import {
 import { useFormik } from "formik";
 import WaveLoader from "../WaveLoader";
 import type { BaseArrayResponse, BaseResponse } from "@/api/model";
+import { useTranslations } from "next-intl";
 
 interface ModalEducationProp {
   title: string;
@@ -37,6 +38,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
   formDt,
   setSchool,
 }) => {
+  const t = useTranslations("MyProfile");
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [formData, setFormData] = useState(formDt);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -62,9 +64,12 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name) newErrors.name = "Education name is required";
-    if (!formData.degree) newErrors.degree = "Degree is required";
-    if (!formData.startDate) newErrors.startDate = "Start Date is required";
+    if (!formData.name)
+      newErrors.name = `${t("education")} ${t("name")} ${t("is required")}`;
+    if (!formData.degree)
+      newErrors.degree = `${t("degree")}  ${t("is required")}`;
+    if (!formData.startDate)
+      newErrors.startDate = `${t("startDate")} ${t("is required")}`;
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -210,7 +215,9 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <p className="m-0 py-1 fw-600 font-xss">Education Name</p>
+            <p className="m-0 py-1 fw-600 font-xss">
+              {t("name")} {t("education")}
+            </p>
             <Autocomplete
               inputValue={isEditing ? formData.name : undefined}
               disablePortal
@@ -280,7 +287,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
 
             <div style={{ width: "100%" }}>
               <div>
-                <p className="m-0 py-1 fw-600 font-xss">Degree</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("degree")}</p>
                 <Select
                   value={formData.degree}
                   onChange={handleSelectChange}
@@ -288,30 +295,30 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   style={{ width: "100%", height: "32px" }}
                 >
                   <MenuItem value="" disabled>
-                    Select Degree
+                    {t("select")} {t("degree")}
                   </MenuItem>
-                  <MenuItem value="INTERMEDIATE">INTERMEDIATE</MenuItem>
-                  <MenuItem value="ADVANCED">ADVANCED</MenuItem>
+                  <MenuItem value="INTERMEDIATE">{t("INTERMEDIATE")}</MenuItem>
+                  <MenuItem value="ADVANCED">{t("ADVANCED")}</MenuItem>
                   <MenuItem value="ENGINEERING DEGREE">
-                    ENGINEERING DEGREE
+                    {t("ENGINEERING DEGREE")}
                   </MenuItem>
                   <MenuItem value="BACHELOR's DEGREE">
-                    BACHELOR&apos;S DEGREE
+                    {t("BACHELOR'S DEGREE")}
                   </MenuItem>
                   <MenuItem value="MASTER'S DEGREE">
-                    MASTER&apos;S DEGREE
+                    {t("MASTER'S DEGREE")}
                   </MenuItem>
-                  <MenuItem value="DOCTOR">DOCTOR</MenuItem>
-                  <MenuItem value="DEGREE">DEGREE</MenuItem>
-                  <MenuItem value="PHD">PHD</MenuItem>
-                  <MenuItem value="OTHER">OTHER</MenuItem>
+                  <MenuItem value="DOCTOR">{t("DOCTOR")}</MenuItem>
+                  <MenuItem value="DEGREE">{t("DEGREE")}</MenuItem>
+                  <MenuItem value="PHD">{t("PHD")}</MenuItem>
+                  <MenuItem value="OTHER">{t("OTHER")}</MenuItem>
                 </Select>
                 {errors.degree && (
                   <p className="text-red font-xsss">{errors.degree}</p>
                 )}
               </div>
               <div>
-                <p className="m-0 py-1 fw-600 font-xss">Major</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("major")}</p>
                 <input
                   className="px-2"
                   style={{
@@ -337,7 +344,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   alignItems: "center",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss">Is Graduated</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("is graduated")}</p>
                 <div>
                   <input
                     className="isGraduated"
@@ -348,7 +355,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                     checked={formData.isGraduated === true}
                     onChange={handleRadioChange}
                   />
-                  <span className="m-2 py-1">True</span>
+                  <span className="m-2 py-1">{t("True")}</span>
                 </div>
                 <div>
                   <input
@@ -360,7 +367,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                     checked={formData.isGraduated === false}
                     onChange={handleRadioChange}
                   />
-                  <span className="m-2">False</span>
+                  <span className="m-2">{t("False")}</span>
                 </div>
               </div>
             </div>
@@ -376,7 +383,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   width: "48.5%",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss ">Start Year</p>
+                <p className="m-0 py-1 fw-600 font-xss ">{t("start year")}</p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.startDate)}
@@ -402,7 +409,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
               </div>
               {!formData.isGraduated && (
                 <div style={{ width: "48.5%" }}>
-                  <p className="m-0 py-1 fw-600 font-xss">End Year</p>
+                  <p className="m-0 py-1 fw-600 font-xss">{t("end year")}</p>
                   <DatePicker
                     className="w__100"
                     value={dayjs(formData.endDate)}
@@ -417,7 +424,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 </div>
               )}
             </div>
-            <p className="m-0 py-1 fw-600 font-xss">Description</p>
+            <p className="m-0 py-1 fw-600 font-xss">{t("description")}</p>
             <textarea
               className="px-2"
               value={formData.description}
@@ -441,7 +448,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
             }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
-            Save
+            {t("save")}
           </Button>
         </Modal.Footer>
       </Modal>

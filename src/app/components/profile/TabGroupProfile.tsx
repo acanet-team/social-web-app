@@ -4,6 +4,7 @@ import type { ICommunity } from "@/api/community/model";
 import DotWaveLoader from "../DotWaveLoader";
 import { getCommunities } from "@/api/community";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import CommunityForm from "../communities/CommunityForm";
 
 const TabGroupProfile = (props: {
   isBroker: boolean;
@@ -54,7 +55,10 @@ const TabGroupProfile = (props: {
     }
   };
 
-  // Infinite scroll
+  const handleClose = useCallback(() => {
+    setShow(false);
+  }, []);
+
   const onScrollHandler = () => {
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
@@ -122,6 +126,15 @@ const TabGroupProfile = (props: {
           ))}
       </div>
       {isLoading && <DotWaveLoader />}
+      {show && (
+        <CommunityForm
+          isEditing={isEditing}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          show={show}
+          setCommunities={setCommunityArr}
+        />
+      )}
     </div>
   );
 };

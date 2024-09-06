@@ -144,7 +144,7 @@ export const Experience = ({
               <>
                 <h1>
                   <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]}`}
+                    className={`bi bi-plus-lg ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
@@ -153,14 +153,14 @@ export const Experience = ({
                     {iconBack ? (
                       <h4>
                         <i
-                          className={`bi bi-arrow-left ${styles["icon-profile"]}`}
+                          className={`bi bi-arrow-left ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleCloseEdit()}
                         ></i>
                       </h4>
                     ) : (
                       <h4>
                         <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleOpenEdit()}
                         ></i>
                       </h4>
@@ -202,13 +202,13 @@ export const Experience = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  {expandPost ? (
-                    <p className="m-0 fw-600 font-xss">{experience.name}</p>
-                  ) : experience.name.length > 20 ? (
-                    experience.name.substring(0, 20) + "..."
-                  ) : (
-                    experience.name
-                  )}
+                  <p className="m-0 fw-600 font-xss">
+                    {expandPost
+                      ? experience.name
+                      : experience.name.length > 20
+                        ? experience.name.substring(0, 20) + "..."
+                        : experience.name}
+                  </p>
 
                   {iconEdit && (
                     <div
@@ -219,11 +219,11 @@ export const Experience = ({
                       }}
                     >
                       <i
-                        className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                        className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                         onClick={() => handleEditModal(experience)}
                       ></i>
                       <i
-                        className={`bi bi-trash3-fill ${styles["icon-profile"]}`}
+                        className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
                         onClick={() => delCompany(experience.id)}
                       ></i>
                     </div>
@@ -304,7 +304,7 @@ export const Experience = ({
                     className={"cursor-pointer text-blue"}
                     onClick={() => setExpandPost((open) => !open)}
                   >
-                    See more
+                    {t("See more")}
                   </span>
                 ) : (
                   ""
@@ -346,13 +346,13 @@ export const Experience = ({
                 }}
               >
                 <p className="m-0 font-xss fw-600">
-                  Show all{" "}
+                  {t("Show all")}{" "}
                   {dataExperiencesProfile.length - experiencesToShow.length}{" "}
-                  experiences
+                  {t("experiences")}
                 </p>
 
                 <i
-                  className={`bi bi-arrow-right ${styles["icon-profile"]}`}
+                  className={`bi bi-arrow-right ${styles["icon-profile"]} cursor-pointer`}
                 ></i>
               </button>
             </>
@@ -368,7 +368,6 @@ export const Experience = ({
           formDt={formDt}
           setCompany={setCompany}
           idUser={id}
-          // editId={editId}``
         />
       )}
       {isLoading && <WaveLoader />}
