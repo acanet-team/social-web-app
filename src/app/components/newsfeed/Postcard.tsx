@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/postCard.module.scss";
 import { deletePost, getComments, likeRequest } from "@/api/newsfeed";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -7,7 +7,6 @@ import { TimeSinceDate } from "@/utils/time-since-date";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Masonry from "@mui/lab/Masonry";
-import { Comments } from "./Comments";
 import DotWaveLoader from "../DotWaveLoader";
 import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
@@ -15,6 +14,9 @@ import RoundedNumber from "../RoundedNumber";
 import type { IPost } from "@/api/newsfeed/model";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import PostModal from "./PostModal";
+import { useMediaQuery } from "react-responsive";
+import Comments from "./Comments";
 
 export default function PostCard(props: {
   postId: string;
@@ -54,17 +56,19 @@ export default function PostCard(props: {
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
+  const [openMobileComments, setOpenMobileComments] = useState<boolean>(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [commentNum, setCommentNum] = useState<number>(comment || 0);
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  // const router = useRouter();
+  // const pathname = usePathname();
+  // const searchParams = useSearchParams();
+  // const [isPending, startTransition] = useTransition();
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likeNum, setLikeNum] = useState<number>(like);
   const settingsRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
-  const [userId, setUserId] = useState<number>();
+  const [userId, setUserId] = useState<number | undefined>(undefined);
   const tBase = useTranslations("Base");
 
   // Comment states
@@ -92,11 +96,13 @@ export default function PostCard(props: {
   };
 
   useEffect(() => {
-    setUserId(session?.user?.id);
+    if (session) {
+      setUserId(session.user?.id);
+    }
   }, [session]);
 
   useEffect(() => {
-    // Fetch comments again every time user opens the comment section
+    // Fetch comments again every time user opens the comment section on PC
     if (openComments) {
       fetchComments();
     }
@@ -118,20 +124,32 @@ export default function PostCard(props: {
   }, [settingsRef]);
 
   const onShowCommentHandler = (id: string) => {
-    setOpenComments((open) => !open);
-    const updatedSearchParams = new URLSearchParams(searchParams ?? "");
-    if (id) {
-      updatedSearchParams.set("comments", id);
+    if (isMobile) {
+      setOpenMobileComments(true);
     } else {
-      updatedSearchParams.delete("comments");
+      setOpenComments((open) => !open);
     }
+    // const updatedSearchParams = new URLSearchParams(searchParams ?? "");
+    // if (id) {
+    //   updatedSearchParams.set("comments", id);
+    // } else {
+    //   updatedSearchParams.delete("comments");
+    // }
 
-    startTransition(() => {
-      router.replace(`${pathname}?${updatedSearchParams.toString()}`, {
-        scroll: false,
-      });
-    });
+    // startTransition(() => {
+    //   router.replace(`${pathname}?${updatedSearchParams.toString()}`, {
+    //     scroll: false,
+    //   });
+    // });
   };
+
+  const handleClose = useCallback(() => {
+    if (isMobile) {
+      setOpenMobileComments(false);
+    } else {
+      setOpenComments((open) => !open);
+    }
+  }, []);
 
   const onClickLikeHandler = (e: any, id: string, like: number) => {
     const likeBtn = e.target;
@@ -164,9 +182,17 @@ export default function PostCard(props: {
     }
   };
 
+  const setCommentNumHandler = useCallback((action: string) => {
+    if (action === "add") {
+      setCommentNum((prevState: number) => prevState + 1);
+    } else {
+      setCommentNum((prevState: number) => prevState - 1);
+    }
+  }, []);
+
   return (
     <div
-      className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-4 mb-3`}
+      className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-sm-4 p-3 mb-3`}
     >
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
@@ -206,21 +232,33 @@ export default function PostCard(props: {
         {groupName ? (
           <div>
             <Link href={`/communities/detail/${groupId}`}>
-              <h4 className="fw-700 text-grey-900 font-xss m-0">{groupName}</h4>
+              <h4 className="fw-700 text-grey-900 text-break font-xss m-0">
+                {groupName.length > 23
+                  ? `${groupName.substring(0, 20)}...`
+                  : groupName}
+              </h4>
             </Link>
             <div className="d-flex align-items-end">
-              <span className="font-xsss fw-500 mt-1 lh-3 text-grey-600">
-                @{nickName}
+              <span className="font-xsss fw-500 text-break mt-1 lh-3 text-grey-600">
+                @
+                {nickName.length > 20
+                  ? `${nickName.substring(0, 20)}...`
+                  : nickName}
               </span>
-              <i className="bi bi-dot h4 m-0 mx-1 text-grey-500"></i>
-              <span className="font-xsss fw-500 mt-1 lh-3 text-grey-500">
-                {createdAt ? TimeSinceDate(createdAt) : ""}
-              </span>
+              <div className="d-flex align-items-end">
+                <i className="bi bi-dot h4 m-0 mx-1 text-grey-500"></i>
+                <span className="font-xsss fw-500 mt-1 lh-3 text-grey-500">
+                  {createdAt ? TimeSinceDate(createdAt) : ""}
+                </span>
+              </div>
             </div>
           </div>
         ) : (
           <h4 className="fw-700 text-grey-900 font-xss mt-1">
-            @{nickName}
+            @
+            {nickName.length > 20
+              ? `${nickName.substring(0, 20)}...`
+              : nickName}
             <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
               {createdAt ? TimeSinceDate(createdAt) : ""}
             </span>
@@ -232,7 +270,7 @@ export default function PostCard(props: {
             onClick={() => setOpenSettings((open) => !open)}
             ref={settingsRef}
           >
-            <i className="bi bi-three-dots h1 me-2"></i>
+            <i className="bi bi-three-dots h1 me-2 position-absolute right-0"></i>
             {openSettings && (
               <div
                 className={`${styles["delete-post__btn"]} font-xsss border-0 py-2 px-3 py-1 rounded-3 cursor-pointer`}
@@ -306,15 +344,11 @@ export default function PostCard(props: {
         </div>
         <div
           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
+          // onClick={() => onShowCommentHandler(postId.toString())}
           onClick={() => onShowCommentHandler(postId.toString())}
         >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
           <span className="d-none-xss">
-            {/* {commentNum > 1000
-              ? Math.round(commentNum / 1000).toFixed(1)
-              : commentNum}
-            {commentNum >= 1000 ? "k" : ""}{" "}
-            {commentNum < 2 ? "Comment" : "Comments"} */}
             <RoundedNumber
               num={commentNum}
               unitSingular={tBase("comment")}
@@ -419,8 +453,31 @@ export default function PostCard(props: {
           totalPage={totalPage}
           take={take}
           postId={postId}
-          setCommentNum={setCommentNum}
+          setCommentNum={setCommentNumHandler}
           postAuthor={author}
+        />
+      )}
+      {isMobile && openMobileComments && (
+        <PostModal
+          show={openMobileComments}
+          handleClose={handleClose}
+          postId={postId}
+          nickName={nickName}
+          avatar={avatar}
+          content={content}
+          assets={assets}
+          author={author}
+          like={likeNum}
+          comment={commentNum}
+          createdAt={createdAt}
+          columnsCount={columnsCount}
+          liked={isLiked}
+          groupAvatar={groupAvatar}
+          groupName={groupName}
+          groupOwnerId={groupOwnerId}
+          groupId={groupId}
+          userId={userId}
+          setPostHandler={setPostHandler}
         />
       )}
     </div>
