@@ -122,6 +122,48 @@ export default function CommunitySection(props: {
   }, [page, totalPage, isLoading]);
 
   // Reset states and fetch data on tab (communityType) change
+  // useEffect(() => {
+  //   if (hasFetchedInitialData) {
+  //     setFilterValues({ searchValue: "", filterValue: "" });
+  //     if (searchRef.current) {
+  //       searchRef.current.value = "";
+  //     }
+  //     setShownFilterValue(tForm("filter_none"));
+  //     setPage(1);
+  //     setTotalPage(2);
+  //     setCommunityArr([]);
+  //     setReadyToFetch(true);
+  //   }
+  // }, [props.communityType]);
+
+  // useEffect(() => {
+  //   if (readyToFetch) {
+  //     fetchCommunities(1);
+  //     setReadyToFetch(false);
+  //   }
+  // }, [readyToFetch]);
+
+  // useEffect(() => {
+  //   if (filterValues.searchValue || filterValues.filterValue) {
+  //     setPage(1);
+  //     setCommunityArr([]);
+  //     fetchCommunities(1);
+  //   }
+  // }, [filterValues]);
+
+  // useEffect(() => {
+  //   if (page > 1) {
+  //     fetchCommunities(page);
+  //   }
+  // }, [page]);
+
+  // // Avoid fetching data on initial render
+  // useEffect(() => {
+  //   if (!hasFetchedInitialData) {
+  //     setHasFetchedInitialData(true);
+  //   }
+  // }, []);
+
   useEffect(() => {
     if (hasFetchedInitialData) {
       setFilterValues({ searchValue: "", filterValue: "" });
@@ -144,11 +186,16 @@ export default function CommunitySection(props: {
   }, [readyToFetch]);
 
   useEffect(() => {
-    if (filterValues.searchValue || filterValues.filterValue) {
-      setPage(1);
-      setCommunityArr([]);
-      fetchCommunities(1);
-    }
+    // if (filterValues.searchValue === "" && hasFetchedInitialData) {
+    //   setCommunityArr([]);
+    //   setPage(1);
+    //   fetchCommunities(page);
+    // }
+    // if (filterValues.searchValue || filterValues.filterValue) {
+    setPage(1);
+    setCommunityArr([]);
+    fetchCommunities(1);
+    // }
   }, [filterValues]);
 
   useEffect(() => {
