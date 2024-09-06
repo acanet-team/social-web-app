@@ -47,7 +47,6 @@ const Comments = forwardRef(
 
     // console.log('1111', props.comments);
     const fetchComments = async () => {
-      console.log("fetching...");
       setIsLoading(true);
       try {
         const response: any = await getComments(page, props.take, props.postId);

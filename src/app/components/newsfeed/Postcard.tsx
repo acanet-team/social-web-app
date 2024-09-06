@@ -75,7 +75,7 @@ export default function PostCard(props: {
   const [comments, setComments] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
-  const [take, setTake] = useState<number>(5);
+  const [take, setTake] = useState<number>(20);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Function to fetch comments
@@ -172,7 +172,6 @@ export default function PostCard(props: {
 
   const onDeletePost = async (e: any, postId: string) => {
     try {
-      console.log("el", e.target);
       // Calling api;
       await deletePost(postId);
       setPostHandler((prev) => prev.filter((post) => post.id !== postId));
@@ -183,6 +182,22 @@ export default function PostCard(props: {
   };
 
   const setCommentNumHandler = useCallback((action: string) => {
+    if (action === "add") {
+      setCommentNum((prevState: number) => prevState + 1);
+    } else {
+      setCommentNum((prevState: number) => prevState - 1);
+    }
+  }, []);
+
+  const updateLikeHandler = useCallback((action: string) => {
+    if (action === "add") {
+      setLikeNum((prevState: number) => prevState + 1);
+    } else {
+      setLikeNum((prevState: number) => prevState - 1);
+    }
+  }, []);
+
+  const updateCommentHandler = useCallback((action: string) => {
     if (action === "add") {
       setCommentNum((prevState: number) => prevState + 1);
     } else {
@@ -467,16 +482,19 @@ export default function PostCard(props: {
           content={content}
           assets={assets}
           author={author}
-          like={likeNum}
-          comment={commentNum}
           createdAt={createdAt}
           columnsCount={columnsCount}
-          liked={isLiked}
           groupAvatar={groupAvatar}
           groupName={groupName}
           groupOwnerId={groupOwnerId}
           groupId={groupId}
           userId={userId}
+          like={likeNum}
+          comment={commentNum}
+          liked={isLiked}
+          updateLike={updateLikeHandler}
+          updateComments={updateCommentHandler}
+          updateIsLiked={setIsLiked}
           setPostHandler={setPostHandler}
         />
       )}

@@ -37,6 +37,9 @@ function PostModal(props: {
   groupId: string;
   userId: number | undefined;
   setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
+  updateLike: React.Dispatch<React.SetStateAction<string>>;
+  updateComments: React.Dispatch<React.SetStateAction<string>>;
+  updateIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const {
     show,
@@ -58,6 +61,9 @@ function PostModal(props: {
     groupId,
     userId,
     setPostHandler,
+    updateLike,
+    updateComments,
+    updateIsLiked,
   } = props;
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -88,7 +94,7 @@ function PostModal(props: {
       // Update the comments state with the fetched data
       // setComments((prevState) => [...prevState, ...response.data.docs]);
       setComments(response.data.docs);
-      console.log("comment array", response.data.docs);
+      // console.log("comment array", response.data.docs);
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -133,11 +139,15 @@ function PostModal(props: {
       try {
         if (isLiked) {
           setLikeNum((prev) => prev - 1);
+          updateLike("remove");
           setIsLiked(false);
+          updateIsLiked(false);
           likeRequest({ postId: id, action: "unfavorite" });
         } else {
           setLikeNum((prev) => prev + 1);
+          updateLike("add");
           setIsLiked(true);
+          updateIsLiked(true);
           likeRequest({ postId: id, action: "favorite" });
         }
       } catch (err) {
@@ -160,8 +170,10 @@ function PostModal(props: {
   const setCommentNumHandler = useCallback((action: string) => {
     if (action === "add") {
       setCommentNum((prevState: number) => prevState + 1);
+      updateComments("add");
     } else {
       setCommentNum((prevState: number) => prevState - 1);
+      updateComments("remove");
     }
   }, []);
 
@@ -379,16 +391,18 @@ function PostModal(props: {
               </span>
             </div>
           )}
-          <Comments
-            comments={comments}
-            page={page}
-            totalPage={totalPage}
-            take={take}
-            postId={postId}
-            setCommentNum={setCommentNumHandler}
-            postAuthor={author}
-            ref={childRef}
-          />
+          {isMobile && (
+            <Comments
+              comments={comments}
+              page={page}
+              totalPage={totalPage}
+              take={take}
+              postId={postId}
+              setCommentNum={setCommentNumHandler}
+              postAuthor={author}
+              ref={childRef}
+            />
+          )}
         </div>
       </Modal.Body>
     </Modal>
