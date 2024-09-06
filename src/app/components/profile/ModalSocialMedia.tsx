@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { getProfile, putSocialMedia } from "@/api/profile";
+import { putSocialMedia } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import type { BrokerProfile, SocialMedia } from "@/api/profile/model";
-import { removePropertiesEmpty } from "@/utils/Helpers";
 import WaveLoader from "../WaveLoader";
+import { useTranslations } from "next-intl";
 
 interface ModalSocialProp {
   title: string;
@@ -17,6 +17,7 @@ interface ModalSocialProp {
   setSocial: React.Dispatch<
     React.SetStateAction<Record<string, { url: string; id: string }>>
   >;
+  setSocialMedia: React.Dispatch<React.SetStateAction<SocialMedia[]>>;
 }
 
 export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
@@ -25,7 +26,9 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
   title,
   social,
   setSocial,
+  setSocialMedia,
 }) => {
+  const t = useTranslations("MyProfile");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const urlFormat = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
@@ -52,7 +55,7 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
         return;
       }
       if (!urlFormat.test(url)) {
-        newErrors[name] = "Invalid URL format";
+        newErrors[name] = `${t("Invalid URL format")}`;
       }
     });
 
@@ -80,12 +83,15 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
 
   const submitSocial = async () => {
     if (!validateForm()) return;
-
     setIsLoading(true);
+    const socialMedia = Object.entries(social).map(([name, { url, id }]) => ({
+      name,
+      mediaUrl: url,
+      id,
+    }));
     try {
-      const res = await putSocialMedia(removePropertiesEmpty(social));
-      console.log("mmmmmmmmmm", res);
-      // await getProfile(idParam);
+      const res = await putSocialMedia(socialMedia);
+      setSocialMedia(socialMedia);
       throwToast("Social media updated successfully", "success");
       handleClose();
     } catch (error) {

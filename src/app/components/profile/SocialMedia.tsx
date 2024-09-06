@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styles from "@/styles/modules/profile.module.scss";
 import { ModalSocialMedia } from "./ModalSocialMedia";
-import type { BrokerProfile } from "@/api/profile/model";
+import type { BrokerProfile, SocialMedia } from "@/api/profile/model";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { v4 as uuidV4 } from "uuid";
@@ -24,7 +24,9 @@ const SocialMedia = ({
     "skype",
     "google",
   ];
-  const socialMedia = dataBrokerProfile?.socialMedia ?? [];
+  const [socialMedia, setSocialMedia] = useState<SocialMedia[]>(
+    dataBrokerProfile?.socialMedia,
+  );
   const t = useTranslations("MyProfile");
   const [show, setShow] = useState(false);
   const [social, setSocial] = useState<
@@ -32,7 +34,7 @@ const SocialMedia = ({
   >(
     socialNames.reduce(
       (acc, name) => {
-        const existingMedia = socialMedia.find((item) => item.name === name);
+        const existingMedia = socialMedia?.find((item) => item.name === name);
         acc[name] = {
           url: existingMedia?.mediaUrl || "",
           id: existingMedia?.id || uuidV4(),
@@ -42,6 +44,10 @@ const SocialMedia = ({
       {} as Record<string, { url: string; id: string }>,
     ),
   );
+
+  useEffect(() => {
+    setSocialMedia(dataBrokerProfile?.socialMedia ?? []);
+  }, [social, dataBrokerProfile]);
 
   const handleOpenModal = useCallback(() => {
     setShow(true);
@@ -125,6 +131,7 @@ const SocialMedia = ({
           show={show}
           social={social}
           setSocial={setSocial}
+          setSocialMedia={setSocialMedia}
         />
       )}
     </>

@@ -12,8 +12,7 @@ import { Experience } from "./Experience";
 import Education from "./Education";
 import License from "./License";
 import Image from "next/image";
-import { getProfile } from "@/api/profile";
-import { createGetAllTopicsRequest } from "@/api/onboard";
+
 import { useSession } from "next-auth/react";
 import WaveLoader from "../WaveLoader";
 

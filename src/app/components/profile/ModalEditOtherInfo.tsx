@@ -15,6 +15,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { updateOtherProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import WaveLoader from "../WaveLoader";
+import { Autocomplete, TextField } from "@mui/material";
+import { getRegionRequest } from "@/api/onboard";
+import type { AllProfileResponse } from "@/api/model";
+import { useTranslations } from "next-intl";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -50,6 +54,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
   setInterestTopics,
   setSkills,
 }) => {
+  const t = useTranslations("MyProfile");
   const [formData, setFormData] = useState({
     location: dataBrokerProfile.location || "",
     selectedServiceIds: dataBrokerProfile.skills.map(
@@ -72,13 +77,6 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      location: e.target.value,
-    }));
-  };
-
   const handleChangeSelectTopic = (event: SelectChangeEvent<string[]>) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -93,6 +91,27 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
     }));
   };
 
+  const [regions, setRegions] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getRegions = async () => {
+      try {
+        const response = await getRegionRequest();
+        const regions = response.data.value.map((obj) => obj.name);
+        setRegions(regions);
+        return response;
+      } catch (err) {
+        console.log(err);
+        return {
+          status: 500,
+          message: "can't fetch regions",
+          data: { key: "regions", value: [], type: "json" },
+        };
+      }
+    };
+    getRegions();
+  }, []);
+
   const submitOtherInfo = async () => {
     setIsLoading(true);
     try {
@@ -104,26 +123,18 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
           location: formData.location,
         };
         formDt.append("brokerProfile", JSON.stringify(brokerProfies));
-        // setSkills(prev => {...prev, "interestTopic": formData.selectedServiceIds
-        //   .map((id) =>
-        //     listInterestTopics.find((topic) => topic.id === id)
-        //   )
-        //   .filter((topic) => topic !== undefined)}
-        // );
-        //  setSkills(formData.selectedServiceIds
-        //     .map((id) =>
-        //       listInterestTopics.find((topic) => topic.id === id)
-        //     )
-        //     .filter((topic) => topic !== undefined))
       }
-      await updateOtherProfile(formDt);
+      const res: AllProfileResponse = await updateOtherProfile(formDt);
       setLocation(formData.location);
       setInterestTopics(
         formData.selectedTopicIds
           .map((id) => listInterestTopics.find((topic) => topic.id === id))
           .filter((topic) => topic !== undefined),
       );
-      console.log("kkkkkk", formData);
+      if (res?.data?.brokerProfile) {
+        setSkills(res.data.brokerProfile.skills);
+      }
+      console.log("kkkkkk", res);
       throwToast("Updated successfully", "success");
       handleClose();
     } catch (error) {
@@ -159,7 +170,99 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <p className="m-0 py-1 fw-600 font-xss">Email</p>
+            <p className="m-0 py-1 fw-600 font-xss">{t("interestTopic")}</p>
+            <FormControl className="w-100">
+              <Select
+                multiple
+                displayEmpty
+                value={formData.selectedTopicIds}
+                onChange={handleChangeSelectTopic}
+                input={<OutlinedInput />}
+                renderValue={(selected) => {
+                  if (selected.length === 0) {
+                    return (
+                      <em>
+                        {t("select")} {t("interestTopic")}
+                      </em>
+                    );
+                  }
+                  return selected
+                    .map(
+                      (id) =>
+                        listInterestTopics.find((topic) => topic.id === id)
+                          ?.topicName,
+                    )
+                    .filter((name) => name !== undefined)
+                    .join(", ");
+                }}
+                MenuProps={MenuProps}
+              >
+                {listInterestTopics.map((topic) => (
+                  <MenuItem key={topic.id} value={topic.id}>
+                    {topic.topicName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <p className="m-0 py-1 fw-600 font-xss">{t("servicesOffer")}</p>
+            <FormControl className="w-100">
+              <Select
+                multiple
+                displayEmpty
+                value={formData.selectedServiceIds}
+                onChange={handleChangeSelectService}
+                input={<OutlinedInput />}
+                renderValue={(selected) => {
+                  if (selected.length === 0) {
+                    return (
+                      <em>
+                        {t("select")} {t("servicesOffer")}
+                      </em>
+                    );
+                  }
+                  return selected
+                    .map(
+                      (id) =>
+                        listInterestTopics.find((topic) => topic.id === id)
+                          ?.topicName,
+                    )
+                    .filter((name) => name !== undefined)
+                    .join(", ");
+                }}
+                MenuProps={MenuProps}
+              >
+                {listInterestTopics.map((topic) => (
+                  <MenuItem key={topic.id} value={topic.id}>
+                    {topic.topicName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <p className="m-0 py-1 fw-600 font-xss">{t("location")}</p>
+            <Autocomplete
+              disablePortal
+              options={regions}
+              className="w-100"
+              freeSolo
+              value={formData.location}
+              onChange={(event, newValue) => {
+                setFormData((prev) => ({ ...prev, location: newValue }));
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Enter the location"
+                  value={formData.location}
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      location: e.target.value,
+                    }));
+                  }}
+                />
+              )}
+            />
+            <p className="m-0 py-1 fw-600 font-xss">{t("Email")}</p>
             <input
               className="px-2"
               style={{
@@ -172,80 +275,6 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
               name="email"
               disabled
             />
-            <p className="m-0 py-1 fw-600 font-xss">Location</p>
-            <input
-              className="px-2"
-              style={{
-                width: "100%",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                height: "32px",
-              }}
-              value={formData.location}
-              name="location"
-              onChange={handleChange}
-              placeholder="Please enter your location"
-            />
-            <p className="m-0 py-1 fw-600 font-xss">Service offer</p>
-            <FormControl className="w-100">
-              <Select
-                multiple
-                displayEmpty
-                value={formData.selectedServiceIds}
-                onChange={handleChangeSelectService}
-                input={<OutlinedInput />}
-                renderValue={(selected) => {
-                  if (selected.length === 0) {
-                    return <em>Select service offer</em>;
-                  }
-                  return selected
-                    .map(
-                      (id) =>
-                        listInterestTopics.find((topic) => topic.id === id)
-                          ?.topicName,
-                    )
-                    .filter((name) => name !== undefined)
-                    .join(", ");
-                }}
-                MenuProps={MenuProps}
-              >
-                {listInterestTopics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.id}>
-                    {topic.topicName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <p className="m-0 py-1 fw-600 font-xss">Interest Topic</p>
-            <FormControl className="w-100">
-              <Select
-                multiple
-                displayEmpty
-                value={formData.selectedTopicIds}
-                onChange={handleChangeSelectTopic}
-                input={<OutlinedInput />}
-                renderValue={(selected) => {
-                  if (selected.length === 0) {
-                    return <em>Select topic offer</em>;
-                  }
-                  return selected
-                    .map(
-                      (id) =>
-                        listInterestTopics.find((topic) => topic.id === id)
-                          ?.topicName,
-                    )
-                    .filter((name) => name !== undefined)
-                    .join(", ");
-                }}
-                MenuProps={MenuProps}
-              >
-                {listInterestTopics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.id}>
-                    {topic.topicName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </form>
         </Modal.Body>
         <Modal.Footer className={styles["modal-footer"]}>
@@ -254,7 +283,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
             onClick={submitOtherInfo}
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
-            Save
+            {t("save")}
           </Button>
         </Modal.Footer>
       </Modal>

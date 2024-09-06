@@ -35,7 +35,7 @@ const AiSummary = ({
     setSkills(dataBrokerProfile?.skills ?? []);
     setLocation(dataBrokerProfile?.location || "");
   }, [dataBrokerProfile]);
-  // console.log("2222222",skills)
+  console.log("2222222", skills);
 
   const [expandPost, setExpandPost] = useState<boolean>(false);
 
@@ -94,7 +94,7 @@ const AiSummary = ({
               className={"cursor-pointer text-blue"}
               onClick={() => setExpandPost((open) => !open)}
             >
-              See more
+              {t("See more")}
             </span>
           ) : (
             ""
@@ -109,7 +109,9 @@ const AiSummary = ({
             height: "144px",
           }}
         >
-          <p className="m-0 fw-400 font-xsss">New report is coming soon</p>
+          <p className="m-0 fw-400 font-xsss">
+            {t("New report is coming soon")}
+          </p>
         </div>
       )}
       <hr
@@ -142,7 +144,7 @@ const AiSummary = ({
               <>
                 <h4>
                   <i
-                    className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                    className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => {
                       handleEdit();
                     }}

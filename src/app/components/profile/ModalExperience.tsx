@@ -11,11 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import type {
-  BrokerProfile,
-  Company,
-  FormDtCompany,
-} from "@/api/profile/model";
+import type { BrokerProfile, FormDtCompany } from "@/api/profile/model";
 import dayjs from "dayjs";
 import {
   createNewExperiences,
@@ -24,7 +20,8 @@ import {
 } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import WaveLoader from "../WaveLoader";
-import type { BaseArrayResponse, BaseResponse } from "@/api/model";
+import type { BaseArrayResponse } from "@/api/model";
+import { useTranslations } from "next-intl";
 
 interface ModalExperienceProp {
   title: string;
@@ -42,30 +39,12 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
   isEditing,
   show,
   title,
-  dataBrokerProfile,
   formDt,
   setCompany,
-  idUser,
 }) => {
   const [formData, setFormData] = useState(formDt);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  // const formik = useFormik({
-  //   initialValues: {
-  //     id: formDt.id,
-  //     logo: formDt.logo,
-  //     name: formDt.name,
-  //     startDate: formDt.startDate,
-  //     endDate: formDt.endDate,
-  //     isWorking: formDt.isWorking,
-  //     position: formDt.position,
-  //     location: formDt.location,
-  //     description: formDt.description,
-  //     workingType: formDt.workingType,
-  //   },
-  //   onSubmit: async (values) => {}
-  // });
-
+  const t = useTranslations("MyProfile");
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [experience, setExperience] = useState<
     { name: string; logo: string }[]
@@ -137,10 +116,12 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name) newErrors.name = "Company name is required";
+    if (!formData.name)
+      newErrors.name = `${t("company")} ${t("name")} ${t("is required")}`;
     if (!formData.workingType)
-      newErrors.workingType = "Employment type is required";
-    if (!formData.startDate) newErrors.startDate = "Start Date is required";
+      newErrors.workingType = `${t("working type")}  ${t("is required")}`;
+    if (!formData.startDate)
+      newErrors.startDate = `${t("startDate")}  ${t("is required")}`;
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -245,23 +226,9 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            {/* <ImageUpload
-              folderUpload={""}
-              onChange={handleImageChange}
-              aspect={0}
-              uploadAvatar={false}
-              previewImage={""}
-            /> */}
-            {/* {uploadedImage && (
-              <div>
-                <p>Image uploaded successfully!</p>
-                <img
-                  src={URL.createObjectURL(uploadedImage)}
-                  alt="Uploaded Image"
-                />
-              </div>
-            )} */}
-            <p className="m-0 py-1 fw-600 font-xss">Company Name</p>
+            <p className="m-0 py-1 fw-600 font-xss">
+              {t("name")} {t("company")}{" "}
+            </p>
             <Autocomplete
               inputValue={isEditing ? formData.name : undefined}
               disablePortal
@@ -336,7 +303,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               }}
             >
               <div style={{ width: "100%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">Job Title</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("job title")}</p>
                 <input
                   className="px-2"
                   style={{
@@ -352,7 +319,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 />
               </div>
               <div style={{ width: "100%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">Employment Type</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("working type")}</p>
                 <Select
                   value={formData.workingType}
                   onChange={handleSelectChange}
@@ -360,7 +327,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   style={{ width: "100%", height: "32px" }}
                 >
                   <MenuItem value="" disabled>
-                    Select Working Type
+                    {t("select")} {t("working type")}
                   </MenuItem>
                   <MenuItem value="FULL_TIME">Full-Time</MenuItem>
                   <MenuItem value="PART_TIME">Part-Time</MenuItem>
@@ -384,7 +351,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   alignItems: "center",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss">Is Working</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("is working")}</p>
                 <div>
                   <input
                     className=""
@@ -395,7 +362,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                     checked={formData.isWorking === true}
                     onChange={handleRadioChange}
                   />
-                  <span className="m-2 py-1">True</span>
+                  <span className="m-2 py-1">{t("True")}</span>
                 </div>
                 <div>
                   <input
@@ -407,7 +374,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                     checked={formData.isWorking === false}
                     onChange={handleRadioChange}
                   />
-                  <span className="m-2">False</span>
+                  <span className="m-2">{t("False")}</span>
                 </div>
               </div>
             </div>
@@ -424,7 +391,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   width: "50%",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss">Start Date</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("startDate")}</p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.startDate)}
@@ -449,7 +416,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               </div>
               {!formData.isWorking && (
                 <div style={{ width: "50%" }}>
-                  <p className="m-0 py-1 fw-600 font-xss">End Date</p>
+                  <p className="m-0 py-1 fw-600 font-xss">{t("endDate")}</p>
                   <DatePicker
                     className="w__100"
                     value={dayjs(formData.endDate)}
@@ -464,7 +431,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 </div>
               )}
             </div>
-            <p className="m-0 py-1 fw-600 font-xss">Location</p>
+            <p className="m-0 py-1 fw-600 font-xss">{t("location")}</p>
             <input
               className="px-2"
               style={{
@@ -479,7 +446,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               placeholder="Please enter your location"
             />
 
-            <p className="m-0 py-1 fw-600 font-xss">Description</p>
+            <p className="m-0 py-1 fw-600 font-xss">{t("description")}</p>
             <textarea
               className="px-2"
               value={formData.description}
@@ -507,7 +474,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
             }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
-            Save
+            {t("save")}
           </Button>
         </Modal.Footer>
       </Modal>

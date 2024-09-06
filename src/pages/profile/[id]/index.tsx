@@ -96,7 +96,7 @@ export default function Profile({
       <div
         className="card"
         style={{
-          background: "#FFFFFF",
+          background: "#fff",
           paddingLeft: "16px",
           paddingRight: "16px",
           paddingTop: "16px",
@@ -104,7 +104,6 @@ export default function Profile({
         }}
       >
         <Banner
-          dataBrokerProfile={dataBrokerProfile}
           role={role}
           dataUser={dataUser}
           idParam={idParam}
@@ -116,21 +115,21 @@ export default function Profile({
             className={`${styles["button-tab"]} ${curTab === TabPnum.Posts ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
           >
-            <p>Posts</p>
+            <p>{t("Posts")}</p>
           </div>
           {dataUser.role.name === "broker" && (
             <div
               className={`${styles["button-tab"]} ${curTab === TabPnum.About ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
               onClick={(e) => onSelectTabHandler(e)}
             >
-              <p>About</p>
+              <p>{t("About")}</p>
             </div>
           )}
           <div
             className={`${styles["button-tab"]} ${curTab === TabPnum.Communities ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
           >
-            <p>Communities</p>
+            <p>{t("Communities")}</p>
           </div>
         </div>
       </div>

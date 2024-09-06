@@ -1,4 +1,3 @@
-import { dataLicenseProfile } from "@/app/fakeData/profile";
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
@@ -117,7 +116,7 @@ const License = ({
               <>
                 <h1>
                   <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]}`}
+                    className={`bi bi-plus-lg ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
@@ -126,14 +125,14 @@ const License = ({
                     {iconBack ? (
                       <h4>
                         <i
-                          className={`bi bi-arrow-left ${styles["icon-profile"]}`}
+                          className={`bi bi-arrow-left ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleCloseEdit()}
                         ></i>
                       </h4>
                     ) : (
                       <h4>
                         <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleOpenEdit()}
                         ></i>
                       </h4>
@@ -186,11 +185,11 @@ const License = ({
                         }}
                       >
                         <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleEditModal(license)}
                         ></i>
                         <i
-                          className={`bi bi-trash3-fill ${styles["icon-profile"]}`}
+                          className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => delCertifications(license.id)}
                         ></i>
                       </div>
@@ -199,13 +198,14 @@ const License = ({
                 </div>
                 <p className="m-0 font-xsss lh-20">{license.licenseIssuer}</p>
                 <p className="m-0 font-xsss lh-20 text-gray-follow">
-                  Issued {dayjs(license.licenseIssueDate).format("MMM-YYYY")} -{" "}
+                  {t("Issued")}{" "}
+                  {dayjs(license.licenseIssueDate).format("MMM-YYYY")} -{" "}
                   {license.licenseExpirationDate
                     ? dayjs(license.licenseExpirationDate).format("MMM-YYYY")
                     : "No expiration date"}
                 </p>
                 <p className="m-0 mt-2 font-xsss lh-20 text-gray-follow">
-                  Credential {license.credentialID}
+                  {t("Credential")} {license.credentialID}
                 </p>
               </div>
             </div>
@@ -243,12 +243,13 @@ const License = ({
               }}
             >
               <p className="m-0 font-xss fw-600">
-                Show all{" "}
-                {dataBrokerProfile.licenses.length - licenseToShow.length}{" "}
-                license & certification
+                {t("Show all")} {licenses.length - licenseToShow.length}{" "}
+                {t("license&certifications")}
               </p>
 
-              <i className={`bi bi-arrow-right ${styles["icon-profile"]}`}></i>
+              <i
+                className={`bi bi-arrow-right ${styles["icon-profile"]} cursor-pointer`}
+              ></i>
             </button>
           </>
         )}

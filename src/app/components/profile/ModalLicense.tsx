@@ -11,6 +11,7 @@ import { throwToast } from "@/utils/throw-toast";
 import { createNewLicense, updateLicense } from "@/api/profile";
 import WaveLoader from "../WaveLoader";
 import type { BaseArrayResponse, BaseResponse } from "@/api/model";
+import { useTranslations } from "next-intl";
 
 interface ModalLisenceProp {
   title: string;
@@ -44,7 +45,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  const t = useTranslations("MyProfile");
   const [formData, setFormData] = useState(formDt);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
@@ -124,7 +125,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             return [newLicense, ...prev];
           });
         }
-        setLicenses((prev) => [license, ...prev]);
+        // setLicenses((prev) => [license, ...prev]);
         handleClose();
       }
     } catch (error) {
@@ -202,7 +203,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             /> */}
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">Certification Name</p>
+                <p className="m-0 py-1 fw-600 font-xss">
+                  {t("name")} {t("certification")}
+                </p>
                 <input
                   className="px-2"
                   style={{
@@ -222,7 +225,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
               </div>
 
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">Issuing Organization</p>
+                <p className="m-0 py-1 fw-600 font-xss">
+                  {t("Issuing Organization")}
+                </p>
                 <input
                   className="px-2"
                   style={{
@@ -240,7 +245,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss ">Issued year</p>
+                <p className="m-0 py-1 fw-600 font-xss ">{t("Issued year")}</p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.licenseIssueDate)}
@@ -266,7 +271,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                 )}
               </div>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss ">Expiration year</p>
+                <p className="m-0 py-1 fw-600 font-xss ">
+                  {t("Expiration year")}
+                </p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.licenseExpirationDate)}
@@ -284,7 +291,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">Credential ID</p>
+                <p className="m-0 py-1 fw-600 font-xss">{t("Credential ID")}</p>
                 <input
                   className="px-2"
                   style={{
@@ -300,7 +307,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                 />
               </div>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">License Status</p>
+                <p className="m-0 py-1 fw-600 font-xss">
+                  {t("License Status")}
+                </p>
                 <Select
                   value={formData.licenseStatus}
                   onChange={handleSelectChange}
@@ -308,7 +317,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                   style={{ width: "100%", height: "32px" }}
                 >
                   <MenuItem value="" disabled>
-                    Select License Status
+                    {t("select")} {t("License Status")}
                   </MenuItem>
                   <MenuItem value="ACTIVE">ACTIVE</MenuItem>
                   <MenuItem value="INACTIVE">INACTIVE</MenuItem>
@@ -332,7 +341,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             }
             className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
           >
-            Save
+            {t("save")}
           </Button>
         </Modal.Footer>
       </Modal>

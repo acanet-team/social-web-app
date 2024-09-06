@@ -1,3 +1,4 @@
+import { BaseApiResponse } from "./../model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 import httpClient from "../index";
 import type {
@@ -36,7 +37,7 @@ export const updateProfile = (formData: FormData) => {
 };
 
 export const updateOtherProfile = (formData: FormData) => {
-  return httpClient.patch<FormData, BaseResponse<T>>(
+  return httpClient.patch<FormData, AllProfileResponse>(
     `/v1/user-profile/update-profile`,
     formData,
     {
@@ -46,15 +47,10 @@ export const updateOtherProfile = (formData: FormData) => {
 };
 
 export const putSocialMedia = (
-  social: Record<string, { url: string; id: string }>,
+  social: { name: string; mediaUrl: string; id: string }[],
 ) => {
-  const socialMedia = Object.entries(social).map(([name, { url, id }]) => ({
-    name,
-    mediaUrl: url,
-    id,
-  }));
   return httpClient.put(`/v1/user-profile/update-social-media`, {
-    socialMedia,
+    socialMedia: social,
   });
 };
 

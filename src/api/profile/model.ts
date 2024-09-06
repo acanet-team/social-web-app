@@ -127,9 +127,9 @@ export interface Company {
 
 export interface SocialMedia {
   id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
   name: string;
   mediaUrl: string;
 }
