@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import type { ICommunity } from "@/api/community/model";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { CommunityViewEnum } from "@/types";
 import styles from "@/styles/modules/memberTable.module.scss";
-import CommunityForm from "./communities/CommunityForm";
+import CommunityForm from "./CommunityForm";
+import { useSession } from "next-auth/react";
 
 export default function CommunityHeader(props: {
   community: ICommunity;
@@ -17,11 +18,19 @@ export default function CommunityHeader(props: {
   const { community, setCurTab, curTab, pendingRequests, groupId } = props;
   const [showModal, setShowModal] = useState<boolean>(false);
   const [curCommunity, setCurCommunity] = useState(community);
+  const [curUser, setCurUser] = useState<number>();
   const coverImage = curCommunity.coverImage?.path;
   const avatar = curCommunity.avatar?.path;
   const t = useTranslations("CommunityTabs");
   const tBase = useTranslations("Base");
   const tCommunity = useTranslations("Community");
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      setCurUser(session.user.id);
+    }
+  }, [session]);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -121,29 +130,30 @@ export default function CommunityHeader(props: {
               {t("members")}
             </Link>
           </li>
-          <li className="list-inline-item me-5 position-relative">
-            <Link
-              className={`${curTab === CommunityViewEnum.requests ? "active" : ""} fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block`}
-              href="#"
-              scroll={false}
-              data-toggle="tab"
-              onClick={onSelectTabHandler}
-            >
-              {t("requests")}
-            </Link>
-            <span
-              className={`${styles["pending-requests"]} position-absolute text-danger`}
-            >
-              {pendingRequests}
-            </span>
-          </li>
+          {curUser === community.owner.userId && (
+            <li className="list-inline-item me-5 position-relative">
+              <Link
+                className={`${curTab === CommunityViewEnum.requests ? "active" : ""} fw-700 font-xsss text-grey-500 pt-3 pb-3 ls-1 d-inline-block`}
+                href="#"
+                scroll={false}
+                data-toggle="tab"
+                onClick={onSelectTabHandler}
+              >
+                {t("requests")}
+              </Link>
+              <span
+                className={`${styles["pending-requests"]} position-absolute text-danger`}
+              >
+                {pendingRequests !== 0 && pendingRequests}
+              </span>
+            </li>
+          )}
         </ul>
       </div>
       {showModal && (
         <CommunityForm
           isEditing={groupId}
           handleClose={handleClose}
-          handleShow={handleShow}
           show={showModal}
           setCommunity={setCurCommunity}
         />

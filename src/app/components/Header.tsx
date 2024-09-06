@@ -18,6 +18,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   const [photo, setPhoto] = useState<string>("");
   const { data: session } = useSession() as any;
   const modalRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLImageElement>(null);
   const t = useTranslations("NavBar");
   const userId = session?.user?.id;
 
@@ -57,7 +58,10 @@ export default function Header(props: { isOnboarding: boolean }) {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    if (
+      !avatarRef?.current?.contains(event.target as Node) &&
+      !modalRef?.current?.contains(event.target as Node)
+    ) {
       setOpenSettings(false);
     }
   };
@@ -280,10 +284,16 @@ export default function Header(props: { isOnboarding: boolean }) {
           src={photo}
           alt="user"
           width={40}
+          ref={avatarRef}
           height={40}
           className="w40 rounded-xl p-0 ms-3 menu-icon cursor-pointer"
           onClick={onOpenSettingHandler}
         />
+      )}
+      {openSettings && (
+        <div ref={modalRef}>
+          <HeaderSetting />
+        </div>
       )}
       {/* Left navbar */}
       {!props.isOnboarding && (
@@ -413,11 +423,6 @@ export default function Header(props: { isOnboarding: boolean }) {
           </div>
         </form>
       </div> */}
-      {openSettings && (
-        <div ref={modalRef}>
-          <HeaderSetting />
-        </div>
-      )}
     </div>
   );
 }

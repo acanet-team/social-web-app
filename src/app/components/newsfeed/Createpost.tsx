@@ -229,7 +229,7 @@ const CreatePost = (props: {
           }}
           value={postText}
           name="message"
-          className="h100 w-100 rounded-3 p-3 ps-5 font-xsss text-dark fw-400 border-light-md theme-dark-bg"
+          className="h100 w-100 rounded-3 p-3 ps-5 font-xss text-dark fw-400 border-light-md theme-dark-bg"
           placeholder={t("Whats_on_your_mind")}
           style={{ resize: "none" }}
         ></textarea>

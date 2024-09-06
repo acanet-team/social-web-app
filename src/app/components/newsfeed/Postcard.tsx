@@ -14,6 +14,7 @@ import { throwToast } from "@/utils/throw-toast";
 import RoundedNumber from "../RoundedNumber";
 import type { IPost } from "@/api/newsfeed/model";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function PostCard(props: {
   postId: string;
@@ -27,8 +28,10 @@ export default function PostCard(props: {
   createdAt: string;
   columnsCount: number;
   liked: boolean;
-  groupName: string;
+  groupAvatar: string;
+  groupName: string | "";
   groupOwnerId: number | "";
+  groupId: string;
   setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
 }) {
   const {
@@ -43,8 +46,10 @@ export default function PostCard(props: {
     createdAt,
     columnsCount = 1,
     liked,
+    groupAvatar,
     groupName,
     groupOwnerId,
+    groupId,
     setPostHandler,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
@@ -161,31 +166,61 @@ export default function PostCard(props: {
 
   return (
     <div
-      className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-3 mb-3`}
+      className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-4 mb-3`}
     >
       <div className="card-body p-0 d-flex">
         <figure className="avatar me-3">
-          <Image
-            src={avatar}
-            width={45}
-            height={45}
-            alt="avater"
-            className="shadow-sm rounded-circle w45"
-          />
+          {groupAvatar ? (
+            <div className="position-relative">
+              <Image
+                src={groupAvatar}
+                width={45}
+                height={45}
+                alt="avater"
+                className="shadow-sm rounded-3 w45"
+                style={{ border: "1px solid #ddd" }}
+              />
+              <Image
+                src={avatar}
+                width={30}
+                height={30}
+                alt="avater"
+                className="shadow-sm rounded-circle position-absolute border-1"
+                style={{
+                  bottom: "-5px",
+                  right: "-5px",
+                  border: "1px solid #eee",
+                }}
+              />
+            </div>
+          ) : (
+            <Image
+              src={avatar}
+              width={45}
+              height={45}
+              alt="avater"
+              className="shadow-sm rounded-circle w45"
+            />
+          )}
         </figure>
         {groupName ? (
-          <h4 className="fw-700 text-grey-900 font-xsss mt-1">
-            @{nickName}
-            <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
-              {createdAt ? TimeSinceDate(createdAt) : ""}
-            </span>
-          </h4>
+          <div>
+            <Link href={`/communities/detail/${groupId}`}>
+              <h4 className="fw-700 text-grey-900 font-xss m-0">{groupName}</h4>
+            </Link>
+            <div className="d-flex align-items-end">
+              <span className="font-xsss fw-500 mt-1 lh-3 text-grey-600">
+                @{nickName}
+              </span>
+              <i className="bi bi-dot h4 m-0 mx-1 text-grey-500"></i>
+              <span className="font-xsss fw-500 mt-1 lh-3 text-grey-500">
+                {createdAt ? TimeSinceDate(createdAt) : ""}
+              </span>
+            </div>
+          </div>
         ) : (
           <h4 className="fw-700 text-grey-900 font-xss mt-1">
-            {groupName}
-            <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-600">
-              @{nickName}
-            </span>
+            @{nickName}
             <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
               {createdAt ? TimeSinceDate(createdAt) : ""}
             </span>
@@ -209,7 +244,7 @@ export default function PostCard(props: {
           </div>
         )}
       </div>
-      <div className="card-body p-0 ms-1 me-lg-6">
+      <div className="card-body p-0 ms-1 mt-2 me-lg-6">
         <Box
           sx={{
             width: "100%",
@@ -217,7 +252,7 @@ export default function PostCard(props: {
             overflow: "hidden",
           }}
         >
-          <p className="fw-500 lh-26 font-xsss w-100 mb-2">
+          <p className="fw-500 lh-26 font-xss w-100 mb-2">
             {expandPost
               ? content
               : content.length > 150
@@ -257,8 +292,8 @@ export default function PostCard(props: {
         </Box>
       </div>
 
-      <div className="card-body d-flex p-0 mt-2">
-        <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3">
+      <div className="card-body d-flex p-0 mt-4">
+        <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
             className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
@@ -270,7 +305,7 @@ export default function PostCard(props: {
           <span className="like-thousand">{likeNum >= 1000 ? "k" : ""}</span>
         </div>
         <div
-          className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss`}
+          className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
           onClick={() => onShowCommentHandler(postId.toString())}
         >
           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>

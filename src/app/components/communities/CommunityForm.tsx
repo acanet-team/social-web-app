@@ -24,14 +24,13 @@ interface CommunityFormProps {
   isEditing: string;
   show: boolean;
   handleClose: () => void;
-  handleShow: () => void;
+  handleShow?: () => void;
   setCommunities?: React.Dispatch<React.SetStateAction<ICommunity[]>>;
   setCommunity?: React.Dispatch<React.SetStateAction<ICommunity>>;
 }
 
 const CommunityForm: React.FC<CommunityFormProps> = ({
   handleClose,
-  handleShow,
   show,
   isEditing,
   setCommunities,
@@ -126,11 +125,8 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
     validationSchema,
     onSubmit: async (values, { setFieldError }) => {
       const communityData = new FormData();
-      communityData.append("name", values.name?.toLowerCase().trim());
-      communityData.append(
-        "description",
-        values.description?.toLowerCase().trim(),
-      );
+      communityData.append("name", values.name?.trim());
+      communityData.append("description", values.description?.trim());
       communityData.append(
         "fee",
         values.hasFee ? String(Number(values.feeNum)) : "0",

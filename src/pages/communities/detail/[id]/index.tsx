@@ -1,4 +1,4 @@
-import CommunityHeader from "@/app/components/CommunityHeader";
+import CommunityHeader from "@/app/components/communities/CommunityHeader";
 import React, { Fragment, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import {
@@ -52,6 +52,7 @@ export default function CommunityView({
         {curTab !== "posts" && (
           <MemberTable
             tab={curTab}
+            ownerId={communityMetaData.owner.userId}
             groupId={groupId}
             pendingRequests={pendingRequests}
             setPendingRequests={setPendingRequests}

@@ -7,15 +7,19 @@ export default function UserInvite() {
 
   return (
     <div className={styles["user-invite__container"]}>
-      <h4 className="fw-700 fs-3 text-current mb-4">{t("invite_user")}</h4>
-      <div className="card bg-transparent-card border-0 d-block mt-3">
-        <h4 className="d-inline font-xsss text-grey-500 fw-700">Setting 1</h4>
-        <div className="d-inline float-right mt-1">
-          <label className="toggle toggle-menu-color">
-            <input type="checkbox" />
-            <span className="toggle-icon"></span>
-          </label>
-        </div>
+      <h4 className="fw-700 fs-3 text-current mb-2">{t("invite_user")}</h4>
+      <div className="border-top mt-3"></div>
+      <div
+        className={`${styles["invite-user__option"]} my-3 d-flex align-items-center cursor-pointer`}
+      >
+        <i className="bi bi-link-45deg text-grey-600 h3 m-0 me-2"></i>
+        <div className="text-grey-600">Send an invitation</div>
+      </div>
+      <div
+        className={`${styles["invite-user__option"]} d-flex align-items-center cursor-pointer`}
+      >
+        <i className="bi bi-person text-grey-600 h3 m-0 me-2"></i>
+        <div className="text-grey-600">Find members</div>
       </div>
     </div>
   );

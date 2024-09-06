@@ -64,8 +64,9 @@
   }
 
   .dropdown-menu-settings:after {
-    border-color: transparent transparent #1a2236 transparent;
+    border-color: transparent transparent var(--theme-dark-color-bg-darker) transparent;
   }
+  
   .bg-transparent-card {
     background: transparent !important;
   }
