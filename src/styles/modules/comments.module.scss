@@ -1,13 +1,16 @@
 .comment-container {
-  padding: 10px 5px;
+  padding: 10px 5px 0;
   border-top: 1px solid var(--border-color-light);
+}
+
+.comment-input__container {
+  background-color: var(--light);
 }
 
 .comment-input textarea {
   border: none !important;
   resize: none;
   width: 100% !important;
-
 }
 
 .comment-input i::before {
@@ -22,7 +25,7 @@
   width: 100%;
   // gap: 1.8rem;
   padding-right: 20px;
-  height: auto; 
+  height: auto;
   max-height: 400px;
   overflow-y: auto;
 
@@ -45,9 +48,29 @@
   }
 }
 
+:global(.theme-dark) {
+  .comment-input__container {
+    background-color: var(--theme-color);
+  }
+}
+
 // MEDIA QUERIES
 @media (max-width: 768px) {
   .comment-content__container {
     padding-right: 5px;
+  }
+
+  .comment-input__container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color-light);
+  }
+
+  .comment-content__container {
+    height: 100%;
+    max-height: 100%;
   }
 }
