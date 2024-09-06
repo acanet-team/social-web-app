@@ -15,6 +15,7 @@ import { throwToast } from "@/utils/throw-toast";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UserInvite from "./UserInvite";
+import page from "@/pages/courses/investor/page";
 
 const TAKE = 5;
 export default function MemberTable(props: {
@@ -94,12 +95,20 @@ export default function MemberTable(props: {
     }
   }, [readyToFetch]);
 
+  // useEffect(() => {
+  //   if (searchValue) {
+  //     setPage(1);
+  //     setMembers([]);
+  //     getMembers(1, searchValue);
+  //   }
+  // }, [searchValue]);
+
   useEffect(() => {
-    if (searchValue) {
-      setPage(1);
-      setMembers([]);
-      getMembers(1, searchValue);
-    }
+    // if (searchValue) {
+    setPage(1);
+    setMembers([]);
+    getMembers(1, searchValue);
+    // }
   }, [searchValue]);
 
   useEffect(() => {
