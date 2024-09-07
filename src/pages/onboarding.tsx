@@ -41,16 +41,16 @@ const Onboarding: NextPageWithLayout = () => {
     /* eslint-disable react-hooks/rules-of-hooks */
     const stepDivs = document.querySelectorAll(`.${styles.step}`);
 
-    const handleCLick = function (e: any) {
-      const clickedTab = (e.target as HTMLElement).closest(
-        `.${styles["step"]}`,
-      ) as HTMLElement;
-      // Find tab number and update curPage
-      const clickedTabNum = Number(clickedTab?.dataset.tab);
-      // if (clickedTab && curstep + 1 > clickedTabNum) {
-      setCurStep(clickedTabNum);
-      // }
-    };
+    // const handleCLick = function (e: any) {
+    //   const clickedTab = (e.target as HTMLElement).closest(
+    //     `.${styles["step"]}`,
+    //   ) as HTMLElement;
+    //   // Find tab number and update curPage
+    //   const clickedTabNum = Number(clickedTab?.dataset.tab);
+    //   // if (clickedTab && curstep + 1 > clickedTabNum) {
+    //   setCurStep(clickedTabNum);
+    //   // }
+    // };
 
     stepDivs.forEach((stepDiv, index) => {
       // Hightlight chosen tab
@@ -67,7 +67,7 @@ const Onboarding: NextPageWithLayout = () => {
         stepDiv.classList.remove(`${styles["done"]}`);
       }
 
-      stepDiv.addEventListener("click", handleCLick as EventListener);
+      // stepDiv.addEventListener("click", handleCLick as EventListener);
 
       // Reveal corresponding content
       const contentContainer = document.querySelectorAll(
