@@ -35,7 +35,6 @@ const AiSummary = ({
     setSkills(dataBrokerProfile?.skills ?? []);
     setLocation(dataBrokerProfile?.location || "");
   }, [dataBrokerProfile]);
-  console.log("2222222", skills);
 
   const [expandPost, setExpandPost] = useState<boolean>(false);
 
