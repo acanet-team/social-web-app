@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/communities.module.scss";
 
 export default function CommunityCard(props: {
-  userId?: number;
+  userId: number;
   groupId: string;
   name: string;
   coverImg: string;

@@ -103,6 +103,7 @@ const GroupProfile = (props: {
           communityArr.map((group, index) => (
             <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
               <CommunityCard
+                userId={group.owner?.userId}
                 groupId={props.isBroker ? group.id : ""}
                 name={group.name}
                 coverImg={group.coverImage?.path}
