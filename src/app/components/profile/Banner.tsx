@@ -53,11 +53,16 @@ const Banner: React.FC<TabBannerProps> = ({
   );
 
   const [previewCover, setPreviewCover] = useState<string>(
-    dataUser?.profileCoverPhoto?.path || "/assets/images/profile/u-bg.png",
+    "/assets/images/profile/u-bg.png",
   );
   const [previewAvatar, setPreviewAvatar] = useState<string>(
-    dataUser?.photo?.path || "/assets/images/profile/ava.png",
+    "/assets/images/profile/ava.png",
   );
+
+  useEffect(() => {
+    setPreviewAvatar(dataUser?.photo?.path);
+    setPreviewCover(dataUser?.profileCoverPhoto?.path);
+  }, [dataUser, dataUserProfile]);
   const coverInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 

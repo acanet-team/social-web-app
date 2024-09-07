@@ -31,6 +31,7 @@ export default function Profile({
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
   const [dtUser, setDtUser] = useState(dataUser);
+  const [dtUserProfile, setDtUserProfile] = useState(dataUserProfile);
   const [listInterestTopic, setListInterestTopic] = useState(interestTopic);
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
@@ -57,6 +58,15 @@ export default function Profile({
       fetchProfileData();
     }
   }, [curTab]);
+  useEffect(() => {
+    fetchProfileData();
+  }, [idParam]);
+
+  useEffect(() => {
+    if (id) {
+      fetchProfileData();
+    }
+  }, [curTab]);
 
   useEffect(() => {
     if (!aboutVisited) {
@@ -70,6 +80,7 @@ export default function Profile({
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
       setDtUser(dtProfileRes?.data?.user || []);
+      setDtUserProfile(dtProfileRes?.data?.userProfile || []);
       setListInterestTopic(interestTopicRes?.data.docs || []);
       console.log(
         "Data refetched successfully!",
@@ -105,9 +116,9 @@ export default function Profile({
       >
         <Banner
           role={role}
-          dataUser={dataUser}
+          dataUser={dtUser}
           idParam={idParam}
-          dataUserProfile={dataUserProfile}
+          dataUserProfile={dtUserProfile}
           followersCount={followersCount}
         />
         <div className={`${styles["group-tabs"]}`}>
