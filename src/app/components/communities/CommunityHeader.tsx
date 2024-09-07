@@ -60,20 +60,25 @@ export default function CommunityHeader(props: {
           height={250}
           alt="avater"
           priority={true}
-          style={{ objectFit: "cover" }}
+          style={{
+            objectFit: "cover",
+            width: "100%",
+            borderTopLeftRadius: "5px",
+            borderTopRightRadius: "5px",
+          }}
         />
       </div>
       <div className="card-body p-0 position-relative mb-2">
         <figure
-          className={`${styles["community-avatar"]} avatar position-absolute w100 z-index-1`}
+          className={`${styles["community-avatar"]} avatar position-absolute z-index-1`}
         >
           <Image
             src={avatar ? avatar : "/assets/images/user.png"}
             alt="avatar"
-            width={100}
-            height={100}
+            width={119}
+            height={119}
             priority={true}
-            className="float-right p-1 bg-white rounded-3 w-100"
+            className="float-right p-1 bg-white rounded-circle"
             style={{ objectFit: "cover" }}
           />
         </figure>
