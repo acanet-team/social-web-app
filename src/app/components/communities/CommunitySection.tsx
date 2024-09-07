@@ -335,6 +335,7 @@ export default function CommunitySection(props: {
                     <CommunityCard
                       groupId={group.id}
                       name={group.name}
+                      userId={group.owner?.userId}
                       coverImg={group.coverImage?.path}
                       avatar={group.avatar?.path}
                       firstName={group.owner?.firstName}

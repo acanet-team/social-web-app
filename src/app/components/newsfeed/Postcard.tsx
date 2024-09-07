@@ -262,8 +262,11 @@ export default function PostCard(props: {
               </h4>
             </Link>
             <div className="d-flex align-items-end">
-              <Link href={`/profile/${author}`}>
-                <span className="font-xsss fw-500 text-break mt-1 lh-3 text-grey-600">
+              <Link
+                href={`/profile/${author}`}
+                className="lh-3 d-flex align-items-end"
+              >
+                <span className="font-xsss fw-500 text-break text-grey-600">
                   @
                   {isMobile
                     ? nickName.length > 20
@@ -273,7 +276,7 @@ export default function PostCard(props: {
                 </span>
               </Link>
               <div className="d-flex align-items-end">
-                <i className="bi bi-dot h4 m-0 mx-1 text-grey-500"></i>
+                <i className="bi bi-dot h4 m-0 text-grey-500"></i>
                 <span className="font-xsss fw-500 mt-1 lh-3 text-grey-500">
                   {createdAt ? TimeSinceDate(createdAt) : ""}
                 </span>
@@ -499,7 +502,7 @@ export default function PostCard(props: {
           avatar={avatar}
           content={content}
           assets={assets}
-          author={author}
+          authorId={author}
           createdAt={createdAt}
           columnsCount={columnsCount}
           groupAvatar={groupAvatar}

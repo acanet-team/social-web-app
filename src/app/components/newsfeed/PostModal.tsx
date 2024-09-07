@@ -22,7 +22,7 @@ function PostModal(props: {
   handleClose: () => void;
   postId: string;
   nickName: string;
-  author: number;
+  authorId: number;
   avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
@@ -49,7 +49,7 @@ function PostModal(props: {
     avatar,
     content,
     assets,
-    author,
+    authorId,
     like = 0,
     comment = 0,
     createdAt,
@@ -214,6 +214,7 @@ function PostModal(props: {
       <Modal.Header
         closeButton={fullscreen === "sm-down" ? false : true}
         className={styles["modal-header"]}
+        style={{ height: "50px" }}
       >
         {fullscreen && (
           <i
@@ -221,6 +222,7 @@ function PostModal(props: {
             onClick={handleClose}
           ></i>
         )}
+        <h2 className="p-0 m-0 fs-4 fw-bold">{nickName}&apos;s post</h2>
       </Modal.Header>
       <div className="border-top" />
       <Modal.Body className={styles["modal-content"]}>
@@ -289,7 +291,7 @@ function PostModal(props: {
                 </span>
               </h4>
             )}
-            {userId && (userId === author || userId === groupOwnerId) && (
+            {userId && (userId === authorId || userId === groupOwnerId) && (
               <div
                 className="ms-auto pointer position-relative"
                 onClick={() => setOpenSettings((open) => !open)}
@@ -400,7 +402,7 @@ function PostModal(props: {
               take={take}
               postId={postId}
               setCommentNum={setCommentNumHandler}
-              postAuthor={author}
+              postAuthor={authorId}
               ref={childRef}
             />
           )}

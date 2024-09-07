@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/communities.module.scss";
 
 export default function CommunityCard(props: {
+  userId?: number;
   groupId: string;
   name: string;
   coverImg: string;
@@ -23,6 +24,7 @@ export default function CommunityCard(props: {
   onEditGroupHandler: (arg: string) => void;
 }) {
   const {
+    userId,
     groupId,
     name,
     coverImg,
@@ -81,12 +83,14 @@ export default function CommunityCard(props: {
       <div className="card-body d-block w-100 py-0 text-left position-relative">
         <div className="mt-3 pl-10 d-flex justify-content-between align-items-start">
           <div className="me-3 e-sm-2 d-flex flex-column align-items-between">
-            <h4 className="fw-700 font-xss mb-1">
-              {firstName + " " + lastName}
-            </h4>
-            <div className="fw-500 font-xsss text-break text-grey-500 mt-0 mb-1 lh-3">
-              @{nickName}
-            </div>
+            <Link href={`/profile/${userId}`}>
+              <h4 className="fw-700 font-xss mb-1">
+                {firstName + " " + lastName}
+              </h4>
+              <div className="fw-500 font-xsss text-break text-grey-500 mt-0 mb-1 lh-3">
+                @{nickName}
+              </div>
+            </Link>
             <div className="fw-500 font-xsss fst-italic text-dark mt-0 lh-3">
               {membersCount?.toLocaleString("en-US") || 1}{" "}
               {membersCount > 1 ? `${tBase("members")}` : tBase("member")}
@@ -129,9 +133,9 @@ export default function CommunityCard(props: {
         </div>
       </div>
       <div className="card-body h-100 mt-2 pb-4 cursor-pointer">
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center mb-2">
           <Link href={`/communities/detail/${groupId}`}>
-            <h3 className="fw-bold fs-3 m-0 mb-2">{name}</h3>
+            <h3 className="fw-bold fs-3 m-0">{name}</h3>
           </Link>
           {isBroker && communityType === "owned" && (
             <i

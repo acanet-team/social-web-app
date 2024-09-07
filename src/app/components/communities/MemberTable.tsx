@@ -15,9 +15,9 @@ import { throwToast } from "@/utils/throw-toast";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UserInvite from "./UserInvite";
-import page from "@/pages/courses/investor/page";
+import Link from "next/link";
 
-const TAKE = 5;
+const TAKE = 20;
 export default function MemberTable(props: {
   groupId: string;
   tab: string;
@@ -302,7 +302,7 @@ export default function MemberTable(props: {
       <div
         className={`${styles["community-table"]} table-responsive rounded-3 shadow-md font-xsss`}
       >
-        <table className="table align-middle pb-4 mt-2">
+        <table className="table align-middle pb-4 mt-2 table-hover">
           <thead>
             <tr className="d-flex">
               <th className={`${styles["name-col"]} col-2`}>
@@ -338,14 +338,17 @@ export default function MemberTable(props: {
                         style={{ objectFit: "cover", borderRadius: "10px" }}
                         alt="avatar"
                       />
-                      <span className="ms-2">
-                        {m.user.firstName + " " + m.user.lastName}
-                      </span>
+
+                      <Link href={`/profile/${m.user.userId}`} className="ms-2">
+                        <span className="text-dark">
+                          {m.user.firstName + " " + m.user.lastName}
+                        </span>
+                      </Link>
                     </td>
                     <td className="col-2">
                       {new Date(m.createdAt).toLocaleString("en-US", {
                         year: "numeric",
-                        month: "long",
+                        month: "short",
                       })}
                     </td>
                     <td className="col-3">{m.user.phone}</td>
