@@ -1,6 +1,5 @@
 import { createGetBrokersRequest } from "@/api/onboard";
 import styles from "@/styles/modules/brokerProfile.module.scss";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import CircleLoader from "../CircleLoader";
 import Pagination from "../Pagination";
@@ -67,7 +66,7 @@ export default function Brokers(props: { onNextHandler: () => void }) {
         isTable={false}
       />
 
-      <div className="btn mt-3 mb-5 mx-auto">
+      <div className={`${styles["onboard-finish__btn"]} btn mt-3 mb-5 mx-auto`}>
         <button
           onClick={onFinish}
           className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-5 mx-auto"

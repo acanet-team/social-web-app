@@ -6,7 +6,7 @@ import "@/styles/global.scss";
 import classNames from "classnames";
 import type { NextPageContext } from "next";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/modules/onboard.module.scss";
 import type { NextPageWithLayout } from "./_app";
 
@@ -16,12 +16,12 @@ const Onboarding: NextPageWithLayout = () => {
   const [curstep, setCurStep] = useState<number>(0);
   const { data: session } = useSession();
 
-  const onClickNextStep = () => {
+  const onClickNextStep = useCallback(() => {
     setCurStep((step) => step + 1);
     if (curstep > numSteps) {
       setCurStep(1);
     }
-  };
+  }, [curstep]);
 
   useEffect(() => {
     if (session && curstep === 0) {
@@ -40,15 +40,16 @@ const Onboarding: NextPageWithLayout = () => {
   useEffect(() => {
     /* eslint-disable react-hooks/rules-of-hooks */
     const stepDivs = document.querySelectorAll(`.${styles.step}`);
+
     // const handleCLick = function (e: any) {
     //   const clickedTab = (e.target as HTMLElement).closest(
     //     `.${styles["step"]}`,
     //   ) as HTMLElement;
     //   // Find tab number and update curPage
     //   const clickedTabNum = Number(clickedTab?.dataset.tab);
-    //   if (clickedTab && curstep + 1 > clickedTabNum) {
-    //     setCurStep(clickedTabNum);
-    //   }
+    //   // if (clickedTab && curstep + 1 > clickedTabNum) {
+    //   setCurStep(clickedTabNum);
+    //   // }
     // };
 
     stepDivs.forEach((stepDiv, index) => {
@@ -134,6 +135,7 @@ const Onboarding: NextPageWithLayout = () => {
           className={classNames(
             "tab-content__container--2",
             styles["tab-content__container"],
+            styles["interest-tab-content__container"],
           )}
         >
           {curstep === 2 && <Interests onNextHandler={onClickNextStep} />}

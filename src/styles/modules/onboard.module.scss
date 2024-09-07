@@ -43,6 +43,7 @@ $text-color-optional: #9fb3c8;
           font-family: "Bootstrap-icons";
           font-weight: 100;
           content: "\F633";
+          color: var(--light);
         }
         * {
           display: none;
@@ -176,7 +177,13 @@ $text-color-optional: #9fb3c8;
   .step-title {
     font-size: 14px !important;
   }
+
   .step {
     padding: 1.5rem 0 !important;
+  }
+
+  .interest-tab-content__container {
+    height: calc(100vh - 102px - 160px) !important;
+    overflow: hidden;
   }
 }

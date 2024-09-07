@@ -248,16 +248,20 @@ export default function PostCard(props: {
           <div>
             <Link href={`/communities/detail/${groupId}`}>
               <h4 className="fw-700 text-grey-900 text-break font-xss m-0">
-                {groupName.length > 23
-                  ? `${groupName.substring(0, 20)}...`
+                {isMobile
+                  ? groupName.length > 23
+                    ? `${groupName.substring(0, 20)}...`
+                    : groupName
                   : groupName}
               </h4>
             </Link>
             <div className="d-flex align-items-end">
               <span className="font-xsss fw-500 text-break mt-1 lh-3 text-grey-600">
                 @
-                {nickName.length > 20
-                  ? `${nickName.substring(0, 20)}...`
+                {isMobile
+                  ? nickName.length > 20
+                    ? `${nickName.substring(0, 20)}...`
+                    : nickName
                   : nickName}
               </span>
               <div className="d-flex align-items-end">
@@ -271,8 +275,10 @@ export default function PostCard(props: {
         ) : (
           <h4 className="fw-700 text-grey-900 font-xss mt-1">
             @
-            {nickName.length > 20
-              ? `${nickName.substring(0, 20)}...`
+            {isMobile
+              ? nickName.length > 20
+                ? `${nickName.substring(0, 20)}...`
+                : nickName
               : nickName}
             <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
               {createdAt ? TimeSinceDate(createdAt) : ""}
@@ -461,7 +467,7 @@ export default function PostCard(props: {
       </div>
       {/* All comments */}
       {isLoading && <DotWaveLoader />}
-      {openComments && !isLoading && (
+      {!isMobile && openComments && !isLoading && (
         <Comments
           comments={comments}
           page={page}

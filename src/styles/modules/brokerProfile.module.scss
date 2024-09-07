@@ -81,3 +81,20 @@
 :global(.theme-dark) #all-brokers .broker-skill {
   color: var(--light);
 }
+
+// MEDIA QUERIES
+@media (max-width: 768px) {
+  .onboard-finish__btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 0 !important;
+    z-index: 10;
+    background-color: var(--light);
+    border-top: 1px solid var(--border-color-light);
+  }
+
+  .onboard-finish__btn button {
+    margin: 1rem !important;
+  }
+}

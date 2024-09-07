@@ -105,6 +105,7 @@ function PostModal(props: {
 
   useEffect(() => {
     if (show) {
+      console.log("101010");
       initialFetchComments();
     }
   }, [show]);

@@ -54,6 +54,7 @@ export default function CommunitySection(props: {
     useState<boolean>(false);
   const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const { data: session } = useSession();
+  const [switchTab, setSwitchTab] = useState<boolean>(false);
 
   useEffect(() => {
     if (session && session.user?.isBroker) {
@@ -121,51 +122,9 @@ export default function CommunitySection(props: {
     };
   }, [page, totalPage, isLoading]);
 
-  // Reset states and fetch data on tab (communityType) change
-  // useEffect(() => {
-  //   if (hasFetchedInitialData) {
-  //     setFilterValues({ searchValue: "", filterValue: "" });
-  //     if (searchRef.current) {
-  //       searchRef.current.value = "";
-  //     }
-  //     setShownFilterValue(tForm("filter_none"));
-  //     setPage(1);
-  //     setTotalPage(2);
-  //     setCommunityArr([]);
-  //     setReadyToFetch(true);
-  //   }
-  // }, [props.communityType]);
-
-  // useEffect(() => {
-  //   if (readyToFetch) {
-  //     fetchCommunities(1);
-  //     setReadyToFetch(false);
-  //   }
-  // }, [readyToFetch]);
-
-  // useEffect(() => {
-  //   if (filterValues.searchValue || filterValues.filterValue) {
-  //     setPage(1);
-  //     setCommunityArr([]);
-  //     fetchCommunities(1);
-  //   }
-  // }, [filterValues]);
-
-  // useEffect(() => {
-  //   if (page > 1) {
-  //     fetchCommunities(page);
-  //   }
-  // }, [page]);
-
-  // // Avoid fetching data on initial render
-  // useEffect(() => {
-  //   if (!hasFetchedInitialData) {
-  //     setHasFetchedInitialData(true);
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (hasFetchedInitialData) {
+      setSwitchTab(true);
       setFilterValues({ searchValue: "", filterValue: "" });
       if (searchRef.current) {
         searchRef.current.value = "";
@@ -182,20 +141,33 @@ export default function CommunitySection(props: {
     if (readyToFetch) {
       fetchCommunities(1);
       setReadyToFetch(false);
+      setSwitchTab(false);
     }
   }, [readyToFetch]);
 
+  const prevFilterValues = useRef(filterValues);
   useEffect(() => {
-    // if (filterValues.searchValue === "" && hasFetchedInitialData) {
-    //   setCommunityArr([]);
-    //   setPage(1);
-    //   fetchCommunities(page);
-    // }
-    // if (filterValues.searchValue || filterValues.filterValue) {
-    setPage(1);
-    setCommunityArr([]);
-    fetchCommunities(1);
-    // }
+    // Check if filterValues have changed compared to the previous state
+    const hasSearchChanged =
+      prevFilterValues.current.searchValue !== filterValues.searchValue;
+    const hasFilterChanged =
+      prevFilterValues.current.filterValue !== filterValues.filterValue;
+
+    // Call fetchCommunities only if either of the values changed on the SAME tab
+    if ((hasSearchChanged || hasFilterChanged) && !switchTab) {
+      setPage(1);
+      setCommunityArr([]);
+      fetchCommunities(1);
+    } else if (
+      // Call fetchCommunities if deleting filters on the SAME tab
+      (filterValues.searchValue === "" || filterValues.filterValue === "") &&
+      !switchTab &&
+      hasFetchedInitialData
+    ) {
+      fetchCommunities(1);
+    }
+    // Update the previous filter values after each effect run
+    prevFilterValues.current = filterValues;
   }, [filterValues]);
 
   useEffect(() => {
