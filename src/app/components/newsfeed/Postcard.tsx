@@ -213,35 +213,41 @@ export default function PostCard(props: {
         <figure className="avatar me-3">
           {groupAvatar ? (
             <div className="position-relative">
+              <Link href={`/communities/detail/${groupId}`}>
+                <Image
+                  src={groupAvatar}
+                  width={45}
+                  height={45}
+                  alt="group"
+                  className="shadow-sm rounded-3 w45"
+                  style={{ border: "1px solid #ddd" }}
+                />
+              </Link>
+              <Link href={`/profile/${author}`}>
+                <Image
+                  src={avatar}
+                  width={30}
+                  height={30}
+                  alt="avatar"
+                  className="shadow-sm rounded-circle position-absolute border-1"
+                  style={{
+                    bottom: "-5px",
+                    right: "-5px",
+                    border: "1px solid #eee",
+                  }}
+                />
+              </Link>
+            </div>
+          ) : (
+            <Link href={`/profile/${author}`}>
               <Image
-                src={groupAvatar}
+                src={avatar}
                 width={45}
                 height={45}
                 alt="avater"
-                className="shadow-sm rounded-3 w45"
-                style={{ border: "1px solid #ddd" }}
+                className="shadow-sm rounded-circle w45"
               />
-              <Image
-                src={avatar}
-                width={30}
-                height={30}
-                alt="avater"
-                className="shadow-sm rounded-circle position-absolute border-1"
-                style={{
-                  bottom: "-5px",
-                  right: "-5px",
-                  border: "1px solid #eee",
-                }}
-              />
-            </div>
-          ) : (
-            <Image
-              src={avatar}
-              width={45}
-              height={45}
-              alt="avater"
-              className="shadow-sm rounded-circle w45"
-            />
+            </Link>
           )}
         </figure>
         {groupName ? (
@@ -256,14 +262,16 @@ export default function PostCard(props: {
               </h4>
             </Link>
             <div className="d-flex align-items-end">
-              <span className="font-xsss fw-500 text-break mt-1 lh-3 text-grey-600">
-                @
-                {isMobile
-                  ? nickName.length > 20
-                    ? `${nickName.substring(0, 20)}...`
-                    : nickName
-                  : nickName}
-              </span>
+              <Link href={`/profile/${author}`}>
+                <span className="font-xsss fw-500 text-break mt-1 lh-3 text-grey-600">
+                  @
+                  {isMobile
+                    ? nickName.length > 20
+                      ? `${nickName.substring(0, 20)}...`
+                      : nickName
+                    : nickName}
+                </span>
+              </Link>
               <div className="d-flex align-items-end">
                 <i className="bi bi-dot h4 m-0 mx-1 text-grey-500"></i>
                 <span className="font-xsss fw-500 mt-1 lh-3 text-grey-500">
@@ -273,17 +281,21 @@ export default function PostCard(props: {
             </div>
           </div>
         ) : (
-          <h4 className="fw-700 text-grey-900 font-xss mt-1">
-            @
-            {isMobile
-              ? nickName.length > 20
-                ? `${nickName.substring(0, 20)}...`
-                : nickName
-              : nickName}
+          <div>
+            <Link href={`/profile/${author}`}>
+              <h4 className="fw-700 text-grey-900 font-xss mt-1">
+                @
+                {isMobile
+                  ? nickName.length > 20
+                    ? `${nickName.substring(0, 20)}...`
+                    : nickName
+                  : nickName}
+              </h4>
+            </Link>
             <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
               {createdAt ? TimeSinceDate(createdAt) : ""}
             </span>
-          </h4>
+          </div>
         )}
         {userId && (userId === author || userId === groupOwnerId) && (
           <div
