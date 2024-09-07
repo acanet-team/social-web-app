@@ -6,6 +6,7 @@ import styles from "@/styles/modules/interest.module.scss";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
 import Pagetitle from "../Pagetitle";
+import { combineUniqueById } from "@/utils/combine-arrs";
 
 interface Option {
   id: string;
@@ -22,6 +23,8 @@ export default function Interests(props: { onNextHandler: () => void }) {
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const TAKE = 20;
   const t = useTranslations("Interest");
+  const [hasFetchedInitialData, setHasFetchedInitialData] =
+    useState<Boolean>(false);
 
   const onSelectInterestHandler = () => {
     if (selectedOptions.length === 0) {
@@ -61,11 +64,13 @@ export default function Interests(props: { onNextHandler: () => void }) {
       setIsLoading(true);
       const response: any = await createGetAllTopicsRequest(page, TAKE);
       // console.log(response);
-      setOptions((prevState) =>
-        response.data.docs
-          ? [...prevState, ...response.data.docs]
-          : [...prevState, ...response.data.data],
-      );
+      setOptions((prevState: Option[]) => {
+        const newOptions: Option[] = combineUniqueById(
+          prevState,
+          response.data.docs,
+        ) as Option[];
+        return newOptions;
+      });
       setTotalPage(response.data.meta.totalPage);
       return response.data;
     } catch (err) {
@@ -79,7 +84,11 @@ export default function Interests(props: { onNextHandler: () => void }) {
   const onScrollHandler = () => {
     if (list.current) {
       const { scrollTop, scrollHeight, clientHeight } = list.current;
-      if (scrollTop + clientHeight === scrollHeight && !isLoading) {
+      if (
+        scrollTop + clientHeight >= scrollHeight &&
+        !isLoading &&
+        page < totalPage
+      ) {
         setPage((prevState) => prevState + 1);
       }
     }
@@ -87,7 +96,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
 
   useEffect(() => {
     const currentList = list.current;
-    if (currentList && page < totalPage) {
+    if (currentList) {
       currentList.addEventListener("scroll", onScrollHandler);
     }
     return () => {
@@ -95,11 +104,23 @@ export default function Interests(props: { onNextHandler: () => void }) {
         currentList.removeEventListener("scroll", onScrollHandler);
       }
     };
-  }, [page, totalPage]);
+  }, [page, totalPage, isLoading]);
 
   useEffect(() => {
-    fetchTopics(page, TAKE);
-  }, [page, TAKE]);
+    if (page === 1 && !hasFetchedInitialData) {
+      fetchTopics(1, TAKE);
+      setHasFetchedInitialData(true);
+    } else if (page > 1) {
+      fetchTopics(page, TAKE);
+    }
+  }, [page]);
+
+  // Avoid fetching data on initial render
+  useEffect(() => {
+    if (!hasFetchedInitialData) {
+      setHasFetchedInitialData(true);
+    }
+  }, []);
 
   return (
     <>
@@ -117,7 +138,7 @@ export default function Interests(props: { onNextHandler: () => void }) {
                 <div
                   ref={list}
                   id={styles["interest-container"]}
-                  className="interest-options card-body p-lg-5 gap-3 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-lg-3 gap-2 mb-lg-3 mb-1"
+                  className="interest-options card-body p-lg-5 p-4 w-100 border-0 d-flex flex-wrap justify-content-center gap-lg-3 gap-2 mb-lg-3 mb-1"
                 >
                   {options?.length > 0 &&
                     options.map((option) => (
@@ -129,19 +150,26 @@ export default function Interests(props: { onNextHandler: () => void }) {
                         {option.topicName}
                       </button>
                     ))}
+                  {isLoading && (
+                    <div className="d-block w-100">
+                      <DotWaveLoader />
+                    </div>
+                  )}
                 </div>
-
                 {error && (
-                  <div className="mx-auto dark-error-text">{error}</div>
+                  <div className="mx-auto dark-error-text my-2">{error}</div>
                 )}
-                {isLoading && <DotWaveLoader />}
-                <button
-                  type="submit"
-                  className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-lg-5 my-4 mx-auto"
-                  onClick={onSelectInterestHandler}
+                <div
+                  className={`${styles["interest-finish__btn"]} btn mt-1 mb-5 mx-auto`}
                 >
-                  Continue
-                </button>
+                  <button
+                    type="submit"
+                    onClick={onSelectInterestHandler}
+                    className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-3 mx-auto"
+                  >
+                    Finish
+                  </button>
+                </div>
               </div>
             </div>
           </div>
