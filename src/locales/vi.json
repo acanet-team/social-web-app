@@ -13,6 +13,10 @@
     "pending": "",
     "join": ""
   },
+  "Onboard": {
+    "continue": "Tiếp tục",
+    "finish": "Hoàn thành"
+  },
   "Time": {
     "now": "bây giờ",
     "minute": "phút",

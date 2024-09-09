@@ -10,6 +10,10 @@
     "follower": "follower",
     "followers": "followers"
   },
+  "Onboard": {
+    "continue": "Continue",
+    "finish": "Finish"
+  },
   "Time": {
     "now": "now",
     "minute": "minute",

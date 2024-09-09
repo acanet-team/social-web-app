@@ -6,8 +6,10 @@ import Pagination from "../Pagination";
 import BrokerProfile from "./BrokerProfile";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function Brokers(props: { onNextHandler: () => void }) {
+  const tOnboard = useTranslations("Onboard");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [brokers, setBrokers] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -59,19 +61,21 @@ export default function Brokers(props: { onNextHandler: () => void }) {
             rank={b.rank}
           />
         ))}
-      <Pagination
-        pageUpdateFn={setPage}
-        page={page}
-        totalPage={totalPage}
-        isTable={false}
-      />
+      <div style={{ marginBottom: "150px" }}>
+        <Pagination
+          pageUpdateFn={setPage}
+          page={page}
+          totalPage={totalPage}
+          isTable={false}
+        />
+      </div>
 
       <div className={`${styles["onboard-finish__btn"]} btn mt-3 mb-5 mx-auto`}>
         <button
           onClick={onFinish}
           className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-5 mx-auto"
         >
-          Finish
+          {tOnboard("finish")}
         </button>
       </div>
     </div>

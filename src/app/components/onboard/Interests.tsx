@@ -14,6 +14,7 @@ interface Option {
 }
 
 export default function Interests(props: { onNextHandler: () => void }) {
+  const tOnboard = useTranslations("Onboard");
   const list = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string>("");
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -159,15 +160,13 @@ export default function Interests(props: { onNextHandler: () => void }) {
                 {error && (
                   <div className="mx-auto dark-error-text my-2">{error}</div>
                 )}
-                <div
-                  className={`${styles["interest-finish__btn"]} btn mt-1 mb-5 mx-auto`}
-                >
+                <div className="btn mt-2 mb-3 mx-auto">
                   <button
                     type="submit"
                     onClick={onSelectInterestHandler}
                     className="main-btn bg-current text-center text-white fw-600 px-2 py-3 w175 rounded-4 border-0 d-inline-block my-3 mx-auto"
                   >
-                    Finish
+                    {tOnboard("continue")}
                   </button>
                 </div>
               </div>

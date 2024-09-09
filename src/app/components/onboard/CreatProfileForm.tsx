@@ -21,6 +21,7 @@ export default function CreateProfileForm(props: {
   const { showLoading, hideLoading } = useLoading();
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
   const t = useTranslations("CreateProfile");
+  const tOnboard = useTranslations("Onboard");
 
   useEffect(() => {
     if (session) {
@@ -248,7 +249,7 @@ export default function CreateProfileForm(props: {
             id={styles["profile-btn"]}
             className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 d-inline-block mt-5"
           >
-            Continue
+            {tOnboard("continue")}
           </button>
         </form>
       </div>
