@@ -11,13 +11,12 @@ import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import styles from "@/styles/modules/communities.module.scss";
-import CommunityForm from "@/app/components/communities/CommunityForm";
+import CommunityForm from "@/components/communities/CommunityForm";
 import type { ICommunity } from "@/api/community/model";
 import { getCommunities } from "@/api/community";
 import { useSession } from "next-auth/react";
 import CommunityCard from "./CommunityCard";
 import { useTranslations } from "next-intl";
-import page from "@/pages/courses/investor/page";
 
 export default function CommunitySection(props: {
   isBroker: boolean;
@@ -335,7 +334,7 @@ export default function CommunitySection(props: {
                     <CommunityCard
                       groupId={group.id}
                       name={group.name}
-                      userId={group.owner?.userId}
+                      ownerId={group.owner?.userId}
                       coverImg={group.coverImage?.path}
                       avatar={group.avatar?.path}
                       firstName={group.owner?.firstName}

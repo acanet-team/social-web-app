@@ -1,4 +1,4 @@
-import { dataExperiencesProfile } from "@/app/fakeData/profile";
+import { dataExperiencesProfile } from "@/fakeData/profile";
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";

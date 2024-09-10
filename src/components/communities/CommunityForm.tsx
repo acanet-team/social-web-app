@@ -77,11 +77,15 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
     // Fetch group data
     fetchCommunity();
     const handleResize = () => {
-      setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
+      if (window) {
+        setFullscreen(window.innerWidth <= 768 ? "sm-down" : undefined);
+      }
     };
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      if (window) return window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const validationSchema = Yup.object({
@@ -318,7 +322,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 src={
                   previewAvatar
                     ? previewAvatar
-                    : `/assets/images/default-avatar.jpg`
+                    : `/assets/images/profile/ava.png`
                 }
                 alt="avatar"
                 width={100}

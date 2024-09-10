@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { CommunityJoiningStatus } from "@/types/enum";
 import Link from "next/link";
 import { joinCommunity } from "@/api/community";
 import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/communities.module.scss";
+import { useSession } from "next-auth/react";
 
 export default function CommunityCard(props: {
-  userId: number;
+  ownerId: number;
   groupId: string;
   name: string;
   coverImg: string;
@@ -24,7 +25,7 @@ export default function CommunityCard(props: {
   onEditGroupHandler: (arg: string) => void;
 }) {
   const {
-    userId,
+    ownerId,
     groupId,
     name,
     coverImg,
@@ -43,6 +44,15 @@ export default function CommunityCard(props: {
   const t = useTranslations("Community");
   const tBase = useTranslations("Base");
   const [joiningStatus, setJoiningStatus] = useState(communityStatus);
+  const [curUser, setCurUser] = useState<number>();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      setCurUser(session.user?.id);
+    }
+  }, [session]);
+
   const onJoinCommunityHandler = async (e: any, groupId: string) => {
     try {
       // Calling api
@@ -83,7 +93,7 @@ export default function CommunityCard(props: {
       <div className="card-body d-block w-100 py-0 text-left position-relative">
         <div className="mt-3 pl-10 d-flex justify-content-between align-items-start">
           <div className="me-3 e-sm-2 d-flex flex-column align-items-between">
-            <Link href={`/profile/${userId}`}>
+            <Link href={`/profile/${nickName}`}>
               <h4 className="fw-700 font-xss mb-1">
                 {firstName + " " + lastName}
               </h4>
@@ -97,22 +107,24 @@ export default function CommunityCard(props: {
             </div>
           </div>
           <div className="d-flex align-items-center d-flex flex-column">
-            <button
-              disabled={
-                joiningStatus === CommunityJoiningStatus.joined ||
-                joiningStatus === CommunityJoiningStatus.pending
-                  ? true
-                  : false
-              }
-              className={`${joiningStatus === CommunityJoiningStatus.joined ? "btn-secondary" : joiningStatus === CommunityJoiningStatus.pending ? "btn-dark" : "btn-primary"} group-status btn text-white px-3 rounded-3 py-1 mb-2`}
-              onClick={(e) => onJoinCommunityHandler(e, groupId)}
-            >
-              {joiningStatus === CommunityJoiningStatus.joined
-                ? t("joined")
-                : joiningStatus === CommunityJoiningStatus.pending
-                  ? t("pending")
-                  : t("join")}
-            </button>
+            {curUser !== ownerId && (
+              <button
+                disabled={
+                  joiningStatus === CommunityJoiningStatus.joined ||
+                  joiningStatus === CommunityJoiningStatus.pending
+                    ? true
+                    : false
+                }
+                className={`${joiningStatus === CommunityJoiningStatus.joined ? "btn-secondary" : joiningStatus === CommunityJoiningStatus.pending ? "btn-dark" : "btn-primary"} group-status btn text-white px-3 rounded-3 py-1 mb-2`}
+                onClick={(e) => onJoinCommunityHandler(e, groupId)}
+              >
+                {joiningStatus === CommunityJoiningStatus.joined
+                  ? t("joined")
+                  : joiningStatus === CommunityJoiningStatus.pending
+                    ? t("pending")
+                    : t("join")}
+              </button>
+            )}
             {/* eslint-disable react/no-unescaped-entities */}
             {fee === 0 ? (
               <div className="text-success fw-bolder">{tBase("free")}</div>

@@ -116,7 +116,8 @@ export default function CommunityFeed(props: {
                 nickName={
                   p.user?.nickName || p.user?.firstName + " " + p.user?.lastName
                 }
-                author={p.user?.userId}
+                authorId={p.user?.userId}
+                authorNickname={p.user?.nickName || ""}
                 avatar={
                   p.user?.photo?.id
                     ? cleanPath(p.user?.photo?.path)

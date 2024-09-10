@@ -7,7 +7,7 @@ import type {
 import styles from "@/styles/modules/communities.module.scss";
 import { CommunityEnum } from "@/types";
 import { useTranslations } from "next-intl";
-import CommunitySection from "@/app/components/communities/CommunitySection";
+import CommunitySection from "@/components/communities/CommunitySection";
 import { useSession } from "next-auth/react";
 import { getCommunities } from "@/api/community";
 import { removePropertiesEmpty } from "@/utils/Helpers";

@@ -21,7 +21,8 @@ import Comments from "./Comments";
 export default function PostCard(props: {
   postId: string;
   nickName: string;
-  author: number;
+  authorId: number;
+  authorNickname: string;
   avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
@@ -42,7 +43,8 @@ export default function PostCard(props: {
     avatar,
     content,
     assets,
-    author,
+    authorId,
+    authorNickname,
     like = 0,
     comment = 0,
     createdAt,
@@ -223,7 +225,7 @@ export default function PostCard(props: {
                   style={{ border: "1px solid #ddd" }}
                 />
               </Link>
-              <Link href={`/profile/${author}`}>
+              <Link href={`/profile/${authorNickname}`}>
                 <Image
                   src={avatar}
                   width={30}
@@ -239,7 +241,7 @@ export default function PostCard(props: {
               </Link>
             </div>
           ) : (
-            <Link href={`/profile/${author}`}>
+            <Link href={`/profile/${authorNickname}`}>
               <Image
                 src={avatar}
                 width={45}
@@ -263,7 +265,7 @@ export default function PostCard(props: {
             </Link>
             <div className="d-flex align-items-end">
               <Link
-                href={`/profile/${author}`}
+                href={`/profile/${authorNickname}`}
                 className="lh-3 d-flex align-items-end"
               >
                 <span className="font-xsss fw-500 text-break text-grey-600">
@@ -285,7 +287,7 @@ export default function PostCard(props: {
           </div>
         ) : (
           <div>
-            <Link href={`/profile/${author}`}>
+            <Link href={`/profile/${authorNickname}`}>
               <h4 className="fw-700 text-grey-900 font-xss mt-1">
                 @
                 {isMobile
@@ -300,7 +302,7 @@ export default function PostCard(props: {
             </span>
           </div>
         )}
-        {userId && (userId === author || userId === groupOwnerId) && (
+        {userId && (userId === authorId || userId === groupOwnerId) && (
           <div
             className="ms-auto pointer position-relative"
             onClick={() => setOpenSettings((open) => !open)}
@@ -490,7 +492,7 @@ export default function PostCard(props: {
           take={take}
           postId={postId}
           setCommentNum={setCommentNumHandler}
-          postAuthor={author}
+          postAuthor={authorId}
         />
       )}
       {isMobile && openMobileComments && (
@@ -502,7 +504,8 @@ export default function PostCard(props: {
           avatar={avatar}
           content={content}
           assets={assets}
-          authorId={author}
+          authorId={authorId}
+          authorNickname={authorNickname}
           createdAt={createdAt}
           columnsCount={columnsCount}
           groupAvatar={groupAvatar}

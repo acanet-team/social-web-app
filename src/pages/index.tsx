@@ -1,8 +1,8 @@
 import { getPosts, getTopBrokers } from "@/api/newsfeed";
-import Contacts from "@/app/components/Contacts";
-import CreatePost from "@/app/components/newsfeed/Createpost";
-import FetchBrokers from "@/app/components/newsfeed/FetchBrokers";
-import Posts from "@/app/components/newsfeed/Posts";
+import Contacts from "@/components/Contacts";
+import CreatePost from "@/components/newsfeed/Createpost";
+import FetchBrokers from "@/components/newsfeed/FetchBrokers";
+import Posts from "@/components/newsfeed/Posts";
 import styles from "@/styles/modules/home.module.scss";
 import { TabEnum } from "@/types/enum";
 import "bootstrap-icons/font/bootstrap-icons.css";

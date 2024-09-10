@@ -23,6 +23,7 @@ function PostModal(props: {
   postId: string;
   nickName: string;
   authorId: number;
+  authorNickname: string;
   avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
@@ -50,6 +51,7 @@ function PostModal(props: {
     content,
     assets,
     authorId,
+    authorNickname,
     like = 0,
     comment = 0,
     createdAt,
@@ -75,7 +77,7 @@ function PostModal(props: {
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const tComment = useTranslations("Comment");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
+  console.log("nickname", authorNickname);
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -105,7 +107,6 @@ function PostModal(props: {
 
   useEffect(() => {
     if (show) {
-      console.log("101010");
       initialFetchComments();
     }
   }, [show]);
@@ -266,31 +267,18 @@ function PostModal(props: {
                 />
               )}
             </figure>
-            {groupName ? (
-              <div>
-                <Link href={`/communities/detail/${groupId}`}>
-                  <h4 className="fw-700 text-grey-900 font-xss m-0">
-                    {groupName}
-                  </h4>
-                </Link>
-                <div className="d-flex align-items-end">
-                  <span className="font-xsss fw-500 mt-1 lh-3 text-grey-600">
-                    @{nickName}
-                  </span>
-                  <i className="bi bi-dot h4 m-0 mx-1 text-grey-500"></i>
-                  <span className="font-xsss fw-500 mt-1 lh-3 text-grey-500">
-                    {createdAt ? TimeSinceDate(createdAt) : ""}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <h4 className="fw-700 text-grey-900 font-xss mt-1">
-                @{nickName}
-                <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
-                  {createdAt ? TimeSinceDate(createdAt) : ""}
-                </span>
-              </h4>
-            )}
+
+            <div>
+              <Link href={`/profile/${authorNickname}`}>
+                <h4 className="fw-700 text-grey-900 font-xss m-0 mt-1">
+                  @{nickName}
+                </h4>
+              </Link>
+              <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
+                {createdAt ? TimeSinceDate(createdAt) : ""}
+              </span>
+            </div>
+
             {userId && (userId === authorId || userId === groupOwnerId) && (
               <div
                 className="ms-auto pointer position-relative"

@@ -30,7 +30,6 @@ type AppPropsWithLayout = AppProps & {
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout ?? ((page) => <RootLayout>{page}</RootLayout>);
-  const router = useRouter();
 
   return (
     <SessionProvider refetchInterval={10}>

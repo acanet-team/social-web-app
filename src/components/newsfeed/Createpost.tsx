@@ -56,7 +56,9 @@ const CreatePost = (props: {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme) setCurTheme(theme);
-    fetchTopics();
+    if (!props.groupId) {
+      fetchTopics();
+    }
     setIsLoading(false);
 
     const handleThemeChange = () => {
@@ -161,7 +163,7 @@ const CreatePost = (props: {
       return;
     }
 
-    if (!selectedTopic) {
+    if (!props.groupId && !selectedTopic) {
       throwToast(t("please_select_a_topic"), "error");
       return;
     }
@@ -172,9 +174,10 @@ const CreatePost = (props: {
       uploadedImages.forEach((image) => {
         postData.append("images", image);
       });
-      postData.append("interestTopicId", interestTopicId);
       if (props.groupId) {
         postData.append("communityId", props.groupId);
+      } else {
+        postData.append("interestTopicId", interestTopicId);
       }
       const newFeed = await createNewPostRequest(postData);
       // Add new post to community/for-you feed
@@ -278,7 +281,6 @@ const CreatePost = (props: {
       </div>
       {enlargedImage && (
         <div className={style["enlarged-image-modal"]} onClick={closeEnlarge}>
-          {" "}
           <div
             className={style["enlarged-image-container"]}
             onClick={(e) => e.stopPropagation()}
@@ -315,61 +317,63 @@ const CreatePost = (props: {
           />
           {t("Photo_Video")}
         </label>
-        <label
-          ref={topicListRef}
-          className={`${style["topic-list"]} theme-dark-bg`}
-        >
-          {isLoading && (
-            <div className="text-center">
-              <span className="spinner-border spinner-border-sm me-2"></span>
-              {t("loading_topics")}
-            </div>
-          )}
-          <Select
-            options={topics}
-            value={selectedTopic}
-            onChange={handleTopicChange}
-            placeholder={t("select_Topic")}
-            isMulti={false}
-            classNamePrefix={`${style["topic-select"]}`}
-            onInputChange={(searchTerm) => {
-              setTimeout(() => {
-                if (searchTerm.trim() !== "") {
-                  setSearchTerm(searchTerm);
-                  fetchTopics(1, searchTerm);
-                }
-              }, 3000);
-            }}
-            onMenuScrollToBottom={handleScroll}
-            styles={{
-              control: (provided) => ({
-                ...provided,
-                backgroundColor:
-                  curTheme === "theme-light" ? "#fff" : "#1a1237",
-                borderColor: "#f1f1f1",
-                borderWidth: "2px",
-                borderRadius: "5px",
-                boxShadow: "shadow-md",
-                fontSize: "15px",
-                cursor: "pointer",
-                color: "#111",
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isSelected ? "#e0e0e0" : "#fff",
-                color: state.isSelected ? "#333" : "#000",
-                "&:hover": {
-                  backgroundColor: "#f1f1f1",
-                },
-                fontSize: "15px",
-              }),
-              menu: (provided) => ({
-                ...provided,
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              }),
-            }}
-          />
-        </label>
+        {!props.groupId && (
+          <label
+            ref={topicListRef}
+            className={`${style["topic-list"]} theme-dark-bg`}
+          >
+            {isLoading && (
+              <div className="text-center">
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                {t("loading_topics")}
+              </div>
+            )}
+            <Select
+              options={topics}
+              value={selectedTopic}
+              onChange={handleTopicChange}
+              placeholder={t("select_Topic")}
+              isMulti={false}
+              classNamePrefix={`${style["topic-select"]}`}
+              onInputChange={(searchTerm) => {
+                setTimeout(() => {
+                  if (searchTerm.trim() !== "") {
+                    setSearchTerm(searchTerm);
+                    fetchTopics(1, searchTerm);
+                  }
+                }, 3000);
+              }}
+              onMenuScrollToBottom={handleScroll}
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor:
+                    curTheme === "theme-light" ? "#fff" : "#1a1237",
+                  borderColor: "#f1f1f1",
+                  borderWidth: "2px",
+                  borderRadius: "5px",
+                  boxShadow: "shadow-md",
+                  fontSize: "15px",
+                  cursor: "pointer",
+                  color: "#111",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#e0e0e0" : "#fff",
+                  color: state.isSelected ? "#333" : "#000",
+                  "&:hover": {
+                    backgroundColor: "#f1f1f1",
+                  },
+                  fontSize: "15px",
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                }),
+              }}
+            />
+          </label>
+        )}
         <div
           className={`ms-auto pointer ${menuClass} ${style["create-post__btn"]}`}
         >

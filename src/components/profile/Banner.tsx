@@ -29,7 +29,6 @@ const Banner: React.FC<TabBannerProps> = ({
   };
 
   const numbersFollowers = formatNumber(followersCount);
-
   // const handleOpenModal = useCallback(() => {
   //   setShow(true);
   // }, []);
@@ -203,21 +202,27 @@ const Banner: React.FC<TabBannerProps> = ({
           </>
         )}
 
-        <div style={{ position: "absolute", bottom: "-30px", left: "30px" }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-30px",
+            left: "30px",
+            width: "119px",
+            height: "119px",
+          }}
+        >
           <Image
             src={
-              previewAvatar
-                ? previewAvatar
-                : `/assets/images/default-avatar.jpg`
+              previewAvatar ? previewAvatar : `/assets/images/profile/ava.png`
             }
             width={119}
             height={119}
             alt={dataUserProfile?.nickName}
             className=""
+            onError={() => setPreviewAvatar("/assets/images/profile/ava.png")}
             style={{
               objectFit: "cover",
               borderRadius: "100%",
-
               border: "4px solid white",
             }}
           />

@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "@/styles/modules/courses.module.scss";
 import Image from "next/image";
-import { coursesList } from "@/app/fakeData/data-investor-course";
+import { coursesList } from "@/fakeData/data-investor-course";
 import { useRouter } from "next/navigation";
 
 export default function ListCourses() {

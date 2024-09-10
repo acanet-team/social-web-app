@@ -97,7 +97,8 @@ const TabPostProfile = (props: {
               myPost.user.nickName ||
               myPost.user.firstName + " " + myPost.user.lastName
             }
-            author={myPost.user.userId}
+            authorId={myPost.user.userId}
+            authorNickname={myPost.user.nickName || ""}
             avatar={
               myPost.user?.photo?.id
                 ? cleanPath(myPost.user?.photo?.path)

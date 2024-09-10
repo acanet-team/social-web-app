@@ -1,7 +1,7 @@
-import Appfooter from "@/app/components/Appfooter";
-import Header from "@/app/components/Header";
-import Leftnav from "@/app/components/Leftnav";
-import Popupchat from "@/app/components/Popupchat";
+import Appfooter from "@/components/Appfooter";
+import Header from "@/components/Header";
+import Leftnav from "@/components/Leftnav";
+import Popupchat from "@/components/Popupchat";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (

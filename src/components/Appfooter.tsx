@@ -7,10 +7,10 @@ import type { IUser } from "@/api/auth/auth.model";
 export default function Appfooter() {
   const { data: session } = useSession() as any;
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
-  const [id, setId] = useState();
+  const [nickName, setNickName] = useState();
   useEffect(() => {
     if (session) {
-      setId(session?.user?.id);
+      setNickName(session?.user?.userProfile?.nickname);
       setUserInfo({
         ...session.user,
         avatar: session.user.photo.path || "/assets/images/user.png",
@@ -20,22 +20,22 @@ export default function Appfooter() {
 
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
-      <Link href={`/profile/${id}`} className="nav-content-bttn nav-center">
+      {/* <Link href={`/profile/${nickName}`} className="nav-content-bttn nav-center">
         <i className="feather-user"></i>
-      </Link>
-      <Link href="/home" className="nav-content-bttn nav-center">
+      </Link> */}
+      <Link href="/" className="nav-content-bttn nav-center">
         <i className="feather-home"></i>
       </Link>
-      <Link href="/defaultvideo" className="nav-content-bttn">
-        <i className="feather-package"></i>
+      <Link href="/communities" className="nav-content-bttn">
+        <i className="feather-grid"></i>
       </Link>
       <Link href="/defaultlive" className="nav-content-bttn" data-tab="chats">
-        <i className="feather-layout"></i>
+        <i className="feather-inbox"></i>
       </Link>
       <Link href="/shop2" className="nav-content-bttn">
-        <i className="feather-layers"></i>
+        <i className="feather-trending-up"></i>
       </Link>
-      <Link href="/defaultsettings" className="nav-content-bttn">
+      <Link href={`/profile/${nickName}`} className="nav-content-bttn">
         {userInfo.avatar && (
           <Image
             src={userInfo.avatar}
@@ -43,6 +43,7 @@ export default function Appfooter() {
             width={40}
             height={40}
             className="w40 rounded-circle shadow-xss"
+            style={{ objectFit: "cover" }}
           />
         )}
       </Link>

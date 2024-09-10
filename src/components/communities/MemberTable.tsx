@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UserInvite from "./UserInvite";
 import Link from "next/link";
+import type { ICommunityMember } from "@/api/community/model";
 
 const TAKE = 20;
 export default function MemberTable(props: {
@@ -30,7 +31,7 @@ export default function MemberTable(props: {
   const tModal = useTranslations("Modal");
   const tForm = useTranslations("Form");
   const { data: session } = useSession();
-  const [members, setMembers] = useState<any[]>([]);
+  const [members, setMembers] = useState<ICommunityMember[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalMembers, setTotalMembers] = useState<number>(0);
@@ -284,13 +285,15 @@ export default function MemberTable(props: {
               }}
             />
           </Box>
-          <button
-            className="main-btn ms-3 bg-current font-xsss text-center text-white fw-600 px-2 w175 rounded-3 border-0 d-inline-block"
-            ref={inviteBtnRef}
-            onClick={() => setOpenInvite((open) => !open)}
-          >
-            + {t("invite new user")}
-          </button>
+          {curUser === ownerId && (
+            <button
+              className="main-btn ms-3 bg-current font-xsss text-center text-white fw-600 px-2 w175 rounded-3 border-0 d-inline-block"
+              ref={inviteBtnRef}
+              onClick={() => setOpenInvite((open) => !open)}
+            >
+              + {t("invite new user")}
+            </button>
+          )}
           {openInvite && (
             <div ref={inviteModalRef}>
               <UserInvite />
@@ -320,7 +323,7 @@ export default function MemberTable(props: {
           </thead>
           {members?.length === 0 && (
             <p className="text-center fs-4 mt-4 text-grey-600">
-              No members found.
+              {t("found_no_members")}
             </p>
           )}
           {members?.length > 0 && (
@@ -339,7 +342,10 @@ export default function MemberTable(props: {
                         alt="avatar"
                       />
 
-                      <Link href={`/profile/${m.user.userId}`} className="ms-2">
+                      <Link
+                        href={`/profile/${m.user.nickName}`}
+                        className="ms-2"
+                      >
                         <span className="text-dark">
                           {m.user.firstName + " " + m.user.lastName}
                         </span>

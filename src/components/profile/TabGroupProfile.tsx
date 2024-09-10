@@ -4,8 +4,9 @@ import type { ICommunity } from "@/api/community/model";
 import DotWaveLoader from "../DotWaveLoader";
 import { getCommunities } from "@/api/community";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import CommunityForm from "../communities/CommunityForm";
 
-const GroupProfile = (props: {
+const TabGroupProfile = (props: {
   isBroker: boolean;
   communities: ICommunity[];
   communityType: string;
@@ -54,7 +55,10 @@ const GroupProfile = (props: {
     }
   };
 
-  // Infinite scroll
+  const handleClose = useCallback(() => {
+    setShow(false);
+  }, []);
+
   const onScrollHandler = () => {
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
@@ -103,7 +107,7 @@ const GroupProfile = (props: {
           communityArr.map((group, index) => (
             <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
               <CommunityCard
-                userId={group.owner?.userId}
+                ownerId={group.owner?.userId}
                 groupId={props.isBroker ? group.id : ""}
                 name={group.name}
                 coverImg={group.coverImage?.path}
@@ -123,8 +127,17 @@ const GroupProfile = (props: {
           ))}
       </div>
       {isLoading && <DotWaveLoader />}
+      {show && (
+        <CommunityForm
+          isEditing={isEditing}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          show={show}
+          setCommunities={setCommunityArr}
+        />
+      )}
     </div>
   );
 };
 
-export default GroupProfile;
+export default TabGroupProfile;

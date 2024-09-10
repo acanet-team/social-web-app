@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "@/styles/modules/pageTitle.module.scss";
+import Link from "next/link";
 
 export default function Pagetitle(props: {
   title: string;
@@ -27,12 +28,12 @@ export default function Pagetitle(props: {
                 />
               </div>
             </form>
-            <a
+            <Link
               href="/"
               className="btn-round-md ms-2 bg-greylight theme-dark-bg rounded-3"
             >
               <i className="feather-filter font-xss text-grey-500"></i>
-            </a>
+            </Link>
           </div>
         )}
       </h2>

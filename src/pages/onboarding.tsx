@@ -1,7 +1,7 @@
-import Header from "@/app/components/Header";
-import Brokers from "@/app/components/onboard/Brokers";
-import CreateProfile from "@/app/components/onboard/CreateProfile";
-import Interests from "@/app/components/onboard/Interests";
+import Header from "@/components/Header";
+import Brokers from "@/components/onboard/Brokers";
+import CreateProfile from "@/components/onboard/CreateProfile";
+import Interests from "@/components/onboard/Interests";
 import "@/styles/global.scss";
 import classNames from "classnames";
 import type { NextPageContext } from "next";

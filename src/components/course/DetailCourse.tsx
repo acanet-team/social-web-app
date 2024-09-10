@@ -1,5 +1,5 @@
 "use client";
-import { coursesList } from "@/app/fakeData/data-investor-course";
+import { coursesList } from "@/fakeData/data-investor-course";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/courses.module.scss";

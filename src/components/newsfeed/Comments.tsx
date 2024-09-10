@@ -186,6 +186,7 @@ const Comments = forwardRef(
           setIsLoading(false);
           if (commentRef.current) {
             commentRef.current.value = "";
+            commentRef.current.blur();
           }
         }
       }
