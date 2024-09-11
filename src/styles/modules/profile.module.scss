@@ -4,23 +4,28 @@
 }
 
 .group-tabs .button-tab {
-  width: 33%;
+  // width: 33.3%;
   height: 50px;
-  opacity: 0.6;
+  opacity: 0.5;
   font-weight: 700;
-  // background-color: #fbfcfe !important;
-  // color: #ADB5BD !important;
   border: none !important;
   position: relative;
   float: inline-start;
-  display: flex;
-  justify-content: center;
+
   align-items: center;
 }
 
-.group-tabs .button-tab:hover {
-  cursor: pointer;
+.group-tabs.two-tabs .button-tab {
+  width: 50%;
 }
+
+.group-tabs.three-tabs .button-tab {
+  width: 33.3%;
+}
+
+// .group-tabs .button-tab:hover {
+//   // cursor: pointer;
+// }
 
 .tab-active {
   opacity: 1 !important;

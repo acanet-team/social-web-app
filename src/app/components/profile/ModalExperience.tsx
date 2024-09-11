@@ -226,7 +226,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <p className="m-0 py-1 fw-600 font-xss">
+            <p className="m-0 py-1 fw-600 font-xs">
               {t("name")} {t("company")}{" "}
             </p>
             <Autocomplete
@@ -303,14 +303,14 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               }}
             >
               <div style={{ width: "100%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">{t("job title")}</p>
+                <p className="m-0 py-1 fw-600 font-xs">{t("job title")}</p>
                 <input
                   className="px-2"
                   style={{
-                    width: "100%",
+                    minWidth: "100%",
                     border: "1px solid #ddd",
                     borderRadius: "4px",
-                    height: "32px",
+                    height: "56px",
                   }}
                   value={formData.position}
                   name="position"
@@ -319,12 +319,12 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 />
               </div>
               <div style={{ width: "100%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">{t("working type")}</p>
+                <p className="m-0 py-1 fw-600 font-xs">{t("working type")}</p>
                 <Select
                   value={formData.workingType}
                   onChange={handleSelectChange}
                   displayEmpty
-                  style={{ width: "100%", height: "32px" }}
+                  style={{ height: "56px", width: "100%" }}
                 >
                   <MenuItem value="" disabled>
                     {t("select")} {t("working type")}
@@ -336,9 +336,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   <MenuItem value="SELF-EMPLOYED">Self-employed</MenuItem>
                 </Select>
                 {errors.workingType && (
-                  <p className="text-red font-xsss font-xsss">
-                    {errors.workingType}
-                  </p>
+                  <p className="text-red font-xsss">{errors.workingType}</p>
                 )}
               </div>
             </div>
@@ -351,7 +349,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   alignItems: "center",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss">{t("is working")}</p>
+                <p className="m-0 py-1 fw-600 font-xs">{t("is working")}</p>
                 <div>
                   <input
                     className=""
@@ -388,10 +386,10 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
             >
               <div
                 style={{
-                  width: "50%",
+                  width: "48.6%",
                 }}
               >
-                <p className="m-0 py-1 fw-600 font-xss">{t("startDate")}</p>
+                <p className="m-0 py-1 fw-600 font-xs">{t("startDate")}</p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.startDate)}
@@ -415,8 +413,8 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 )}
               </div>
               {!formData.isWorking && (
-                <div style={{ width: "50%" }}>
-                  <p className="m-0 py-1 fw-600 font-xss">{t("endDate")}</p>
+                <div style={{ width: "48.6%" }}>
+                  <p className="m-0 py-1 fw-600 font-xs">{t("endDate")}</p>
                   <DatePicker
                     className="w__100"
                     value={dayjs(formData.endDate)}
@@ -431,12 +429,12 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 </div>
               )}
             </div>
-            <p className="m-0 py-1 fw-600 font-xss">{t("location")}</p>
+            <p className="m-0 py-1 fw-600 font-xs">{t("location")}</p>
             <input
               className="px-2"
               style={{
                 width: "100%",
-                height: "32px",
+                height: "56px",
                 border: "1px solid #ddd",
                 borderRadius: "4px",
               }}
@@ -446,7 +444,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               placeholder="Please enter your location"
             />
 
-            <p className="m-0 py-1 fw-600 font-xss">{t("description")}</p>
+            <p className="m-0 py-1 fw-600 font-xs">{t("description")}</p>
             <textarea
               className="px-2"
               value={formData.description}
@@ -458,6 +456,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 width: "100%",
                 border: "1px solid #ddd",
                 borderRadius: "4px",
+                height: "100px",
               }}
             />
           </form>

@@ -23,7 +23,7 @@ export default function Appfooter() {
       <Link href={`/profile/${id}`} className="nav-content-bttn nav-center">
         <i className="feather-user"></i>
       </Link>
-      <Link href="/home" className="nav-content-bttn nav-center">
+      <Link href="/" className="nav-content-bttn nav-center">
         <i className="feather-home"></i>
       </Link>
       <Link href="/defaultvideo" className="nav-content-bttn">
@@ -34,6 +34,9 @@ export default function Appfooter() {
       </Link>
       <Link href="/shop2" className="nav-content-bttn">
         <i className="feather-layers"></i>
+      </Link>
+      <Link href="/shop2" className="nav-content-bttn">
+        <i className="feather-bell font-xl "></i>
       </Link>
       <Link href="/defaultsettings" className="nav-content-bttn">
         {userInfo.avatar && (

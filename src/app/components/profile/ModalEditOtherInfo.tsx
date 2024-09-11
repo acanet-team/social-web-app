@@ -170,7 +170,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form className="p-1">
-            <p className="m-0 py-1 fw-600 font-xss">{t("interestTopic")}</p>
+            <p className="m-0 py-1 fw-600 font-xs">{t("interestTopic")}</p>
             <FormControl className="w-100">
               <Select
                 multiple
@@ -204,7 +204,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
                 ))}
               </Select>
             </FormControl>
-            <p className="m-0 py-1 fw-600 font-xss">{t("servicesOffer")}</p>
+            <p className="m-0 py-1 fw-600 font-xs">{t("servicesOffer")}</p>
             <FormControl className="w-100">
               <Select
                 multiple
@@ -238,7 +238,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
                 ))}
               </Select>
             </FormControl>
-            <p className="m-0 py-1 fw-600 font-xss">{t("location")}</p>
+            <p className="m-0 py-1 fw-600 font-xs">{t("location")}</p>
             <Autocomplete
               disablePortal
               options={regions}
@@ -262,14 +262,14 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
                 />
               )}
             />
-            <p className="m-0 py-1 fw-600 font-xss">{t("Email")}</p>
+            <p className="m-0 py-1 fw-600 font-xs">{t("Email")}</p>
             <input
               className="px-2"
               style={{
                 width: "100%",
                 border: "1px solid #ddd",
                 borderRadius: "4px",
-                height: "32px",
+                height: "56px",
               }}
               value={dataUser.email}
               name="email"

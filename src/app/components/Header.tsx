@@ -7,6 +7,61 @@ import { useSession } from "next-auth/react";
 import HeaderSetting from "./auth/HeaderSetting";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
+import styles from "@/styles/modules/header.module.scss";
+import Notification from "./Notification";
+
+const fakeData: Notification[] = [
+  {
+    id: "25ecc472-d30d-47e1-ad86-73aa7abc63bf",
+    type: "comment_post",
+    read_at: null,
+    user: {
+      userId: 7,
+      firstName: "Huyy",
+      lastName: "Trần",
+      nickName: "huytran",
+    },
+    sourceUser: {
+      userId: 169,
+      firstName: "huy18",
+      lastName: "tran",
+      nickName: "huytran18",
+    },
+    community: {
+      communityId: "40c54a12-9ade-4af9-ae6d-3985f1d6e552",
+      name: "huy test done 2",
+    },
+    additionalData: {
+      post_id: "ea0a42b4-9552-4cef-a418-64dbb309d776",
+      comment_id: "e0ca6bf1-2b17-40b8-9f41-3a5e2035824c",
+      community_id: "40c54a12-9ade-4af9-ae6d-3985f1d6e552",
+    },
+    createdAt: 1725522931173,
+  },
+  {
+    id: "86e2a281-d521-41cd-88c5-a031fc4f0039",
+    type: "like_post",
+    read_at: null,
+    user: {
+      userId: 7,
+      firstName: "Huyy",
+      lastName: "Trần",
+      nickName: "huytran",
+    },
+    sourceUser: {
+      userId: 169,
+      firstName: "huy18",
+      lastName: "tran",
+      nickName: "huytran18",
+    },
+    community: null,
+    additionalData: {
+      post_id: "ea0a42b4-9552-4cef-a418-64dbb309d776",
+      community_id: "40c54a12-9ade-4af9-ae6d-3985f1d6e552",
+    },
+    createdAt: 1725522883219,
+  },
+];
 
 export default function Header(props: { isOnboarding: boolean }) {
   const [isOpen, toggleOpen] = useState(false);
@@ -85,7 +140,6 @@ export default function Header(props: { isOnboarding: boolean }) {
             className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0
             "
           >
-            {/* eslint-disable @next/next/no-img-element */}
             <Image
               src={
                 curTheme === "theme-dark"
@@ -94,8 +148,9 @@ export default function Header(props: { isOnboarding: boolean }) {
               }
               width={220}
               height={55}
-              style={{ width: "auto", height: "55px" }}
+              // style={{ width: "140px", height: "50px" }}
               alt="logo"
+              className={`${styles["logo-header"]}`}
             />
           </span>
         </Link>
@@ -103,15 +158,24 @@ export default function Header(props: { isOnboarding: boolean }) {
           href="/defaultmessage"
           className="mob-menu ms-auto me-2 chat-active-btn"
         >
-          <i className="feather-message-circle text-grey-900 font-sm btn-round-md bg-greylight"></i>
+          <i className="feather-message-circle text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </Link>
+        <span
+          className={`me-2 menu-search-icon mob-menu ${notiClass}`}
+          // id="dropdownMenu"
+          // data-bs-toggle="dropdown"
+          // aria-expanded="false"
+          onClick={() => toggleisNoti((prevState) => !prevState)}
+        >
+          <span className="dot-count bg-warning"></span>
+          <i className="feather-bell  text-grey-900 font-md btn-round-sm bg-greylight"></i>
+        </span>
         <span
           onClick={() => toggleActive((prevState) => !prevState)}
           className="me-2 menu-search-icon mob-menu"
         >
-          <i className="feather-search text-grey-900 font-sm btn-round-md bg-greylight"></i>
+          <i className="feather-search text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </span>
-        {/* eslint-disable @next/next/no-img-element */}
         {props.isOnboarding && photo ? (
           <Image
             src={photo}
@@ -138,147 +202,23 @@ export default function Header(props: { isOnboarding: boolean }) {
           />
         </div>
       </form>
-      {/* <Link
-        href="/home"
-        className="p-2 text-center ms-3 menu-icon center-menu-icon"
-      >
-        <i className="feather-home font-lg text-grey-500 "></i>
-        <div className={curTheme === "theme-dark" ? "text-white" : "text-dark"}>
-          {t('newsfeed')}
-        </div>
-      </Link>
-      <Link
-        href="/defaultgroup"
-        className="p-2 text-center ms-0 menu-icon center-menu-icon"
-      >
-        <i className="feather-user font-lg text-grey-500"></i>
-        <div
-          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
-        >
-          {t('brokers')}
-        </div>
-      </Link>
-      <Link
-        href="/defaultstorie"
-        className="p-2 text-center ms-0 menu-icon center-menu-icon"
-      >
-        <i className="feather-zap font-lg text-grey-500 "></i>
-        <div
-          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
-        >
-          {t('courses')}
-        </div>
-      </Link>
-      <Link
-        href="/shop2"
-        className="p-2 text-center ms-0 menu-icon center-menu-icon"
-      >
-        <i className="feather-shopping-bag font-lg text-grey-500 "></i>
-        <div
-          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
-        >
-          {t('messages')}
-        </div>
-      </Link>
-      <Link
-        href="/shop2"
-        className="p-2 text-center ms-0 menu-icon center-menu-icon"
-      >
-        <i className="feather-shopping-bag font-lg text-grey-500 "></i>
-        <div
-          className={curTheme === "theme-dark" ? "text-white" : "text-grey-500"}
-        >
-          {t('settings')}
-        </div>
-      </Link> */}
       <span
         className={`p-2 pointer text-center ms-auto menu-icon ${notiClass}`}
-        id="dropdownMenu3"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
+        // id="dropdownMenu"
+        // data-bs-toggle="dropdown"
+        // aria-expanded="false"
         onClick={() => toggleisNoti((prevState) => !prevState)}
       >
         <span className="dot-count bg-warning"></span>
         <i className="feather-bell font-xl text-current"></i>
       </span>
       <div
-        className={`dropdown-menu p-4 right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
-        aria-labelledby="dropdownMenu3"
+        className={`dropdown-menu ${styles["height-dropdown-menu"]} p-4 right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
+        // aria-labelledby="dropdownMenu"
       >
-        <h4 className="fw-700 font-xss mb-4 pe-auto">Notification</h4>
-        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          {/* Notification content */}
-        </div>
-        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          {/* eslint-disable @next/next/no-img-element */}
-          {photo && (
-            <Image
-              src={photo}
-              width={40}
-              height={40}
-              alt="user"
-              className="w40 position-absolute left-0 rounded-xl"
-            />
-          )}
-          <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Goria Coast{" "}
-            <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {" "}
-              2 min
-            </span>
-          </h5>
-          <h6 className="text-grey-500 fw-500 font-xssss lh-4">
-            Mobile Apps UI Designer is require..
-          </h6>
-        </div>
-
-        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          {/* eslint-disable @next/next/no-img-element */}
-          {photo && (
-            <Image
-              src={photo}
-              alt="user"
-              width={40}
-              height={40}
-              className="w40 position-absolute left-0 rounded-xl"
-            />
-          )}
-          <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Surfiya Zakir{" "}
-            <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {" "}
-              1 min
-            </span>
-          </h5>
-          <h6 className="text-grey-500 fw-500 font-xssss lh-4">
-            Mobile Apps UI Designer is require..
-          </h6>
-        </div>
-        <div className="card bg-transparent-card w-100 border-0 ps-5">
-          {/* eslint-disable @next/next/no-img-element */}
-          {photo && (
-            <Image
-              src={photo}
-              alt="user"
-              width={40}
-              height={40}
-              className="w40 position-absolute left-0 rounded-xl"
-            />
-          )}
-          <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-            Victor Exrixon{" "}
-            <span className="text-grey-400 font-xsssss fw-600 float-right mt-1">
-              {" "}
-              30 sec
-            </span>
-          </h5>
-          <h6 className="text-grey-500 fw-500 font-xssss lh-4">
-            Mobile Apps UI Designer is require..
-          </h6>
-        </div>
+        <Notification photo={photo} data={fakeData} />
       </div>
       <Darkbutton />
-      {/* eslint-disable @next/next/no-img-element */}
       {photo && (
         <Image
           src={photo}
@@ -405,24 +345,6 @@ export default function Header(props: { isOnboarding: boolean }) {
           </div>
         </nav>
       )}
-      {/* 
-      <div className={`app-header-search ${searchClass}`}>
-        <form className="search-form">
-          <div className="form-group searchbox mb-0 border-0 p-1">
-            <input
-              type="text"
-              className="form-control border-0"
-              placeholder="Search..."
-            />
-            <span className="ms-1 mt-1 d-inline-block close searchbox-close">
-              <i
-                className="ti-close font-xs"
-                onClick={() => toggleActive((prevState) => !prevState)}
-              ></i>
-            </span>
-          </div>
-        </form>
-      </div> */}
     </div>
   );
 }

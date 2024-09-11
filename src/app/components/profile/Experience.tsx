@@ -48,7 +48,7 @@ export const Experience = ({
     setCompany(dataBrokerProfile?.company ?? []);
   }, [dataBrokerProfile]);
 
-  const experiencesToShow = showAllExperiences ? company : company.slice(0, 5);
+  const experiencesToShow = showAllExperiences ? company : company?.slice(0, 5);
 
   const calculateDuration = (startDate: string, endDate: string): string => {
     const start = dayjs(startDate);
@@ -148,7 +148,7 @@ export const Experience = ({
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
-                {company.length != 0 && (
+                {company?.length != 0 && (
                   <>
                     {iconBack ? (
                       <h4>
@@ -171,159 +171,160 @@ export const Experience = ({
             )}
           </div>
         </div>
-        {experiencesToShow.map((experience, index) => (
-          <>
-            <div
-              key={experience.id}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "12px",
-              }}
-            >
-              <Image
-                src={
-                  experience.logo ||
-                  "/assets/images/profile/alabaster_global_logo.png"
-                }
-                width={48}
-                height={48}
-                alt={experience.name}
+        {experiencesToShow?.length > 0 &&
+          experiencesToShow?.map((experience, index) => (
+            <>
+              <div
+                key={experience.id}
                 style={{
-                  objectFit: "cover",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "12px",
                 }}
-              />
-              <div className="w-100">
-                <div
+              >
+                <Image
+                  src={
+                    experience.logo ||
+                    "/assets/images/profile/alabaster_global_logo.png"
+                  }
+                  width={48}
+                  height={48}
+                  alt={experience.name}
                   style={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    objectFit: "cover",
                   }}
-                >
-                  <p className="m-0 fw-600 font-xss">
-                    {expandPost
-                      ? experience.name
-                      : experience.name.length > 20
-                        ? experience.name.substring(0, 20) + "..."
-                        : experience.name}
-                  </p>
+                />
+                <div className="w-100">
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <p className="m-0 fw-600 font-xs">
+                      {expandPost
+                        ? experience.name
+                        : experience.name.length > 20
+                          ? experience.name.substring(0, 20) + "..."
+                          : experience.name}
+                    </p>
 
-                  {iconEdit && (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "4px",
-                      }}
-                    >
-                      <i
-                        className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
-                        onClick={() => handleEditModal(experience)}
-                      ></i>
-                      <i
-                        className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
-                        onClick={() => delCompany(experience.id)}
-                      ></i>
-                    </div>
-                  )}
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    // gap: "8px",
-                  }}
-                >
-                  <p className="m-0 font-xsss lh-20">{experience.position}</p>
-                  {experience.position && experience.workingType && (
-                    <span
-                      style={{
-                        display: "inline-block",
-                        width: "3px",
-                        height: "3px",
-                        borderRadius: "100%",
-                        backgroundColor: "#000",
-                        marginLeft: "8px",
-                        marginRight: "8px",
-                      }}
-                    ></span>
-                  )}
-                  <p className="m-0 font-xsss lh-20">
-                    {experience.workingType}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <p className="m-0 font-xsss lh-20 text-gray-follow">
-                    {dayjs(experience.startDate).format("MMM-YYYY")} -{" "}
-                    {experience.isWorking
-                      ? "Present"
-                      : dayjs(experience.endDate).format("MMM-YYYY")}
-                  </p>
-                  {calculateDuration(
-                    experience.startDate,
-                    experience.endDate,
-                  ) && (
-                    <span
-                      style={{
-                        display: "inline-block",
-                        width: "3px",
-                        height: "3px",
-                        borderRadius: "100%",
-                        backgroundColor: "#000",
-                        color: "#8b8d8d",
-                      }}
-                    ></span>
-                  )}
-                  <p className="m-0 font-xsss lh-20 text-gray-follow">
+                    {iconEdit && (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: "4px",
+                        }}
+                      >
+                        <i
+                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                          onClick={() => handleEditModal(experience)}
+                        ></i>
+                        <i
+                          className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
+                          onClick={() => delCompany(experience.id)}
+                        ></i>
+                      </div>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      // gap: "8px",
+                    }}
+                  >
+                    <p className="m-0 font-xss lh-20">{experience.position}</p>
+                    {experience.position && experience.workingType && (
+                      <span
+                        style={{
+                          display: "inline-block",
+                          width: "3px",
+                          height: "3px",
+                          borderRadius: "100%",
+                          backgroundColor: "#000",
+                          marginLeft: "8px",
+                          marginRight: "8px",
+                        }}
+                      ></span>
+                    )}
+                    <p className="m-0 font-xss lh-20">
+                      {experience.workingType}
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <p className="m-0 font-xss lh-20 text-gray-follow">
+                      {dayjs(experience.startDate).format("MMM-YYYY")} -{" "}
+                      {experience.isWorking
+                        ? "Present"
+                        : dayjs(experience.endDate).format("MMM-YYYY")}
+                    </p>
                     {calculateDuration(
                       experience.startDate,
                       experience.endDate,
+                    ) && (
+                      <span
+                        style={{
+                          display: "inline-block",
+                          width: "3px",
+                          height: "3px",
+                          borderRadius: "100%",
+                          backgroundColor: "#000",
+                          color: "#8b8d8d",
+                        }}
+                      ></span>
                     )}
+                    <p className="m-0 font-xss lh-20 text-gray-follow">
+                      {calculateDuration(
+                        experience.startDate,
+                        experience.endDate,
+                      )}
+                    </p>
+                  </div>
+                  <p className="m-0 font-xss lh-20 text-gray-follow">
+                    {experience.location}
                   </p>
+                  {expandPost
+                    ? experience.description
+                    : experience.description.length > 20
+                      ? experience.description.substring(0, 20) + "..."
+                      : experience.description}
+                  {experience.description.length > 20 && !expandPost ? (
+                    <span
+                      className={"cursor-pointer text-blue"}
+                      onClick={() => setExpandPost((open) => !open)}
+                    >
+                      {t("See more")}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                <p className="m-0 font-xsss lh-20 text-gray-follow">
-                  {experience.location}
-                </p>
-                {expandPost
-                  ? experience.description
-                  : experience.description.length > 20
-                    ? experience.description.substring(0, 20) + "..."
-                    : experience.description}
-                {experience.description.length > 20 && !expandPost ? (
-                  <span
-                    className={"cursor-pointer text-blue"}
-                    onClick={() => setExpandPost((open) => !open)}
-                  >
-                    {t("See more")}
-                  </span>
-                ) : (
-                  ""
-                )}
               </div>
-            </div>
-            {index < experiencesToShow.length - 1 && (
-              <hr
-                style={{
-                  border: "none",
-                  borderTop: "2px solid #d1d1d1",
-                  marginTop: "20px",
-                }}
-              />
-            )}
-          </>
-        ))}
+              {index < experiencesToShow?.length - 1 && (
+                <hr
+                  style={{
+                    border: "none",
+                    borderTop: "2px solid #d1d1d1",
+                    marginTop: "20px",
+                  }}
+                />
+              )}
+            </>
+          ))}
         {!showAllExperiences &&
-          company.length - experiencesToShow.length > 0 && (
+          company?.length - experiencesToShow?.length > 0 && (
             <>
               <hr
                 style={{
@@ -347,7 +348,7 @@ export const Experience = ({
               >
                 <p className="m-0 font-xss fw-600">
                   {t("Show all")}{" "}
-                  {dataExperiencesProfile.length - experiencesToShow.length}{" "}
+                  {dataExperiencesProfile?.length - experiencesToShow?.length}{" "}
                   {t("experiences")}
                 </p>
 
