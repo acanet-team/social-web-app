@@ -10,6 +10,7 @@ import TabPostProfile from "@/components/profile/TabPostProfile";
 import TabGroupProfile from "@/components/profile/TabGroupProfile";
 import TabAbout from "@/components/profile/TabAbout";
 import Banner from "@/components/profile/Banner";
+import TabRating from "@/components/profile/TabRating";
 
 const TAKE = 10;
 
@@ -117,8 +118,10 @@ export default function Profile({
       setCurTab("posts");
     } else if (chosenTab === t("Communities")) {
       setCurTab("communities");
-    } else {
+    } else if (chosenTab === t("about")) {
       setCurTab("about");
+    } else {
+      setCurTab("rating");
     }
   };
 
@@ -172,6 +175,12 @@ export default function Profile({
           >
             <p>{t("Communities")}</p>
           </div>
+          <div
+            className={`${styles["button-tab"]} ${curTab === TabPnum.Rating ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            onClick={(e) => onSelectTabHandler(e)}
+          >
+            <p>{t("Rating")}</p>
+          </div>
         </div>
       </div>
       {curTab === TabPnum.About && (
@@ -204,6 +213,9 @@ export default function Profile({
           take={TAKE}
           id={Number(idParam)}
         />
+      )}
+      {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
+        <TabRating brokerData={dataUser} />
       )}
     </>
   );

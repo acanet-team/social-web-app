@@ -66,12 +66,18 @@
     box-shadow: 0px 0px 2px 2px var(--theme-color-shade) !important;
     color: #fff !important;
   }
+  
   // Page title
   .page-title {
     color: #fff !important;
   }
+
   .page-intro {
     color: var(--theme-color-text-secondary);
+  }
+
+  .main-btn {
+    background-color: var(--theme-color-shade) !important;
   }
 }
 

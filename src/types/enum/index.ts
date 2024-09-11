@@ -6,6 +6,7 @@ export enum TabPnum {
   Posts = "posts",
   Communities = "communities",
   About = "about",
+  Rating = "rating",
 }
 export enum CommunityEnum {
   popular = "popular",

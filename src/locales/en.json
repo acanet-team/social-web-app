@@ -218,6 +218,7 @@
     "Posts": "Posts",
     "About": "About",
     "Communities": "Communities",
+    "Rating": "Rating",
     "save": "Save",
     "back": "Back",
     "company_name": "Company Name",
@@ -305,5 +306,13 @@
     "write_comment": "Write a comment",
     "error_post_comment": "Failed to send the message"
   },
-  "Education": "Education"
+  "Education": "Education",
+  "Rating": {
+    "write_review": "Write a review...",
+    "review_input_title": "Let us know your review about",
+    "submit_review": "Submit Review",
+    "rank_desc": "Rating powered by Acanet Blockchain",
+    "rank_desc_guarantee": "100% Fairness Guarantee",
+    "error_missing_rating": "Please rate the broker."
+  }
 }

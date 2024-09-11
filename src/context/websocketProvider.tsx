@@ -133,10 +133,6 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Rendering WebSocketProvider");
-  }, []);
-
-  useEffect(() => {
     const newSocket = new ReconnectingWebSocket(
       "wss://kdc8tpgrc4.execute-api.ap-southeast-1.amazonaws.com/develop/",
     );
@@ -144,13 +140,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     const handleMessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       const message = JSON.parse(data.message);
-      console.log("data", data);
-      console.log("socket data", message);
       addNotification(message);
-      // setNotifications((prevState: any[]) => {
-      //   const newState = combineUniqueById(message, prevState);
-      //   return newState;
-      // });
     };
 
     // Subscribe channel
