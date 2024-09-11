@@ -10,6 +10,7 @@ import { removePropertiesEmpty } from "@/utils/Helpers";
 import type { NextAuthOptions } from "next-auth";
 import { setCookie } from "nookies";
 import { trigger } from "@spotlightjs/spotlight";
+import { useGuestToken } from "@/context/guestToken";
 
 const options: NextAuthOptions = {
   providers: [
@@ -29,6 +30,20 @@ const options: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, trigger }: any) {
       console.log(token);
+      // Access the guest token from the context
+      // const { guestToken } = useGuestToken() || {};
+
+      // console.log('test test', guestToken);
+      // if (guestToken && Object.keys(guestToken).length !== 0) {
+      //   token.accessToken = guestToken;
+      //   token.needToLogin = false;
+      //   if (token.refreshTokenExpires < Date.now()) {
+      //     token.needToLogin = true;
+      //     return token;
+      //   }
+      //   return token;
+      // }
+
       if (trigger === "update") {
         httpClient.setAuthorization(token.accessToken);
         const userData = await getMe();
@@ -39,6 +54,7 @@ const options: NextAuthOptions = {
         };
         return token;
       }
+
       if (token.accessToken || !account) {
         token.needToLogin = false;
         const shouldRefreshTime =
@@ -67,6 +83,9 @@ const options: NextAuthOptions = {
         data.accessToken = account.access_token;
         token.provider = "facebook";
       }
+      // if (account?.provider === undefined && guestToken) {
+      //   data.accessToken = guestToken;
+      // }
 
       const res = await httpClient.post<any, any>(
         `/v1/auth/${token?.provider}/login`,
@@ -86,6 +105,7 @@ const options: NextAuthOptions = {
       token.refreshTokenExpires = res.data.refreshTokenExpires;
       token.tokenExpires = res.data.tokenExpires;
       token.refreshToken = res.data.refreshToken;
+      console.log("hicc", token);
       return token;
     },
 
