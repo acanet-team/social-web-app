@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
-import Pagetitle from "@/app/components/Pagetitle";
+import Pagetitle from "@/components/Pagetitle";
 import { getTranslations } from "next-intl/server";
-import ListCourses from "@/app/components/course/ListCourses";
+import ListCourses from "@/components/course/ListCourses";
 
 export default async function Courses() {
   const t = await getTranslations("CoursesList");

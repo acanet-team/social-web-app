@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { NextPageWithLayout } from "./_app";
+import { guestLogin } from "@/api/auth";
+import { useGuestToken } from "@/context/guestToken";
 
 const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -20,6 +22,7 @@ const LoginPage: NextPageWithLayout = () => {
   const { createProfile, login, checkOnboarding } = useAuthStore(
     (state) => state,
   );
+  const { guestToken, setGuestToken } = useGuestToken() || {};
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -44,6 +47,17 @@ const LoginPage: NextPageWithLayout = () => {
     }
   }, [session]);
 
+  const onSignInAsGuestHandler = async () => {
+    const res: any = await guestLogin();
+    console.log("guest", res);
+    if (setGuestToken) {
+      setGuestToken(res.token);
+      // signIn(undefined, { callbackUrl: "/" });
+      // if (guestToken && Object.keys(guestToken).length !== 0) {
+      signIn();
+      // }
+    }
+  };
   return (
     <div className="main-wrap">
       {/* <Session /> */}
@@ -132,6 +146,12 @@ const LoginPage: NextPageWithLayout = () => {
                     {t("sign_in_with_facebook")}
                   </button>
                 </div>
+              </div>
+              <div
+                onClick={onSignInAsGuestHandler}
+                className="text-center mt-3 cursor-pointer"
+              >
+                Sign in as guest
               </div>
             </div>
           </div>

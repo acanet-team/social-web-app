@@ -75,6 +75,7 @@ interface ICommunityUser {
   nickName: string;
   gmail: string;
   phone: string;
+  photo: Photo;
 }
 
 export interface ICommunityMember {

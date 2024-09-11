@@ -6,6 +6,12 @@ export const getMe = () => {
   return httpClient.get<IMe>("/v1/auth/me");
 };
 
+export const guestLogin = (
+  headers: Headers = undefined as unknown as Headers,
+) => {
+  return httpClient.post(`/v1/auth/guest/login`, { headers });
+};
+
 export const logOut = (headers: Headers = undefined as unknown as Headers) => {
   return httpClient.post("/v1/auth/logout", { headers });
 };

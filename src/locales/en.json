@@ -10,6 +10,13 @@
     "follower": "follower",
     "followers": "followers"
   },
+  "Error": {
+    "not_found": "The page you are looking for isn't available."
+  },
+  "Onboard": {
+    "continue": "Continue",
+    "finish": "Finish"
+  },
   "Time": {
     "now": "now",
     "minute": "minute",
@@ -151,7 +158,8 @@
     "logout": "Log out",
     "chat": "Chat",
     "account": "Account",
-    "my profile": "My Profile"
+    "my profile": "My Profile",
+    "home_page": "Home Page"
   },
   "Community": {
     "community": "Communities",
@@ -187,7 +195,8 @@
     "about": "About",
     "private": "Private",
     "owner": "Owner",
-    "invite_user": "Add a new member"
+    "invite_user": "Add a new member",
+    "found_no_members": "No members found."
   },
   "MyProfile": {
     "follow": "Follow",

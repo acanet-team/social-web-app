@@ -61,6 +61,7 @@
     ".storybook/*.ts",
     ".next/types/**/*.ts",
     "**/*.mts",
-    "src/middleware.ts"
+    "src/middleware.ts",
+    "src/templatePages/Notification.js"
   ]
 }

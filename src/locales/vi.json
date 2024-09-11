@@ -13,6 +13,13 @@
     "pending": "",
     "join": ""
   },
+  "Error": {
+    "not_found": "Trang bạn đang tìm kiếm không tồn tại."
+  },
+  "Onboard": {
+    "continue": "Tiếp tục",
+    "finish": "Hoàn thành"
+  },
   "Time": {
     "now": "bây giờ",
     "minute": "phút",
@@ -154,7 +161,8 @@
     "settings": "Cài đặt",
     "logout": "Đăng xuất",
     "chat": "Trò chuyện",
-    "account": "Tài khoản"
+    "account": "Tài khoản",
+    "home_page": "Trang chủ"
   },
   "MyProfile": {
     "follow": "Theo dõi",
@@ -266,7 +274,8 @@
     "about": "Thông tin",
     "private": "Riêng tư",
     "owner": "Chủ cộng đồng",
-    "invite_user": "Thêm thành viên mới"
+    "invite_user": "Thêm thành viên mới",
+    "found_no_members": "Không có thành viên."
   },
   "FeedTabs": {
     "for_you": "Dành cho bạn",

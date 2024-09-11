@@ -1,4 +1,4 @@
-import CommunityHeader from "@/app/components/communities/CommunityHeader";
+import CommunityHeader from "@/components/communities/CommunityHeader";
 import React, { Fragment, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import {
@@ -7,8 +7,8 @@ import {
   getCommunityPosts,
 } from "@/api/community";
 import { useSession } from "next-auth/react";
-import CommunityFeed from "@/app/components/communities/CommunityFeed";
-import MemberTable from "@/app/components/communities/MemberTable";
+import CommunityFeed from "@/components/communities/CommunityFeed";
+import MemberTable from "@/components/communities/MemberTable";
 
 const TAKE = 10;
 export default function CommunityView({
@@ -65,6 +65,11 @@ export default function CommunityView({
 
 export async function getServerSideProps(context: NextPageContext) {
   const groupId = context.query?.id as string;
+  if (!groupId) {
+    return {
+      notFound: true, // This triggers the 404 page
+    };
+  }
   const response = await getACommunity(groupId);
   const communityFeed = await getCommunityPosts(1, TAKE, "community", groupId);
   const communityMembers = await getCommunityMembers({

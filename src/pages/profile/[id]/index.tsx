@@ -6,10 +6,10 @@ import { getMyGroups, getMyPosts, getProfile } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { createGetAllTopicsRequest } from "@/api/onboard";
-import TabPostProfile from "@/app/components/profile/TabPostProfile";
-import TabGroupProfile from "@/app/components/profile/TabGroupProfile";
-import TabAbout from "@/app/components/profile/TabAbout";
-import Banner from "@/app/components/profile/Banner";
+import TabPostProfile from "@/components/profile/TabPostProfile";
+import TabGroupProfile from "@/components/profile/TabGroupProfile";
+import TabAbout from "@/components/profile/TabAbout";
+import Banner from "@/components/profile/Banner";
 
 const TAKE = 10;
 
@@ -210,6 +210,11 @@ export default function Profile({
 }
 export async function getServerSideProps(context: NextPageContext) {
   const { id } = context.query;
+  if (!id) {
+    return {
+      notFound: true, // This triggers the 404 page
+    };
+  }
   const profileRes = await getProfile(id as string);
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   const myPost = await getMyPosts(1, TAKE, "owner", Number(id));

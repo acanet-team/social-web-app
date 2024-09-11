@@ -1,4 +1,4 @@
-import DetailCourse from "@/app/components/course/DetailCourse";
+import DetailCourse from "@/components/course/DetailCourse";
 import React, { Fragment } from "react";
 
 export default function Detail({ params }: { params: { id: number } }) {
