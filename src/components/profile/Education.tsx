@@ -38,7 +38,7 @@ const Education = ({
   useEffect(() => {
     setSchool(dataBrokerProfile?.school);
   }, [dataBrokerProfile]);
-  const educationToShow = showAllEducation ? school : school.slice(0, 2);
+  const educationToShow = showAllEducation ? school : school?.slice(0, 2);
 
   const handleAddModal = useCallback(() => {
     setIsEditing(false);
@@ -113,7 +113,7 @@ const Education = ({
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
-                {school.length != 0 && (
+                {school?.length != 0 && (
                   <>
                     {iconBack ? (
                       <h4>
@@ -136,85 +136,86 @@ const Education = ({
             )}
           </div>
         </div>
-        {educationToShow.map((education, index) => (
-          <>
-            <div
-              key={education.id}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "12px",
-              }}
-            >
-              <Image
-                src={
-                  education.logo ||
-                  "/assets/images/profile/alabaster_global_logo.png"
-                }
-                width={48}
-                height={48}
-                alt={education.name}
+        {educationToShow?.length > 0 &&
+          educationToShow.map((education, index) => (
+            <>
+              <div
+                key={education.id}
                 style={{
-                  objectFit: "cover",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "12px",
                 }}
-              />
-              <div className="w-100">
-                <div
+              >
+                <Image
+                  src={
+                    education.logo ||
+                    "/assets/images/profile/alabaster_global_logo.png"
+                  }
+                  width={48}
+                  height={48}
+                  alt={education.name}
                   style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    objectFit: "cover",
                   }}
-                >
-                  <p className="m-0 fw-600 font-xss">{education.name}</p>
+                />
+                <div className="w-100">
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      gap: "4px",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {iconEdit && (
-                      <>
-                        <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
-                          onClick={() => handleEditModal(education)}
-                        ></i>
-                        <i
-                          className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
-                          onClick={() => delEdu(education.id)}
-                        ></i>
-                      </>
-                    )}
+                    <p className="m-0 fw-600 font-xs">{education.name}</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "4px",
+                      }}
+                    >
+                      {iconEdit && (
+                        <>
+                          <i
+                            className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                            onClick={() => handleEditModal(education)}
+                          ></i>
+                          <i
+                            className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
+                            onClick={() => delEdu(education.id)}
+                          ></i>
+                        </>
+                      )}
+                    </div>
                   </div>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <p className="m-0 font-xss lh-20">{education.degree}</p>
+                    <p className="m-0 font-xss lh-20">,{education.major}</p>
+                  </div>
+                  <p className="m-0 font-xss lh-20 text-gray-follow">
+                    {dayjs(education.startDate).format("YYYY")} -{" "}
+                    {education.isGraduated
+                      ? "Present"
+                      : dayjs(education.endDate).format("YYYY")}
+                  </p>
+                  <p className="m-0 mt-2 font-xss lh-20 text-gray-follow">
+                    {t("Activities and societies")} {education.description}
+                  </p>
                 </div>
-                <div style={{ display: "flex", flexDirection: "row" }}>
-                  <p className="m-0 font-xsss lh-20">{education.degree}</p>
-                  <p className="m-0 font-xsss lh-20">,{education.major}</p>
-                </div>
-                <p className="m-0 font-xsss lh-20 text-gray-follow">
-                  {dayjs(education.startDate).format("YYYY")} -{" "}
-                  {education.isGraduated
-                    ? "Present"
-                    : dayjs(education.endDate).format("YYYY")}
-                </p>
-                <p className="m-0 mt-2 font-xsss lh-20 text-gray-follow">
-                  {t("Activities and societies")} {education.description}
-                </p>
               </div>
-            </div>
-            {index < educationToShow.length - 1 && (
-              <hr
-                style={{
-                  border: "none",
-                  borderTop: "2px solid #d1d1d1",
-                  marginTop: "20px",
-                }}
-              />
-            )}
-          </>
-        ))}
-        {!showAllEducation && school.length - educationToShow.length > 0 && (
+              {index < educationToShow?.length - 1 && (
+                <hr
+                  style={{
+                    border: "none",
+                    borderTop: "2px solid #d1d1d1",
+                    marginTop: "20px",
+                  }}
+                />
+              )}
+            </>
+          ))}
+        {!showAllEducation && school?.length - educationToShow?.length > 0 && (
           <>
             <hr
               style={{
@@ -237,7 +238,7 @@ const Education = ({
               }}
             >
               <p className="m-0 font-xss fw-600">
-                {t("Show all")} {school.length - educationToShow.length}{" "}
+                {t("Show all")} {school?.length - educationToShow?.length}{" "}
                 {t("educations")}
               </p>
               <i

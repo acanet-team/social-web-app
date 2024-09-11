@@ -15,6 +15,7 @@ import Image from "next/image";
 
 import { useSession } from "next-auth/react";
 import WaveLoader from "../WaveLoader";
+import { map } from "zod";
 
 const TabAbout = (props: {
   ssi: SSI[] | null;
@@ -60,37 +61,38 @@ const TabAbout = (props: {
                   gap: "10px",
                 }}
               >
-                {ssi.map((ssi) => (
-                  <>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "12px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Image
-                        src={
-                          ssi.company.logo ||
-                          "/assets/images/profile/image 2 (1).png"
-                        }
-                        width={48}
-                        height={48}
-                        alt=""
-                        className=""
+                {ssi?.length > 0 &&
+                  ssi.map((ssi) => (
+                    <>
+                      <div
                         style={{
-                          objectFit: "cover",
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: "12px",
+                          alignItems: "center",
                         }}
-                      />
-                      <div>
-                        <p className="m-0 fw-700 font-xsss">
-                          {ssi.company.name || "Certified SSI Broker"}
-                        </p>
+                      >
+                        <Image
+                          src={
+                            ssi.company.logo ||
+                            "/assets/images/profile/image 2 (1).png"
+                          }
+                          width={48}
+                          height={48}
+                          alt=""
+                          className=""
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div>
+                          <p className="m-0 fw-700 font-xss">
+                            {ssi.company.name || "Certified SSI Broker"}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </>
-                ))}
+                    </>
+                  ))}
               </div>
             </>
           )}

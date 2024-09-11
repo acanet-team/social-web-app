@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import styles from "@/styles/modules/profile.module.scss";
 import { TabPnum } from "@/types/enum";
@@ -27,19 +27,22 @@ export default function Profile({
   curPageGroup,
   allPageGroup,
   ssi,
+  followed,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
   const [dtUser, setDtUser] = useState(dataUser);
   const [dtUserProfile, setDtUserProfile] = useState(dataUserProfile);
+  const [flCount, setFlCount] = useState(followersCount);
+  const [fllowed, setFolowed] = useState(followed);
   const [listInterestTopic, setListInterestTopic] = useState(interestTopic);
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
   const [role, setRole] = useState(false);
-  const [aboutVisited, setAboutVisited] = useState(false);
-  const [curTab, setCurTab] = useState<string>(
-    dataUser?.role.name === "broker" ? "about" : "posts",
-  );
+  const [initialFetch, setInitialFetch] = useState(false);
+  const [switchTab, setSwitchTab] = useState<boolean>(false);
+
+  const [curTab, setCurTab] = useState<string>();
 
   useEffect(() => {
     if (session) {
@@ -48,44 +51,61 @@ export default function Profile({
   }, [session]);
 
   useEffect(() => {
+    setCurTab(dataUser?.role.name === "broker" ? "about" : "posts");
+  }, [dataUser]);
+
+  useEffect(() => {
     if (Number(idParam) === id) {
       setRole(true);
     }
   }, [idParam, id]);
 
   useEffect(() => {
-    if (curTab === "about" && aboutVisited) {
+    if (curTab === "about" && switchTab) {
+      console.log("yyyyyy");
       fetchProfileData();
     }
+    // setInitialFetch(false);
   }, [curTab]);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     fetchProfileData();
+  //   }
+  // }, [curTab]);
+
   useEffect(() => {
-    fetchProfileData();
+    if (!initialFetch) {
+      setInitialFetch(true);
+    }
+  }, []);
+  useEffect(() => {
+    if (!switchTab) {
+      setSwitchTab(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (initialFetch) {
+      console.log("eeeeeee");
+      fetchProfileData();
+    }
   }, [idParam]);
-
-  useEffect(() => {
-    if (id) {
-      fetchProfileData();
-    }
-  }, [curTab]);
-
-  useEffect(() => {
-    if (!aboutVisited) {
-      setAboutVisited(true);
-    }
-  }, [aboutVisited]);
 
   const fetchProfileData = async () => {
     try {
+      console.log("idParam", idParam);
       const dtProfileRes = await getProfile(idParam as string);
+      // console.log("render", dtProfileRes);
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
       setDtUser(dtProfileRes?.data?.user || []);
       setDtUserProfile(dtProfileRes?.data?.userProfile || []);
       setListInterestTopic(interestTopicRes?.data.docs || []);
-      console.log(
-        "Data refetched successfully!",
-        dtProfileRes?.data?.brokerProfile,
-      );
+      setFlCount(dtProfileRes?.data?.followersCount || 0);
+      setFolowed(dtProfileRes.data?.followed);
+      console.log("count", dtProfileRes?.data?.followersCount);
+      console.log("count", flCount);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -93,14 +113,25 @@ export default function Profile({
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
-    if (chosenTab === "Posts") {
+    if (chosenTab === t("Posts")) {
       setCurTab("posts");
-    } else if (chosenTab === "Communities") {
+    } else if (chosenTab === t("Communities")) {
       setCurTab("communities");
     } else {
       setCurTab("about");
     }
   };
+
+  const [tabClass, setTabClass] = useState<string>("");
+
+  useEffect(() => {
+    const totalTabs = dataUser.role.name === "broker" ? 3 : 2;
+    if (totalTabs === 2) {
+      setTabClass(styles["two-tabs"] || "");
+    } else if (totalTabs === 3) {
+      setTabClass(styles["three-tabs"] || "");
+    }
+  }, [dataUser.role.name]);
 
   return (
     <>
@@ -108,8 +139,6 @@ export default function Profile({
         className="card"
         style={{
           background: "#fff",
-          paddingLeft: "16px",
-          paddingRight: "16px",
           paddingTop: "16px",
           borderRadius: "5px",
         }}
@@ -119,9 +148,10 @@ export default function Profile({
           dataUser={dtUser}
           idParam={idParam}
           dataUserProfile={dtUserProfile}
-          followersCount={followersCount}
+          followersCount={flCount}
+          followed={fllowed}
         />
-        <div className={`${styles["group-tabs"]}`}>
+        <div className={`${styles["group-tabs"]} ${tabClass}`}>
           <div
             className={`${styles["button-tab"]} ${curTab === TabPnum.Posts ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
@@ -204,13 +234,14 @@ export async function getServerSideProps(context: NextPageContext) {
       dataUserProfile: profileRes?.data?.userProfile || [],
       dataUser: profileRes?.data?.user || [],
       followersCount: profileRes?.data?.followersCount,
+      followed: profileRes?.data?.followed,
       ssi: profileRes?.data?.ssi || null,
       idParam: id,
       interestTopic: interestTopic?.data.docs || [],
-      myPosts: myPost?.data?.docs || [],
+      myPosts: myPost?.data?.docs || null,
       totalPage: myPost?.data?.meta?.totalPage,
       page: myPost?.data?.meta.page,
-      dataMyGroups: myGroup?.data?.docs || [],
+      dataMyGroups: myGroup?.data?.docs || null,
       curPageGroup: myGroup?.data?.meta.page || 1,
       allPageGroup: myGroup?.data?.meta.totalPage || 1,
     },

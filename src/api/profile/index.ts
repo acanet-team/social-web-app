@@ -36,6 +36,10 @@ export const updateProfile = (formData: FormData) => {
   );
 };
 
+export const postUpdateSummary = ({}) => {
+  return httpClient.post(`/v1/user-profile/update-summary`, {});
+};
+
 export const updateOtherProfile = (formData: FormData) => {
   return httpClient.patch<FormData, AllProfileResponse>(
     `/v1/user-profile/update-profile`,

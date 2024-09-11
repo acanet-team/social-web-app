@@ -6,12 +6,14 @@ import styles from "@/styles/modules/profile.module.scss";
 import { updateProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import { ImageCropModal } from "@/components/ImageCropModal";
+import { createGetBrokersRequest, followABroker } from "@/api/onboard";
 interface TabBannerProps {
   role: boolean;
   dataUser: User;
   idParam: string | undefined | string[];
   dataUserProfile: UserProfile;
   followersCount: number;
+  followed: boolean;
 }
 const Banner: React.FC<TabBannerProps> = ({
   role,
@@ -19,6 +21,7 @@ const Banner: React.FC<TabBannerProps> = ({
   idParam,
   dataUserProfile,
   followersCount,
+  followed,
 }) => {
   const t = useTranslations("MyProfile");
   const [textHover, setTextHover] = useState(false);
@@ -28,29 +31,13 @@ const Banner: React.FC<TabBannerProps> = ({
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
-  const numbersFollowers = formatNumber(followersCount);
-  // const handleOpenModal = useCallback(() => {
-  //   setShow(true);
-  // }, []);
-
-  // const handleCancel = useCallback(() => {
-  //   setShow(false);
-  // }, []);
-
-  // const [avatar, setAvatar] = useState<string>(
-  //   dataUser?.photo?.path || "/assets/images/profile/ava.png",
-  // );
-  // const [coverImg, setCoverImg] = useState<string>(
-  //   dataUser?.profileCoverPhoto?.path || "/assets/images/profile/u-bg.png",
-  // );
-
   const [uploadedCoverImage, setUploadedCoverImage] = useState<File | null>(
     null,
   );
   const [uploadedAvatarImage, setUploadedAvatarImage] = useState<File | null>(
     null,
   );
-
+  const [flCount, setFlCount] = useState(0);
   const [previewCover, setPreviewCover] = useState<string>(
     "/assets/images/profile/u-bg.png",
   );
@@ -61,13 +48,18 @@ const Banner: React.FC<TabBannerProps> = ({
   useEffect(() => {
     setPreviewAvatar(dataUser?.photo?.path);
     setPreviewCover(dataUser?.profileCoverPhoto?.path);
-  }, [dataUser, dataUserProfile]);
+    setFlCount(Number(followersCount));
+  }, [dataUser, dataUserProfile, followersCount]);
   const coverInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const numbersFollowers = formatNumber(flCount);
 
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
+  const [brokers, setBrokers] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isFollowing, setIsFollowing] = useState<boolean>(followed);
 
   useEffect(() => {
     if (selectedImage && imageType) {
@@ -125,6 +117,7 @@ const Banner: React.FC<TabBannerProps> = ({
       if (avatarInputRef.current) {
         avatarInputRef.current.value = "";
       }
+      submitBanner();
     }
     if (imageType === "cover") {
       setUploadedCoverImage(image);
@@ -132,6 +125,7 @@ const Banner: React.FC<TabBannerProps> = ({
       if (coverInputRef.current) {
         coverInputRef.current.value = "";
       }
+      submitBanner();
     }
     setOpenImageCrop(false);
     setImageType(null);
@@ -159,8 +153,40 @@ const Banner: React.FC<TabBannerProps> = ({
     }
   };
 
+  useEffect(() => {
+    async function getBrokers() {
+      try {
+        setIsLoading(true);
+        const res = await createGetBrokersRequest(page, 20);
+        setBrokers(res.data.docs ? res.data.docs : res.data.data || []);
+        console.log("Success", brokers);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getBrokers();
+  }, []);
+  const onFollowBrokerHandler = async (e: any, brokerId: number) => {
+    setIsFollowing(!isFollowing);
+    followABroker({
+      userId: brokerId,
+      followType: isFollowing ? "UNFOLLOW" : "FOLLOW",
+    });
+    if (!isFollowing) {
+      setFlCount((prevState) => prevState + 1);
+    } else {
+      setFlCount((prevState) => prevState - 1);
+    }
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div>
+    <div style={{ paddingRight: "16px", paddingLeft: "16px" }}>
       <div
         className=""
         style={{
@@ -183,7 +209,7 @@ const Banner: React.FC<TabBannerProps> = ({
             borderTopLeftRadius: "5px",
           }}
         />
-        {show && (
+        {role === true && (
           <>
             <label htmlFor="cover" className="cursor-pointer">
               <i
@@ -226,7 +252,7 @@ const Banner: React.FC<TabBannerProps> = ({
               border: "4px solid white",
             }}
           />
-          {show && (
+          {role === true && (
             <>
               <label htmlFor="avatar" className="cursor-pointer">
                 <i
@@ -274,10 +300,10 @@ const Banner: React.FC<TabBannerProps> = ({
             }}
           >
             <div>
-              <h2 className="m-0 fw-700 ">
+              <h2 className="m-0 fw-700 font-md">
                 {dataUser?.lastName} {dataUser?.firstName}
               </h2>
-              <div className="font-xssss text-gray">
+              <div className="font-xsss text-gray m-0">
                 @{dataUserProfile?.nickName}
               </div>
             </div>
@@ -298,161 +324,132 @@ const Banner: React.FC<TabBannerProps> = ({
                   objectFit: "cover",
                 }}
               />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "2px",
-                }}
-              >
-                <p className="font-xsss fw-400">{t("Certified Broker")}</p>
-                <Image
-                  onMouseEnter={() => setTextHover(true)}
-                  onMouseLeave={() => setTextHover(false)}
-                  src="/assets/images/profile/icons8-info-50.png"
-                  width={13}
-                  height={13}
-                  alt=""
-                  className=""
+              {dataUser.role.name === "broker" && (
+                <div
                   style={{
-                    objectFit: "cover",
-                    backgroundColor: "white",
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "2px",
                   }}
-                />
-                {textHover && (
-                  <p className="text-hover font-xsssss">
-                    {t("This broker has been verified by Acanet")}
-                  </p>
-                )}
-              </div>
+                >
+                  <p className="font-xss fw-400 m-0">{t("Certified Broker")}</p>
+                  <Image
+                    onMouseEnter={() => setTextHover(true)}
+                    onMouseLeave={() => setTextHover(false)}
+                    src="/assets/images/profile/icons8-info-50.png"
+                    width={13}
+                    height={13}
+                    alt=""
+                    className=""
+                    style={{
+                      objectFit: "cover",
+                      backgroundColor: "white",
+                    }}
+                  />
+                  {textHover && (
+                    <p className="text-hover font-xssss">
+                      {t("This broker has been verified by Acanet")}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
-          {role === true && (
-            <>
-              {show ? (
-                <>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: "10px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      className="bg-tumblr p-2 rounded-3 cursor-pointer"
-                      onClick={() => setShow(false)}
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <h4 className="text-white m-0">
-                        <i
-                          className={`bi bi-arrow-left-square ${styles["icon-profile"]}`}
-                        ></i>
-                      </h4>
-                      <h4 className="text-white m-0">{t("back")}</h4>
-                    </div>
-                    <div
-                      className="bg-primary p-2 rounded-3 cursor-pointer"
-                      onClick={submitBanner}
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <h4 className="text-white m-0">
-                        <i
-                          className={`bi bi-floppy ${styles["icon-profile"]}`}
-                        ></i>
-                      </h4>
-                      <h4 className="text-white m-0">{t("save")}</h4>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h4>
-                    <i
-                      className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
-                      onClick={() => setShow(true)}
-                    ></i>
-                  </h4>
-                </>
-              )}
-            </>
-          )}
         </div>
 
-        <div className="font-xsss fw-600 text-gray-follow">
+        <div className="font-xss fw-600 text-gray-follow">
           {numbersFollowers} {t("followers")}
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",
-            marginTop: "15px",
-          }}
-        >
-          <button
-            className="px-3 bg-blue-button"
+        {!role && (
+          <div
             style={{
-              borderRadius: "16px",
-              border: "0",
               display: "flex",
               flexDirection: "row",
-              gap: "2px",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "120px",
+              gap: "10px",
+              marginTop: "15px",
             }}
           >
-            <Image
-              src="/assets/images/profile/add-small.png"
-              width={16}
-              height={16}
-              alt=""
-              className=""
+            {dataUser.role.name === "broker" && (
+              <>
+                <button
+                  onClick={(e) => onFollowBrokerHandler(e, dataUser.id)}
+                  className="px-3 "
+                  style={{
+                    backgroundColor: isFollowing ? "#0A66C2" : "#34465d",
+                    borderRadius: "16px",
+                    border: "0",
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "2px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "155px",
+                  }}
+                >
+                  {isFollowing ? (
+                    <h4 className="text-white m-0">
+                      <i
+                        className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
+                      ></i>
+                    </h4>
+                  ) : (
+                    <h4 className="text-white m-0">
+                      <i
+                        className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
+                      ></i>
+                    </h4>
+                    // <Image
+                    //   src="/assets/images/profile/add-small.png"
+                    //   width={16}
+                    //   height={16}
+                    //   alt=""
+                    //   className=""
+                    //   style={{
+                    //     objectFit: "cover",
+                    //   }}
+                    // />
+                  )}
+
+                  <span className="text-white font-xss fw-600">
+                    {isFollowing ? t("following") : t("follow")}
+                  </span>
+                </button>
+              </>
+            )}
+            <button
+              className="px-3 bg-white"
               style={{
-                objectFit: "cover",
+                borderRadius: "16px",
+                borderColor: "#0A66C2",
+                display: "flex",
+                flexDirection: "row",
+                gap: "2px",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "155px",
               }}
-            />
-            <span className="text-white font-xss fw-600">{t("follow")}</span>
-          </button>
-          <button
-            className="px-3 bg-white"
-            style={{
-              borderRadius: "16px",
-              borderColor: "#0A66C2",
-              display: "flex",
-              flexDirection: "row",
-              gap: "2px",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "120px",
-            }}
-          >
-            <Image
-              src="/assets/images/profile/send-privately-small.png"
-              width={16}
-              height={16}
-              alt=""
-              className=""
-              style={{
-                objectFit: "cover",
-              }}
-            />
-            <div className="text-blue-button font-xss fw-600">
-              {t("messages")}
-            </div>
-          </button>
-        </div>
+            >
+              {/* <h4 className="text-blue-button m-0" > 
+                <i style={{width:"10px", height:"10px"}}
+                  className={`bi bi-send ${styles["icon-profile"]} cursor-pointer`}
+                ></i>
+              </h4> */}
+              <Image
+                src="/assets/images/profile/send-privately-small.png"
+                width={16}
+                height={16}
+                alt=""
+                className=""
+                style={{
+                  objectFit: "cover",
+                }}
+              />
+              <div className="text-blue-button font-xss fw-600">
+                {t("messages")}
+              </div>
+            </button>
+          </div>
+        )}
       </div>
       <hr
         style={{

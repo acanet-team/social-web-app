@@ -82,39 +82,43 @@ const TabPostProfile = (props: {
   }, []);
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
-      {!isLoading && myPosts.length === 0 && (
+      {!isLoading && myPosts?.length === 0 && (
         <div className="mt-5 text-center">No posts found.</div>
       )}
-      {myPosts.map((myPost) => (
-        <div key={""}>
-          <PostCard
-            groupOwnerId=""
-            groupName=""
-            groupId=""
-            groupAvatar={myPost.community?.avatar?.path || ""}
-            postId={myPost.id}
-            nickName={
-              myPost.user.nickName ||
-              myPost.user.firstName + " " + myPost.user.lastName
-            }
-            authorId={myPost.user.userId}
-            authorNickname={myPost.user.nickName || ""}
-            avatar={
-              myPost.user?.photo?.id
-                ? cleanPath(myPost.user?.photo?.path)
-                : "/assets/images/user.png"
-            }
-            content={myPost.content}
-            assets={myPost.assets}
-            createdAt={myPost.createdAt}
-            like={myPost.favoriteCount}
-            comment={myPost.commentCount}
-            columnsCount={myPost.assets?.length > 3 ? 3 : myPost.assets?.length}
-            liked={myPost.liked}
-            setPostHandler={setMyPosts}
-          />
-        </div>
-      ))}
+      {myPosts &&
+        myPosts.length > 0 &&
+        myPosts.map((myPost) => (
+          <div key={""}>
+            <PostCard
+              groupOwnerId=""
+              groupName=""
+              groupId=""
+              groupAvatar={myPost.community?.avatar?.path || ""}
+              postId={myPost.id}
+              nickName={
+                myPost.user?.nickName ||
+                myPost.user?.firstName + " " + myPost.user.lastName
+              }
+              authorId={myPost.user?.userId}
+              authorNickname={myPost.user?.nickName || ""}
+              avatar={
+                myPost.user?.photo?.id
+                  ? cleanPath(myPost.user?.photo?.path)
+                  : "/assets/images/user.png"
+              }
+              content={myPost.content}
+              assets={myPost.assets}
+              createdAt={myPost.createdAt}
+              like={myPost.favoriteCount}
+              comment={myPost.commentCount}
+              columnsCount={
+                myPost.assets?.length > 3 ? 3 : myPost.assets?.length
+              }
+              liked={myPost.liked}
+              setPostHandler={setMyPosts}
+            />
+          </div>
+        ))}
       {isLoading && <DotWaveLoader />}
     </div>
   );

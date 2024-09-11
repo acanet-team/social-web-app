@@ -271,7 +271,8 @@
     "PHD": "PHD",
     "OTHER": "OTHER",
     "True": "True",
-    "False": "False"
+    "False": "False",
+    "following": "Following"
   },
   "FeedTabs": {
     "for_you": "For you",

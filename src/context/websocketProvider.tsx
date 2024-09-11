@@ -160,7 +160,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
         newSocket.send(
           JSON.stringify({
             action: "setChannel",
-            userId: `notification:163`,
+            userId: `notification:${session.user?.id}`,
           }),
         );
       }

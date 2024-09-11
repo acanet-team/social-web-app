@@ -118,7 +118,7 @@ export type AllProfileResponse = {
     ssi?: SSI[];
     // rating: string;
     // coursesEnrolledCount: string;
-    // followed: boolean;
+    followed: boolean;
   };
 };
 

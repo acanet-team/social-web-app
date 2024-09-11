@@ -143,84 +143,87 @@ const License = ({
             )}
           </div>
         </div>
-        {licenseToShow.map((license, index) => (
-          <>
-            <div
-              key={license.id}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "12px",
-              }}
-            >
-              <Image
-                src={
-                  license.logo ||
-                  "/assets/images/profile/alabaster_global_logo.png"
-                }
-                width={48}
-                height={48}
-                alt={license.licenseType}
+        {licenseToShow?.length > 0 &&
+          licenseToShow.map((license, index) => (
+            <>
+              <div
+                key={license.id}
                 style={{
-                  objectFit: "cover",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "12px",
                 }}
-              />
-              <div className="w-100">
-                <div>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <p className="m-0 fw-600 font-xss">{license.licenseType}</p>
-                    {iconEdit && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          gap: "4px",
-                        }}
-                      >
-                        <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
-                          onClick={() => handleEditModal(license)}
-                        ></i>
-                        <i
-                          className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
-                          onClick={() => delCertifications(license.id)}
-                        ></i>
-                      </div>
-                    )}
+              >
+                <Image
+                  src={
+                    license.logo ||
+                    "/assets/images/profile/alabaster_global_logo.png"
+                  }
+                  width={48}
+                  height={48}
+                  alt={license.licenseType}
+                  style={{
+                    objectFit: "cover",
+                  }}
+                />
+                <div className="w-100">
+                  <div>
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <p className="m-0 fw-600 font-xs">
+                        {license.licenseType}
+                      </p>
+                      {iconEdit && (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "4px",
+                          }}
+                        >
+                          <i
+                            className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                            onClick={() => handleEditModal(license)}
+                          ></i>
+                          <i
+                            className={`bi bi-trash3-fill ${styles["icon-profile"]} cursor-pointer`}
+                            onClick={() => delCertifications(license.id)}
+                          ></i>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                  <p className="m-0 font-xss lh-20">{license.licenseIssuer}</p>
+                  <p className="m-0 font-xss lh-20 text-gray-follow">
+                    {t("Issued")}{" "}
+                    {dayjs(license.licenseIssueDate).format("MMM-YYYY")} -{" "}
+                    {license.licenseExpirationDate
+                      ? dayjs(license.licenseExpirationDate).format("MMM-YYYY")
+                      : "No expiration date"}
+                  </p>
+                  <p className="m-0 mt-2 font-xss lh-20 text-gray-follow">
+                    {t("Credential")} {license.credentialID}
+                  </p>
                 </div>
-                <p className="m-0 font-xsss lh-20">{license.licenseIssuer}</p>
-                <p className="m-0 font-xsss lh-20 text-gray-follow">
-                  {t("Issued")}{" "}
-                  {dayjs(license.licenseIssueDate).format("MMM-YYYY")} -{" "}
-                  {license.licenseExpirationDate
-                    ? dayjs(license.licenseExpirationDate).format("MMM-YYYY")
-                    : "No expiration date"}
-                </p>
-                <p className="m-0 mt-2 font-xsss lh-20 text-gray-follow">
-                  {t("Credential")} {license.credentialID}
-                </p>
               </div>
-            </div>
-            {index < licenseToShow.length - 1 && (
-              <hr
-                style={{
-                  border: "none",
-                  borderTop: "2px solid #d1d1d1",
-                  marginTop: "20px",
-                }}
-              />
-            )}
-          </>
-        ))}
-        {!showAllLicense && licenses.length - licenseToShow.length > 0 && (
+              {index < licenseToShow.length - 1 && (
+                <hr
+                  style={{
+                    border: "none",
+                    borderTop: "2px solid #d1d1d1",
+                    marginTop: "20px",
+                  }}
+                />
+              )}
+            </>
+          ))}
+        {!showAllLicense && licenses?.length - licenseToShow?.length > 0 && (
           <>
             <hr
               style={{

@@ -203,7 +203,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             /> */}
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">
+                <p className="m-0 py-1 fw-600 font-xs">
                   {t("name")} {t("certification")}
                 </p>
                 <input
@@ -212,7 +212,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     width: "100%",
                     border: "1px solid #ddd",
                     borderRadius: "4px",
-                    height: "32px",
+                    height: "56px",
                   }}
                   value={formData.licenseType}
                   name="licenseType"
@@ -225,7 +225,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
               </div>
 
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">
+                <p className="m-0 py-1 fw-600 font-xs">
                   {t("Issuing Organization")}
                 </p>
                 <input
@@ -234,7 +234,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     width: "100%",
                     border: "1px solid #ddd",
                     borderRadius: "4px",
-                    height: "32px",
+                    height: "56px",
                   }}
                   value={formData.licenseIssuer}
                   name="licenseIssuer"
@@ -245,7 +245,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss ">{t("Issued year")}</p>
+                <p className="m-0 py-1 fw-600 font-xs ">{t("Issued year")}</p>
                 <DatePicker
                   className="w__100"
                   value={dayjs(formData.licenseIssueDate)}
@@ -271,7 +271,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                 )}
               </div>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss ">
+                <p className="m-0 py-1 fw-600 font-xs ">
                   {t("Expiration year")}
                 </p>
                 <DatePicker
@@ -291,14 +291,14 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">{t("Credential ID")}</p>
+                <p className="m-0 py-1 fw-600 font-xs">{t("Credential ID")}</p>
                 <input
                   className="px-2"
                   style={{
                     width: "100%",
                     border: "1px solid #ddd",
                     borderRadius: "4px",
-                    height: "32px",
+                    height: "56px",
                   }}
                   value={formData.credentialID}
                   name="credentialID"
@@ -307,14 +307,12 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                 />
               </div>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xss">
-                  {t("License Status")}
-                </p>
+                <p className="m-0 py-1 fw-600 font-xs">{t("License Status")}</p>
                 <Select
                   value={formData.licenseStatus}
                   onChange={handleSelectChange}
                   displayEmpty
-                  style={{ width: "100%", height: "32px" }}
+                  style={{ width: "100%", height: "56px" }}
                 >
                   <MenuItem value="" disabled>
                     {t("select")} {t("License Status")}

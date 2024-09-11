@@ -84,7 +84,7 @@ export const About = ({
         <div>
           {!show ? (
             <>
-              <p>
+              <p className="fw-400 font-xss">
                 {expandPost
                   ? aboutText
                   : aboutText?.length > 150
@@ -106,7 +106,7 @@ export const About = ({
             <div>
               <div style={{}}>
                 <textarea
-                  className="w-100 m-0 font-xsss fw-400 lh-20 d-flex"
+                  className="w-100 m-0 font-xss fw-400 lh-20 d-flex"
                   onChange={(event) => {
                     setAboutText(event.target.value);
                   }}
@@ -132,7 +132,7 @@ export const About = ({
                 }}
               >
                 <button
-                  className="px-4 py-1 bg-blue-button text-white font-xsss"
+                  className="px-4 py-1 bg-blue-button text-white font-xss"
                   style={{ marginRight: "0px", border: "none" }}
                 >
                   <p className="m-0" onClick={() => submitAbout()}>

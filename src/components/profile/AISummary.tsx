@@ -9,6 +9,8 @@ import {
 } from "@/api/profile/model";
 import { useTranslations } from "next-intl";
 import ModalEditOtherInfo from "./ModalEditOtherInfo";
+import { postUpdateSummary } from "@/api/profile";
+import { throwToast } from "@/utils/throw-toast";
 
 const AiSummary = ({
   dataBrokerProfile,
@@ -22,6 +24,7 @@ const AiSummary = ({
   listInterestTopic: InterestTopics[];
 }) => {
   const t = useTranslations("MyProfile");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [showAllInterestTopics, setShowAllInterestTopics] =
     useState<boolean>(false);
@@ -30,10 +33,12 @@ const AiSummary = ({
   const [interestTopics, setInterestTopics] = useState<InterestTopics[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [location, setLocation] = useState("");
+  const [summary, setSummary] = useState<string | null>();
   useEffect(() => {
     setInterestTopics(dataBrokerProfile?.interestTopics ?? []);
     setSkills(dataBrokerProfile?.skills ?? []);
     setLocation(dataBrokerProfile?.location || "");
+    setSummary(dataBrokerProfile?.summary || null);
   }, [dataBrokerProfile]);
 
   const [expandPost, setExpandPost] = useState<boolean>(false);
@@ -51,6 +56,17 @@ const AiSummary = ({
     setShow(false);
   }, []);
 
+  const updateSummary = async () => {
+    setIsLoading(true);
+    try {
+      await postUpdateSummary({});
+    } catch (error) {
+      throwToast("Error updating", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
       className="card p-4"
@@ -65,30 +81,43 @@ const AiSummary = ({
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          gap: "2px",
+          justifyContent: "space-between",
         }}
       >
-        <p className="m-0 fw-700 font-xsss">{t("AI summary")}</p>
-        <Image
-          src="/assets/images/profile/icons8-lightning-96 1.png"
-          width={25}
-          height={25}
-          alt=""
-          className=""
+        <div
           style={{
-            objectFit: "cover",
+            display: "flex",
+            flexDirection: "row",
+            gap: "2px",
           }}
-        />
+        >
+          <p className="m-0 fw-700 font-xss">{t("AI summary")}</p>
+          <Image
+            src="/assets/images/profile/icons8-lightning-96 1.png"
+            width={25}
+            height={25}
+            alt=""
+            className=""
+            style={{
+              objectFit: "cover",
+            }}
+          />
+        </div>
+        <h4>
+          <i
+            className="bi bi-box-arrow-down cursor-pointer"
+            onClick={updateSummary}
+          ></i>
+        </h4>
       </div>
-      {dataBrokerProfile?.summary ? (
+      {summary ? (
         <>
           {expandPost
-            ? dataBrokerProfile.summary
-            : dataBrokerProfile.summary.length > 20
-              ? dataBrokerProfile.summary.substring(0, 20) + "..."
-              : dataBrokerProfile.summary}
-          {dataBrokerProfile.summary.length > 20 && !expandPost ? (
+            ? summary
+            : summary.length > 20
+              ? summary.substring(0, 20) + "..."
+              : summary}
+          {summary.length > 20 && !expandPost ? (
             <span
               className={"cursor-pointer text-blue"}
               onClick={() => setExpandPost((open) => !open)}
@@ -108,7 +137,7 @@ const AiSummary = ({
             height: "144px",
           }}
         >
-          <p className="m-0 fw-400 font-xsss">
+          <p className="m-0 fw-400 font-xss">
             {t("New report is coming soon")}
           </p>
         </div>
@@ -129,7 +158,7 @@ const AiSummary = ({
             alignItems: "center",
           }}
         >
-          <p className="m-0 fw-700 font-xssss">{t("contact")}</p>
+          <p className="m-0 fw-700 font-xsss">{t("contact")}</p>
           <div
             style={{
               display: "flex",
@@ -153,16 +182,16 @@ const AiSummary = ({
             )}
           </div>
         </div>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">
+        <p className="m-0 fw-500 font-xsss text-gray-follow">
           {dataUser?.email}
         </p>
       </div>
 
       <div className="mb-2">
-        <p className="m-0 fw-700 font-xssss">{t("servicesOffer")}</p>
+        <p className="m-0 fw-700 font-xsss">{t("servicesOffer")}</p>
         {serviceToShow.map((service, index) => (
           <div key={service.id}>
-            <p className="m-0 fw-500 font-xssss text-gray-follow">
+            <p className="m-0 fw-500 font-xsss text-gray-follow">
               {service.interestTopic.topicName}
             </p>
           </div>
@@ -173,14 +202,14 @@ const AiSummary = ({
       </div>
 
       <div className="mb-2">
-        <p className="m-0 fw-700 font-xssss">{t("location")}</p>
-        <p className="m-0 fw-500 font-xssss text-gray-follow">{location}</p>
+        <p className="m-0 fw-700 font-xsss">{t("location")}</p>
+        <p className="m-0 fw-500 font-xsss text-gray-follow">{location}</p>
       </div>
       <div className="">
-        <p className="m-0 fw-700 font-xssss">{t("interestTopic")}</p>
+        <p className="m-0 fw-700 font-xsss">{t("interestTopic")}</p>
         {interestToShow.map((topic, index) => (
           <div key={topic.id}>
-            <p className="m-0 fw-500 font-xssss text-gray-follow">
+            <p className="m-0 fw-500 font-xsss text-gray-follow">
               {topic.topicName}
             </p>
           </div>
