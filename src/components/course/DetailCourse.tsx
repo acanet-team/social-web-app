@@ -69,7 +69,7 @@ export default function DetailCourse({ id }: Props) {
                 Best seller
               </div>
               <p className="m-0 font-xsss text-white">4.7</p>
-              <Rating rating={4.7} />
+              <Rating rating={4.7} size={12} />
               <p className="m-0 font-xsss text-blue">
                 ({course?.ratings} ratings)
               </p>

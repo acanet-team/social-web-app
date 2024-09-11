@@ -1,13 +1,12 @@
 .rating {
   display: flex; 
-  font-size: 12px; 
-  color: #ffd700;
+  color: #ffd700 !important;
 }
 
-.filled {
-  color: #ffd700; 
+.rating .filled {
+  color: #ffd700 !important; 
 }
 
-.empty {
+.rating .empty {
   color: #e0e0e0;
 }

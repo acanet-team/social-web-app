@@ -101,7 +101,6 @@ const options: NextAuthOptions = {
       token.refreshTokenExpires = res.data.refreshTokenExpires;
       token.tokenExpires = res.data.tokenExpires;
       token.refreshToken = res.data.refreshToken;
-      console.log("hicc", token);
       return token;
     },
 

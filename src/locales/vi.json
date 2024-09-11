@@ -308,5 +308,13 @@
     "no_comment": "Không có bình luận.",
     "write_comment": "Viết bình luận",
     "error_post_comment": "Không gửi được bình luận"
+  },
+  "Rating": {
+    "write_review": "Viết đánh giá...",
+    "review_input_title": "Hãy cho chúng tôi biết đánh giá của bạn về",
+    "submit_review": "Gửi đánh giá",
+    "rank_desc": "Xếp hạng được cung cấp bởi Acanet Blockchain",
+    "rank_desc_guarantee": "Đảm bảo khách quan 100%",
+    "error_missing_rating": "Vui lòng điền điểm đánh giá."
   }
 }

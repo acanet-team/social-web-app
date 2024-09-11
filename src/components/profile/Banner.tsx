@@ -7,6 +7,7 @@ import { updateProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import { ImageCropModal } from "@/components/ImageCropModal";
 import { createGetBrokersRequest, followABroker } from "@/api/onboard";
+import Ratings from "@/components/Ratings";
 interface TabBannerProps {
   role: boolean;
   dataUser: User;
@@ -24,6 +25,8 @@ const Banner: React.FC<TabBannerProps> = ({
   followed,
 }) => {
   const t = useTranslations("MyProfile");
+  const tRating = useTranslations("Rating");
+  const tBase = useTranslations("Base");
   const [textHover, setTextHover] = useState(false);
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -284,12 +287,9 @@ const Banner: React.FC<TabBannerProps> = ({
       <div style={{ marginLeft: "30px" }}>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
             marginTop: "10px",
-            alignItems: "start",
           }}
+          className="w-100 d-flex justify-content-between align-items-start"
         >
           <div
             style={{
@@ -301,7 +301,7 @@ const Banner: React.FC<TabBannerProps> = ({
           >
             <div>
               <h2 className="m-0 fw-700 font-md">
-                {dataUser?.lastName} {dataUser?.firstName}
+                {dataUser?.firstName} {dataUser?.lastName}
               </h2>
               <div className="font-xsss text-gray m-0">
                 @{dataUserProfile?.nickName}
@@ -355,10 +355,31 @@ const Banner: React.FC<TabBannerProps> = ({
               )}
             </div>
           </div>
+          <div className="ms-auto d-flex flex-column align-items-center justify-content-center">
+            {/* Rank image */}
+            {/* <i className="bi bi-patch-check h1 m-0"></i> */}
+            <Ratings rating={5} size={18} />
+            <div style={{ fontSize: "15px" }} className="fw-bold">
+              Rating: 4.7
+            </div>
+            <div
+              style={{ fontSize: "12px" }}
+              className="text-grey-600 text-center"
+            >
+              {tRating("rank_desc")}
+            </div>
+            <div
+              style={{ fontSize: "12px" }}
+              className="text-grey-600 text-center"
+            >
+              {tRating("rank_desc_guarantee")}
+            </div>
+          </div>
         </div>
 
         <div className="font-xss fw-600 text-gray-follow">
-          {numbersFollowers} {t("followers")}
+          {numbersFollowers}{" "}
+          {Number(numbersFollowers) > 1 ? t("followers") : tBase("follower")}
         </div>
         {!role && (
           <div

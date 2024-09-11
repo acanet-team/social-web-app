@@ -10,6 +10,7 @@ import TabPostProfile from "@/components/profile/TabPostProfile";
 import TabGroupProfile from "@/components/profile/TabGroupProfile";
 import TabAbout from "@/components/profile/TabAbout";
 import Banner from "@/components/profile/Banner";
+import TabRating from "@/components/profile/TabRating";
 
 const TAKE = 10;
 
@@ -212,6 +213,9 @@ export default function Profile({
           take={TAKE}
           id={Number(idParam)}
         />
+      )}
+      {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
+        <TabRating brokerData={dataUser} />
       )}
     </>
   );

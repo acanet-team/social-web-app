@@ -46,6 +46,7 @@ export interface User {
   phone: string;
   userInterestTopicRelations: string[];
   whiteList: {};
+  wallet_address: string | null;
 }
 
 export interface UserProfile {
