@@ -7,6 +7,8 @@ import { useSession } from "next-auth/react";
 import HeaderSetting from "./auth/HeaderSetting";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
+import Notification from "@/templatePages/Notification";
+import { useWebSocket } from "@/context/websocketProvider";
 
 export default function Header(props: { isOnboarding: boolean }) {
   const [isOpen, toggleOpen] = useState(false);
@@ -21,6 +23,11 @@ export default function Header(props: { isOnboarding: boolean }) {
   const avatarRef = useRef<HTMLImageElement>(null);
   const t = useTranslations("NavBar");
   const userId = session?.user?.id;
+  const { notifications } = useWebSocket();
+
+  useEffect(() => {
+    console.log("yyy", notifications);
+  }, [notifications]);
 
   useEffect(() => {
     if (session) {
@@ -94,7 +101,7 @@ export default function Header(props: { isOnboarding: boolean }) {
               }
               width={220}
               height={55}
-              style={{ width: "auto", height: "55px" }}
+              style={{ width: "auto", height: "55px", objectFit: "cover" }}
               alt="logo"
             />
           </span>
@@ -118,8 +125,9 @@ export default function Header(props: { isOnboarding: boolean }) {
             alt="user"
             width={40}
             height={40}
-            className="w40 rounded-xl p-0 me-0 nav-menu h-auto rounded-circle cursor-pointer"
+            className="w40 rounded-xl p-0 me-0 nav-menu rounded-circle cursor-pointer"
             onClick={onOpenSettingHandler}
+            style={{ height: "40px", objectFit: "cover" }}
           />
         ) : (
           <button
@@ -201,16 +209,14 @@ export default function Header(props: { isOnboarding: boolean }) {
         <span className="dot-count bg-warning"></span>
         <i className="feather-bell font-xl text-current"></i>
       </span>
+      {/* Notification */}
       <div
         className={`dropdown-menu p-4 right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
         aria-labelledby="dropdownMenu3"
       >
         <h4 className="fw-700 font-xss mb-4 pe-auto">Notification</h4>
+        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3"></div>
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          {/* Notification content */}
-        </div>
-        <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          {/* eslint-disable @next/next/no-img-element */}
           {photo && (
             <Image
               src={photo}
@@ -218,6 +224,7 @@ export default function Header(props: { isOnboarding: boolean }) {
               height={40}
               alt="user"
               className="w40 position-absolute left-0 rounded-xl"
+              style={{ objectFit: "cover" }}
             />
           )}
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
@@ -233,7 +240,6 @@ export default function Header(props: { isOnboarding: boolean }) {
         </div>
 
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-          {/* eslint-disable @next/next/no-img-element */}
           {photo && (
             <Image
               src={photo}
@@ -255,7 +261,6 @@ export default function Header(props: { isOnboarding: boolean }) {
           </h6>
         </div>
         <div className="card bg-transparent-card w-100 border-0 ps-5">
-          {/* eslint-disable @next/next/no-img-element */}
           {photo && (
             <Image
               src={photo}
@@ -263,6 +268,7 @@ export default function Header(props: { isOnboarding: boolean }) {
               width={40}
               height={40}
               className="w40 position-absolute left-0 rounded-xl"
+              style={{ objectFit: "cover" }}
             />
           )}
           <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
@@ -277,6 +283,7 @@ export default function Header(props: { isOnboarding: boolean }) {
           </h6>
         </div>
       </div>
+
       <Darkbutton />
       {/* eslint-disable @next/next/no-img-element */}
       {photo && (
@@ -288,6 +295,7 @@ export default function Header(props: { isOnboarding: boolean }) {
           height={40}
           className="w40 rounded-xl p-0 ms-3 menu-icon cursor-pointer"
           onClick={onOpenSettingHandler}
+          style={{ objectFit: "cover" }}
         />
       )}
       {openSettings && (

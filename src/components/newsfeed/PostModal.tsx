@@ -77,7 +77,7 @@ function PostModal(props: {
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const tComment = useTranslations("Comment");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  console.log("nickname", authorNickname);
+
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
   const [page, setPage] = useState<number>(1);

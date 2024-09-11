@@ -18,6 +18,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { WebSocketProvider } from "@/context/websocketProvider";
+import { GuestTokenProvider } from "@/context/guestToken";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -33,20 +35,24 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <SessionProvider refetchInterval={10}>
-      <NextIntlClientProvider
-        locale={"en"}
-        timeZone="Europe/Vienna"
-        messages={pageProps.messages}
-      >
-        <ToastContainer />
-        <LoadingProvider>
-          <RouterProgressBar />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            {getLayout(<Component {...pageProps} />)}
-          </LocalizationProvider>
-          <Loading />
-        </LoadingProvider>
-      </NextIntlClientProvider>
+      <WebSocketProvider>
+        <GuestTokenProvider>
+          <NextIntlClientProvider
+            locale={"en"}
+            timeZone="Europe/Vienna"
+            messages={pageProps.messages}
+          >
+            <ToastContainer />
+            <LoadingProvider>
+              <RouterProgressBar />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {getLayout(<Component {...pageProps} />)}
+              </LocalizationProvider>
+              <Loading />
+            </LoadingProvider>
+          </NextIntlClientProvider>
+        </GuestTokenProvider>
+      </WebSocketProvider>
     </SessionProvider>
   );
 }

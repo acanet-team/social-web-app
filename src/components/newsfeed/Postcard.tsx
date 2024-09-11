@@ -70,7 +70,7 @@ export default function PostCard(props: {
   const [likeNum, setLikeNum] = useState<number>(like);
   const settingsRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
-  const [userId, setUserId] = useState<number | undefined>(undefined);
+  const [userId, setUserId] = useState<number>();
   const tBase = useTranslations("Base");
 
   // Comment states
