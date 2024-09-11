@@ -4,7 +4,7 @@ import type { BrokerProfile } from "@/api/profile/model";
 import { useTranslations } from "next-intl";
 import { throwToast } from "@/utils/throw-toast";
 import { updateProfile } from "@/api/profile";
-import WaveLoader from "../WaveLoader";
+import DotWaveLoader from "../DotWaveLoader";
 
 export const About = ({
   dataBrokerProfile,
@@ -144,7 +144,7 @@ export const About = ({
           )}
         </div>
       </div>
-      {isLoading && <WaveLoader />}
+      {isLoading && <DotWaveLoader />}
     </>
   );
 };

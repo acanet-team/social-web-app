@@ -33,18 +33,18 @@ const options: NextAuthOptions = {
       // Access the guest token from the context
       // const { guestToken } = useGuestToken() || {};
 
-      // console.log('test test', guestToken);
-      // if (guestToken && Object.keys(guestToken).length !== 0) {
-      //   token.accessToken = guestToken;
-      //   token.needToLogin = false;
-      //   if (token.refreshTokenExpires < Date.now()) {
-      //     token.needToLogin = true;
-      //     return token;
-      //   }
-      //   return token;
-      // }
-
       if (trigger === "update") {
+        // console.log("test test", guestToken);
+        // if (guestToken && Object.keys(guestToken).length !== 0) {
+        //   token.accessToken = guestToken;
+        //   token.needToLogin = false;
+        //   if (token.refreshTokenExpires < Date.now()) {
+        //     token.needToLogin = true;
+        //     return token;
+        //   }
+        //   return token;
+        // }
+
         httpClient.setAuthorization(token.accessToken);
         const userData = await getMe();
         token.user = {
@@ -83,10 +83,6 @@ const options: NextAuthOptions = {
         data.accessToken = account.access_token;
         token.provider = "facebook";
       }
-      // if (account?.provider === undefined && guestToken) {
-      //   data.accessToken = guestToken;
-      // }
-
       const res = await httpClient.post<any, any>(
         `/v1/auth/${token?.provider}/login`,
         removePropertiesEmpty(data),

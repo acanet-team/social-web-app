@@ -12,10 +12,8 @@ import { Experience } from "./Experience";
 import Education from "./Education";
 import License from "./License";
 import Image from "next/image";
-
 import { useSession } from "next-auth/react";
-import WaveLoader from "../WaveLoader";
-import { map } from "zod";
+import DotWaveLoader from "../DotWaveLoader";
 
 const TabAbout = (props: {
   ssi: SSI[] | null;
@@ -115,7 +113,7 @@ const TabAbout = (props: {
           <License role={role} dataBrokerProfile={dataBrokerProfile} />
         </div>
       </div>
-      {isLoading && <WaveLoader />}
+      {isLoading && <DotWaveLoader />}
     </>
   );
 };

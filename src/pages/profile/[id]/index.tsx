@@ -117,8 +117,10 @@ export default function Profile({
       setCurTab("posts");
     } else if (chosenTab === t("Communities")) {
       setCurTab("communities");
-    } else {
+    } else if (chosenTab === t("about")) {
       setCurTab("about");
+    } else {
+      setCurTab("rating");
     }
   };
 
@@ -171,6 +173,12 @@ export default function Profile({
             onClick={(e) => onSelectTabHandler(e)}
           >
             <p>{t("Communities")}</p>
+          </div>
+          <div
+            className={`${styles["button-tab"]} ${curTab === TabPnum.Rating ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            onClick={(e) => onSelectTabHandler(e)}
+          >
+            <p>{t("Rating")}</p>
           </div>
         </div>
       </div>
