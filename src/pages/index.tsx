@@ -11,6 +11,8 @@ import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/api/newsfeed/model";
+import { getNotifications } from "@/api/notification";
+import type { BaseArrayResponsVersionDocs } from "@/api/model";
 
 const TAKE = 10;
 
@@ -89,6 +91,7 @@ export default React.memo(Home);
 export async function getServerSideProps(context: NextPageContext) {
   const postRes = await getPosts(1, TAKE, "suggestion");
   const brokerRes = await getTopBrokers(1, 20);
+  // const response = await getNotifications(1, 5);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,

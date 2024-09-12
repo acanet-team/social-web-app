@@ -14,12 +14,14 @@ interface NotificationProps {
   photo: string;
   notifications: Notification[];
   toggleisNoti: React.Dispatch<React.SetStateAction<boolean>>;
+  setReadAllNotis: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Notifications: React.FC<NotificationProps> = ({
   photo,
   notifications,
   toggleisNoti,
+  setReadAllNotis,
 }) => {
   const router = useRouter();
   const [notis, setNotis] = useState<Notification[]>([]);
@@ -29,9 +31,9 @@ const Notifications: React.FC<NotificationProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openPostModal, setOpenPostModal] = useState<string>("");
   const notisListRef = useRef<HTMLDivElement>(null);
-  const [newNotifications, setNewNotifications] = useState<Set<string>>(
-    new Set(),
-  );
+  // const [newNotifications, setNewNotifications] = useState<Set<string>>(
+  //   new Set()
+  // );
 
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
@@ -253,6 +255,20 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponsVersionDocs<Notification> =
         await getNotifications(page, take);
+      console.log("notiiiiiiiiiiii", response);
+      if (
+        response.data.docs.some((notification) => notification.read_at === null)
+      ) {
+        console.log(
+          "readAll",
+          response.data.docs.some(
+            (notification) => notification.read_at === null,
+          ),
+        );
+        setReadAllNotis(false);
+      } else {
+        setReadAllNotis(true);
+      }
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           response?.data?.docs,
@@ -260,6 +276,7 @@ const Notifications: React.FC<NotificationProps> = ({
         ) as Notification[];
         return newNotis;
       });
+
       setTotalPages(response?.data?.meta?.totalPage);
     } catch (err) {
       console.error(err);
@@ -335,11 +352,11 @@ const Notifications: React.FC<NotificationProps> = ({
         ) as Notification[];
         return updatedNotis;
       });
-      setNewNotifications((prev) => {
-        const newNotis = new Set(prev);
-        notifications.forEach((notif) => newNotis.add(notif.id));
-        return newNotis;
-      });
+      // setNewNotifications((prev) => {
+      //   const newNotis = new Set(prev);
+      //   notifications.forEach((notif) => newNotis.add(notif.id));
+      //   return newNotis;
+      // });
     }
   }, [notifications]);
 
