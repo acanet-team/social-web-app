@@ -108,6 +108,11 @@
   font-size: 15px;
 }
 
+.profile-banner__btn {
+  width: 170px !important;
+  height: 38px;
+}
+
 :global(.theme-dark) {
   .tab-active::before {
     border: 2px solid #fff;

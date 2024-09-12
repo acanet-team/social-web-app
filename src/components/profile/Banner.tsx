@@ -294,7 +294,7 @@ const Banner: React.FC<TabBannerProps> = ({
         >
           <div className="w-100">
             <div
-              className="d-flex align-items-sm-start align-items-center flex-md-row flex-column gap-md-3 gap-2 mb-2"
+              className="d-flex align-items-sm-start align-items-center flex-lg-row flex-column gap-md-3 gap-2 mb-2"
               style={{
                 marginTop: "30px",
               }}
@@ -309,7 +309,7 @@ const Banner: React.FC<TabBannerProps> = ({
               </div>
               <div
                 className="d-flex align-items-center"
-                style={{ minWidth: "170px" }}
+                style={{ minWidth: "220px" }}
               >
                 {dataUser.role.name === "broker" && (
                   <div
@@ -385,7 +385,7 @@ const Banner: React.FC<TabBannerProps> = ({
               <>
                 <button
                   onClick={(e) => onFollowBrokerHandler(e, dataUser.id)}
-                  className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-followed__btn"]}`}
+                  className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-followed__btn"]} ${styles["profile-banner__btn"]}`}
                   style={{
                     borderRadius: "16px",
                     border: "0",
@@ -409,16 +409,6 @@ const Banner: React.FC<TabBannerProps> = ({
                         className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
                       ></i>
                     </h4>
-                    // <Image
-                    //   src="/assets/images/profile/add-small.png"
-                    //   width={16}
-                    //   height={16}
-                    //   alt=""
-                    //   className=""
-                    //   style={{
-                    //     objectFit: "cover",
-                    //   }}
-                    // />
                   )}
 
                   <span className="text-white font-xss fw-600">
@@ -428,7 +418,7 @@ const Banner: React.FC<TabBannerProps> = ({
               </>
             )}
             <button
-              className="px-3 btn bg-white"
+              className={`px-3 btn bg-white ${styles["profile-banner__btn"]}`}
               style={{
                 borderRadius: "16px",
                 border: "1px solid #0A66C2",
@@ -462,7 +452,7 @@ const Banner: React.FC<TabBannerProps> = ({
 
             {dataUser.role.name === "broker" && (
               <button
-                className={`${styles["profile-donate__btn"]} btn`}
+                className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
                 onClick={() => setOpenDonate(true)}
               >
                 <i className="bi bi-cash-coin text-success me-1"></i>
