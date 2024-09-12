@@ -95,6 +95,7 @@ export interface IUserInfo {
   isBroker: boolean;
   isProfile: boolean;
   image?: string;
+  wallet_address: string | null;
 }
 export interface IUserSession {
   user?: IUserInfo;

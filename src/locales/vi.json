@@ -167,6 +167,7 @@
   "MyProfile": {
     "follow": "Theo dõi",
     "messages": "Tin nhắn",
+    "donate": "Quyên tặng",
     "about": "Giới thiệu",
     "experience": "Kinh nghiệm",
     "education": "Học vấn",
@@ -239,7 +240,10 @@
     "OTHER": "KHÁC",
     "True": "Đúng",
     "False": "Sai",
-    "following": "Đang theo dõi"
+    "following": "Đang theo dõi",
+    "donate_amount": "Số tiền ủng hộ",
+    "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.",
+    "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân"
   },
   "Community": {
     "community": "Cộng đồng",
@@ -316,5 +320,8 @@
     "rank_desc": "Xếp hạng được cung cấp bởi Acanet Blockchain",
     "rank_desc_guarantee": "Đảm bảo khách quan 100%",
     "error_missing_rating": "Vui lòng điền điểm đánh giá."
+  },
+  "Wallet": {
+    "connect_wallet": "Kết nối ví của bạn tới Acanet"
   }
 }

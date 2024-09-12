@@ -116,7 +116,7 @@ export const Experience = ({
   return (
     <>
       <div
-        className="card p-4"
+        className="card p-4 border-0 shadow-xss"
         style={{
           background: "#FFFFFF",
           borderRadius: "5px",

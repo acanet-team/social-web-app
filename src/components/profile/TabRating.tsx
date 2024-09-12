@@ -15,7 +15,6 @@ export default function TabRating(props: { brokerData: User }) {
   const tRating = useTranslations("Rating");
   const [rating, setRating] = React.useState<number | null>(0);
   const [review, setReview] = React.useState<string>("");
-  console.log("mmm", brokerData);
 
   const formik = useFormik({
     initialValues: {

@@ -5,12 +5,14 @@ import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 
 import httpClient from "@/api";
-import { getMe, refreshToken } from "@/api/auth";
+import { getMe, guestLogin, refreshToken } from "@/api/auth";
 import { removePropertiesEmpty } from "@/utils/Helpers";
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, User } from "next-auth";
 import { setCookie } from "nookies";
 import { trigger } from "@spotlightjs/spotlight";
 import { useGuestToken } from "@/context/guestToken";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { randomUUID } from "crypto";
 
 const options: NextAuthOptions = {
   providers: [
@@ -22,6 +24,21 @@ const options: NextAuthOptions = {
       clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
     }),
+    CredentialsProvider({
+      id: "guest-login",
+      name: "guest",
+      credentials: {},
+      async authorize(credentials, req): Promise<User | null> {
+        // generate a random name and email for this anonymous user
+        const unique_uuid: string = randomUUID();
+        return {
+          id: unique_uuid,
+          email: `${unique_uuid.toLowerCase()}@example.com`,
+          name: unique_uuid,
+          image: "",
+        };
+      },
+    }),
   ],
   secret: process.env.NEXT_AUTH_SECRET,
   session: {
@@ -30,21 +47,21 @@ const options: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, trigger }: any) {
       console.log(token);
-      // Access the guest token from the context
-      // const { guestToken } = useGuestToken() || {};
+      // const guestTokenRes: any = await guestLogin();
+      // const guestToken = guestTokenRes.token;
+
+      // if (guestToken) {
+      //   token.accessToken = guestToken;
+      //   token.needToLogin = false;
+      //   httpClient.setAuthorization(guestToken);
+      //   if (token.refreshTokenExpires < Date.now()) {
+      //     token.needToLogin = true;
+      //     return token;
+      //   }
+      //   return token;
+      // }
 
       if (trigger === "update") {
-        // console.log("test test", guestToken);
-        // if (guestToken && Object.keys(guestToken).length !== 0) {
-        //   token.accessToken = guestToken;
-        //   token.needToLogin = false;
-        //   if (token.refreshTokenExpires < Date.now()) {
-        //     token.needToLogin = true;
-        //     return token;
-        //   }
-        //   return token;
-        // }
-
         httpClient.setAuthorization(token.accessToken);
         const userData = await getMe();
         token.user = {
@@ -74,6 +91,7 @@ const options: NextAuthOptions = {
         }
         return token;
       }
+
       const data: { accessToken?: string; idToken?: string } = {};
       if (account?.provider === "google") {
         data.idToken = account.id_token;

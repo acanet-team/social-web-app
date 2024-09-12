@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import Brokers from "@/components/onboard/Brokers";
 import CreateProfile from "@/components/onboard/CreateProfile";
 import Interests from "@/components/onboard/Interests";
-import "@/styles/global.scss";
 import classNames from "classnames";
 import type { NextPageContext } from "next";
 import { useSession } from "next-auth/react";

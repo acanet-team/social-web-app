@@ -201,6 +201,7 @@
   "MyProfile": {
     "follow": "Follow",
     "messages": "Messages",
+    "donate": "Donate",
     "about": "About",
     "experience": "Experience",
     "education": "Education",
@@ -273,7 +274,10 @@
     "OTHER": "OTHER",
     "True": "True",
     "False": "False",
-    "following": "Following"
+    "following": "Following",
+    "donate_amount": "Donate amount",
+    "donate_amount_missing": "Donate amount must be greater than 0.",
+    "donate_input": "Please use comma as the decimal seperator"
   },
   "FeedTabs": {
     "for_you": "For you",
@@ -314,5 +318,8 @@
     "rank_desc": "Rating powered by Acanet Blockchain",
     "rank_desc_guarantee": "100% Fairness Guarantee",
     "error_missing_rating": "Please rate the broker."
+  },
+  "Wallet": {
+    "connect_wallet": "Connect your wallet to Acanet"
   }
 }
