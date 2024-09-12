@@ -43,22 +43,23 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // const validateForm = (updatedSocial?: typeof social) => {
-  //   const socialToValidate = updatedSocial || social;
-  //   const newErrors: { [key: string]: string } = {};
+  const validateForm = (updatedSocial?: SocialMedia[]) => {
+    const socialsToValidate = updatedSocial || updatedSocials;
+    const newErrors: { [key: string]: string } = {};
 
-  //   Object.entries(socialToValidate).forEach(([name, { url }]) => {
-  //     if (url === "") {
-  //       return;
-  //     }
-  //     if (!urlFormat.test(url)) {
-  //       newErrors[name] = `${t("Invalid URL format")}`;
-  //     }
-  //   });
+    socialsToValidate.forEach((social) => {
+      if (social.mediaUrl === "") {
+        // delete newErrors[social.name];
+        return;
+      }
+      if (!urlFormat.test(social.mediaUrl)) {
+        newErrors[social.name] = `${t("Invalid URL format")}`;
+      }
+    });
 
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, dataset } = e.target;
@@ -71,11 +72,11 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
       ),
     );
 
-    // validateForm(newSocial);
+    // validateForm();
   };
 
   const submitSocial = async () => {
-    // if (!validateForm()) return;
+    if (!validateForm()) return;
     setIsLoading(true);
 
     try {
@@ -122,7 +123,7 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
                 updatedSocials.map((item) => (
                   <div key={item.id} style={{ flexBasis: "calc(50% - 20px)" }}>
                     <div style={{ width: "100%" }}>
-                      <p className="m-0 py-1 fw-600 font-xs">
+                      <p className="m-0 py-1 fw-600 font-xss">
                         {item.name.toUpperCase()}
                       </p>
                       <input
@@ -138,10 +139,13 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
                         data-id={item.id}
                         value={item.mediaUrl}
                         onChange={handleInputChange}
+                        onKeyUp={() => validateForm()}
                       />
-                      {/* {errors[name] && (
-                      <p className="text-red font-xsss">{errors[name]}</p>
-                    )} */}
+                      {errors[item.name] && (
+                        <p className="text-red font-xsss">
+                          {errors[item.name]}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
