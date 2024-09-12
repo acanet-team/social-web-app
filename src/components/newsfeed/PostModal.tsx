@@ -37,7 +37,7 @@ function PostModal(props: {
   groupOwnerId: number | "";
   groupId: string;
   userId: number | undefined;
-  setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
+  setPostHandler?: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
   updateLike: React.Dispatch<React.SetStateAction<string>>;
   updateComments: React.Dispatch<React.SetStateAction<string>>;
   updateIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -162,7 +162,8 @@ function PostModal(props: {
     try {
       // Calling api;
       await deletePost(postId);
-      setPostHandler((prev) => prev.filter((post) => post.id !== postId));
+      setPostHandler &&
+        setPostHandler((prev) => prev.filter((post) => post.id !== postId));
       throwToast("Post was successfully deleted", "success");
     } catch (err) {
       console.log(err);

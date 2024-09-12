@@ -71,6 +71,20 @@ export type BaseArrayResponse<T> = {
   data: T[];
 };
 
+export type BaseArrayResponsVersionDocs<T> = {
+  status: number;
+  success?: boolean;
+  message: string;
+  data: {
+    docs: T[];
+    meta: {
+      page: number;
+      total: number;
+      totalPage: number;
+    };
+  };
+};
+
 export type BaseApiResponse<T> = Promise<T>;
 
 export type AllBrokersResponse<T> = {

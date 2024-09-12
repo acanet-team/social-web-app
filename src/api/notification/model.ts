@@ -23,8 +23,16 @@ export type Notification = {
     firstName: string;
     lastName: string;
     nickName: string;
+    photo: {
+      id: UUID;
+      path: string;
+    };
   };
   community: {
+    avatar: {
+      id: UUID;
+      path: string;
+    };
     communityId: string;
     name: string;
   } | null;
@@ -32,6 +40,7 @@ export type Notification = {
     post_id: string;
     comment_id?: string;
     community_id: string | UUID;
+    notificationCount: number;
   };
   createdAt: number;
 };

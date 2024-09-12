@@ -11,59 +11,7 @@ import styles from "@/styles/modules/header.module.scss";
 import { useWebSocket } from "@/context/websocketProvider";
 import Notifications from "./Notification";
 import type { Notification } from "@/api/notification/model";
-
-const fakeData: Notification[] = [
-  {
-    id: "25ecc472-d30d-47e1-ad86-73aa7abc63bf",
-    type: "comment_post",
-    read_at: null,
-    user: {
-      userId: 7,
-      firstName: "Huyy",
-      lastName: "Trần",
-      nickName: "huytran",
-    },
-    sourceUser: {
-      userId: 169,
-      firstName: "huy18",
-      lastName: "tran",
-      nickName: "huytran18",
-    },
-    community: {
-      communityId: "40c54a12-9ade-4af9-ae6d-3985f1d6e552",
-      name: "huy test done 2",
-    },
-    additionalData: {
-      post_id: "ea0a42b4-9552-4cef-a418-64dbb309d776",
-      comment_id: "e0ca6bf1-2b17-40b8-9f41-3a5e2035824c",
-      community_id: "40c54a12-9ade-4af9-ae6d-3985f1d6e552",
-    },
-    createdAt: 1725522931173,
-  },
-  {
-    id: "86e2a281-d521-41cd-88c5-a031fc4f0039",
-    type: "like_post",
-    read_at: null,
-    user: {
-      userId: 7,
-      firstName: "Huyy",
-      lastName: "Trần",
-      nickName: "huytran",
-    },
-    sourceUser: {
-      userId: 169,
-      firstName: "huy18",
-      lastName: "tran",
-      nickName: "huytran18",
-    },
-    community: null,
-    additionalData: {
-      post_id: "ea0a42b4-9552-4cef-a418-64dbb309d776",
-      community_id: "40c54a12-9ade-4af9-ae6d-3985f1d6e552",
-    },
-    createdAt: 1725522883219,
-  },
-];
+import { getNotifications } from "@/api/notification";
 
 export default function Header(props: { isOnboarding: boolean }) {
   const [isOpen, toggleOpen] = useState(false);
@@ -75,10 +23,13 @@ export default function Header(props: { isOnboarding: boolean }) {
   const [photo, setPhoto] = useState<string>("");
   const { data: session } = useSession() as any;
   const modalRef = useRef<HTMLDivElement>(null);
+  const notiRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
   const t = useTranslations("NavBar");
   const userId = session?.user?.id;
   const { notifications } = useWebSocket();
+
+  // console.log("fetchNotis22", notis);
 
   useEffect(() => {
     console.log("yyy", notifications);
@@ -126,6 +77,9 @@ export default function Header(props: { isOnboarding: boolean }) {
     ) {
       setOpenSettings(false);
     }
+    if (notiRef.current && !notiRef.current.contains(event.target as Node)) {
+      toggleisNoti(false);
+    }
   };
 
   useEffect(() => {
@@ -155,7 +109,6 @@ export default function Header(props: { isOnboarding: boolean }) {
               }
               width={220}
               height={55}
-              // style={{ width: "140px", height: "50px" }}
               alt="logo"
               className={`${styles["logo-header"]}`}
             />
@@ -168,14 +121,17 @@ export default function Header(props: { isOnboarding: boolean }) {
           <i className="feather-message-circle text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </Link>
         <span
-          className={`me-2 menu-search-icon mob-menu ${notiClass}`}
-          // id="dropdownMenu"
-          // data-bs-toggle="dropdown"
-          // aria-expanded="false"
+          className={`me-2 menu-search-icon mob-menu ${notiClass} ${styles["icon-noti"]}`}
           onClick={() => toggleisNoti((prevState) => !prevState)}
         >
-          <span className="dot-count bg-warning"></span>
-          <i className="feather-bell  text-grey-900 font-md btn-round-sm bg-greylight"></i>
+          {notifications.length > 0 && (
+            <span
+              className={`dot-count ${styles["dot-count"]} bg-warning mob-menu top-0 right-0`}
+            >
+              .
+            </span>
+          )}
+          <i className="feather-bell text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </span>
         <span
           onClick={() => toggleActive((prevState) => !prevState)}
@@ -212,20 +168,25 @@ export default function Header(props: { isOnboarding: boolean }) {
       </form>
       <span
         className={`p-2 pointer text-center ms-auto menu-icon ${notiClass}`}
-        // id="dropdownMenu"
-        // data-bs-toggle="dropdown"
-        // aria-expanded="false"
         onClick={() => toggleisNoti((prevState) => !prevState)}
       >
-        <span className="dot-count bg-warning"></span>
+        {notifications.length > 0 && (
+          <span className="dot-count bg-warning"></span>
+        )}
+
         <i className="feather-bell font-xl text-current"></i>
       </span>
-      {/* Notification */}
       <div
-        className={`dropdown-menu ${styles["height-dropdown-menu"]} p-4 right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
-        // aria-labelledby="dropdownMenu"
+        ref={notiRef}
+        className={`dropdown-menu  right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
       >
-        <Notifications photo={photo} data={fakeData} />
+        {isNoti && (
+          <Notifications
+            photo={photo}
+            notifications={notifications}
+            toggleisNoti={toggleisNoti}
+          />
+        )}
       </div>
 
       <Darkbutton />
