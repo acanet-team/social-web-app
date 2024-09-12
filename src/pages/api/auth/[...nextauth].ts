@@ -51,7 +51,6 @@ const options: NextAuthOptions = {
       console.log(token);
       const guestTokenRes: any = await guestLogin();
       const guestToken = guestTokenRes.token;
-      console.log("asdas", account);
 
       if (guestToken && account?.provider === "credentials") {
         token.accessToken = guestToken;

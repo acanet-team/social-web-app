@@ -9,3 +9,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
+:root {
+  --account-center-position-bottom: 0px;
+  select {
+    --w3o-text-color: #000
+  }
+}
+
+
+
+@media  (max-width: 992px) {
+:root {
+  --account-center-position-bottom: 50px
+}
+}

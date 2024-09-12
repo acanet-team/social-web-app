@@ -3,23 +3,24 @@ import { type ISession } from "@/api/auth/auth.model";
 import { RouterProgressBar } from "@/components/RouterProgressBar";
 import Loading from "@/context/Loading";
 import { LoadingProvider } from "@/context/Loading/context";
-import RootLayout from "@/layout/root";
+import { WalletProvider } from "@/context/wallet.context";
 import "@/styles/global.scss";
+import { initWeb3Onboard } from "@/web3/onboard";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import type { NextPage } from "next";
 import { getSession, SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
 import type { AppProps } from "next/app";
 import App from "next/app";
-import { useRouter } from "next/navigation";
 import { setCookie } from "nookies";
-import { type ReactElement, type ReactNode } from "react";
+import { type JSX, type ReactElement, type ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { WebSocketProvider } from "@/context/websocketProvider";
 import { GuestTokenProvider } from "@/context/guestToken";
+import RootLayout from "@/layout/root";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -28,7 +29,7 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
-
+initWeb3Onboard();
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout ?? ((page) => <RootLayout>{page}</RootLayout>);
@@ -36,12 +37,12 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <SessionProvider refetchInterval={10}>
       <WebSocketProvider>
-        <GuestTokenProvider>
-          <NextIntlClientProvider
-            locale={"en"}
-            timeZone="Europe/Vienna"
-            messages={pageProps.messages}
-          >
+        <NextIntlClientProvider
+          locale={"en"}
+          timeZone="Europe/Vienna"
+          messages={pageProps.messages}
+        >
+          <WalletProvider>
             <ToastContainer />
             <LoadingProvider>
               <RouterProgressBar />
@@ -50,8 +51,8 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               </LocalizationProvider>
               <Loading />
             </LoadingProvider>
-          </NextIntlClientProvider>
-        </GuestTokenProvider>
+          </WalletProvider>
+        </NextIntlClientProvider>
       </WebSocketProvider>
     </SessionProvider>
   );
