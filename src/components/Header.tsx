@@ -24,10 +24,13 @@ export default function Header(props: { isOnboarding: boolean }) {
   const { data: session } = useSession() as any;
   const modalRef = useRef<HTMLDivElement>(null);
   const notiRef = useRef<HTMLDivElement>(null);
+  const iconNotiRef = useRef<HTMLDivElement>(null);
+  const iconNotiMiniRef = useRef<HTMLDivElement>(null);
+  const { notifications } = useWebSocket();
   const avatarRef = useRef<HTMLImageElement>(null);
   const t = useTranslations("NavBar");
   const userId = session?.user?.id;
-  const { notifications } = useWebSocket();
+  const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
 
   // console.log("fetchNotis22", notis);
 
@@ -77,7 +80,11 @@ export default function Header(props: { isOnboarding: boolean }) {
     ) {
       setOpenSettings(false);
     }
-    if (notiRef.current && !notiRef.current.contains(event.target as Node)) {
+    if (
+      !iconNotiRef?.current?.contains(event.target as Node) &&
+      !notiRef?.current?.contains(event.target as Node) &&
+      !iconNotiMiniRef?.current?.contains(event.target as Node)
+    ) {
       toggleisNoti(false);
     }
   };
@@ -123,8 +130,9 @@ export default function Header(props: { isOnboarding: boolean }) {
         <span
           className={`me-2 menu-search-icon mob-menu ${notiClass} ${styles["icon-noti"]}`}
           onClick={() => toggleisNoti((prevState) => !prevState)}
+          ref={iconNotiMiniRef}
         >
-          {notifications.length > 0 && (
+          {(notifications?.length > 0 || !reatAllNotis) && (
             <span
               className={`dot-count ${styles["dot-count"]} bg-warning mob-menu top-0 right-0`}
             >
@@ -169,9 +177,12 @@ export default function Header(props: { isOnboarding: boolean }) {
       <span
         className={`p-2 pointer text-center ms-auto menu-icon ${notiClass}`}
         onClick={() => toggleisNoti((prevState) => !prevState)}
+        ref={iconNotiRef}
       >
-        {notifications.length > 0 && (
-          <span className="dot-count bg-warning"></span>
+        {(notifications?.length > 0 || !reatAllNotis) && (
+          <span
+            className={`dot-count ${styles["dot-count"]} bg-warning`}
+          ></span>
         )}
 
         <i className="feather-bell font-xl text-current"></i>
@@ -184,6 +195,7 @@ export default function Header(props: { isOnboarding: boolean }) {
           photo={photo}
           notifications={notifications}
           toggleisNoti={toggleisNoti}
+          setReadAllNotis={setReadAllNotis}
         />
       </div>
 
