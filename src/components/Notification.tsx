@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { Notification, NotificationType } from "@/api/notification/model";
@@ -9,7 +9,7 @@ import DotWaveLoader from "./DotWaveLoader";
 import styles from "@/styles/modules/header.module.scss";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { useRouter } from "next/navigation";
-import DetailPostNoti from "./PostNotiDetal";
+import PostNotiDetail from "./PostNotiDetal";
 interface NotificationProps {
   photo: string;
   notifications: Notification[];
@@ -104,9 +104,9 @@ const Notifications: React.FC<NotificationProps> = ({
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
                 <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  {additionalData?.notificationCount === 1
+                  {Number(additionalData?.notificationCount) === 1
                     ? `liked your post`
-                    : `and ${additionalData?.notificationCount - 1} people liked your post`}
+                    : `and ${Number(additionalData?.notificationCount) - 1} people liked your post`}
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
@@ -131,9 +131,9 @@ const Notifications: React.FC<NotificationProps> = ({
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
                 <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  {additionalData?.notificationCount === 1
+                  {Number(additionalData?.notificationCount) === 1
                     ? `commented on your post`
-                    : `and ${additionalData?.notificationCount - 1} people commented on your post`}
+                    : `and ${Number(additionalData?.notificationCount) - 1} people commented on your post`}
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
@@ -253,7 +253,6 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponsVersionDocs<Notification> =
         await getNotifications(page, take);
-      console.log("notiiiiiiiiiiii", response);
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           response?.data?.docs,
@@ -282,12 +281,16 @@ const Notifications: React.FC<NotificationProps> = ({
     }
   };
 
+  const resetPostId = useCallback(() => {
+    setOpenPostModal("");
+  }, [openPostModal]);
+
   const readNotis = async (
     id: string,
     idDetail: string,
     notificationType: string,
   ) => {
-    const res = await readNoti(id);
+    await readNoti(id);
     if (
       notificationType === "like_post" ||
       notificationType === "comment_post"
@@ -346,12 +349,12 @@ const Notifications: React.FC<NotificationProps> = ({
         Notification
       </h4>
       <div>
-        {notis.length === 0 ? (
+        {notis?.length === 0 ? (
           <p className="font-xsss text-grey-500 mb-1 mt-0 fw-400 d-block">
             No Notifications Found
           </p>
         ) : (
-          notis.map((notification) => (
+          notis?.map((notification) => (
             <div
               key={notification?.id}
               style={{ height: "72px", padding: "4px" }}
@@ -407,7 +410,9 @@ const Notifications: React.FC<NotificationProps> = ({
           ))
         )}
         {isLoading && <DotWaveLoader />}
-        {openPostModal !== "" && <DetailPostNoti id={openPostModal} />}
+        {openPostModal && (
+          <PostNotiDetail id={openPostModal} resetPostId={resetPostId} />
+        )}
       </div>
     </div>
   );

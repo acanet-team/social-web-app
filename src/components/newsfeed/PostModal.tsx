@@ -224,7 +224,9 @@ function PostModal(props: {
             onClick={handleClose}
           ></i>
         )}
-        <h2 className="p-0 m-0 fs-4 fw-bold">{nickName}&apos;s post</h2>
+        <div className="w-100 d-flex justify-content-center">
+          <h2 className="p-0 m-0 fs-4 fw-bold">{nickName}&apos;s post</h2>
+        </div>
       </Modal.Header>
       <div className="border-top" />
       <Modal.Body className={styles["modal-content"]}>
@@ -376,14 +378,8 @@ function PostModal(props: {
             </div>
           </div>
           {/* All comments */}
-          {comments?.length === 0 && (
-            <div className="text-center pointer align-items-center text-dark lh-26 font-xss">
-              <span className="d-none-xs font-xss fw-600 text-grey-700">
-                {tComment("no_comment")}
-              </span>
-            </div>
-          )}
-          {isMobile && (
+          {isLoading && <DotWaveLoader />}
+          {!isLoading && comments?.length > 0 && (
             <Comments
               comments={comments}
               page={page}

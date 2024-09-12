@@ -497,6 +497,7 @@ export default function PostCard(props: {
       )}
       {isMobile && openMobileComments && (
         <PostModal
+          // notiPopup={false}
           show={openMobileComments}
           handleClose={handleClose}
           postId={postId}

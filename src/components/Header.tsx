@@ -32,7 +32,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   // console.log("fetchNotis22", notis);
 
   useEffect(() => {
-    console.log("yyy", notifications);
+    console.log("notifications", notifications);
   }, [notifications]);
 
   useEffect(() => {
@@ -180,13 +180,11 @@ export default function Header(props: { isOnboarding: boolean }) {
         ref={notiRef}
         className={`dropdown-menu  right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
       >
-        {isNoti && (
-          <Notifications
-            photo={photo}
-            notifications={notifications}
-            toggleisNoti={toggleisNoti}
-          />
-        )}
+        <Notifications
+          photo={photo}
+          notifications={notifications}
+          toggleisNoti={toggleisNoti}
+        />
       </div>
 
       <Darkbutton />
