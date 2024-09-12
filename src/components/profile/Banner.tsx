@@ -311,11 +311,6 @@ const Banner: React.FC<TabBannerProps> = ({
                 className="d-flex align-items-center"
                 style={{ minWidth: "170px" }}
               >
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  size="xl"
-                  style={{ color: "#56e137" }}
-                />
                 {dataUser.role.name === "broker" && (
                   <div
                     className="align-items-center position-relative"
@@ -325,6 +320,11 @@ const Banner: React.FC<TabBannerProps> = ({
                       gap: "2px",
                     }}
                   >
+                    <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      size="xl"
+                      style={{ color: "#56e137" }}
+                    />
                     <p className="font-xss fw-400 m-0 ms-1">
                       {t("Certified Broker")}
                     </p>
@@ -355,26 +355,28 @@ const Banner: React.FC<TabBannerProps> = ({
                 : tBase("follower")}
             </div>
           </div>
-          <div className="ms-sm-auto d-flex flex-column align-items-center justify-content-center mt-3 me-sm-4 me-0">
-            {/* Rank image */}
-            {/* <i className="bi bi-patch-check h1 m-0"></i> */}
-            <Ratings rating={5} size={18} />
-            <div className={`fw-bold ${styles["profile-rating__average"]}`}>
-              Rating: 4.7
+          {dataUser.role.name === "broker" && (
+            <div className="ms-sm-auto d-flex flex-column align-items-center justify-content-center mt-3 me-sm-4 me-0">
+              {/* Rank image */}
+              {/* <i className="bi bi-patch-check h1 m-0"></i> */}
+              <Ratings rating={5} size={18} />
+              <div className={`fw-bold ${styles["profile-rating__average"]}`}>
+                Rating: 4.7
+              </div>
+              <div
+                style={{ fontSize: "13px" }}
+                className="text-grey-600 text-center"
+              >
+                {tRating("rank_desc")}
+              </div>
+              <div
+                style={{ fontSize: "13px" }}
+                className="text-grey-600 text-center"
+              >
+                {tRating("rank_desc_guarantee")}
+              </div>
             </div>
-            <div
-              style={{ fontSize: "13px" }}
-              className="text-grey-600 text-center"
-            >
-              {tRating("rank_desc")}
-            </div>
-            <div
-              style={{ fontSize: "13px" }}
-              className="text-grey-600 text-center"
-            >
-              {tRating("rank_desc_guarantee")}
-            </div>
-          </div>
+          )}
         </div>
 
         {!role && (

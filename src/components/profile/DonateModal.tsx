@@ -51,7 +51,7 @@ function DonateModal(props: { show: boolean; handleClose: () => void }) {
 
   return (
     <Modal
-      id={styles["wallet-modal"]}
+      id={styles["donate-modal"]}
       fullscreen={fullscreen}
       show={show}
       onHide={handleClose}

@@ -13,7 +13,7 @@ export default function Appfooter() {
       setNickName(session?.user?.userProfile?.nickname);
       setUserInfo({
         ...session.user,
-        avatar: session.user.photo.path || "/assets/images/user.png",
+        avatar: session.user?.photo?.path || "/assets/images/user.png",
       });
     }
   }, [session]);

@@ -1,30 +1,32 @@
-.group-tabs {
+#user-profile .group-tabs {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-.group-tabs .button-tab {
+#user-profile .group-tabs .button-tab {
   width: 100%;
+  flex: 1;
   height: 50px;
   opacity: 0.5;
   font-weight: 700;
   border: none !important;
   position: relative;
   float: inline-start;
+  text-align: center;
 }
 
-// .group-tabs .button-tab:hover {
-//   // cursor: pointer;
-// }
+#user-profile .group-tabs .button-tab p {
+  width: 100%;
+}
 
-.tab-active {
+#user-profile .tab-active {
   opacity: 1 !important;
   font-weight: 700;
   border: none !important;
 }
 
-.tab-active::before {
+#user-profile .tab-active::before {
   content: "";
   width: 60%;
   border: 2px solid var(--theme-color-text-secondary);
@@ -35,17 +37,17 @@
   color: #000000;
 }
 
-.cover-image-edit__btn {
+#user-profile .cover-image-edit__btn {
   top: 10px;
   right: 10px;
 }
 
-.avatar-image-edit__btn {
+#user-profile .avatar-image-edit__btn {
   bottom: 10px;
   right: 10px;
 }
 
-.image-edit__btn {
+#user-profile .image-edit__btn {
   height: 35px;
   width: 35px;
   line-height: 35px;
@@ -62,11 +64,11 @@
     rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.image-edit__btn::before {
+#user-profile .image-edit__btn::before {
   color: #0505059d;
 }
 
-.image-edit__btn:hover::before {
+#user-profile .image-edit__btn:hover::before {
   color: #111;
 }
 
@@ -187,5 +189,17 @@
 
   .group-tabs {
     justify-content: space-evenly;
+  }
+
+  #user-profile .group-tabs {
+    font-size: 14px !important;
+  }
+
+  #user-profile .group-tabs .button-tab {
+    flex-basis: 1 !important;
+  }
+
+  #user-profile .button-tab__communities {
+    flex-grow: 2 !important;
   }
 }

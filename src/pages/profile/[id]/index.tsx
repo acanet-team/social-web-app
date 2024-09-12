@@ -11,6 +11,7 @@ import TabGroupProfile from "@/components/profile/TabGroupProfile";
 import TabAbout from "@/components/profile/TabAbout";
 import Banner from "@/components/profile/Banner";
 import TabRating from "@/components/profile/TabRating";
+import Wallet from "@/components/wallets/Wallet";
 
 const TAKE = 10;
 
@@ -42,8 +43,8 @@ export default function Profile({
   const [role, setRole] = useState(false);
   const [initialFetch, setInitialFetch] = useState(false);
   const [switchTab, setSwitchTab] = useState<boolean>(false);
-
   const [curTab, setCurTab] = useState<string>();
+  console.log("addwdw", dataUser.role.name);
 
   useEffect(() => {
     if (session) {
@@ -63,7 +64,6 @@ export default function Profile({
 
   useEffect(() => {
     if (curTab === "about" && switchTab) {
-      console.log("yyyyyy");
       fetchProfileData();
     }
     // setInitialFetch(false);
@@ -120,6 +120,8 @@ export default function Profile({
       setCurTab("communities");
     } else if (chosenTab === t("about")) {
       setCurTab("about");
+    } else if (chosenTab === t("Wallet")) {
+      setCurTab("wallet");
     } else {
       setCurTab("rating");
     }
@@ -127,17 +129,17 @@ export default function Profile({
 
   const [tabClass, setTabClass] = useState<string>("");
 
-  useEffect(() => {
-    const totalTabs = dataUser.role.name === "broker" ? 3 : 2;
-    if (totalTabs === 2) {
-      setTabClass(styles["two-tabs"] || "");
-    } else if (totalTabs === 3) {
-      setTabClass(styles["three-tabs"] || "");
-    }
-  }, [dataUser.role.name]);
+  // useEffect(() => {
+  //   const totalTabs = dataUser.role.name === "broker" ? 3 : 2;
+  //   if (totalTabs === 2) {
+  //     setTabClass(styles["two-tabs"] || "");
+  //   } else if (totalTabs === 3) {
+  //     setTabClass(styles["three-tabs"] || "");
+  //   }
+  // }, [dataUser.role.name]);
 
   return (
-    <>
+    <div id={styles["user-profile"]}>
       <div
         className="card border-0 shadow-xss"
         style={{
@@ -170,16 +172,24 @@ export default function Profile({
             </div>
           )}
           <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.Communities ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            className={`${styles["button-tab"]} ${styles["button-tab__communities"]} ${curTab === TabPnum.Communities ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
           >
             <p>{t("Communities")}</p>
           </div>
+          {dataUser.role.name === "broker" && (
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Rating ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>{t("Rating")}</p>
+            </div>
+          )}
           <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.Rating ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            className={`${styles["button-tab"]} ${curTab === TabPnum.Wallet ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
           >
-            <p>{t("Rating")}</p>
+            <p>{t("Wallet")}</p>
           </div>
         </div>
       </div>
@@ -217,7 +227,8 @@ export default function Profile({
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
         <TabRating brokerData={dataUser} />
       )}
-    </>
+      {curTab === TabPnum.Wallet && <Wallet />}
+    </div>
   );
 }
 export async function getServerSideProps(context: NextPageContext) {
