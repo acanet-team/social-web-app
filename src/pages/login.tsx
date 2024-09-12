@@ -47,8 +47,16 @@ const LoginPage: NextPageWithLayout = () => {
     }
   }, [session]);
 
-  const onSignInAsGuestHandler = async () => {
-    // signIn();
+  const onSignInAsGuestHandler = async (
+    e: React.MouseEvent<HTMLDivElement>,
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    try {
+      await signIn("credentials", { redirect: false }, {});
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <div className="main-wrap">

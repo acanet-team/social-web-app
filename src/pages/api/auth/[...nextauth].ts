@@ -13,24 +13,18 @@ import { trigger } from "@spotlightjs/spotlight";
 import { useGuestToken } from "@/context/guestToken";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { randomUUID } from "crypto";
+import { truncate } from "fs/promises";
 
 const options: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
-    }),
     CredentialsProvider({
-      id: "guest-login",
       name: "guest",
       credentials: {},
-      async authorize(credentials, req): Promise<User | null> {
+      async authorize(credentials, req): Promise<any> {
+        console.log("credentials", credentials);
         // generate a random name and email for this anonymous user
         const unique_uuid: string = randomUUID();
+        // return true
         return {
           id: unique_uuid,
           email: `${unique_uuid.toLowerCase()}@example.com`,
@@ -38,6 +32,14 @@ const options: NextAuthOptions = {
           image: "",
         };
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
     }),
   ],
   secret: process.env.NEXT_AUTH_SECRET,
@@ -47,19 +49,25 @@ const options: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, trigger }: any) {
       console.log(token);
-      // const guestTokenRes: any = await guestLogin();
-      // const guestToken = guestTokenRes.token;
+      const guestTokenRes: any = await guestLogin();
+      const guestToken = guestTokenRes.token;
+      console.log("asdas", account);
 
-      // if (guestToken) {
-      //   token.accessToken = guestToken;
-      //   token.needToLogin = false;
-      //   httpClient.setAuthorization(guestToken);
-      //   if (token.refreshTokenExpires < Date.now()) {
-      //     token.needToLogin = true;
-      //     return token;
-      //   }
-      //   return token;
-      // }
+      if (guestToken && account?.provider === "credentials") {
+        token.accessToken = guestToken;
+        token.needToLogin = false;
+        httpClient.setAuthorization(guestToken);
+        const userData = await getMe();
+        token.user = {
+          ...userData.user,
+          ...userData,
+        };
+        if (token.refreshTokenExpires < Date.now()) {
+          token.needToLogin = true;
+          return token;
+        }
+        return token;
+      }
 
       if (trigger === "update") {
         httpClient.setAuthorization(token.accessToken);
