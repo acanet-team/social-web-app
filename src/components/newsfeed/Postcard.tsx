@@ -497,9 +497,11 @@ export default function PostCard(props: {
       )}
       {isMobile && openMobileComments && (
         <PostModal
+          // notiPopup={false}
           show={openMobileComments}
           handleClose={handleClose}
           postId={postId}
+          userId={userId}
           nickName={nickName}
           avatar={avatar}
           content={content}
@@ -512,7 +514,6 @@ export default function PostCard(props: {
           groupName={groupName}
           groupOwnerId={groupOwnerId}
           groupId={groupId}
-          userId={userId}
           like={likeNum}
           comment={commentNum}
           liked={isLiked}

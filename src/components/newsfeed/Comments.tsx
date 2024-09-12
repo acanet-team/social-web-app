@@ -45,7 +45,6 @@ const Comments = forwardRef(
     const tComment = useTranslations("Comment");
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-    // console.log('1111', props.comments);
     const fetchComments = async () => {
       setIsLoading(true);
       try {

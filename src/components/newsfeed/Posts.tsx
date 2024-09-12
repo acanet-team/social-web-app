@@ -25,6 +25,7 @@ export default function Posts(props: {
     useState<boolean>(false);
   const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const t = useTranslations("Post");
+
   // const post = usePostStore((state) => state.posts);
 
   // useEffect(() => {

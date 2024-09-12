@@ -63,6 +63,12 @@ export type ResponseDto<T> = {
   };
 };
 
+export type ResponseGetOneDto<T> = {
+  status: number;
+  message: string;
+  data: T;
+};
+
 export interface IPost {
   id: string;
   content: string;

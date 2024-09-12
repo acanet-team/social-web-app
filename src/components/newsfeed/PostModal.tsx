@@ -37,7 +37,7 @@ function PostModal(props: {
   groupOwnerId: number | "";
   groupId: string;
   userId: number | undefined;
-  setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
+  setPostHandler?: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
   updateLike: React.Dispatch<React.SetStateAction<string>>;
   updateComments: React.Dispatch<React.SetStateAction<string>>;
   updateIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -162,7 +162,8 @@ function PostModal(props: {
     try {
       // Calling api;
       await deletePost(postId);
-      setPostHandler((prev) => prev.filter((post) => post.id !== postId));
+      setPostHandler &&
+        setPostHandler((prev) => prev.filter((post) => post.id !== postId));
       throwToast("Post was successfully deleted", "success");
     } catch (err) {
       console.log(err);
@@ -223,7 +224,9 @@ function PostModal(props: {
             onClick={handleClose}
           ></i>
         )}
-        <h2 className="p-0 m-0 fs-4 fw-bold">{nickName}&apos;s post</h2>
+        <div className="w-100 d-flex justify-content-center">
+          <h2 className="p-0 m-0 fs-4 fw-bold">{nickName}&apos;s post</h2>
+        </div>
       </Modal.Header>
       <div className="border-top" />
       <Modal.Body className={styles["modal-content"]}>
@@ -375,14 +378,8 @@ function PostModal(props: {
             </div>
           </div>
           {/* All comments */}
-          {comments?.length === 0 && (
-            <div className="text-center pointer align-items-center text-dark lh-26 font-xss">
-              <span className="d-none-xs font-xss fw-600 text-grey-700">
-                {tComment("no_comment")}
-              </span>
-            </div>
-          )}
-          {isMobile && (
+          {isLoading && <DotWaveLoader />}
+          {!isLoading && comments?.length > 0 && (
             <Comments
               comments={comments}
               page={page}
