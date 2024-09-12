@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { BrokerProfile, User, UserProfile } from "@/api/profile/model";
 import { useTranslations } from "next-intl";
@@ -8,6 +8,11 @@ import { throwToast } from "@/utils/throw-toast";
 import { ImageCropModal } from "@/components/ImageCropModal";
 import { createGetBrokersRequest, followABroker } from "@/api/onboard";
 import Ratings from "@/components/Ratings";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tooltip from "@mui/material/Tooltip";
+import DonateModal from "./DonateModal";
+
 interface TabBannerProps {
   role: boolean;
   dataUser: User;
@@ -27,9 +32,9 @@ const Banner: React.FC<TabBannerProps> = ({
   const t = useTranslations("MyProfile");
   const tRating = useTranslations("Rating");
   const tBase = useTranslations("Base");
-  const [textHover, setTextHover] = useState(false);
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openDonate, setOpenDonate] = useState<boolean>(false);
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -188,6 +193,10 @@ const Banner: React.FC<TabBannerProps> = ({
     }
   };
 
+  const handleClose = useCallback(() => {
+    setOpenDonate(false);
+  }, []);
+
   return (
     <div style={{ paddingRight: "16px", paddingLeft: "16px" }}>
       <div
@@ -231,15 +240,7 @@ const Banner: React.FC<TabBannerProps> = ({
           </>
         )}
 
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-30px",
-            left: "30px",
-            width: "119px",
-            height: "119px",
-          }}
-        >
+        <div className={styles["profile-avatar"]}>
           <Image
             src={
               previewAvatar ? previewAvatar : `/assets/images/profile/ava.png`
@@ -284,92 +285,91 @@ const Banner: React.FC<TabBannerProps> = ({
           />
         )}
       </div>
-      <div style={{ marginLeft: "30px" }}>
+      <div className={styles["banner-info"]}>
         <div
           style={{
             marginTop: "10px",
           }}
-          className="w-100 d-flex justify-content-between align-items-start"
+          className="w-100 d-flex flex-sm-row flex-column justify-content-between align-items-sm-start align-items-center"
         >
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "16px",
-              marginTop: "30px",
-            }}
-          >
-            <div>
-              <h2 className="m-0 fw-700 font-md">
-                {dataUser?.firstName} {dataUser?.lastName}
-              </h2>
-              <div className="font-xsss text-gray m-0">
-                @{dataUserProfile?.nickName}
-              </div>
-            </div>
+          <div className="w-100">
             <div
+              className="d-flex align-items-sm-start align-items-center flex-md-row flex-column gap-md-3 gap-2 mb-2"
               style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "2px",
+                marginTop: "30px",
               }}
             >
-              <Image
-                src="/assets/images/profile/icons8-tick-192.png"
-                width={24}
-                height={24}
-                alt=""
-                className=""
-                style={{
-                  objectFit: "cover",
-                }}
-              />
-              {dataUser.role.name === "broker" && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "2px",
-                  }}
-                >
-                  <p className="font-xss fw-400 m-0">{t("Certified Broker")}</p>
-                  <Image
-                    onMouseEnter={() => setTextHover(true)}
-                    onMouseLeave={() => setTextHover(false)}
-                    src="/assets/images/profile/icons8-info-50.png"
-                    width={13}
-                    height={13}
-                    alt=""
-                    className=""
-                    style={{
-                      objectFit: "cover",
-                      backgroundColor: "white",
-                    }}
-                  />
-                  {textHover && (
-                    <p className="text-hover font-xssss">
-                      {t("This broker has been verified by Acanet")}
-                    </p>
-                  )}
+              <div className="d-flex flex-column align-items-center align-items-sm-start">
+                <h2 className={`m-0 fw-700 font-md ${styles["profile-name"]}`}>
+                  {dataUser?.firstName} {dataUser?.lastName}
+                </h2>
+                <div className="font-xsss text-gray m-0">
+                  @{dataUserProfile?.nickName}
                 </div>
-              )}
+              </div>
+              <div
+                className="d-flex align-items-center"
+                style={{ minWidth: "170px" }}
+              >
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  size="xl"
+                  style={{ color: "#56e137" }}
+                />
+                {dataUser.role.name === "broker" && (
+                  <div
+                    className="align-items-center position-relative"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "2px",
+                    }}
+                  >
+                    <p className="font-xss fw-400 m-0 ms-1">
+                      {t("Certified Broker")}
+                    </p>
+                    <Tooltip
+                      title={t("This broker has been verified by Acanet")}
+                    >
+                      <Image
+                        src="/assets/images/profile/icons8-info-50.png"
+                        width={13}
+                        height={13}
+                        alt=""
+                        className="position-absolute top-0"
+                        style={{
+                          objectFit: "cover",
+                          backgroundColor: "white",
+                          right: "-15px",
+                        }}
+                      />
+                    </Tooltip>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="font-xss fw-600 text-gray-follow text-center text-sm-start">
+              {numbersFollowers}{" "}
+              {Number(numbersFollowers) > 1
+                ? t("followers")
+                : tBase("follower")}
             </div>
           </div>
-          <div className="ms-auto d-flex flex-column align-items-center justify-content-center">
+          <div className="ms-sm-auto d-flex flex-column align-items-center justify-content-center mt-3 me-sm-4 me-0">
             {/* Rank image */}
             {/* <i className="bi bi-patch-check h1 m-0"></i> */}
             <Ratings rating={5} size={18} />
-            <div style={{ fontSize: "15px" }} className="fw-bold">
+            <div className={`fw-bold ${styles["profile-rating__average"]}`}>
               Rating: 4.7
             </div>
             <div
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: "13px" }}
               className="text-grey-600 text-center"
             >
               {tRating("rank_desc")}
             </div>
             <div
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: "13px" }}
               className="text-grey-600 text-center"
             >
               {tRating("rank_desc_guarantee")}
@@ -377,26 +377,14 @@ const Banner: React.FC<TabBannerProps> = ({
           </div>
         </div>
 
-        <div className="font-xss fw-600 text-gray-follow">
-          {numbersFollowers}{" "}
-          {Number(numbersFollowers) > 1 ? t("followers") : tBase("follower")}
-        </div>
         {!role && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "10px",
-              marginTop: "15px",
-            }}
-          >
+          <div className="d-flex flex-wrap gap-sm-3 gap-2 mt-md-2 mt-3 mt-3 justify-content-sm-start justify-content-center">
             {dataUser.role.name === "broker" && (
               <>
                 <button
                   onClick={(e) => onFollowBrokerHandler(e, dataUser.id)}
-                  className="px-3 "
+                  className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-followed__btn"]}`}
                   style={{
-                    backgroundColor: isFollowing ? "#0A66C2" : "#34465d",
                     borderRadius: "16px",
                     border: "0",
                     display: "flex",
@@ -404,7 +392,7 @@ const Banner: React.FC<TabBannerProps> = ({
                     gap: "2px",
                     alignItems: "center",
                     justifyContent: "center",
-                    width: "155px",
+                    width: "130px",
                   }}
                 >
                   {isFollowing ? (
@@ -438,16 +426,16 @@ const Banner: React.FC<TabBannerProps> = ({
               </>
             )}
             <button
-              className="px-3 bg-white"
+              className="px-3 btn bg-white"
               style={{
                 borderRadius: "16px",
-                borderColor: "#0A66C2",
+                border: "1px solid #0A66C2",
                 display: "flex",
                 flexDirection: "row",
                 gap: "2px",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "155px",
+                width: "130px",
               }}
             >
               {/* <h4 className="text-blue-button m-0" > 
@@ -469,6 +457,16 @@ const Banner: React.FC<TabBannerProps> = ({
                 {t("messages")}
               </div>
             </button>
+
+            {dataUser.role.name === "broker" && (
+              <button
+                className={`${styles["profile-donate__btn"]} btn`}
+                onClick={() => setOpenDonate(true)}
+              >
+                <i className="bi bi-cash-coin text-success me-1"></i>
+                <span>{t("donate")}</span>
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -479,6 +477,9 @@ const Banner: React.FC<TabBannerProps> = ({
           marginTop: "20px",
         }}
       />
+      {openDonate && (
+        <DonateModal handleClose={handleClose} show={openDonate} />
+      )}
     </div>
   );
 };

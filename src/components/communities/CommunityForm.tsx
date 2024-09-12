@@ -37,6 +37,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   setCommunity,
 }) => {
   const t = useTranslations("Community");
+  const tProfile = useTranslations("MyProfile");
   const [groupInfo, setgroupInfo] = useState<ICommunity>({} as ICommunity);
   const { showLoading, hideLoading } = useLoading();
   const [uploadedCoverImage, setUploadedCoverImage] = useState<File | null>(
@@ -110,7 +111,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
               );
               // Convert string to number before validation
               const numValue = Number(originalValue);
-              console.log("Transformed Value:", numValue, typeof numValue);
+              // console.log("Transformed Value:", numValue, typeof numValue);
               return isNaN(numValue) ? 0 : numValue;
             })
             .min(0.01, t("error_joining_fee"))
@@ -451,6 +452,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 inputProps={{
                   step: "0.01",
                 }}
+                placeholder={tProfile("donate_input")}
                 // onBlur={(e) =>
                 //   formik.setFieldValue(
                 //     "feeNum",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { CommunityJoiningStatus } from "@/types/enum";
 import Link from "next/link";
@@ -6,6 +6,8 @@ import { joinCommunity } from "@/api/community";
 import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/communities.module.scss";
 import { useSession } from "next-auth/react";
+import { getMe } from "@/api/auth";
+import WalletConnectionModal from "../wallets/WalletConnectionModal";
 
 export default function CommunityCard(props: {
   ownerId: number;
@@ -45,6 +47,8 @@ export default function CommunityCard(props: {
   const tBase = useTranslations("Base");
   const [joiningStatus, setJoiningStatus] = useState(communityStatus);
   const [curUser, setCurUser] = useState<number>();
+  const [openWalletConnection, setOpenWalletConnection] =
+    useState<boolean>(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -55,14 +59,23 @@ export default function CommunityCard(props: {
 
   const onJoinCommunityHandler = async (e: any, groupId: string) => {
     try {
-      // Calling api
-      const res = await joinCommunity({ communityId: groupId });
-      console.log("to join", res);
-      setJoiningStatus("pending_request");
+      // Check wallet availability
+      const userRes = await getMe();
+      if (!userRes.user?.wallet_address && fee > 0) {
+        setOpenWalletConnection(true);
+      }
+      if (fee === 0) {
+        await joinCommunity({ communityId: groupId });
+        setJoiningStatus("pending_request");
+      }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const handleClose = useCallback(() => {
+    setOpenWalletConnection(false);
+  }, []);
 
   return (
     <div className="card d-block border-0 shadow-md h-100 rounded-3 overflow-hidden">
@@ -158,6 +171,12 @@ export default function CommunityCard(props: {
         </div>
         <p>{description}</p>
       </div>
+      {openWalletConnection && (
+        <WalletConnectionModal
+          handleClose={handleClose}
+          show={openWalletConnection}
+        />
+      )}
     </div>
   );
 }

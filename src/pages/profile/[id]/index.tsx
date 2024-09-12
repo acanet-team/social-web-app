@@ -139,7 +139,7 @@ export default function Profile({
   return (
     <>
       <div
-        className="card"
+        className="card border-0 shadow-xss"
         style={{
           background: "#fff",
           paddingTop: "16px",

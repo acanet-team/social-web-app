@@ -48,15 +48,7 @@ const LoginPage: NextPageWithLayout = () => {
   }, [session]);
 
   const onSignInAsGuestHandler = async () => {
-    const res: any = await guestLogin();
-    console.log("guest", res);
-    if (setGuestToken) {
-      setGuestToken(res.token);
-      // signIn(undefined, { callbackUrl: "/" });
-      // if (guestToken && Object.keys(guestToken).length !== 0) {
-      signIn();
-      // }
-    }
+    // signIn();
   };
   return (
     <div className="main-wrap">

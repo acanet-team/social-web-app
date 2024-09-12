@@ -1,26 +1,17 @@
 .group-tabs {
   width: 100%;
   display: flex;
-  // margin-left: 40px;
+  justify-content: space-between;
 }
 
 .group-tabs .button-tab {
-  // width: 33.3%;
+  width: 100%;
   height: 50px;
   opacity: 0.5;
   font-weight: 700;
   border: none !important;
   position: relative;
   float: inline-start;
-  align-items: center;
-}
-
-.group-tabs.two-tabs .button-tab {
-  width: 50%;
-}
-
-.group-tabs.three-tabs .button-tab {
-  width: 33.3%;
 }
 
 // .group-tabs .button-tab:hover {
@@ -79,13 +70,51 @@
   color: #111;
 }
 
+.profile-following__btn {
+  background-color: var(--theme-color-main);
+}
+
+.profile-followed__btn {
+  background-color: var(--theme-color-text-secondary);
+}
+
+.profile-donate__btn {
+  width: 130px;
+  border: 1px solid #137d4a;
+  border-radius: 16px;
+}
+
+.profile-donate__btn span,
+.profile-donate__btn i::before {
+  color: #137d4a;
+  font-weight: 600;
+}
+
+.banner-info {
+  margin-left: 24px;
+}
+
+.profile-avatar {
+  position: absolute;
+  bottom: -30px;
+  left: 24px;
+  width: 119px;
+  height: 119px;
+}
+
+.profile-rating__average {
+  font-size: 15px;
+}
+
 :global(.theme-dark) {
   .tab-active::before {
     border: 2px solid #fff;
   }
+
   .icon-profile {
     color: white !important;
   }
+
   .image-edit__btn {
     background-color: rgb(36, 37, 38);
   }
@@ -97,7 +126,20 @@
   .image-edit__btn:hover::before {
     color: var(--light);
   }
+
+  .profile-following__btn, .profile-followed__btn, .profile-donate__btn {
+    background-color: var(--theme-color-shade);
+  }
+
+  .profile-donate__btn i:before {
+    color: var(--light);
+  }
+
+  .profile-rating__average {
+    color: var(--light);
+  }
 }
+
 .profile-img {
   object-fit: cover;
   border-radius: 100%;
@@ -128,5 +170,22 @@
 
   .modal-header {
     padding: 25px;
+  }
+
+  .banner-info {
+    margin-left: 15px;
+  }
+
+  .profile-name {
+    font-size: 20px !important;
+  }
+
+  .profile-avatar {
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+  .group-tabs {
+    justify-content: space-evenly;
   }
 }
