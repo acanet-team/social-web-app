@@ -152,6 +152,7 @@ const License = ({
                   display: "flex",
                   flexDirection: "row",
                   gap: "12px",
+                  alignItems: "center",
                 }}
               >
                 <Image

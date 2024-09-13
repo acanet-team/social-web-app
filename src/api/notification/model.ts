@@ -11,7 +11,8 @@ export type NotificationType =
 export type Notification = {
   id: string;
   type: NotificationType;
-  read_at: string | null;
+  read_at: number | null;
+  notiAt: number | null;
   user: {
     userId: number;
     firstName: string;

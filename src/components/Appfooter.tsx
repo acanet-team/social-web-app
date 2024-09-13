@@ -8,9 +8,10 @@ export default function Appfooter() {
   const { data: session } = useSession() as any;
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
   const [nickName, setNickName] = useState();
+  const userId = session?.user?.id;
   useEffect(() => {
     if (session) {
-      setNickName(session?.user?.userProfile?.nickname);
+      setNickName(session?.user?.userProfile?.nickName);
       setUserInfo({
         ...session.user,
         avatar: session.user?.photo?.path || "/assets/images/user.png",
@@ -35,7 +36,10 @@ export default function Appfooter() {
       <Link href="/shop2" className="nav-content-bttn">
         <i className="feather-trending-up"></i>
       </Link>
-      <Link href={`/profile/${nickName}`} className="nav-content-bttn">
+      <Link
+        href={nickName ? `/profile/${nickName}` : "#"}
+        className="nav-content-bttn"
+      >
         {userInfo.avatar && (
           <Image
             src={userInfo.avatar}
