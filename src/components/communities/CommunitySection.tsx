@@ -360,6 +360,7 @@ export default function CommunitySection(props: {
               handleShow={handleShow}
               show={show}
               setCommunities={setCommunityArr}
+              brokerId={brokerId || undefined}
             />
           )}
         </div>

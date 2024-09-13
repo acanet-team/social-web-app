@@ -1,3 +1,5 @@
+import type { UserProfile } from "../profile/model";
+
 export interface ISession {
   user: IUser;
   accessToken: string;
@@ -32,7 +34,34 @@ export interface IUser {
   avatar: string;
   isBroker: boolean;
   location: string;
+  userProfile: UserProfile;
+  wallet_address: string | null;
 }
+
+// export interface IUser {
+//   id: number;
+//   email: string;
+//   provider: string;
+//   socialId: string;
+//   fullName: string;
+//   nickName: string;
+//   avatar: string;
+//   isBroker: boolean;
+//   location: string;
+//   user: {
+//     createdAt: string;
+//     updatedAt: string;
+//     deletedAt: null;
+//     onboarding_data: OnboardingData;
+//     photo: Photo;
+//     role: Role;
+//     status: Role;
+//     firstName: string;
+//     lastName: string;
+//   }
+//   userProfile: UserProfile;
+//   wallet_address: string | null;
+// }
 
 interface OnboardingData {
   step: string;

@@ -19,10 +19,15 @@ import type { ICommunity } from "@/api/community/model";
 import Image from "next/image";
 import { ImageCropModal } from "@/components/ImageCropModal";
 import styles from "@/styles/modules/communityForm.module.scss";
+import { useWeb3 } from "@/context/wallet.context";
+import { uuid } from "uuidv4";
+import { ethers } from "ethers";
+import "dotenv/config";
 
 interface CommunityFormProps {
   isEditing: string;
   show: boolean;
+  brokerId?: number;
   handleClose: () => void;
   handleShow?: () => void;
   setCommunities?: React.Dispatch<React.SetStateAction<ICommunity[]>>;
@@ -33,6 +38,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   handleClose,
   show,
   isEditing,
+  brokerId,
   setCommunities,
   setCommunity,
 }) => {
@@ -56,6 +62,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
+  const { communityContract, account, provider, connectWallet } = useWeb3();
 
   const fetchCommunity = async () => {
     try {
@@ -128,7 +135,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
     },
     enableReinitialize: true,
     validationSchema,
-    onSubmit: async (values, { setFieldError }) => {
+    onSubmit: async (values) => {
       const communityData = new FormData();
       communityData.append("name", values.name?.trim());
       communityData.append("description", values.description?.trim());
@@ -160,6 +167,35 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             );
           setCommunity && setCommunity(editedCommunity.data);
         } else {
+          if (values.feeNum) {
+            connectWallet();
+            // Create group with fee on smart contract
+            const groupId = uuid();
+            // console.log('group fee', ethers.utils.parseEther(values.feeNum.toString()).toString());
+            console.log(communityContract);
+            console.log("group", groupId);
+            console.log("broker", brokerId);
+            console.log(
+              "fee",
+              ethers.utils.parseEther(values.feeNum.toString()).toString(),
+            );
+            const newGroupContract = await communityContract.createGroup(
+              groupId.toString(),
+              brokerId?.toString(),
+              ethers.utils.parseEther(values.feeNum.toString()).toString(),
+              {
+                from: account?.address,
+                gasLimit: ethers.utils.parseEther(
+                  process.env.GAS_LIMIT?.toString() || "0.0000000000001",
+                ),
+              },
+            );
+            console.log("new group", newGroupContract);
+
+            const awaits = await newGroupContract.wait();
+            console.log(awaits);
+          }
+          // Create group on DB
           const newCommunity = await createCommunity(communityData);
           setCommunities &&
             setCommunities(

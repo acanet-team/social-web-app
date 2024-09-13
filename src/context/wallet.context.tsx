@@ -12,6 +12,8 @@ import React, {
 } from "react";
 import rateAbi from "@/web3/abi/rate.json";
 import communityAbi from "@/web3/abi/community.json";
+import { useSession } from "next-auth/react";
+import { updateWalletAddress } from "@/api/wallet";
 
 interface WalletContextType {
   chains: Chain[];
@@ -70,7 +72,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   const connectedWallets = useWallets();
   const [account, setAccount] = useState<Account | null>(null);
   const [signer, setSigner] = useState<any>(null);
-
+  const { data: session, update } = useSession();
   const [provider, setProvider] = useState<any>(
     new ethers.providers.JsonRpcProvider(
       "	https://mevm.devnet.imola.movementlabs.xyz",
@@ -89,6 +91,19 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     ),
   );
 
+  const updateUserWalletAddress = (address: string) => {
+    // Update address in DB
+    updateWalletAddress(address);
+    // Update wallet address in session
+    update({
+      ...session,
+      user: {
+        ...session?.user,
+        wallet_address: address,
+      },
+    });
+  };
+
   useEffect(() => {
     const rate = new ethers.Contract(
       contracts.Rate[30732],
@@ -98,7 +113,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     setRateContract(rate);
     const community = new ethers.Contract(
       contracts.Rate[30732],
-      rateAbi as any,
+      communityAbi as any,
       signer || provider,
     );
     setCommunityContract(community);
@@ -113,6 +128,10 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         balance: wallet?.accounts[0]?.balance as any,
         ens: { name, avatar: avatar?.url },
       });
+      // if user has no wallet address in DB
+      if (!session?.user?.wallet_address) {
+        updateUserWalletAddress(wallet?.accounts?.[0]?.address as string);
+      }
     }
   }, [wallet]);
 
@@ -129,6 +148,9 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   }, [wallet]);
 
   const connectWallet = () => {
+    if (account) {
+      return;
+    }
     connect({});
     setTimeout(() => {
       (document.querySelector("onboard-v2") as any).shadowRoot.append(

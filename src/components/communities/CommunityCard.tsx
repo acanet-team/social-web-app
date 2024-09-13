@@ -8,6 +8,10 @@ import styles from "@/styles/modules/communities.module.scss";
 import { useSession } from "next-auth/react";
 import { getMe } from "@/api/auth";
 import WalletConnectionModal from "../wallets/WalletConnectionModal";
+import { useWeb3 } from "@/context/wallet.context";
+import { ethers } from "ethers";
+import "dotenv/config";
+import { joinPaidCommunity } from "@/api/wallet";
 
 export default function CommunityCard(props: {
   ownerId: number;
@@ -47,9 +51,8 @@ export default function CommunityCard(props: {
   const tBase = useTranslations("Base");
   const [joiningStatus, setJoiningStatus] = useState(communityStatus);
   const [curUser, setCurUser] = useState<number>();
-  const [openWalletConnection, setOpenWalletConnection] =
-    useState<boolean>(false);
   const { data: session } = useSession();
+  const { connectWallet, communityContract, account } = useWeb3();
 
   useEffect(() => {
     if (session) {
@@ -59,23 +62,36 @@ export default function CommunityCard(props: {
 
   const onJoinCommunityHandler = async (e: any, groupId: string) => {
     try {
-      // Check wallet availability
-      const userRes = await getMe();
-      if (!userRes.user?.wallet_address && fee > 0) {
-        setOpenWalletConnection(true);
+      if (fee > 0) {
+        connectWallet();
+        // Calling smart contract
+        console.log(groupId, curUser);
+        const res = await communityContract.joinGroup(
+          groupId,
+          curUser?.toString(),
+          {
+            from: account?.address,
+            gasLimit: ethers.utils.parseEther(
+              process.env.GAS_LIMIT?.toString() || "0.0000000000001",
+            ),
+            value: ethers.utils.parseEther(fee.toString()),
+          },
+        );
+        console.log("response", res);
+        const hasTransaction = res.hash;
+        // Calling api
+        joinPaidCommunity({
+          communityId: groupId,
+          hashTransaction: hasTransaction,
+        });
+      } else {
+        joinCommunity({ communityId: groupId });
       }
-      if (fee === 0) {
-        await joinCommunity({ communityId: groupId });
-        setJoiningStatus("pending_request");
-      }
+      setJoiningStatus("pending_request");
     } catch (err) {
       console.log(err);
     }
   };
-
-  const handleClose = useCallback(() => {
-    setOpenWalletConnection(false);
-  }, []);
 
   return (
     <div className="card d-block border-0 shadow-md h-100 rounded-3 overflow-hidden">
@@ -171,12 +187,12 @@ export default function CommunityCard(props: {
         </div>
         <p>{description}</p>
       </div>
-      {openWalletConnection && (
+      {/* {openWalletConnection && (
         <WalletConnectionModal
           handleClose={handleClose}
           show={openWalletConnection}
         />
-      )}
+      )} */}
     </div>
   );
 }

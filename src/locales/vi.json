@@ -318,9 +318,12 @@
     "write_review": "Viết đánh giá...",
     "review_input_title": "Hãy cho chúng tôi biết đánh giá của bạn về",
     "submit_review": "Gửi đánh giá",
+    "review_submitted": "Đã đánh giá",
     "rank_desc": "Xếp hạng được cung cấp bởi Acanet Blockchain",
     "rank_desc_guarantee": "Đảm bảo khách quan 100%",
-    "error_missing_rating": "Vui lòng điền điểm đánh giá."
+    "error_missing_rating": "Vui lòng điền điểm đánh giá.",
+    "review_success": "Đánh giá thành công.",
+    "reivew_fail": "Không thể gửi đánh giá."
   },
   "Wallet": {
     "connect_wallet": "Kết nối ví của bạn tới Acanet"

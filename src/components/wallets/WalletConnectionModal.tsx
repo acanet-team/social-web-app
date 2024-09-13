@@ -3,6 +3,8 @@ import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/walletConnectionModal.module.scss";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useWeb3 } from "@/context/wallet.context";
+import { useConnectWallet } from "@web3-onboard/react/dist/hooks/useConnectWallet";
 
 function WalletConnectionModal(props: {
   show: boolean;
@@ -10,9 +12,19 @@ function WalletConnectionModal(props: {
 }) {
   const { show, handleClose } = props;
   const tWallet = useTranslations("Wallet");
+  const { connectWallet, rateContract, account } = useWeb3();
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
+  const [
+    {
+      wallet, // the wallet that has been connected or null if not yet connected
+      connecting, // boolean indicating if connection is in progress
+    },
+    connect, // function to call to initiate user to connect wallet
+    disconnect, // function to call to with wallet<DisconnectOptions> to disconnect wallet
+  ] = useConnectWallet();
+
   useEffect(() => {
     const handleResize = () => {
       if (window) {
@@ -28,6 +40,20 @@ function WalletConnectionModal(props: {
     };
   }, []);
 
+  useEffect(() => {
+    if (wallet) {
+      console.log("wallet 1111", wallet);
+      handleClose();
+    }
+  }, [wallet]);
+
+  const onConnectWalletHandler = () => {
+    if (!account) {
+      connectWallet();
+      console.log("wallet", wallet);
+      return;
+    }
+  };
   return (
     <Modal
       id={styles["wallet-modal"]}
@@ -55,6 +81,7 @@ function WalletConnectionModal(props: {
         <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
           <div
             className={`${styles["connect-wallet_btn"]} d-flex gap-2 shadow-xss align-items-center`}
+            onClick={onConnectWalletHandler}
           >
             <Image
               src="/assets/images/wallet/metamask.png"
@@ -66,6 +93,7 @@ function WalletConnectionModal(props: {
           </div>
           <div
             className={`${styles["connect-wallet_btn"]} d-flex gap-2 shadow-xss align-items-center`}
+            onClick={onConnectWalletHandler}
           >
             <Image
               src="/assets/images/wallet/binance.png"
@@ -79,6 +107,7 @@ function WalletConnectionModal(props: {
         <div className="d-flex justify-content-center align-items-center gap-3">
           <div
             className={`${styles["connect-wallet_btn"]} d-flex gap-2 shadow-xss align-items-center`}
+            onClick={onConnectWalletHandler}
           >
             <Image
               src="/assets/images/wallet/coinbase.png"
@@ -90,6 +119,7 @@ function WalletConnectionModal(props: {
           </div>
           <div
             className={`${styles["connect-wallet_btn"]} d-flex gap-2 shadow-xss align-items-center`}
+            onClick={onConnectWalletHandler}
           >
             <Image
               src="/assets/images/wallet/walletconnect.png"

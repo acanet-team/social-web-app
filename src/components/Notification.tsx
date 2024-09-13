@@ -259,7 +259,6 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponsVersionDocs<Notification> =
         await getNotifications(page, take);
-      console.log("notiiiiiiiiiiii", response);
       if (
         response.data.docs.some((notification) => notification.read_at === null)
       ) {

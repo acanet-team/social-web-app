@@ -18,6 +18,10 @@
   border-radius: 50%;
 }
 
+.submit-btn_disable {
+  background-color: #8f8f8f;
+}
+
 :global(.theme-dark) {
   .tab-rating__container,
   .tab-rating-list__container {

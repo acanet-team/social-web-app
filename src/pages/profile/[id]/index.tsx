@@ -44,7 +44,6 @@ export default function Profile({
   const [initialFetch, setInitialFetch] = useState(false);
   const [switchTab, setSwitchTab] = useState<boolean>(false);
   const [curTab, setCurTab] = useState<string>();
-  console.log("addwdw", dataUser.role.name);
 
   useEffect(() => {
     if (session) {
@@ -95,7 +94,6 @@ export default function Profile({
 
   const fetchProfileData = async () => {
     try {
-      console.log("idParam", idParam);
       const dtProfileRes = await getProfile(idParam as string);
       // console.log("render", dtProfileRes);
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);

@@ -1,4 +1,4 @@
-import type { User } from "@/api/profile/model";
+import type { User, UserProfile } from "@/api/profile/model";
 import styles from "@/styles/modules/tabRating.module.scss";
 import { FormHelperText, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -6,13 +6,14 @@ import Rating from "@mui/material/Rating";
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import Ratings from "../Ratings";
 import { useWeb3 } from "@/context/wallet.context";
 import { useSession } from "next-auth/react";
-import { error } from "console";
 import { useLoading } from "@/context/Loading/context";
+import { throwToast } from "@/utils/throw-toast";
+import { ethers } from "ethers";
 
 export default function TabRating(props: { brokerData: User }) {
   const { brokerData } = props;
@@ -20,6 +21,16 @@ export default function TabRating(props: { brokerData: User }) {
   const { connectWallet, rateContract, account } = useWeb3();
   const { showLoading, hideLoading } = useLoading();
   const { data: session } = useSession();
+  const brokerId = brokerData.id;
+  const [raterNickname, setRaterNickname] = useState<string>("");
+  const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(session);
+    if (session) {
+      setRaterNickname(session?.user?.userProfile?.nickName);
+    }
+  }, [session]);
 
   const formik = useFormik({
     initialValues: {
@@ -30,23 +41,24 @@ export default function TabRating(props: { brokerData: User }) {
     validationSchema: Yup.object({
       rating: Yup.number().min(1, tRating("error_missing_rating")),
     }),
-    onSubmit: async (values, { setFieldError }) => {
-      if (!account) {
-        connectWallet();
-        return;
-      }
+    onSubmit: async (values, { resetForm, setValues }) => {
+      connectWallet();
       try {
         showLoading();
-        const txHash = await rateContract.createRating(
-          "ahihi",
-          "13",
-          "duyht",
-          5,
+        await rateContract.createRating(
+          values.review,
+          brokerId?.toString(),
+          raterNickname?.toString(),
+          values.rating,
         );
+        setReviewSubmitted(true);
       } catch (error) {
+        throwToast(tRating("reivew_fail"), "error");
         console.error(error);
       } finally {
         hideLoading();
+        // resetForm();
+        resetForm({ rating: 0, review: "" } as any);
       }
     },
   });
@@ -64,12 +76,14 @@ export default function TabRating(props: { brokerData: User }) {
           onSubmit={formik.handleSubmit}
           className="w-100 d-flex flex-column align-items-center"
         >
+          {reviewSubmitted && <div>{tRating("review_submitted")}</div>}
           <Box className="d-flex align-items-center mb-3">
             <Rating
               name="rating"
               onChange={(event, newValue) => {
                 formik.setFieldValue("rating", newValue);
               }}
+              value={formik.values.rating}
               sx={{
                 lineHeight: "0",
                 width: "100%",
@@ -89,6 +103,7 @@ export default function TabRating(props: { brokerData: User }) {
           >
             <TextField
               id="review"
+              value={formik.values.review}
               placeholder={tRating("write_review")}
               multiline
               rows={4}
@@ -97,9 +112,8 @@ export default function TabRating(props: { brokerData: User }) {
                 formik.setFieldValue("review", event.target.value);
               }}
               sx={{
-                backgroundColor: "#eee",
                 border: "none",
-                "& fieldset": { border: "none" },
+                "& fieldset": { border: "1px solid #eee" },
                 borderRadius: "5px",
               }}
             />
@@ -109,9 +123,30 @@ export default function TabRating(props: { brokerData: User }) {
               {formik.errors.rating}
             </FormHelperText>
           )}
-          <button type="submit" className="main-btn border-0 mt-3">
-            {tRating("submit_review")}
+          <button
+            type="submit"
+            className={`${reviewSubmitted ? styles["submit-btn_disable"] : ""} main-btn border-0 mt-3`}
+            disabled={reviewSubmitted ? true : false}
+          >
+            {reviewSubmitted
+              ? tRating("review_submitted")
+              : tRating("submit_review")}
           </button>
+          {reviewSubmitted && (
+            <div className="text-grey-600 mt-3 text-center">
+              You have submited a review for{" "}
+              {brokerData.firstName + " " + brokerData.lastName} on{" "}
+              {new Date().toLocaleString("en-US", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}{" "}
+              and it cannot be altered
+            </div>
+          )}
         </form>
       </div>
       <div

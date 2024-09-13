@@ -316,9 +316,12 @@
     "write_review": "Write a review...",
     "review_input_title": "Let us know your review about",
     "submit_review": "Submit Review",
+    "review_submitted": "Review Submitted",
     "rank_desc": "Rating powered by Acanet Blockchain",
     "rank_desc_guarantee": "100% Fairness Guarantee",
-    "error_missing_rating": "Please rate the broker."
+    "error_missing_rating": "Please rate the broker.",
+    "review_success": "Review sent.",
+    "reivew_fail": "Can't sent review."
   },
   "Wallet": {
     "connect_wallet": "Connect your wallet to Acanet"
