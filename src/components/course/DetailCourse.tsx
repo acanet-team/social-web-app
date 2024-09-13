@@ -1,5 +1,3 @@
-"use client";
-import { coursesList } from "@/fakeData/data-investor-course";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/courses.module.scss";
@@ -35,6 +33,7 @@ interface Props {
 export default function DetailCourse({ id }: Props) {
   const [course, setCourse] = useState<Course | null>(null);
   const numericId = Number(id);
+  const [coursesList, setCoursesList] = useState<Course[]>([]);
 
   useEffect(() => {
     const findCourse = coursesList.find((data) => data.id === numericId);
