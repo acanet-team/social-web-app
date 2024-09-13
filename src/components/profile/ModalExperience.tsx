@@ -307,7 +307,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 <input
                   className="px-2"
                   style={{
-                    minWidth: "100%",
+                    width: "100%",
                     border: "1px solid #ddd",
                     borderRadius: "4px",
                     height: "56px",

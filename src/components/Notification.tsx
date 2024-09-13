@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import type { Notification, NotificationType } from "@/api/notification/model";
 import type { UUID } from "crypto";
 import type { BaseArrayResponsVersionDocs } from "@/api/model";
 import { getNotifications, readNoti } from "@/api/notification";
-import DotWaveLoader from "./DotWaveLoader";
 import styles from "@/styles/modules/header.module.scss";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { useRouter } from "next/navigation";
 import PostNotiDetail from "./PostNotiDetal";
+import WaveLoader from "./WaveLoader";
 interface NotificationProps {
   photo: string;
   notifications: Notification[];
@@ -26,7 +25,7 @@ const Notifications: React.FC<NotificationProps> = ({
   const router = useRouter();
   const [notis, setNotis] = useState<Notification[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [take] = useState<number>(5);
+  const [take] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openPostModal, setOpenPostModal] = useState<string>("");
@@ -34,7 +33,7 @@ const Notifications: React.FC<NotificationProps> = ({
   // const [newNotifications, setNewNotifications] = useState<Set<string>>(
   //   new Set()
   // );
-
+  console.log("notiApi", notis);
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
     const diffInMs = now - createdAt;
@@ -88,6 +87,7 @@ const Notifications: React.FC<NotificationProps> = ({
       notificationCount: number;
     } | null,
     createdAt: number,
+    notiAt: number | null,
   ) => {
     switch (type) {
       case "like_post":
@@ -101,7 +101,7 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
+              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
@@ -114,7 +114,8 @@ const Notifications: React.FC<NotificationProps> = ({
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {getTimeDifference(createdAt)}
+                {/* {getTimeDifference(createdAt)} */}
+                {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
@@ -130,7 +131,7 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
+              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
@@ -143,7 +144,8 @@ const Notifications: React.FC<NotificationProps> = ({
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {getTimeDifference(createdAt)}
+                {/* {getTimeDifference(createdAt)} */}
+                {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
@@ -159,7 +161,7 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
+              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
@@ -171,7 +173,8 @@ const Notifications: React.FC<NotificationProps> = ({
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {getTimeDifference(createdAt)}
+                {/* {getTimeDifference(createdAt)} */}
+                {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
@@ -187,14 +190,15 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
-                You are now a member of{" "}
-                <span className="fw-700 text-grey-900">
-                  {community?.name} Group
+              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
+                <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
+                  You are new a member of{" "}
                 </span>
+                {community?.name} Group
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {getTimeDifference(createdAt)}
+                {/* {getTimeDifference(createdAt)} */}
+                {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
@@ -210,7 +214,7 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
+              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
                 Your request to join{" "}
                 <span className="fw-700 text-grey-900">
                   {community?.name} Group
@@ -218,7 +222,8 @@ const Notifications: React.FC<NotificationProps> = ({
                 has been unsuccessful
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {getTimeDifference(createdAt)}
+                {/* {getTimeDifference(createdAt)} */}
+                {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
@@ -235,7 +240,7 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
+              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
@@ -244,7 +249,8 @@ const Notifications: React.FC<NotificationProps> = ({
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {getTimeDifference(createdAt)}
+                {/* {getTimeDifference(createdAt)} */}
+                {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
@@ -259,19 +265,14 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponsVersionDocs<Notification> =
         await getNotifications(page, take);
-      if (
-        response.data.docs.some((notification) => notification.read_at === null)
-      ) {
-        console.log(
-          "readAll",
-          response.data.docs.some(
-            (notification) => notification.read_at === null,
-          ),
-        );
-        setReadAllNotis(false);
-      } else {
-        setReadAllNotis(true);
-      }
+
+      // if (
+      //   response.data.docs.some((notification) => notification.read_at === null)
+      // ) {
+      //   setReadAllNotis(false);
+      // } else {
+      //   setReadAllNotis(true);
+      // }
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           response?.data?.docs,
@@ -287,8 +288,20 @@ const Notifications: React.FC<NotificationProps> = ({
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    const allRead = notis.every(
+      (notification) => notification.read_at !== null,
+    );
+    if (allRead) {
+      console.log("All notifications are read, updating state.");
+      setReadAllNotis(true);
+    } else {
+      setReadAllNotis(false);
+    }
+  }, [notis]);
 
   useEffect(() => {
+    // if (page > 1) {
     fetchNotifications();
   }, [page]);
 
@@ -309,18 +322,26 @@ const Notifications: React.FC<NotificationProps> = ({
     id: string,
     idDetail: string,
     notificationType: string,
+    read_at: number | null,
   ) => {
-    await readNoti(id);
+    if (read_at === null) {
+      await readNoti(id);
+      // await fetchNotifications()
+      setNotis((prevNotis) =>
+        prevNotis.map((notification) =>
+          notification.id === id
+            ? { ...notification, read_at: Date.now() }
+            : notification,
+        ),
+      );
+    }
+
     if (
       notificationType === "like_post" ||
       notificationType === "comment_post"
     ) {
-      // router.push(`/postdetail/${idDetail}`);
-      console.log(idDetail);
       setOpenPostModal(idDetail);
       toggleisNoti(false);
-      // const res = await getDetailNotis(idPost);
-      // console.log("detaillll", res);
     } else if (
       notificationType === "community_join_request" ||
       notificationType === "community_join_accept" ||
@@ -376,64 +397,75 @@ const Notifications: React.FC<NotificationProps> = ({
             No Notifications Found
           </p>
         ) : (
-          notis?.map((notification) => (
-            <div
-              key={notification?.id}
-              style={{ height: "72px", padding: "4px" }}
-              className={`card w-100 border-0 mb-3 cursor-pointer  ${
-                // newNotifications.has(notification.id) ||
-                !notification?.read_at ? "bg-lightblue" : ""
-              }`}
-            >
-              {/* <Link href={""}> */}
+          notis?.map((notification) => {
+            const renderedMessage = renderNotificationMessage(
+              notification?.type,
+              notification?.user,
+              notification?.sourceUser,
+              notification?.community,
+              notification?.additionalData,
+              notification?.createdAt,
+              notification?.notiAt,
+            );
+
+            if (!renderedMessage) return null;
+
+            return (
               <div
-                onClick={() => {
-                  if (
-                    notification?.type === "like_post" ||
-                    notification?.type === "comment_post"
-                  ) {
-                    readNotis(
-                      notification?.id,
-                      notification?.additionalData?.post_id,
-                      notification?.type,
-                    );
-                  } else if (
-                    notification?.type === "community_join_request" ||
-                    notification?.type === "community_join_accept" ||
-                    notification?.type === "community_join_reject"
-                  ) {
-                    readNotis(
-                      notification?.id,
-                      notification?.community?.communityId || "",
-                      notification?.type,
-                    );
-                  } else if (notification?.type === "follow") {
-                    readNotis(
-                      notification?.id,
-                      String(notification?.user.userId),
-                      notification?.type,
-                    );
-                  } else {
-                    console.log("Notification type not found");
-                  }
-                }}
-                className="p-2"
-                style={{ display: "flex", flexDirection: "row", gap: "8px" }}
+                key={notification?.id}
+                style={{ height: "72px", padding: "4px" }}
+                className={`card w-100 border-0 mb-3 cursor-pointer  ${
+                  !notification?.read_at ? "bg-lightblue" : ""
+                }`}
               >
-                {renderNotificationMessage(
-                  notification?.type,
-                  notification?.user,
-                  notification?.sourceUser,
-                  notification?.community,
-                  notification?.additionalData,
-                  notification?.createdAt,
-                )}
+                <div
+                  onClick={() => {
+                    if (
+                      notification?.type === "like_post" ||
+                      notification?.type === "comment_post"
+                    ) {
+                      readNotis(
+                        notification?.id,
+                        notification?.additionalData?.post_id,
+                        notification?.type,
+                        notification?.read_at ? notification?.read_at : null,
+                      );
+                    } else if (
+                      notification?.type === "community_join_request" ||
+                      notification?.type === "community_join_accept" ||
+                      notification?.type === "community_join_reject"
+                    ) {
+                      readNotis(
+                        notification?.id,
+                        notification?.community?.communityId || "",
+                        notification?.type,
+                        notification?.read_at ? notification?.read_at : null,
+                      );
+                    } else if (notification?.type === "follow") {
+                      readNotis(
+                        notification?.id,
+                        String(notification?.user.nickName),
+                        notification?.type,
+                        notification?.read_at ? notification?.read_at : null,
+                      );
+                    } else {
+                      console.log("Notification type not messages");
+                    }
+                  }}
+                  className="p-2"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "8px",
+                  }}
+                >
+                  {renderedMessage}
+                </div>
               </div>
-              {/* </Link> */}
-            </div>
-          ))
+            );
+          })
         )}
-        {isLoading && <DotWaveLoader />}
+        {isLoading && <WaveLoader />}
         {openPostModal && (
           <PostNotiDetail id={openPostModal} resetPostId={resetPostId} />
         )}

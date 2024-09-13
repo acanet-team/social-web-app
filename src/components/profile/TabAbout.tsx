@@ -20,7 +20,7 @@ const TabAbout = (props: {
   dataBrokerProfile: BrokerProfile;
   dataUser: User;
   interestTopic: InterestTopics[];
-  idParam: string | undefined | string[];
+  idParam: string;
 }) => {
   const { ssi, dataBrokerProfile, dataUser, interestTopic, idParam } = props;
   const { data: session } = useSession() as any;

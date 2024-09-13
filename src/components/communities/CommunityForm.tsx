@@ -20,7 +20,8 @@ import Image from "next/image";
 import { ImageCropModal } from "@/components/ImageCropModal";
 import styles from "@/styles/modules/communityForm.module.scss";
 import { useWeb3 } from "@/context/wallet.context";
-import { uuid } from "uuidv4";
+import { v4 as uuidV4 } from "uuid";
+// import { uuid } from "uuidv4";
 import { ethers } from "ethers";
 import "dotenv/config";
 
@@ -170,7 +171,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           if (values.feeNum) {
             connectWallet();
             // Create group with fee on smart contract
-            const groupId = uuid();
+            const groupId = uuidV4();
             // console.log('group fee', ethers.utils.parseEther(values.feeNum.toString()).toString());
             console.log(communityContract);
             console.log("group", groupId);

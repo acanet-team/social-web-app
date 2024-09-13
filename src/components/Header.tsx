@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Darkbutton from "./Darkbutton";
@@ -29,18 +29,18 @@ export default function Header(props: { isOnboarding: boolean }) {
   const { notifications } = useWebSocket();
   const avatarRef = useRef<HTMLImageElement>(null);
   const t = useTranslations("NavBar");
+  const [nickName, setNickName] = useState<string>("");
   const userId = session?.user?.id;
   const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
 
-  // console.log("fetchNotis22");
-
   useEffect(() => {
-    console.log("notifications", notifications);
+    console.log("notifications-yy", notifications);
   }, [notifications]);
 
   useEffect(() => {
     if (session) {
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
+      setNickName(session?.user?.userProfile?.nickName);
     }
   }, [session]);
 
@@ -143,7 +143,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         </span>
         <span
           onClick={() => toggleActive((prevState) => !prevState)}
-          className="me-2 menu-search-icon mob-menu"
+          className="me-2 menu-search-icon mob-menu cursor-pointer"
         >
           <i className="feather-search text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </span>
@@ -175,7 +175,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         </div>
       </form>
       <span
-        className={`p-2 pointer text-center ms-auto menu-icon ${notiClass}`}
+        className={`p-2 pointer text-center ms-auto menu-icon cursor-pointer ${notiClass}`}
         onClick={() => toggleisNoti((prevState) => !prevState)}
         ref={iconNotiRef}
       >
@@ -189,7 +189,7 @@ export default function Header(props: { isOnboarding: boolean }) {
       </span>
       <div
         ref={notiRef}
-        className={`dropdown-menu  right-0 rounded-3 border-0 shadow-lg ${notiClass}`}
+        className={`dropdown-menu  right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
       >
         <Notifications
           photo={photo}
@@ -232,7 +232,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li className="logo d-none d-xl-block d-lg-block"></li>
                   <li>
                     <Link
-                      href={`/profile/${userId}`}
+                      href={nickName ? `/profile/${nickName}` : "#"}
                       className="nav-content-bttn open-font"
                     >
                       <i className="feather-user btn-round-md bg-blue-gradiant me-3"></i>

@@ -20,14 +20,14 @@ export default function Profile({
   dataUserProfile,
   dataUser,
   followersCount,
-  idParam,
+  idUser,
   interestTopic,
   myPosts,
   totalPage,
   page,
-  dataMyGroups,
-  curPageGroup,
-  allPageGroup,
+  // dataMyGroups,
+  // curPageGroup,
+  // allPageGroup,
   ssi,
   followed,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -56,10 +56,10 @@ export default function Profile({
   }, [dataUser]);
 
   useEffect(() => {
-    if (Number(idParam) === id) {
+    if (Number(idUser) === id) {
       setRole(true);
     }
-  }, [idParam, id]);
+  }, [idUser, id]);
 
   useEffect(() => {
     if (curTab === "about" && switchTab) {
@@ -90,11 +90,11 @@ export default function Profile({
       console.log("eeeeeee");
       fetchProfileData();
     }
-  }, [idParam]);
+  }, [idUser]);
 
   const fetchProfileData = async () => {
     try {
-      const dtProfileRes = await getProfile(idParam as string);
+      const dtProfileRes = await getProfile(String(idUser));
       // console.log("render", dtProfileRes);
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
@@ -149,7 +149,7 @@ export default function Profile({
         <Banner
           role={role}
           dataUser={dtUser}
-          idParam={idParam}
+          idParam={String(idUser)}
           dataUserProfile={dtUserProfile}
           followersCount={flCount}
           followed={fllowed}
@@ -197,7 +197,7 @@ export default function Profile({
           dataBrokerProfile={dtBrokerProfile}
           dataUser={dtUser}
           interestTopic={listInterestTopic}
-          idParam={idParam}
+          idParam={String(idUser)}
         />
       )}
       {curTab === TabPnum.Posts && (
@@ -205,21 +205,21 @@ export default function Profile({
           myPosts={myPosts}
           totalPages={totalPage}
           curPage={page}
-          id={idParam as string}
+          id={String(idUser)}
           take={TAKE}
         />
       )}
       {curTab === TabPnum.Communities && (
         <TabGroupProfile
           isBroker={dataUser.role.name === "broker"}
-          communities={dataMyGroups}
+          // communities={dataMyGroups}
           communityType={
             dataUser.role.name === "broker" ? "owned" : "following"
           }
-          curPage={curPageGroup}
-          allPage={allPageGroup}
+          // curPage={curPageGroup}
+          // allPage={allPageGroup}
           take={TAKE}
-          id={Number(idParam)}
+          id={Number(idUser)}
         />
       )}
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
@@ -230,24 +230,30 @@ export default function Profile({
   );
 }
 export async function getServerSideProps(context: NextPageContext) {
-  const { id } = context.query;
-  if (!id) {
+  const { key } = context.query;
+  if (!key) {
     return {
       notFound: true, // This triggers the 404 page
     };
   }
-  const profileRes = await getProfile(id as string);
+  const profileRes = await getProfile(key as string);
+  const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
-  const myPost = await getMyPosts(1, TAKE, "owner", Number(id));
-  const brokerId = profileRes?.data?.user?.role ? Number(id) : "";
-  const myGroup = await getMyGroups({
-    page: 1,
-    take: TAKE,
-    type: "joined",
-    brokerId,
-    search: "",
-    feeType: "",
-  });
+  let myPost;
+  if (idUser) {
+    myPost = await getMyPosts(1, TAKE, "owner", Number(idUser));
+  }
+  // const brokerId =
+  //   profileRes?.data?.user?.role?.name === "broker" ? Number(id) : "";
+  // const type = profileRes?.data?.user?.role?.name === "broker" ? "" : "joined";
+  // const myGroup = await getMyGroups({
+  //   page: 1,
+  //   take: TAKE,
+  //   type,
+  //   brokerId,
+  //   search: "",
+  //   feeType: "",
+  // });
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
@@ -257,14 +263,14 @@ export async function getServerSideProps(context: NextPageContext) {
       followersCount: profileRes?.data?.followersCount,
       followed: profileRes?.data?.followed,
       ssi: profileRes?.data?.ssi || null,
-      idParam: id,
+      idUser: idUser,
       interestTopic: interestTopic?.data.docs || [],
       myPosts: myPost?.data?.docs || null,
-      totalPage: myPost?.data?.meta?.totalPage,
-      page: myPost?.data?.meta.page,
-      dataMyGroups: myGroup?.data?.docs || null,
-      curPageGroup: myGroup?.data?.meta.page || 1,
-      allPageGroup: myGroup?.data?.meta.totalPage || 1,
+      totalPage: myPost?.data?.meta?.totalPage || 1,
+      page: myPost?.data?.meta.page || 1,
+      // dataMyGroups: myGroup?.data?.docs || null,
+      // curPageGroup: myGroup?.data?.meta.page || 1,
+      // allPageGroup: myGroup?.data?.meta.totalPage || 1,
     },
   };
 }

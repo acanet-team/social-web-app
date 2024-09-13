@@ -8,21 +8,20 @@ import CommunityForm from "../communities/CommunityForm";
 
 const TabGroupProfile = (props: {
   isBroker: boolean;
-  communities: ICommunity[];
+  // communities: ICommunity[];
   communityType: string;
-  curPage: number;
-  allPage: number;
+  // curPage: number;
+  // allPage: number;
   take: number;
   id: number;
 }) => {
+  console.log("comuuuuu", props);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [communityArr, setCommunityArr] = useState<ICommunity[]>(
-    props.communities,
-  );
+  const [communityArr, setCommunityArr] = useState<ICommunity[]>([]);
   const [take, setTake] = useState<number>(props.take);
   const [isBroker, setIsBroker] = useState<boolean>(props.isBroker);
-  const [page, setPage] = useState<number>(props.curPage);
-  const [totalPage, setTotalPage] = useState<number>(props.allPage);
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [type, setType] = useState<string>(props.communityType);
   const [idBroker, setIdBroker] = useState<number>(props.id);
   const [show, setShow] = useState<boolean>(false);
@@ -34,8 +33,8 @@ const TabGroupProfile = (props: {
       const response = await getCommunities({
         page,
         take,
-        type,
-        brokerId: isBroker ? idBroker : "",
+        type: isBroker ? "" : "joined",
+        brokerId: idBroker,
         search: "",
         feeType: "",
       });
@@ -85,10 +84,10 @@ const TabGroupProfile = (props: {
   }, [page, totalPage, isLoading]);
 
   useEffect(() => {
-    if (page > 1) {
-      fetchCommunities(page);
-    }
-  }, [page]);
+    // if (page > 1) {
+    fetchCommunities(page);
+    // }
+  }, [page, props]);
 
   const handleShow = useCallback(() => {
     setShow(true);

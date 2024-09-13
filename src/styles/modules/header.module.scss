@@ -28,6 +28,7 @@
     min-width: 100vw;
     overflow-y: auto;
     padding-left: 32px;
+    
   }
 
   .logo-header {
@@ -37,5 +38,14 @@
 
   .title-dropdown-menu {
     font-size: 20px;
+  }
+}
+:global(.theme-dark) {
+  .height-dropdown-menu {
+    background-color: var(--theme-color) ;
+  }
+  .bg-dropdown-border-noti {
+    background-color: var(--theme-color) ;
+    border: 2px solid #1A1237 !important
   }
 }

@@ -144,6 +144,7 @@ const Education = ({
                 style={{
                   display: "flex",
                   flexDirection: "row",
+                  alignItems: "center",
                   gap: "12px",
                 }}
               >
