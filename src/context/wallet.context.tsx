@@ -11,6 +11,7 @@ import React, {
   useState,
 } from "react";
 import rateAbi from "@/web3/abi/rate.json";
+import communityAbi from "@/web3/abi/community.json";
 
 interface WalletContextType {
   chains: Chain[];
@@ -27,6 +28,8 @@ interface WalletContextType {
     React.SetStateAction<ethers.providers.Web3Provider | null | undefined>
   >;
   signer: any;
+  rateContract: any;
+  communityContract: any;
 }
 
 export interface Account {
@@ -74,17 +77,32 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     ),
   );
 
-  const [rateContract, setRateContract] = useState<any>();
-  // new ethers.Contract(contracts.Rate[30732], rateAbi as any, provider),
+  const [rateContract, setRateContract] = useState<any>(
+    new ethers.Contract(contracts.Rate[30732], rateAbi as any, provider),
+  );
 
-  // useEffect(() => {
-  //   const contract = new ethers.Contract(
-  //     contracts.Rate[30732],
-  //     rateAbi as any,
-  //     signer || provider,
-  //   );
-  //   setRateContract(contract);
-  // }, [provider, signer, connectedChain]);
+  const [communityContract, setCommunityContract] = useState<any>(
+    new ethers.Contract(
+      contracts.Community[30732],
+      communityAbi as any,
+      provider,
+    ),
+  );
+
+  useEffect(() => {
+    const rate = new ethers.Contract(
+      contracts.Rate[30732],
+      rateAbi as any,
+      signer || provider,
+    );
+    setRateContract(rate);
+    const community = new ethers.Contract(
+      contracts.Rate[30732],
+      rateAbi as any,
+      signer || provider,
+    );
+    setCommunityContract(community);
+  }, [provider, signer, connectedChain]);
 
   useEffect(() => {
     // If `wallet` is defined then the user is connected
@@ -147,6 +165,8 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         provider,
         setProvider,
         signer,
+        rateContract,
+        communityContract,
       }}
     >
       {children}

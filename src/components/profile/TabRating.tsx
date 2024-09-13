@@ -9,12 +9,17 @@ import Image from "next/image";
 import React from "react";
 import * as Yup from "yup";
 import Ratings from "../Ratings";
+import { useWeb3 } from "@/context/wallet.context";
+import { useSession } from "next-auth/react";
+import { error } from "console";
+import { useLoading } from "@/context/Loading/context";
 
 export default function TabRating(props: { brokerData: User }) {
   const { brokerData } = props;
   const tRating = useTranslations("Rating");
-  const [rating, setRating] = React.useState<number | null>(0);
-  const [review, setReview] = React.useState<string>("");
+  const { connectWallet, rateContract, account } = useWeb3();
+  const { showLoading, hideLoading } = useLoading();
+  const { data: session } = useSession();
 
   const formik = useFormik({
     initialValues: {
@@ -26,8 +31,23 @@ export default function TabRating(props: { brokerData: User }) {
       rating: Yup.number().min(1, tRating("error_missing_rating")),
     }),
     onSubmit: async (values, { setFieldError }) => {
-      console.log("rating", rating);
-      console.log("review", review);
+      if (!account) {
+        connectWallet();
+        return;
+      }
+      try {
+        showLoading();
+        const txHash = await rateContract.createRating(
+          "ahihi",
+          "13",
+          "duyht",
+          5,
+        );
+      } catch (error) {
+        console.error(error);
+      } finally {
+        hideLoading();
+      }
     },
   });
 
@@ -47,9 +67,8 @@ export default function TabRating(props: { brokerData: User }) {
           <Box className="d-flex align-items-center mb-3">
             <Rating
               name="rating"
-              value={rating}
               onChange={(event, newValue) => {
-                setRating(newValue);
+                formik.setFieldValue("rating", newValue);
               }}
               sx={{
                 lineHeight: "0",
@@ -73,10 +92,9 @@ export default function TabRating(props: { brokerData: User }) {
               placeholder={tRating("write_review")}
               multiline
               rows={4}
-              name={review}
-              value={review}
+              name={"review"}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setReview(event.target.value);
+                formik.setFieldValue("review", event.target.value);
               }}
               sx={{
                 backgroundColor: "#eee",
