@@ -65,7 +65,7 @@ export default function CommunityCard(props: {
       if (fee > 0) {
         connectWallet();
         // Calling smart contract
-        console.log(groupId, curUser);
+        // console.log(groupId, curUser);
         const res = await communityContract.joinGroup(
           groupId,
           curUser?.toString(),
