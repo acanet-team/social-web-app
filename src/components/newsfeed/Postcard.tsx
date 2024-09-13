@@ -484,7 +484,7 @@ export default function PostCard(props: {
       </div>
       {/* All comments */}
       {isLoading && <DotWaveLoader />}
-      {!isMobile && openComments && !isLoading && (
+      {openComments && !isLoading && (
         <Comments
           comments={comments}
           page={page}

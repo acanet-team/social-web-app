@@ -379,7 +379,7 @@ function PostModal(props: {
           </div>
           {/* All comments */}
           {isLoading && <DotWaveLoader />}
-          {!isLoading && comments?.length > 0 && (
+          {!isLoading && (
             <Comments
               comments={comments}
               page={page}
