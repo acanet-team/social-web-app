@@ -13,7 +13,7 @@ import Ratings from "../Ratings";
 export default function TabRating(props: { brokerData: User }) {
   const { brokerData } = props;
   const tRating = useTranslations("Rating");
-  const [rating, setRating] = React.useState<number | null>(0);
+  // const [rating, setRating] = React.useState<number | null>(0);
   const [review, setReview] = React.useState<string>("");
 
   const formik = useFormik({
@@ -26,8 +26,8 @@ export default function TabRating(props: { brokerData: User }) {
       rating: Yup.number().min(1, tRating("error_missing_rating")),
     }),
     onSubmit: async (values, { setFieldError }) => {
-      console.log("rating", rating);
-      console.log("review", review);
+      console.log("rating", values.rating);
+      console.log("review", values.review);
     },
   });
 
@@ -47,9 +47,9 @@ export default function TabRating(props: { brokerData: User }) {
           <Box className="d-flex align-items-center mb-3">
             <Rating
               name="rating"
-              value={rating}
               onChange={(event, newValue) => {
-                setRating(newValue);
+                // setRating(newValue);
+                formik.setFieldValue("rating", newValue);
               }}
               sx={{
                 lineHeight: "0",
@@ -74,9 +74,10 @@ export default function TabRating(props: { brokerData: User }) {
               multiline
               rows={4}
               name={review}
-              value={review}
+              // value={review}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setReview(event.target.value);
+                // setReview(event.target.value);
+                formik.setFieldValue("rating", event.target.value);
               }}
               sx={{
                 backgroundColor: "#eee",

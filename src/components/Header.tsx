@@ -40,6 +40,7 @@ export default function Header(props: { isOnboarding: boolean }) {
 
   useEffect(() => {
     if (session) {
+      console.log("sesss", session);
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
     }
   }, [session]);

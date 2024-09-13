@@ -341,6 +341,7 @@ const Banner: React.FC<TabBannerProps> = ({
                           objectFit: "cover",
                           backgroundColor: "white",
                           right: "-15px",
+                          borderRadius: "50%",
                         }}
                       />
                     </Tooltip>
@@ -385,17 +386,7 @@ const Banner: React.FC<TabBannerProps> = ({
               <>
                 <button
                   onClick={(e) => onFollowBrokerHandler(e, dataUser.id)}
-                  className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-followed__btn"]} ${styles["profile-banner__btn"]}`}
-                  style={{
-                    borderRadius: "16px",
-                    border: "0",
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "2px",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "130px",
-                  }}
+                  className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
                 >
                   {isFollowing ? (
                     <h4 className="text-white m-0">
@@ -411,13 +402,13 @@ const Banner: React.FC<TabBannerProps> = ({
                     </h4>
                   )}
 
-                  <span className="text-white font-xss fw-600">
+                  <span className="font-xss fw-600">
                     {isFollowing ? t("following") : t("follow")}
                   </span>
                 </button>
               </>
             )}
-            <button
+            {/* <button
               className={`px-3 btn bg-white ${styles["profile-banner__btn"]}`}
               style={{
                 borderRadius: "16px",
@@ -430,11 +421,6 @@ const Banner: React.FC<TabBannerProps> = ({
                 width: "130px",
               }}
             >
-              {/* <h4 className="text-blue-button m-0" > 
-                <i style={{width:"10px", height:"10px"}}
-                  className={`bi bi-send ${styles["icon-profile"]} cursor-pointer`}
-                ></i>
-              </h4> */}
               <Image
                 src="/assets/images/profile/send-privately-small.png"
                 width={16}
@@ -448,7 +434,7 @@ const Banner: React.FC<TabBannerProps> = ({
               <div className="text-blue-button font-xss fw-600">
                 {t("messages")}
               </div>
-            </button>
+            </button> */}
 
             {dataUser.role.name === "broker" && (
               <button

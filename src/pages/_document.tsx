@@ -6,7 +6,13 @@ export default function Document({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Html lang="vi" className="color-theme-blue nunito-font loaded">
-      <Head />
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, viewport-fit=cover"
+        />
+        <title>Acanet</title>
+      </Head>
       <body>
         <Main />
         <NextScript />
