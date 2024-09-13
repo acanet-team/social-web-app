@@ -82,7 +82,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     setSocket(newSocket);
 
     return () => {
-      newSocket.close();
+      // newSocket.close();
     };
   }, [session, addNotification]);
 

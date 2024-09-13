@@ -152,6 +152,13 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       if (isEditing) {
         communityData.append("communityId", isEditing);
       }
+      if (values.feeNum) {
+        if (!account) {
+          connectWallet();
+          handleClose();
+          return;
+        }
+      }
       try {
         // Calling api to edit/create a community
         if (isEditing) {
@@ -168,7 +175,6 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           setCommunity && setCommunity(editedCommunity.data);
         } else {
           if (values.feeNum) {
-            connectWallet();
             // Create group with fee on smart contract
             const groupId = uuid();
             // console.log('group fee', ethers.utils.parseEther(values.feeNum.toString()).toString());
@@ -177,7 +183,11 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             console.log("broker", brokerId);
             console.log(
               "fee",
-              ethers.utils.parseEther(values.feeNum.toString()).toString(),
+              ethers.utils
+                .parseEther(
+                  process.env.GAS_LIMIT?.toString() || "0.0000000000001",
+                )
+                .toString(),
             );
             const newGroupContract = await communityContract.createGroup(
               groupId.toString(),
@@ -185,9 +195,11 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
               ethers.utils.parseEther(values.feeNum.toString()).toString(),
               {
                 from: account?.address,
-                gasLimit: ethers.utils.parseEther(
-                  process.env.GAS_LIMIT?.toString() || "0.0000000000001",
-                ),
+                gasLimit: ethers.utils
+                  .parseEther(
+                    process.env.GAS_LIMIT?.toString() || "0.0000000000001",
+                  )
+                  .toString(),
               },
             );
             console.log("new group", newGroupContract);
