@@ -86,7 +86,7 @@ const Notifications: React.FC<NotificationProps> = ({
       comment_id?: string;
       community_id: string | UUID;
       notificationCount: number;
-    },
+    } | null,
     createdAt: number,
   ) => {
     switch (type) {
@@ -94,7 +94,7 @@ const Notifications: React.FC<NotificationProps> = ({
         return (
           <>
             <Image
-              src={sourceUser?.photo?.path}
+              src={sourceUser?.photo?.path || photo}
               width={40}
               height={40}
               alt="user"
@@ -106,9 +106,11 @@ const Notifications: React.FC<NotificationProps> = ({
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
                 <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  {Number(additionalData?.notificationCount) === 1
-                    ? `liked your post`
-                    : `and ${Number(additionalData?.notificationCount) - 1} people liked your post`}
+                  {additionalData
+                    ? Number(additionalData?.notificationCount) === 1
+                      ? `liked your post`
+                      : `and ${Number(additionalData?.notificationCount) - 1} people liked your post`
+                    : ""}
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
@@ -121,7 +123,7 @@ const Notifications: React.FC<NotificationProps> = ({
         return (
           <>
             <Image
-              src={sourceUser?.photo?.path}
+              src={sourceUser?.photo?.path || photo}
               width={40}
               height={40}
               alt="user"
@@ -133,9 +135,11 @@ const Notifications: React.FC<NotificationProps> = ({
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
                 <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  {Number(additionalData?.notificationCount) === 1
-                    ? `commented on your post`
-                    : `and ${Number(additionalData?.notificationCount) - 1} people commented on your post`}
+                  {additionalData
+                    ? Number(additionalData?.notificationCount) === 1
+                      ? `commented on your post`
+                      : `and ${Number(additionalData?.notificationCount) - 1} people commented on your post`
+                    : ""}
                 </span>
               </h5>
               <p className="text-grey-500 font-xsssss fw-600 m-0">
@@ -224,7 +228,7 @@ const Notifications: React.FC<NotificationProps> = ({
         return (
           <>
             <Image
-              src={sourceUser?.photo?.path}
+              src={sourceUser?.photo?.path || photo}
               width={40}
               height={40}
               alt="user"
@@ -328,6 +332,8 @@ const Notifications: React.FC<NotificationProps> = ({
     } else if (notificationType === "follow") {
       router.push(`/profile/${idDetail}`);
       toggleisNoti(false);
+    } else {
+      console.log("");
     }
   };
 
@@ -408,6 +414,8 @@ const Notifications: React.FC<NotificationProps> = ({
                       String(notification?.user.userId),
                       notification?.type,
                     );
+                  } else {
+                    console.log("Notification type not found");
                   }
                 }}
                 className="p-2"

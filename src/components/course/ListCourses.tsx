@@ -1,20 +1,27 @@
-"use client";
 import React from "react";
 import styles from "@/styles/modules/courses.module.scss";
 import Image from "next/image";
-import { coursesList } from "@/fakeData/data-investor-course";
 import { useRouter } from "next/navigation";
+
+interface Course {
+  id: string;
+  imgCourse: string;
+  nameCourse: string;
+  price: number;
+  imgAuthor: string;
+  author: string;
+}
 
 export default function ListCourses() {
   const router = useRouter();
+  const [coursesList, setCoursesList] = React.useState<Course[]>([]);
 
   return (
     <>
       <div className="row">
         <div className="col-12">
           <div className="row ps-2 pe-2">
-            {coursesList &&
-              coursesList.length > 0 &&
+            {coursesList?.length > 0 &&
               coursesList.map((course, index) => (
                 <div key={index} className="col-md-4 col-sm-6 col-xs-12">
                   <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-4">
