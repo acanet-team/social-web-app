@@ -102,7 +102,7 @@ const PostNotiDetail = (props: {
             dataPost.user?.nickName ||
             dataPost.user?.firstName + dataPost.user?.lastName
           }
-          avatar={dataPost.user?.photo?.path}
+          avatar={dataPost.user?.photo?.path || "/assets/images/user.png"}
           content={dataPost.content}
           assets={dataPost.assets}
           authorId={dataPost.user?.userId}
@@ -111,7 +111,7 @@ const PostNotiDetail = (props: {
           columnsCount={
             dataPost.assets?.length > 3 ? 3 : dataPost.assets?.length
           }
-          groupAvatar={dataPost.community?.avatar.path || ""}
+          groupAvatar={dataPost.community?.avatar?.path || ""}
           groupName={dataPost.community?.name || ""}
           groupOwnerId={""}
           groupId={dataPost.community?.communityId || ""}

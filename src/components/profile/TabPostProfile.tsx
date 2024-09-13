@@ -5,6 +5,7 @@ import type { IPost } from "@/api/newsfeed/model";
 import { getMyPosts } from "@/api/profile";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { cleanPath } from "@/utils/Helpers";
+import { id } from "ethers/lib/utils";
 
 const TabPostProfile = (props: {
   myPosts: any;
@@ -17,16 +18,19 @@ const TabPostProfile = (props: {
   const [take, setTake] = useState<number>(props.take);
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.totalPages);
-  const [id, setId] = useState<string>(props.id);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  console.log("postsssss", myPosts);
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
 
-  const fetchPosts = useCallback(async (page = 1) => {
+  const fetchPosts = async (page = 1) => {
     setIsLoading(true);
     try {
-      const response: any = await getMyPosts(page, take, "owner", Number(id));
+      const response: any = await getMyPosts(
+        page,
+        take,
+        "owner",
+        Number(props.id),
+      );
       console.log("postsssss", response);
       setMyPosts((prev: IPost[]) => {
         const newPosts: IPost[] = combineUniqueById(
@@ -41,7 +45,7 @@ const TabPostProfile = (props: {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
   const onScrollHandler = () => {
     if (document.documentElement) {
@@ -64,6 +68,13 @@ const TabPostProfile = (props: {
   }, [page]);
 
   useEffect(() => {
+    setMyPosts([]);
+    setPage(1);
+    setTotalPage(2);
+    fetchPosts(1);
+  }, [props.id]);
+
+  useEffect(() => {
     if (document.documentElement && page < totalPage) {
       window.addEventListener("scroll", onScrollHandler);
     }
@@ -80,6 +91,7 @@ const TabPostProfile = (props: {
       setHasFetchedInitialData(true);
     }
   }, []);
+
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
       {!isLoading && myPosts?.length === 0 && (

@@ -71,10 +71,8 @@ export default function CommunityCard(props: {
           curUser?.toString(),
           {
             from: account?.address,
-            gasLimit: ethers.utils.parseEther(
-              process.env.GAS_LIMIT?.toString() || "0.0000000000001",
-            ),
-            value: ethers.utils.parseEther(fee.toString()),
+            gasPrice: ethers.utils.parseUnits("100", "gwei"),
+            gasLimit: 2000000,
           },
         );
         console.log("response", res);

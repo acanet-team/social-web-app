@@ -175,12 +175,20 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             );
           setCommunity && setCommunity(editedCommunity.data);
         } else {
+          // Create group on DB
+          const newCommunity = await createCommunity(communityData);
+          setCommunities &&
+            setCommunities(
+              (prev) => [newCommunity.data, ...prev] as ICommunity[],
+            );
+
+          console.log("com", newCommunity);
           if (values.feeNum) {
             // Create group with fee on smart contract
-            const groupId = uuidV4();
+            // const groupId = uuidV4();
             // console.log('group fee', ethers.utils.parseEther(values.feeNum.toString()).toString());
             console.log(communityContract);
-            console.log("group", groupId);
+            console.log("group", newCommunity.data.id);
             console.log("broker", brokerId);
             console.log(
               "fee",
@@ -191,29 +199,19 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 .toString(),
             );
             const newGroupContract = await communityContract.createGroup(
-              groupId.toString(),
+              newCommunity.data.id.toString(),
               brokerId?.toString(),
               ethers.utils.parseEther(values.feeNum.toString()).toString(),
               {
                 from: account?.address,
-                gasLimit: ethers.utils
-                  .parseEther(
-                    process.env.GAS_LIMIT?.toString() || "0.0000000000001",
-                  )
-                  .toString(),
+                gasPrice: ethers.utils.parseUnits("100", "gwei"),
+                gasLimit: 2000000,
               },
             );
             console.log("new group", newGroupContract);
-
-            const awaits = await newGroupContract.wait();
-            console.log(awaits);
+            // const awaits = await newGroupContract.wait();
+            // console.log(awaits);
           }
-          // Create group on DB
-          const newCommunity = await createCommunity(communityData);
-          setCommunities &&
-            setCommunities(
-              (prev) => [newCommunity.data, ...prev] as ICommunity[],
-            );
         }
         handleClose();
       } catch (err) {

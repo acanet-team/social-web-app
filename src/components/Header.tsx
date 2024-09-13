@@ -233,6 +233,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href={nickName ? `/profile/${nickName}` : "#"}
+                      // href={() => window.location.replace(nickName ? `/profile/${nickName}` : "#")}
                       className="nav-content-bttn open-font"
                     >
                       <i className="feather-user btn-round-md bg-blue-gradiant me-3"></i>

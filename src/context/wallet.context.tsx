@@ -112,7 +112,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     );
     setRateContract(rate);
     const community = new ethers.Contract(
-      contracts.Rate[30732],
+      contracts.Community[30732],
       communityAbi as any,
       signer || provider,
     );

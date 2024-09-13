@@ -25,6 +25,7 @@ export default function Profile({
   myPosts,
   totalPage,
   page,
+  userUsername,
   // dataMyGroups,
   // curPageGroup,
   // allPageGroup,
@@ -47,12 +48,17 @@ export default function Profile({
 
   useEffect(() => {
     if (session) {
+      console.log("seeee", session);
       setId(session?.user?.id);
     }
   }, [session]);
 
   useEffect(() => {
-    setCurTab(dataUser?.role.name === "broker" ? "about" : "posts");
+    setCurTab(
+      dataUser?.role.name === "broker" || dataUser?.role.name === "guest"
+        ? "about"
+        : "posts",
+    );
   }, [dataUser]);
 
   useEffect(() => {
@@ -161,7 +167,8 @@ export default function Profile({
           >
             <p>{t("Posts")}</p>
           </div>
-          {dataUser.role.name === "broker" && (
+          {(dataUser.role.name === "broker" ||
+            dataUser.role.name === "guest") && (
             <div
               className={`${styles["button-tab"]} ${curTab === TabPnum.About ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
               onClick={(e) => onSelectTabHandler(e)}
@@ -268,6 +275,7 @@ export async function getServerSideProps(context: NextPageContext) {
       myPosts: myPost?.data?.docs || null,
       totalPage: myPost?.data?.meta?.totalPage || 1,
       page: myPost?.data?.meta.page || 1,
+      userUsername: key || "",
       // dataMyGroups: myGroup?.data?.docs || null,
       // curPageGroup: myGroup?.data?.meta.page || 1,
       // allPageGroup: myGroup?.data?.meta.totalPage || 1,
