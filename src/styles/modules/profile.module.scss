@@ -72,12 +72,24 @@
   color: #111;
 }
 
-.profile-following__btn {
-  background-color: var(--theme-color-main);
+.profile-following__btn, .profile-follow__btn {
+  border-radius: 16px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  border: 1px solid var(--theme-color-main);
 }
 
-.profile-followed__btn {
-  background-color: var(--theme-color-text-secondary);
+.profile-following__btn {
+  background-color: var(--theme-color-main);
+  color: var(--light);
+}
+
+.profile-follow__btn {
+  background-color: var(--light);
+  color: var(--theme-color-main);
 }
 
 .profile-donate__btn {
@@ -90,6 +102,10 @@
 .profile-donate__btn i::before {
   color: #137d4a;
   font-weight: 600;
+}
+
+.icon-profile {
+  color: var(--theme-color-main);
 }
 
 .banner-info {
@@ -144,6 +160,10 @@
 
   .profile-rating__average {
     color: var(--light);
+  }
+
+  .profile-follow__btn {
+    background-color: var(--theme-color-shade);
   }
 }
 

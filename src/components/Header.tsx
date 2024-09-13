@@ -32,7 +32,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   const userId = session?.user?.id;
   const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
 
-  // console.log("fetchNotis22", notis);
+  // console.log("fetchNotis22");
 
   useEffect(() => {
     console.log("notifications", notifications);
@@ -40,6 +40,7 @@ export default function Header(props: { isOnboarding: boolean }) {
 
   useEffect(() => {
     if (session) {
+      console.log("sesss", session);
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
     }
   }, [session]);

@@ -1,4 +1,3 @@
-import { dataExperiencesProfile } from "@/fakeData/profile";
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
@@ -347,8 +346,7 @@ export const Experience = ({
                 }}
               >
                 <p className="m-0 font-xss fw-600">
-                  {t("Show all")}{" "}
-                  {dataExperiencesProfile?.length - experiencesToShow?.length}{" "}
+                  {t("Show all")} {company?.length - experiencesToShow?.length}{" "}
                   {t("experiences")}
                 </p>
 
