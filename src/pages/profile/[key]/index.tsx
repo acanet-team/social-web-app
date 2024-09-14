@@ -48,7 +48,6 @@ export default function Profile({
 
   useEffect(() => {
     if (session) {
-      console.log("seeee", session);
       setId(session?.user?.id);
     }
   }, [session]);

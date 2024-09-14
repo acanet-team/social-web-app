@@ -1,12 +1,25 @@
 .rating {
-  display: flex; 
-  color: #ffd700 !important;
+  display: flex;
 }
 
 .rating .filled {
-  color: #ffd700 !important; 
+  color: gold;
+}
+
+.rating .half {
+  color: lightgray !important;
+  position: relative;
+}
+
+.half::before {
+  content: "★";
+  color: gold !important;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
 }
 
 .rating .empty {
-  color: #e0e0e0;
+  color: lightgray !important;
 }

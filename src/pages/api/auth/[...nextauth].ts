@@ -102,10 +102,12 @@ const options: NextAuthOptions = {
         data.idToken = account.id_token;
         token.provider = "google";
       }
+
       if (account?.provider === "facebook") {
         data.accessToken = account.access_token;
         token.provider = "facebook";
       }
+
       const res = await httpClient.post<any, any>(
         `/v1/auth/${token?.provider}/login`,
         removePropertiesEmpty(data),
