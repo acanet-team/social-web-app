@@ -32,6 +32,24 @@ export default function TabRating(props: { brokerData: User }) {
     }
   }, [session]);
 
+  useEffect(() => {
+    const getAllRatings = async () => {
+      try {
+        // Get rating
+        const res = await rateContract.getAllRatingsByBroker(
+          brokerId?.toString(),
+          20,
+          0,
+        );
+        console.log("ressss", res);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    console.log("fetching");
+    getAllRatings();
+  }, [brokerId]);
+
   const formik = useFormik({
     initialValues: {
       rating: 0,
@@ -57,7 +75,6 @@ export default function TabRating(props: { brokerData: User }) {
         console.error(error);
       } finally {
         hideLoading();
-        // resetForm();
         resetForm({ rating: 0, review: "" } as any);
       }
     },

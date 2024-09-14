@@ -12,6 +12,8 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
+import { useWeb3 } from "@/context/wallet.context";
+import { ethers } from "ethers";
 
 interface TabBannerProps {
   role: boolean;
@@ -35,10 +37,10 @@ const Banner: React.FC<TabBannerProps> = ({
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
+  const { rateContract } = useWeb3();
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
-
   const [uploadedCoverImage, setUploadedCoverImage] = useState<File | null>(
     null,
   );
@@ -61,11 +63,11 @@ const Banner: React.FC<TabBannerProps> = ({
   const coverInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const numbersFollowers = formatNumber(flCount);
-
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
   const [brokers, setBrokers] = useState<any[]>([]);
+  const [avarageRating, setAverageRating] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
 
@@ -74,6 +76,23 @@ const Banner: React.FC<TabBannerProps> = ({
       setOpenImageCrop(true);
     }
   }, [selectedImage, imageType]);
+
+  useEffect(() => {
+    const fetchAverageRating = async () => {
+      console.log("broker id", dataUser.id);
+      const res = await rateContract.getAverageRating(dataUser.id.toString());
+      const avgRating = ethers.utils.formatEther(res.brokerTotalScore);
+      // console.log('avg', res.brokerTotalScore);
+      // const avgRating = res.brokerTotalScore.toNumber();
+      console.log("average rating", avgRating);
+      setAverageRating(parseFloat(avgRating));
+    };
+    try {
+      fetchAverageRating();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [dataUser.id]);
 
   const fileToDataString = (file: File) => {
     return new Promise<string>((resolve, reject) => {
@@ -360,9 +379,9 @@ const Banner: React.FC<TabBannerProps> = ({
             <div className="ms-sm-auto d-flex flex-column align-items-center justify-content-center mt-3 me-sm-4 me-0">
               {/* Rank image */}
               {/* <i className="bi bi-patch-check h1 m-0"></i> */}
-              <Ratings rating={5} size={18} />
+              <Ratings rating={avarageRating} size={18} />
               <div className={`fw-bold ${styles["profile-rating__average"]}`}>
-                Rating: 4.7
+                Rating: {avarageRating}
               </div>
               <div
                 style={{ fontSize: "13px" }}
