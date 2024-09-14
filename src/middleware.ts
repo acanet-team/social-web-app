@@ -6,8 +6,8 @@ import { ONBOARDING_STEP } from "./api/auth/auth.model";
 export async function middleware(request: NextRequest) {
   const token = (await getToken({
     req: request,
-    // secret: process.env.NEXT_AUTH_SECRET,
-    secret: "Vsmn1iPTxPak0x3q2+HHSI23ZLX+rZMAoQylm5Uyoew=",
+    secret: process.env.NEXT_AUTH_SECRET,
+    // secret: "Vsmn1iPTxPak0x3q2+HHSI23ZLX+rZMAoQylm5Uyoew=",
   })) as any;
 
   console.log("trace =>>>>>>>>", token);
