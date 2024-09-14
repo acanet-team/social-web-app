@@ -53,7 +53,8 @@ const LoginPage: NextPageWithLayout = () => {
     e.stopPropagation();
     e.preventDefault();
     try {
-      await signIn("credentials", { redirect: false }, {});
+      showLoading();
+      await signIn("credentials", {}, {});
     } catch (error) {
       console.log("error", error);
     }

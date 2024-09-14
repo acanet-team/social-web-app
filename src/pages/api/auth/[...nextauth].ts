@@ -48,11 +48,9 @@ const options: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, account, trigger }: any) {
-      console.log(token);
-      const guestTokenRes: any = await guestLogin();
-      const guestToken = guestTokenRes.token;
-
-      if (guestToken && account?.provider === "credentials") {
+      if (account?.provider === "credentials") {
+        const guestTokenRes: any = await guestLogin();
+        const guestToken = guestTokenRes.token;
         token.accessToken = guestToken;
         token.needToLogin = false;
         httpClient.setAuthorization(guestToken);
