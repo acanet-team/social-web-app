@@ -34,7 +34,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log("notifications-yy", notifications);
+    // console.log("notifications-yy", notifications);
   }, [notifications]);
 
   useEffect(() => {
@@ -189,7 +189,7 @@ export default function Header(props: { isOnboarding: boolean }) {
       </span>
       <div
         ref={notiRef}
-        className={`dropdown-menu  right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
+        className={`dropdown-menu right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
       >
         <Notifications
           photo={photo}
@@ -217,6 +217,7 @@ export default function Header(props: { isOnboarding: boolean }) {
           <HeaderSetting />
         </div>
       )}
+
       {/* Left navbar */}
       {!props.isOnboarding && (
         <nav

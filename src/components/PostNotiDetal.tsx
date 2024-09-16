@@ -67,14 +67,15 @@ const PostNotiDetail = (props: {
     }
   }, []);
 
-  console.log("post id", id);
-
   useEffect(() => {
     const getDataDetailPost = async () => {
       if (id) {
         try {
           const res = await getDetailPost(id as string);
           setDataPost(res.data);
+          setLikeNum(res.data.favoriteCount);
+          setCommentNum(res.data.commentCount);
+          setIsLiked(res.data.liked);
         } catch (error) {
           console.error("Failed to fetch post details", error);
         }

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import styles from "@/styles/modules/topBrokers.module.scss";
 import "slick-carousel/slick/slick.css";
@@ -20,6 +19,9 @@ export const TopBrokers = (props: {
     Number(followersCount),
   );
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const firstNameArr = firstName.split(" ");
+  const lastNameArr = lastName.split(" ");
+  const displayName = `${firstNameArr[firstNameArr.length - 1]} ${lastNameArr[0]}`;
 
   const onFollowBrokerHandler = (e: any, brokerId: number) => {
     try {
@@ -45,13 +47,13 @@ export const TopBrokers = (props: {
       className={styles["image-slider-container"]}
       id={styles["top-brokers"]}
     >
-      <div className="card w140 h200 d-block border-0 shadow-md bg-light rounded-3 overflow-hidden my-3 me-3">
+      <div className="card w140 h210 d-block border-0 shadow-md bg-light rounded-3 overflow-hidden my-3 me-3">
         <div className="card-body d-block w-100 ps-4 pe-4 pb-4 text-center">
           <Link href={`/profile/${brokerId}`}>
             <figure className="avatar overflow-hidden ms-auto me-auto mb-0 position-relative w75 z-index-1">
               <Image
                 src={photoUrl ? photoUrl : "/assets/images/user.png"}
-                alt="avater"
+                alt="avatar"
                 width={75}
                 height={75}
                 className="float-right p-1 bg-white rounded-circle object-fit-cover"
@@ -59,9 +61,7 @@ export const TopBrokers = (props: {
               />
             </figure>
             <div className="clearfix"></div>
-            <h4 className="fw-700 font-xsss mt-2 mb-1">
-              {firstName + " " + lastName}
-            </h4>
+            <h4 className="fw-700 font-xsss mt-2 mb-1">{displayName}</h4>
           </Link>
           <p className="fw-500 font-xssss text-grey-700 mt-0 mb-2">
             {followerNum >= 1000

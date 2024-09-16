@@ -292,9 +292,12 @@ const Comments = forwardRef(
         {/* Delete modal */}
         {showModal && (
           <AlertModal
+            show={showModal}
+            title={tModal("delete_title")}
             message={tModal("modal_comment_delete")}
-            onCancel={handleCancel}
-            onOk={onProceedDelete}
+            handleClose={handleCancel}
+            onProceed={onProceedDelete}
+            type="delete"
           />
         )}
       </div>

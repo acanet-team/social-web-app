@@ -100,7 +100,6 @@ export default function Profile({
   const fetchProfileData = async () => {
     try {
       const dtProfileRes = await getProfile(String(idUser));
-      // console.log("render", dtProfileRes);
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
       setDtUser(dtProfileRes?.data?.user || []);
@@ -108,8 +107,6 @@ export default function Profile({
       setListInterestTopic(interestTopicRes?.data.docs || []);
       setFlCount(dtProfileRes?.data?.followersCount || 0);
       setFolowed(dtProfileRes.data?.followed);
-      console.log("count", dtProfileRes?.data?.followersCount);
-      console.log("count", flCount);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -123,8 +120,8 @@ export default function Profile({
       setCurTab("communities");
     } else if (chosenTab === t("about")) {
       setCurTab("about");
-    } else if (chosenTab === t("Wallet")) {
-      setCurTab("wallet");
+    } else if (chosenTab === t("Signal")) {
+      setCurTab("signal");
     } else {
       setCurTab("rating");
     }
@@ -190,10 +187,10 @@ export default function Profile({
             </div>
           )}
           <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.Wallet ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            className={`${styles["button-tab"]} ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
             onClick={(e) => onSelectTabHandler(e)}
           >
-            <p>{t("Wallet")}</p>
+            <p>{t("Signal")}</p>
           </div>
         </div>
       </div>
@@ -231,7 +228,7 @@ export default function Profile({
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
         <TabRating brokerData={dataUser} />
       )}
-      {curTab === TabPnum.Wallet && <Wallet />}
+      {curTab === TabPnum.Signal && <Wallet />}
     </div>
   );
 }

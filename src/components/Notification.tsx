@@ -33,7 +33,7 @@ const Notifications: React.FC<NotificationProps> = ({
   // const [newNotifications, setNewNotifications] = useState<Set<string>>(
   //   new Set()
   // );
-  console.log("notiApi", notis);
+  // console.log("notiApi", notis);
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
     const diffInMs = now - createdAt;
@@ -293,7 +293,6 @@ const Notifications: React.FC<NotificationProps> = ({
       (notification) => notification.read_at !== null,
     );
     if (allRead) {
-      console.log("All notifications are read, updating state.");
       setReadAllNotis(true);
     } else {
       setReadAllNotis(false);

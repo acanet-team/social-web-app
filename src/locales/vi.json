@@ -186,7 +186,7 @@
     "About": "Giới Thiệu",
     "Communities": "Cộng Đồng",
     "Rating": "Đánh Giá",
-    "Wallet": "Ví",
+    "Signal": "Tín hiệu",
     "save": "Lưu",
     "back": "Quay Lại",
     "company_name": "Tên Công Ty",
@@ -299,7 +299,11 @@
     "modal_member_delete": "Xác nhận xoá thành viên?",
     "modal_member_reject": "Xác nhận từ chối thành viên?",
     "modal_yes": "Tiếp tục",
-    "modal_no": "Không"
+    "modal_no": "Không",
+    "modal_delete": "Xoá",
+    "delete_title": "Xoá bình luận?",
+    "delete_member": "Xoá thành viên?",
+    "reject_member": "Từ chối thành viên"
   },
   "Form": {
     "search": "Tìm kiếm",
@@ -323,7 +327,8 @@
     "rank_desc_guarantee": "Đảm bảo khách quan 100%",
     "error_missing_rating": "Vui lòng điền điểm đánh giá.",
     "review_success": "Đánh giá thành công.",
-    "reivew_fail": "Không thể gửi đánh giá."
+    "reivew_fail": "Không thể gửi đánh giá.",
+    "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!"
   },
   "Wallet": {
     "connect_wallet": "Kết nối ví của bạn tới Acanet"

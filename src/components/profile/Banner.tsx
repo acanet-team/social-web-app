@@ -14,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
+import convertBigNumber from "@/utils/conver-bigNumber";
 
 interface TabBannerProps {
   role: boolean;
@@ -81,11 +82,11 @@ const Banner: React.FC<TabBannerProps> = ({
     const fetchAverageRating = async () => {
       console.log("broker id", dataUser.id);
       const res = await rateContract.getAverageRating(dataUser.id.toString());
-      const avgRating = ethers.utils.formatEther(res.brokerTotalScore);
-      // console.log('avg', res.brokerTotalScore);
-      // const avgRating = res.brokerTotalScore.toNumber();
+      // const avgRatingBigNumber = ethers.utils.formatEther(res.brokerTotalScore);
+      // const avgRating = Math.round(parseFloat(avgRatingBigNumber) * (10 ** 18));
+      const avgRating = convertBigNumber(res.brokerTotalScore);
       console.log("average rating", avgRating);
-      setAverageRating(parseFloat(avgRating));
+      setAverageRating(avgRating);
     };
     try {
       fetchAverageRating();

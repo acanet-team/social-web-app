@@ -14,7 +14,7 @@
 
 .modal-content {
   background: white;
-  padding: 50px;
+  padding: 40px;
   border-radius: 8px;
   text-align: center;
   position: relative;
@@ -41,6 +41,10 @@
 .ok-button {
   background-color: var(--theme-color-main);
   color: white;
+}
+
+.modal-actions {
+  margin-left: auto;
 }
 
 // Community
