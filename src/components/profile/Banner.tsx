@@ -13,8 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
-import { ethers } from "ethers";
-import convertBigNumber from "@/utils/conver-bigNumber";
+import convertBigNumber from "@/utils/convert-bigNumber";
+import { ConvertType } from "@/types";
 
 interface TabBannerProps {
   role: boolean;
@@ -38,7 +38,7 @@ const Banner: React.FC<TabBannerProps> = ({
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
-  const { rateContract } = useWeb3();
+  const { rateContract, connectWallet } = useWeb3();
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -72,6 +72,20 @@ const Banner: React.FC<TabBannerProps> = ({
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
 
+  const fetchAverageRating = async () => {
+    try {
+      console.log("broker id", dataUser.id);
+      const res = await rateContract.getAverageRating(dataUser.id.toString());
+      const avgRating = res.brokerTotalScore.toNumber();
+      // const avgRating = convertBigNumber(res.brokerTotalScore, ConvertType.normal_number);
+      console.log("aaa", res);
+      console.log("average rating", avgRating);
+      setAverageRating(Number(avgRating));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (selectedImage && imageType) {
       setOpenImageCrop(true);
@@ -79,20 +93,7 @@ const Banner: React.FC<TabBannerProps> = ({
   }, [selectedImage, imageType]);
 
   useEffect(() => {
-    const fetchAverageRating = async () => {
-      console.log("broker id", dataUser.id);
-      const res = await rateContract.getAverageRating(dataUser.id.toString());
-      // const avgRatingBigNumber = ethers.utils.formatEther(res.brokerTotalScore);
-      // const avgRating = Math.round(parseFloat(avgRatingBigNumber) * (10 ** 18));
-      const avgRating = convertBigNumber(res.brokerTotalScore);
-      console.log("average rating", avgRating);
-      setAverageRating(avgRating);
-    };
-    try {
-      fetchAverageRating();
-    } catch (err) {
-      console.log(err);
-    }
+    fetchAverageRating();
   }, [dataUser.id]);
 
   const fileToDataString = (file: File) => {
@@ -187,7 +188,6 @@ const Banner: React.FC<TabBannerProps> = ({
         setIsLoading(true);
         const res = await createGetBrokersRequest(page, 20);
         setBrokers(res.data.docs ? res.data.docs : res.data.data || []);
-        console.log("Success", brokers);
       } catch (err) {
         console.log(err);
       } finally {
@@ -328,7 +328,7 @@ const Banner: React.FC<TabBannerProps> = ({
                 </div>
               </div>
               <div
-                className="d-flex align-items-center"
+                className="d-flex align-items-center justify-content-center justify-content-sm-start "
                 style={{ minWidth: "220px" }}
               >
                 {dataUser.role.name === "broker" && (

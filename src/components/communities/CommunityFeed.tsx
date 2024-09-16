@@ -35,7 +35,7 @@ export default function CommunityFeed(props: {
         "community",
         props.groupId,
       );
-      console.log("posts", response);
+      // console.log("posts", response);
       setPosts((prev: IPost[]) => {
         const newPosts: IPost[] = combineUniqueById(
           prev,

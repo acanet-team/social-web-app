@@ -121,6 +121,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     // If `wallet` is defined then the user is connected
+    // console.log(wallet);
     if (wallet) {
       const { name, avatar }: any = wallet?.accounts?.[0]?.ens ?? {};
       setAccount({

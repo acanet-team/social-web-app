@@ -71,9 +71,9 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     // Listen to message
     newSocket.addEventListener("message", handleMessage);
 
-    newSocket.addEventListener("close", () => {
-      console.log("WebSocket disconnected");
-    });
+    // newSocket.addEventListener("close", () => {
+    //   console.log("WebSocket disconnected");
+    // });
 
     newSocket.addEventListener("error", (error) => {
       console.error("WebSocket error:", error);

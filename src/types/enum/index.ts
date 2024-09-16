@@ -29,3 +29,8 @@ export enum CommunityJoiningStatus {
   rejected = "rejected", // Bị từ chối
   banned = "banned", // Bị ban
 }
+
+export enum ConvertType {
+  normal_number = "normal",
+  datetime = "datetime",
+}
