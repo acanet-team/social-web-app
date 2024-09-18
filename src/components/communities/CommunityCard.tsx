@@ -70,7 +70,6 @@ export default function CommunityCard(props: {
           curUser?.toString(),
           {
             from: account?.address,
-            gasPrice: ethers.utils.parseUnits("100", "gwei"),
             gasLimit: 2000000,
           },
         );

@@ -78,9 +78,10 @@ function DonateModal(props: { show: boolean; handleClose: () => void }) {
             type="number"
             value={formik.values.amount}
             inputProps={{
-              step: "0.01",
+              min: 0,
+              step: 0.01,
             }}
-            placeholder={t("donate_input")}
+            // placeholder={t("donate_input")}
             onBlur={(e) =>
               formik.setFieldValue(
                 "amount",

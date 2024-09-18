@@ -42,6 +42,7 @@
   "CreatePost": {
     "live_Video": "Video trực tiếp",
     "create_Post": "Tạo bài đăng",
+    "create_signal": "Tạo tín hiệu",
     "Photo_Video": "Ảnh/Video",
     "Whats_on_your_mind": "Bạn đang nghĩ gì vậy?",
     "select_Topic": "Chọn chủ đề",
@@ -52,6 +53,30 @@
     "post_create_success": "Bài viết được tạo thành công!",
     "post_create_error": "Lỗi tạo bài viết.",
     "error_fetch_topic": "Lỗi khi tìm nạp chủ đề."
+  },
+  "CreateSignal": {
+    "create_signal": "Tạo signal",
+    "error_missing_currency_pairs": "Vui lòng chọn cặp tỷ giá",
+    "error_missing_type": "Hãy chọn kiểu lệnh",
+    "error_missing_expiry": "Hãy nhập ngày hết hạn",
+    "error_invalid_expiry": "Ngày hết hạn phải ở trong tương lai",
+    "error_missing_entry": "Vui lòng nhập giá vào lệnh",
+    "error_missing_target": "Vui lòng nhập giá mục tiêu",
+    "error_min_entry": "Giá vào phải lớn hơn 0.0000000001",
+    "error_min_stop": "Giá cắt lỗ phải lớn hơn 0.0000000001.",
+    "error_min_target": "Giá mục tiêu phải lớn hơn 0.0000000001.",
+    "error_invalid_low_target": "Giá mục tiêu phải cao hơn giá vào lệnh",
+    "error_invalid_high_target": "Giá mục tiêu phải thấp hơn giá vào lệnh",
+    "error_missing_stop": "Vui lòng nhập giá cắt lỗ",
+    "error_invalid_high_stop": "Giá cắt lỗ phải thấp hơn giá vào lệnh",
+    "error_invalid_low_stop": "Giá cắt lỗ phải cao hơn giá vào lệnh",
+    "signal_pair": "Cặp tỷ giá",
+    "type": "Kiểu lệnh",
+    "expirary_date": "Ngày hết hạn",
+    "entry": "Giá vào",
+    "target": "Giá mục tiêu",
+    "stop": "Giá cắt lỗ",
+    "description": "Mô tả"
   },
   "BrokerList": {
     "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",

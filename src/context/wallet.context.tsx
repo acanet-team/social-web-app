@@ -74,18 +74,20 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   const [signer, setSigner] = useState<any>(null);
   const { data: session, update } = useSession();
   const [provider, setProvider] = useState<any>(
-    new ethers.providers.JsonRpcProvider(
-      "	https://mevm.devnet.imola.movementlabs.xyz",
-    ),
+    new ethers.providers.JsonRpcProvider(chains[0]?.rpcUrl as string),
   );
 
   const [rateContract, setRateContract] = useState<any>(
-    new ethers.Contract(contracts.Rate[30732], rateAbi as any, provider),
+    new ethers.Contract(
+      contracts.Rate["0x61"] as string,
+      rateAbi as any,
+      provider,
+    ),
   );
 
   const [communityContract, setCommunityContract] = useState<any>(
     new ethers.Contract(
-      contracts.Community[30732],
+      contracts.Community["0x61"] as string,
       communityAbi as any,
       provider,
     ),
@@ -105,18 +107,20 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    const rate = new ethers.Contract(
-      contracts.Rate[30732],
-      rateAbi as any,
-      signer || provider,
-    );
-    setRateContract(rate);
-    const community = new ethers.Contract(
-      contracts.Community[30732],
-      communityAbi as any,
-      signer || provider,
-    );
-    setCommunityContract(community);
+    if (connectedChain) {
+      const rate = new ethers.Contract(
+        contracts.Rate[connectedChain?.id] as string,
+        rateAbi as any,
+        signer || provider,
+      );
+      setRateContract(rate);
+      const community = new ethers.Contract(
+        contracts.Community[connectedChain?.id] as string,
+        communityAbi as any,
+        signer || provider,
+      );
+      setCommunityContract(community);
+    }
   }, [provider, signer, connectedChain]);
 
   useEffect(() => {

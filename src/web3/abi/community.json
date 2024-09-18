@@ -324,6 +324,24 @@
         "internalType": "string",
         "name": "groupId",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fee",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateGroupFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "groupId",
+        "type": "string"
       }
     ],
     "name": "withdraw",
