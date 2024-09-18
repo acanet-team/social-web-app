@@ -110,8 +110,6 @@ export default function TabRating(props: { brokerData: User }) {
           values.rating,
           {
             from: account?.address,
-            gasPrice: ethers.utils.parseUnits("100", "gwei"),
-            gasLimit: 2000000,
           },
         );
         setReviewSubmitted(true);

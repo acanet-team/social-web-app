@@ -207,9 +207,10 @@ const CreatePost = (props: {
   };
 
   const menuClass = `${isOpen ? " show" : ""}`;
+
   return (
     <div
-      className="card w-100 shadow-xss border-0 px-4 py-3 mb-3 nunito-font"
+      className="card w-100 border-0 py-3 mb-3 nunito-font"
       id={style["create-post"]}
     >
       <div

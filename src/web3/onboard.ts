@@ -18,6 +18,7 @@ const ETH_MAINNET_RPC_URL = `https://rpc.payload.de`;
 const KLAYTN_MAINNET_URL = `Paste KLAYTN MAINNET URL`;
 const KLAYTN_BAOBAB_URL = `Paste KLAYTN BAOBAB URL`;
 const MOVE_RPC_URL = "https://mevm.devnet.imola.movementlabs.xyz";
+const BNB_TESTNET = "https://data-seed-prebsc-1-s1.bnbchain.org:8545";
 
 export const initWeb3Onboard = () =>
   init({
@@ -25,6 +26,13 @@ export const initWeb3Onboard = () =>
     wallets: modules,
     // An array of Chains that your app supports
     chains: [
+      {
+        id: 97,
+        token: "TBNB",
+        namespace: "evm",
+        label: "TBNB",
+        rpcUrl: BNB_TESTNET,
+      },
       {
         id: 30732,
         token: "MOVE",
