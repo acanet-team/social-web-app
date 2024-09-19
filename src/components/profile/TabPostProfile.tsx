@@ -5,19 +5,18 @@ import type { IPost } from "@/api/newsfeed/model";
 import { getMyPosts } from "@/api/profile";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { cleanPath } from "@/utils/Helpers";
-import { id } from "ethers/lib/utils";
 
 const TabPostProfile = (props: {
-  myPosts: any;
+  // myPosts: any;
   take: number;
-  totalPages: number;
-  curPage: number;
+  // totalPages: number;
+  // curPage: number;
   id: string;
 }) => {
-  const [myPosts, setMyPosts] = useState<IPost[]>(props.myPosts);
+  const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [take, setTake] = useState<number>(props.take);
-  const [page, setPage] = useState<number>(props.curPage);
-  const [totalPage, setTotalPage] = useState<number>(props.totalPages);
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
@@ -32,13 +31,14 @@ const TabPostProfile = (props: {
         Number(props.id),
       );
       console.log("postsssss", response);
-      setMyPosts((prev: IPost[]) => {
-        const newPosts: IPost[] = combineUniqueById(
-          prev,
-          response.data.docs,
-        ) as IPost[];
-        return newPosts;
-      });
+      setMyPosts((prev) => [...prev, ...response.data.docs]);
+      // setMyPosts((prev: IPost[]) => {
+      //   const newPosts: IPost[] = combineUniqueById(
+      //     prev,
+      //     response.data.docs,
+      //   ) as IPost[];
+      //   return newPosts;
+      // });
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -62,19 +62,6 @@ const TabPostProfile = (props: {
   };
 
   useEffect(() => {
-    if (page > 1) {
-      fetchPosts(page);
-    }
-  }, [page]);
-
-  useEffect(() => {
-    setMyPosts([]);
-    setPage(1);
-    setTotalPage(2);
-    fetchPosts(1);
-  }, [props.id]);
-
-  useEffect(() => {
     if (document.documentElement && page < totalPage) {
       window.addEventListener("scroll", onScrollHandler);
     }
@@ -84,6 +71,18 @@ const TabPostProfile = (props: {
       }
     };
   }, [page, totalPage, isLoading]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchPosts(page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    console.log("useEffect triggered");
+    setMyPosts([]);
+    fetchPosts();
+  }, [props.id]);
 
   // Avoid fetching data on initial render
   useEffect(() => {

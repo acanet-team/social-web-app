@@ -159,7 +159,8 @@
     "chat": "Chat",
     "account": "Account",
     "my profile": "My Profile",
-    "home_page": "Home Page"
+    "home_page": "Home Page",
+    "request_connect": "Request Connect"
   },
   "Community": {
     "community": "Communities",
@@ -278,7 +279,12 @@
     "following": "Following",
     "donate_amount": "Donate amount",
     "donate_amount_missing": "Donate amount must be greater than 0.",
-    "donate_input": "Please use comma as the decimal seperator"
+    "donate_input": "Please use comma as the decimal seperator",
+    "connect": "connect",
+    "connects": "connects",
+    "Connect": "Connect",
+    "connecting": "Connecting",
+    "waiting": "Waiting"
   },
   "FeedTabs": {
     "for_you": "For you",
@@ -325,5 +331,8 @@
   },
   "Wallet": {
     "connect_wallet": "Connect your wallet to Acanet"
+  },
+  "Connect_investor": {
+    "friend_request": "Friend Request"
   }
 }

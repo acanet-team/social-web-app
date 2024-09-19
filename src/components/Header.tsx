@@ -32,10 +32,13 @@ export default function Header(props: { isOnboarding: boolean }) {
   const [nickName, setNickName] = useState<string>("");
   const userId = session?.user?.id;
   const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
+  // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
-  useEffect(() => {
-    console.log("notifications-yy", notifications);
-  }, [notifications]);
+  // useEffect(() => {
+  //   setNotiSocket(notifications);
+  // }, [notifications]);
+  // console.log("soket", notiSocket);
+  // console.log("notifications-yy", notifications);
 
   useEffect(() => {
     if (session) {
@@ -132,13 +135,17 @@ export default function Header(props: { isOnboarding: boolean }) {
           onClick={() => toggleisNoti((prevState) => !prevState)}
           ref={iconNotiMiniRef}
         >
-          {(notifications?.length > 0 || !reatAllNotis) && (
-            <span
-              className={`dot-count ${styles["dot-count"]} bg-warning mob-menu top-0 right-0`}
-            >
-              .
-            </span>
-          )}
+          {
+            // (notiSocket?.length > 0 ||
+            !reatAllNotis && (
+              // )
+              <span
+                className={`dot-count ${styles["dot-count"]} bg-warning mob-menu top-0 right-0`}
+              >
+                .
+              </span>
+            )
+          }
           <i className="feather-bell text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </span>
         <span
@@ -179,11 +186,15 @@ export default function Header(props: { isOnboarding: boolean }) {
         onClick={() => toggleisNoti((prevState) => !prevState)}
         ref={iconNotiRef}
       >
-        {(notifications?.length > 0 || !reatAllNotis) && (
-          <span
-            className={`dot-count ${styles["dot-count"]} bg-warning`}
-          ></span>
-        )}
+        {
+          // (notiSocket?.length > 0 ||
+          !reatAllNotis && (
+            // )
+            <span
+              className={`dot-count ${styles["dot-count"]} bg-warning`}
+            ></span>
+          )
+        }
 
         <i className="feather-bell font-xl text-current"></i>
       </span>
@@ -192,10 +203,11 @@ export default function Header(props: { isOnboarding: boolean }) {
         className={`dropdown-menu  right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
       >
         <Notifications
-          photo={photo}
           notifications={notifications}
           toggleisNoti={toggleisNoti}
           setReadAllNotis={setReadAllNotis}
+          isNoti={isNoti}
+          // setNotiSocket={setNotiSocket}
         />
       </div>
 
@@ -236,7 +248,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                       // href={() => window.location.replace(nickName ? `/profile/${nickName}` : "#")}
                       className="nav-content-bttn open-font"
                     >
-                      <i className="feather-user btn-round-md bg-blue-gradiant me-3"></i>
+                      <i className="feather-user btn-round-md bg-youtube me-3"></i>
 
                       <span>{t("my profile")}</span>
                     </Link>
@@ -246,6 +258,25 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
 
                       <span>{t("newsfeed")}</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/listrequest"
+                      className="nav-content-bttn open-font "
+                    >
+                      <div className=" btn-round-md bg-instagram me-3">
+                        <Image
+                          src="/assets/images/iconListRequest.svg"
+                          alt=""
+                          width={20}
+                          height={20}
+                          className="w20 rounded-circle shadow-xss"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+
+                      <span>{t("request_connect")}</span>
                     </Link>
                   </li>
                   <li>

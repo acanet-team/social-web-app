@@ -32,16 +32,10 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const addNotification = useCallback((message: any) => {
-    // console.log("Attempting to add notification:", message);
     setNotifications((prevState) => {
-      // Only add the notification if it doesn't already exist (by ID).
-      const exists = prevState.some(
-        (notification) => notification.id === message.id,
-      );
-      if (!exists) {
-        return [message, ...prevState];
-      }
-      return prevState;
+      // 2 actions on 1 post have the same id => only add the latest id
+      const updatedNoti = prevState.filter((noti) => noti.id !== message.id);
+      return [message, ...updatedNoti];
     });
   }, []);
 
@@ -53,6 +47,8 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     const handleMessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       const message = JSON.parse(data.message);
+      // console.log(66666666666, message);
+
       addNotification(message);
     };
 

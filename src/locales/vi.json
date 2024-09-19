@@ -162,7 +162,8 @@
     "logout": "Đăng xuất",
     "chat": "Trò chuyện",
     "account": "Tài khoản",
-    "home_page": "Trang chủ"
+    "home_page": "Trang chủ",
+    "request_connect": "Yêu cầu kết nối"
   },
   "MyProfile": {
     "follow": "Theo dõi",
@@ -244,7 +245,12 @@
     "following": "Đang theo dõi",
     "donate_amount": "Số tiền ủng hộ",
     "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.",
-    "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân"
+    "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân",
+    "Connect": "Kết nối",
+    "connect": "kết nối",
+    "connects": "kết nối",
+    "connecting": "Đang kết nối",
+    "waiting": "Đang chờ"
   },
   "Community": {
     "community": "Cộng đồng",
@@ -327,5 +333,8 @@
   },
   "Wallet": {
     "connect_wallet": "Kết nối ví của bạn tới Acanet"
+  },
+  "Connect_investor": {
+    "friend_request": "Yêu cầu kết nối"
   }
 }

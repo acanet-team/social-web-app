@@ -22,13 +22,6 @@ export default function Profile({
   followersCount,
   idUser,
   interestTopic,
-  myPosts,
-  totalPage,
-  page,
-  userUsername,
-  // dataMyGroups,
-  // curPageGroup,
-  // allPageGroup,
   ssi,
   followed,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -44,7 +37,7 @@ export default function Profile({
   const [role, setRole] = useState(false);
   const [initialFetch, setInitialFetch] = useState(false);
   const [switchTab, setSwitchTab] = useState<boolean>(false);
-  const [curTab, setCurTab] = useState<string>();
+  const [curTab, setCurTab] = useState<string>("about");
 
   useEffect(() => {
     if (session) {
@@ -52,13 +45,12 @@ export default function Profile({
     }
   }, [session]);
 
-  useEffect(() => {
-    setCurTab(
-      dataUser?.role.name === "broker" || dataUser?.role.name === "guest"
-        ? "about"
-        : "posts",
-    );
-  }, [dataUser]);
+  // useEffect(() => {
+  //   setCurTab(
+  //     (dataUser?.role.name === "broker" || dataUser?.role.name === "guest") &&
+  //       "about",
+  //   );
+  // }, [dataUser]);
 
   useEffect(() => {
     if (Number(idUser) === id) {
@@ -167,7 +159,8 @@ export default function Profile({
             <p>{t("Posts")}</p>
           </div>
           {(dataUser.role.name === "broker" ||
-            dataUser.role.name === "guest") && (
+            dataUser.role.name === "guest" ||
+            dataUser.role.name === "investor") && (
             <div
               className={`${styles["button-tab"]} ${curTab === TabPnum.About ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
               onClick={(e) => onSelectTabHandler(e)}
@@ -207,13 +200,7 @@ export default function Profile({
         />
       )}
       {curTab === TabPnum.Posts && (
-        <TabPostProfile
-          myPosts={myPosts}
-          totalPages={totalPage}
-          curPage={page}
-          id={String(idUser)}
-          take={TAKE}
-        />
+        <TabPostProfile id={String(idUser)} take={TAKE} />
       )}
       {curTab === TabPnum.Communities && (
         <TabGroupProfile
@@ -222,8 +209,6 @@ export default function Profile({
           communityType={
             dataUser.role.name === "broker" ? "owned" : "following"
           }
-          // curPage={curPageGroup}
-          // allPage={allPageGroup}
           take={TAKE}
           id={Number(idUser)}
         />
@@ -245,21 +230,6 @@ export async function getServerSideProps(context: NextPageContext) {
   const profileRes = await getProfile(key as string);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
-  let myPost;
-  if (idUser) {
-    myPost = await getMyPosts(1, TAKE, "owner", Number(idUser));
-  }
-  // const brokerId =
-  //   profileRes?.data?.user?.role?.name === "broker" ? Number(id) : "";
-  // const type = profileRes?.data?.user?.role?.name === "broker" ? "" : "joined";
-  // const myGroup = await getMyGroups({
-  //   page: 1,
-  //   take: TAKE,
-  //   type,
-  //   brokerId,
-  //   search: "",
-  //   feeType: "",
-  // });
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
@@ -271,13 +241,7 @@ export async function getServerSideProps(context: NextPageContext) {
       ssi: profileRes?.data?.ssi || null,
       idUser: idUser,
       interestTopic: interestTopic?.data.docs || [],
-      myPosts: myPost?.data?.docs || null,
-      totalPage: myPost?.data?.meta?.totalPage || 1,
-      page: myPost?.data?.meta.page || 1,
       userUsername: key || "",
-      // dataMyGroups: myGroup?.data?.docs || null,
-      // curPageGroup: myGroup?.data?.meta.page || 1,
-      // allPageGroup: myGroup?.data?.meta.totalPage || 1,
     },
   };
 }

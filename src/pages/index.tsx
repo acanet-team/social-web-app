@@ -1,5 +1,6 @@
 import { getPosts, getTopBrokers } from "@/api/newsfeed";
 import Contacts from "@/components/Contacts";
+import Friends from "@/components/Friends";
 import CreatePost from "@/components/newsfeed/Createpost";
 import FetchBrokers from "@/components/newsfeed/FetchBrokers";
 import Posts from "@/components/newsfeed/Posts";
@@ -11,8 +12,7 @@ import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/api/newsfeed/model";
-import { getNotifications } from "@/api/notification";
-import type { BaseArrayResponsVersionDocs } from "@/api/model";
+import { useMediaQuery } from "react-responsive";
 
 const TAKE = 10;
 
@@ -26,6 +26,7 @@ const Home = ({
   const [curTab, setCurTab] = useState<string>("suggestion");
   const { data: session } = useSession() as any;
   const t = useTranslations("FeedTabs");
+  const isTablet = useMediaQuery({ query: "(max-width:992px)" });
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -76,7 +77,8 @@ const Home = ({
               />
             </div>
             <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-              <Contacts />
+              {!isTablet && <Friends />}
+              {/* <Contacts /> */}
             </div>
           </div>
         </div>

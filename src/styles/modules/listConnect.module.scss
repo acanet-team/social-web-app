@@ -1,0 +1,14 @@
+.layout-page-list-connect {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Đảm bảo container chiếm toàn bộ chiều cao trang */
+  width: 100%;
+}
+.list-connect {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 30px;
+  justify-content: center;
+}
