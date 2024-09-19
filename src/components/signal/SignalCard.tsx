@@ -10,7 +10,7 @@ export default function SignalCard() {
   };
   return (
     <div
-      className={classNames(styles.scene, styles["scene--card"])}
+      className={classNames(styles.signal, styles["signal--card"])}
       onClick={onFlipCardHandler}
     >
       <div

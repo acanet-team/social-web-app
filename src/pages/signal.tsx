@@ -55,7 +55,17 @@ const Signal = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
         allPage={totalPage}
         curPage={page}
       /> */}
-      <div className="card shadow-xss w-100 border-0 p-4 mt-4">
+      <div
+        className={`${styles["card_container"]} card shadow-xss w-100 border-0 mt-4`}
+      >
+        <SignalCard />
+        <SignalCard />
+        <SignalCard />
+        <SignalCard />
+        <SignalCard />
+        <SignalCard />
+        <SignalCard />
+        <SignalCard />
         <SignalCard />
       </div>
     </div>
