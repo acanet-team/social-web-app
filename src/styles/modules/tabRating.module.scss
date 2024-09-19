@@ -4,10 +4,19 @@
   width: 100%;
   padding: 2rem;
   border-radius: 5px;
+  padding: 3rem 5rem;
+}
+
+.rating-card {
+  border-bottom: 1px solid var(--border-color-light)
 }
 
 .tab-rating-list__container {
   margin-bottom: 100px;
+}
+
+.tab-rating-list__container div:last-child {
+  border: none !important;
 }
 
 .review_date {
@@ -49,3 +58,10 @@
   }
 }
 
+// MEDIA QUERIES
+@media (max-width:768px) {
+  .tab-rating__container,
+  .tab-rating-list__container {
+    padding: 2rem 1.5rem;
+  }
+}

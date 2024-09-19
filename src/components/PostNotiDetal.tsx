@@ -71,8 +71,8 @@ const PostNotiDetail = (props: {
         try {
           const res = await getDetailPost(id as string);
           setDataPost(res.data);
-          setCommentNum(res.data.commentCount);
           setLikeNum(res.data.favoriteCount);
+          setCommentNum(res.data.commentCount);
           setIsLiked(res.data.liked);
         } catch (error) {
           console.error("Failed to fetch post details", error);

@@ -7,7 +7,7 @@ export enum TabPnum {
   Communities = "communities",
   About = "about",
   Rating = "rating",
-  Wallet = "wallet",
+  Signal = "signal",
 }
 export enum CommunityEnum {
   popular = "popular",
@@ -28,4 +28,14 @@ export enum CommunityJoiningStatus {
   invited = "invited", // Đã gửi lời mời vào nhóm
   rejected = "rejected", // Bị từ chối
   banned = "banned", // Bị ban
+}
+
+export enum SignalStationEnum {
+  discover = "discover",
+  history = "history",
+}
+
+export enum ConvertType {
+  normal_number = "normal",
+  datetime = "datetime",
 }

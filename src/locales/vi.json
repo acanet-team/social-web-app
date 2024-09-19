@@ -42,6 +42,7 @@
   "CreatePost": {
     "live_Video": "Video trực tiếp",
     "create_Post": "Tạo bài đăng",
+    "create_signal": "Tạo tín hiệu",
     "Photo_Video": "Ảnh/Video",
     "Whats_on_your_mind": "Bạn đang nghĩ gì vậy?",
     "select_Topic": "Chọn chủ đề",
@@ -52,6 +53,30 @@
     "post_create_success": "Bài viết được tạo thành công!",
     "post_create_error": "Lỗi tạo bài viết.",
     "error_fetch_topic": "Lỗi khi tìm nạp chủ đề."
+  },
+  "CreateSignal": {
+    "create_signal": "Tạo signal",
+    "error_missing_currency_pairs": "Vui lòng chọn cặp tỷ giá",
+    "error_missing_type": "Hãy chọn kiểu lệnh",
+    "error_missing_expiry": "Hãy nhập ngày hết hạn",
+    "error_invalid_expiry": "Ngày hết hạn phải ở trong tương lai",
+    "error_missing_entry": "Vui lòng nhập giá vào lệnh",
+    "error_missing_target": "Vui lòng nhập giá mục tiêu",
+    "error_min_entry": "Giá vào phải lớn hơn 0.0000000001",
+    "error_min_stop": "Giá cắt lỗ phải lớn hơn 0.0000000001.",
+    "error_min_target": "Giá mục tiêu phải lớn hơn 0.0000000001.",
+    "error_invalid_low_target": "Giá mục tiêu phải cao hơn giá vào lệnh",
+    "error_invalid_high_target": "Giá mục tiêu phải thấp hơn giá vào lệnh",
+    "error_missing_stop": "Vui lòng nhập giá cắt lỗ",
+    "error_invalid_high_stop": "Giá cắt lỗ phải thấp hơn giá vào lệnh",
+    "error_invalid_low_stop": "Giá cắt lỗ phải cao hơn giá vào lệnh",
+    "signal_pair": "Cặp tỷ giá",
+    "type": "Kiểu lệnh",
+    "expirary_date": "Ngày hết hạn",
+    "entry": "Giá vào",
+    "target": "Giá mục tiêu",
+    "stop": "Giá cắt lỗ",
+    "description": "Mô tả"
   },
   "BrokerList": {
     "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
@@ -168,7 +193,7 @@
   "MyProfile": {
     "follow": "Theo dõi",
     "messages": "Tin nhắn",
-    "donate": "Quyên tặng",
+    "donate": "Ủng hộ",
     "about": "Giới thiệu",
     "experience": "Kinh nghiệm",
     "education": "Học vấn",
@@ -187,7 +212,7 @@
     "About": "Giới Thiệu",
     "Communities": "Cộng Đồng",
     "Rating": "Đánh Giá",
-    "Wallet": "Ví",
+    "Signal": "Tín hiệu",
     "save": "Lưu",
     "back": "Quay Lại",
     "company_name": "Tên Công Ty",
@@ -305,7 +330,11 @@
     "modal_member_delete": "Xác nhận xoá thành viên?",
     "modal_member_reject": "Xác nhận từ chối thành viên?",
     "modal_yes": "Tiếp tục",
-    "modal_no": "Không"
+    "modal_no": "Không",
+    "modal_delete": "Xoá",
+    "delete_title": "Xoá bình luận?",
+    "delete_member": "Xoá thành viên?",
+    "reject_member": "Từ chối thành viên"
   },
   "Form": {
     "search": "Tìm kiếm",
@@ -329,12 +358,20 @@
     "rank_desc_guarantee": "Đảm bảo khách quan 100%",
     "error_missing_rating": "Vui lòng điền điểm đánh giá.",
     "review_success": "Đánh giá thành công.",
-    "reivew_fail": "Không thể gửi đánh giá."
+    "reivew_fail": "Không thể gửi đánh giá.",
+    "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!"
   },
   "Wallet": {
-    "connect_wallet": "Kết nối ví của bạn tới Acanet"
+    "connect_wallet": "Kết nối ví của bạn tới Acanet",
+    "donate_success": "Ủng hộ thành công!",
+    "input_donate_amount": "Nhập"
   },
   "Connect_investor": {
     "friend_request": "Yêu cầu kết nối"
+  },
+  "Signal": {
+    "discover_tab": "Khám phá",
+    "history_tab": "Lịch sử",
+    "signal_station_title": "Trạm Signal"
   }
 }

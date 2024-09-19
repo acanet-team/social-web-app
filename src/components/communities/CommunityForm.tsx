@@ -63,7 +63,13 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
-  const { communityContract, account, provider, connectWallet } = useWeb3();
+  const {
+    communityContract,
+    account,
+    provider,
+    connectedChain,
+    connectWallet,
+  } = useWeb3();
 
   const fetchCommunity = async () => {
     try {
@@ -175,43 +181,43 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             );
           setCommunity && setCommunity(editedCommunity.data);
         } else {
-          // Create group on DB
-          const newCommunity = await createCommunity(communityData);
-          setCommunities &&
-            setCommunities(
-              (prev) => [newCommunity.data, ...prev] as ICommunity[],
-            );
-
-          console.log("com", newCommunity);
           if (values.feeNum) {
             // Create group with fee on smart contract
-            // const groupId = uuidV4();
-            // console.log('group fee', ethers.utils.parseEther(values.feeNum.toString()).toString());
-            console.log(communityContract);
-            console.log("group", newCommunity.data.id);
-            console.log("broker", brokerId);
-            console.log(
-              "fee",
-              ethers.utils
-                .parseEther(
-                  process.env.GAS_LIMIT?.toString() || "0.0000000000001",
-                )
-                .toString(),
-            );
+            const groupId = uuidV4();
+            // console.log(communityContract);
+            // console.log("group", groupId);
+            // console.log("broker", brokerId);
             const newGroupContract = await communityContract.createGroup(
-              newCommunity.data.id.toString(),
+              groupId.toString(),
               brokerId?.toString(),
               ethers.utils.parseEther(values.feeNum.toString()).toString(),
               {
                 from: account?.address,
-                gasPrice: ethers.utils.parseUnits("100", "gwei"),
-                gasLimit: 2000000,
               },
             );
-            console.log("new group", newGroupContract);
+            // console.log("new group", newGroupContract);
+            const communityHash = newGroupContract.hash;
+            if (communityHash && connectedChain) {
+              // console.log('connectedChain', connectedChain);
+              communityData.append("hashTransaction", communityHash);
+              communityData.append("id", groupId);
+              communityData.append(
+                "network",
+                connectedChain.id === "0x780c" ? "30732" : "72",
+              );
+            }
             // const awaits = await newGroupContract.wait();
             // console.log(awaits);
           }
+          // Create group on DB
+          // console.log('to send', communityData);
+          createCommunity(communityData);
+          throwToast("Your community is in review", "success");
+
+          // setCommunities &&
+          //   setCommunities(
+          //     (prev) => [newCommunity.data, ...prev] as ICommunity[]
+          //   );
         }
         handleClose();
       } catch (err) {
@@ -497,9 +503,10 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 type="number"
                 value={formik.values.feeNum}
                 inputProps={{
-                  step: "0.01",
+                  min: 0,
+                  step: 0.01,
                 }}
-                placeholder={tProfile("donate_input")}
+                // placeholder={tProfile("donate_input")}
                 // onBlur={(e) =>
                 //   formik.setFieldValue(
                 //     "feeNum",

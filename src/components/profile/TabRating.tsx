@@ -14,41 +14,81 @@ import { useSession } from "next-auth/react";
 import { useLoading } from "@/context/Loading/context";
 import { throwToast } from "@/utils/throw-toast";
 import { ethers } from "ethers";
+import convertBigNumber from "@/utils/convert-bigNumber";
+import { ConvertType } from "@/types";
+import page from "@/pages/courses/investor/page";
+import DotWaveLoader from "../DotWaveLoader";
 
 export default function TabRating(props: { brokerData: User }) {
   const { brokerData } = props;
-  const tRating = useTranslations("Rating");
   const { connectWallet, rateContract, account } = useWeb3();
   const { showLoading, hideLoading } = useLoading();
   const { data: session } = useSession();
-  const brokerId = brokerData.id;
   const [raterNickname, setRaterNickname] = useState<string>("");
   const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [curPage, setCurPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const tRating = useTranslations("Rating");
+  const brokerId = brokerData.id;
+  const TAKE = 20;
+
+  const getAllRatings = async (curPage: number) => {
+    try {
+      setIsLoading(true);
+      const res = await rateContract.getAllRatingsByBroker(
+        brokerId?.toString(),
+        TAKE,
+        (curPage - 1) * TAKE,
+      );
+      setReviews(res[0]);
+      console.log("ressss", curPage, res);
+      console.log("totalPage", res.totalPage.toNumber());
+      console.log("curPage", curPage);
+      setTotalPage(res.totalPage.toNumber());
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    console.log(session);
     if (session) {
       setRaterNickname(session?.user?.userProfile?.nickName);
     }
   }, [session]);
 
   useEffect(() => {
-    const getAllRatings = async () => {
-      try {
-        // Get rating
-        const res = await rateContract.getAllRatingsByBroker(
-          brokerId?.toString(),
-          20,
-          0,
-        );
-        console.log("ressss", res);
-      } catch (err) {
-        console.log(err);
+    getAllRatings(curPage);
+  }, [brokerId, curPage]);
+
+  const onScrollHandler = () => {
+    if (document.documentElement) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (
+        scrollTop + clientHeight >= scrollHeight &&
+        !isLoading &&
+        curPage < totalPage
+      ) {
+        console.log("fetching another page");
+        setCurPage((page) => page + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (document.documentElement && curPage < totalPage) {
+      window.addEventListener("scroll", onScrollHandler);
+    }
+    return () => {
+      if (document.documentElement) {
+        window.removeEventListener("scroll", onScrollHandler);
       }
     };
-    console.log("fetching");
-    getAllRatings();
-  }, [brokerId]);
+  }, [curPage, totalPage, isLoading]);
 
   const formik = useFormik({
     initialValues: {
@@ -63,11 +103,14 @@ export default function TabRating(props: { brokerData: User }) {
       connectWallet();
       try {
         showLoading();
-        await rateContract.createRating(
+        const res = await rateContract.createRating(
           values.review,
           brokerId?.toString(),
           raterNickname?.toString(),
           values.rating,
+          {
+            from: account?.address,
+          },
         );
         setReviewSubmitted(true);
       } catch (error) {
@@ -81,7 +124,7 @@ export default function TabRating(props: { brokerData: User }) {
   });
 
   return (
-    <div style={{ marginBottom: "300px" }}>
+    <div style={{ marginBottom: "100px" }}>
       <div
         className={`${styles["tab-rating__container"]} d-flex flex-column align-items-center shadow-xss my-5`}
       >
@@ -130,7 +173,7 @@ export default function TabRating(props: { brokerData: User }) {
               }}
               sx={{
                 border: "none",
-                "& fieldset": { border: "1px solid #eee" },
+                "& fieldset": { border: "2px solid #eee" },
                 borderRadius: "5px",
               }}
             />
@@ -166,32 +209,50 @@ export default function TabRating(props: { brokerData: User }) {
           )}
         </form>
       </div>
+      {/* Review list section */}
       <div
         className={`${styles["tab-rating-list__container"]} d-flex flex-column shadow-xss align-items-center`}
       >
-        <div className="d-flex flex-column justify-content-start">
-          <div className={`${styles["review_date"]} text-grey-600 fw-600`}>
-            Jan 20, 2024
+        {isLoading && <DotWaveLoader />}
+        {!isLoading && reviews?.length === 0 && (
+          <div className="text-grey-600 mt-3 text-center">
+            {tRating("no_rating_found")}
           </div>
-          <Ratings rating={3.5} size={18} />
-          <div className="d-flex align-items-center mt-2">
-            <Image
-              src={"/assets/images/user.png"}
-              width={40}
-              height={40}
-              alt="test"
-              className={styles["review-avatar"]}
-            />
-            <div className={`${styles["review-name"]} ms-3 fw-bold`}>
-              Alex K
+        )}
+        {!isLoading &&
+          reviews?.length > 0 &&
+          reviews.map((review) => (
+            <div
+              key={review[0]}
+              className={`${styles["rating-card"]} d-flex flex-column justify-content-start align-items-start w-100 mb-4 pb-4`}
+            >
+              <div
+                className={`${styles["review_date"]} text-grey-600 fw-600 mb-2`}
+              >
+                {/* {convertBigNumber(review.timestamp, ConvertType.datetime)} */}
+                {new Date(review.timestamp * 1000).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </div>
+              <Ratings rating={review[5]} size={18} />
+              <div className="d-flex align-items-center mt-2 mb-3">
+                <Image
+                  src={"/assets/images/user.png"}
+                  width={40}
+                  height={40}
+                  alt="test"
+                  className={styles["review-avatar"]}
+                />
+                <div className={`${styles["review-name"]} ms-3 fw-bold`}>
+                  {review[4]}
+                </div>
+              </div>
+              {/* <div className="text-grey-500 mt-2 mb-2">Investor</div> */}
+              <div className={styles["review-desc"]}>{review[1]}</div>
             </div>
-          </div>
-          <div className="text-grey-500 mt-2 mb-3">Senior Analyst</div>
-          <div className={styles["review-desc"]}>
-            Test description Test description Test descriptio Test description
-            Test description Test description Test description Test description.
-          </div>
-        </div>
+          ))}
       </div>
     </div>
   );

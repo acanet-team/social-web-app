@@ -12,6 +12,7 @@ import React, {
 } from "react";
 import rateAbi from "@/web3/abi/rate.json";
 import communityAbi from "@/web3/abi/community.json";
+import donateAbi from "@/web3/abi/donate.json";
 import { useSession } from "next-auth/react";
 import { updateWalletAddress } from "@/api/wallet";
 
@@ -32,6 +33,7 @@ interface WalletContextType {
   signer: any;
   rateContract: any;
   communityContract: any;
+  donateContract: any;
 }
 
 export interface Account {
@@ -74,19 +76,29 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   const [signer, setSigner] = useState<any>(null);
   const { data: session, update } = useSession();
   const [provider, setProvider] = useState<any>(
-    new ethers.providers.JsonRpcProvider(
-      "	https://mevm.devnet.imola.movementlabs.xyz",
-    ),
+    new ethers.providers.JsonRpcProvider(chains[0]?.rpcUrl as string),
   );
 
   const [rateContract, setRateContract] = useState<any>(
-    new ethers.Contract(contracts.Rate[30732], rateAbi as any, provider),
+    new ethers.Contract(
+      contracts.Rate["0x61"] as string,
+      rateAbi as any,
+      provider,
+    ),
   );
 
   const [communityContract, setCommunityContract] = useState<any>(
     new ethers.Contract(
-      contracts.Community[30732],
+      contracts.Community["0x61"] as string,
       communityAbi as any,
+      provider,
+    ),
+  );
+
+  const [donateContract, setDonateContract] = useState<any>(
+    new ethers.Contract(
+      contracts.Donate["0x61"] as string,
+      donateAbi as any,
       provider,
     ),
   );
@@ -105,22 +117,32 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    const rate = new ethers.Contract(
-      contracts.Rate[30732],
-      rateAbi as any,
-      signer || provider,
-    );
-    setRateContract(rate);
-    const community = new ethers.Contract(
-      contracts.Community[30732],
-      communityAbi as any,
-      signer || provider,
-    );
-    setCommunityContract(community);
+    if (connectedChain) {
+      const rate = new ethers.Contract(
+        contracts.Rate[connectedChain?.id] as string,
+        rateAbi as any,
+        signer || provider,
+      );
+      setRateContract(rate);
+      const community = new ethers.Contract(
+        contracts.Community[connectedChain?.id] as string,
+        communityAbi as any,
+        signer || provider,
+      );
+      setCommunityContract(community);
+
+      const donate = new ethers.Contract(
+        contracts.Donate[connectedChain?.id] as string,
+        donateAbi as any,
+        signer || provider,
+      );
+      setDonateContract(donate);
+    }
   }, [provider, signer, connectedChain]);
 
   useEffect(() => {
     // If `wallet` is defined then the user is connected
+    // console.log(wallet);
     if (wallet) {
       const { name, avatar }: any = wallet?.accounts?.[0]?.ens ?? {};
       setAccount({
@@ -189,6 +211,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         signer,
         rateContract,
         communityContract,
+        donateContract,
       }}
     >
       {children}

@@ -410,13 +410,20 @@ export default function MemberTable(props: {
       </div>
       {showModal && (
         <AlertModal
+          show={showModal}
+          title={
+            tab === "members"
+              ? tModal("delete_member")
+              : tModal("reject_member")
+          }
           message={
             tab === "members"
               ? tModal("modal_member_delete")
               : tModal("modal_member_reject")
           }
-          onCancel={handleCancel}
-          onOk={() => onProceedAction("")}
+          handleClose={handleCancel}
+          onProceed={() => onProceedAction("")}
+          type={tab === "members" ? "delete" : "reject"}
         />
       )}
     </div>

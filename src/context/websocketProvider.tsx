@@ -50,6 +50,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       // console.log(66666666666, message);
 
       addNotification(message);
+      console.log("sockettt", message);
     };
 
     // Subscribe channel

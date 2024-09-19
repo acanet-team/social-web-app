@@ -200,7 +200,7 @@ export default function Header(props: { isOnboarding: boolean }) {
       </span>
       <div
         ref={notiRef}
-        className={`dropdown-menu  right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
+        className={`dropdown-menu right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
       >
         <Notifications
           notifications={notifications}
@@ -229,6 +229,7 @@ export default function Header(props: { isOnboarding: boolean }) {
           <HeaderSetting />
         </div>
       )}
+
       {/* Left navbar */}
       {!props.isOnboarding && (
         <nav

@@ -121,6 +121,7 @@
     "Photo_Video": "Photo/Video",
     "live_Video": "Live Video",
     "create_Post": "Create Post",
+    "create_signal": "Create Signal",
     "select_Topic": "Select a topic",
     "no_topics": "No topics found.",
     "loading_topics": "Loading topics...",
@@ -129,6 +130,30 @@
     "post_create_success": "Post created successfully!",
     "post_create_error": "Error creating post.",
     "error_fetch_topic": "Error fetching topics."
+  },
+  "CreateSignal": {
+    "create_signal": "Create signal",
+    "error_missing_type": "Please enter a type",
+    "error_missing_currency_pairs": "Please pick a currency pair",
+    "error_missing_expiry": "Please enter an expiry date",
+    "error_invalid_expiry": "Expiry must be a future date",
+    "error_missing_entry": "Please enter an entry point",
+    "error_missing_target": "Please enter an target point",
+    "error_invalid_low_target": "Target must be higher than entry",
+    "error_min_entry": "Entry must exceed 0.0000000001",
+    "error_min_stop": "Stop must exceed 0.0000000001",
+    "error_min_target": "Target must exceed 0.0000000001.",
+    "error_invalid_high_target": "Target must be lower than entry",
+    "error_missing_stop": "Please enter an stop point",
+    "error_invalid_high_stop": "Stop must be lower than entry",
+    "error_invalid_low_stop": "Stop must be higher than entry",
+    "signal_pair": "Signal pair",
+    "type": "Type",
+    "expirary_date": "Expiry date",
+    "entry": "Entry",
+    "target": "Target",
+    "stop": "Stop",
+    "description": "Description"
   },
   "Post": {
     "Explore_More": "Explore More",
@@ -221,7 +246,7 @@
     "About": "About",
     "Communities": "Communities",
     "Rating": "Rating",
-    "Wallet": "Wallet",
+    "Signal": "Signal",
     "save": "Save",
     "back": "Back",
     "company_name": "Company Name",
@@ -298,11 +323,15 @@
   "Modal": {
     "modal_question": "Do you want to proceed?",
     "modal_yes": "Yes",
+    "modal_delete": "Delete",
     "modal_no": "No",
-    "modal_comment_delete": "Confirm deleting comment?",
-    "modal_post_delete": "Confirm deleting post?",
+    "modal_comment_delete": "Are you sure you want to delete this comment?",
+    "modal_post_delete": "Are you sure you want to delete this post?",
     "modal_member_delete": "Confirm deleting member?",
-    "modal_member_reject": "Confirm rejecting member?"
+    "modal_member_reject": "Confirm rejecting member?",
+    "delete_title": "Delete comment?",
+    "delete_member": "Delete member?",
+    "reject_member": "Reject member"
   },
   "Form": {
     "search": "Search",
@@ -327,12 +356,20 @@
     "rank_desc_guarantee": "100% Fairness Guarantee",
     "error_missing_rating": "Please rate the broker.",
     "review_success": "Review sent.",
-    "reivew_fail": "Can't sent review."
+    "reivew_fail": "Can't sent review.",
+    "no_rating_found": "No rating found. Be the first to rate this broker!"
   },
   "Wallet": {
-    "connect_wallet": "Connect your wallet to Acanet"
+    "connect_wallet": "Connect your wallet to Acanet",
+    "donate_success": "Donate succeeded!",
+    "input_donate_amount": "Input"
   },
   "Connect_investor": {
     "friend_request": "Friend Request"
+  },
+  "Signal": {
+    "discover_tab": "Discover",
+    "history_tab": "History",
+    "signal_station_title": "Signal Station"
   }
 }

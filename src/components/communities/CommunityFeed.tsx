@@ -35,7 +35,7 @@ export default function CommunityFeed(props: {
         "community",
         props.groupId,
       );
-      console.log("posts", response);
+      // console.log("posts", response);
       setPosts((prev: IPost[]) => {
         const newPosts: IPost[] = combineUniqueById(
           prev,
@@ -97,11 +97,13 @@ export default function CommunityFeed(props: {
       </div>
       <div className="col-xl-9 col-xxl-9 col-lg-8">
         <div>
-          <CreatePost
-            userSession={props.userSession}
-            groupId={props.groupId}
-            updatePostArr={setPosts}
-          />
+          <div className="card w-100 shadow-xss border-0 px-4 py-3 mb-3 nunito-font">
+            <CreatePost
+              userSession={props.userSession}
+              groupId={props.groupId}
+              updatePostArr={setPosts}
+            />
+          </div>
           {!isLoading && posts.length === 0 && (
             <div className="mt-5 text-center">No posts found.</div>
           )}

@@ -207,9 +207,10 @@ const CreatePost = (props: {
   };
 
   const menuClass = `${isOpen ? " show" : ""}`;
+
   return (
     <div
-      className="card w-100 shadow-xss border-0 px-4 py-3 mb-3 nunito-font"
+      className="card w-100 border-0 py-3 mb-3 nunito-font"
       id={style["create-post"]}
     >
       <div
@@ -382,7 +383,7 @@ const CreatePost = (props: {
             className="main-btn font-xsss fw-600 text-white card-body px-4 py-2 d-flex align-items-center justify-content-center cursor-pointer"
             onClick={submitPost}
           >
-            <i className="rounded-3 font-xs text-white feather-edit-3"></i>
+            <i className="rounded-3 font-xs me-1 text-white feather-edit-3"></i>
             {t("create_Post")}
           </label>
         </div>
