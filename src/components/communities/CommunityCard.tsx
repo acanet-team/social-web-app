@@ -49,10 +49,13 @@ export default function CommunityCard(props: {
   } = props;
   const t = useTranslations("Community");
   const tBase = useTranslations("Base");
-  const [joiningStatus, setJoiningStatus] = useState(communityStatus);
+  const [joiningStatus, setJoiningStatus] = useState<string | null>(
+    communityStatus,
+  );
   const [curUser, setCurUser] = useState<number>();
   const { data: session } = useSession();
-  const { connectWallet, communityContract, account } = useWeb3();
+  const { connectWallet, communityContract, account, connectedChain } =
+    useWeb3();
 
   useEffect(() => {
     if (session) {
@@ -71,20 +74,22 @@ export default function CommunityCard(props: {
           {
             from: account?.address,
             gasLimit: 2000000,
+            value: ethers.utils.parseEther(fee.toString()),
           },
         );
-        console.log("response", res);
         const hasTransaction = res.hash;
         // Calling api
         joinPaidCommunity({
           communityId: groupId,
           hashTransaction: hasTransaction,
+          network: connectedChain?.id === "0x780c" ? "30732" : "72",
         });
       } else {
         joinCommunity({ communityId: groupId });
       }
       setJoiningStatus("pending_request");
     } catch (err) {
+      setJoiningStatus(null);
       console.log(err);
     }
   };

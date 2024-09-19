@@ -30,6 +30,11 @@ export enum CommunityJoiningStatus {
   banned = "banned", // Bị ban
 }
 
+export enum SignalStationEnum {
+  discover = "discover",
+  history = "history",
+}
+
 export enum ConvertType {
   normal_number = "normal",
   datetime = "datetime",

@@ -192,7 +192,7 @@
   "MyProfile": {
     "follow": "Theo dõi",
     "messages": "Tin nhắn",
-    "donate": "Quyên tặng",
+    "donate": "Ủng hộ",
     "about": "Giới thiệu",
     "experience": "Kinh nghiệm",
     "education": "Học vấn",
@@ -356,6 +356,13 @@
     "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!"
   },
   "Wallet": {
-    "connect_wallet": "Kết nối ví của bạn tới Acanet"
+    "connect_wallet": "Kết nối ví của bạn tới Acanet",
+    "donate_success": "Ủng hộ thành công!",
+    "input_donate_amount": "Nhập"
+  },
+  "Signal": {
+    "discover_tab": "Khám phá",
+    "history_tab": "Lịch sử",
+    "signal_station_title": "Trạm Signal"
   }
 }

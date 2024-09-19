@@ -456,7 +456,7 @@ const Banner: React.FC<TabBannerProps> = ({
               </div>
             </button> */}
 
-            {dataUser.role.name === "broker" && (
+            {dataUser.role.name === "broker" && dataUser.wallet_address && (
               <button
                 className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
                 onClick={() => setOpenDonate(true)}
@@ -476,7 +476,11 @@ const Banner: React.FC<TabBannerProps> = ({
         }}
       />
       {openDonate && (
-        <DonateModal handleClose={handleClose} show={openDonate} />
+        <DonateModal
+          handleClose={handleClose}
+          show={openDonate}
+          brokerData={dataUser}
+        />
       )}
     </div>
   );

@@ -64,6 +64,7 @@ export type BaseResponse<T> = {
   message: string;
   data: T;
 };
+
 export type BaseArrayResponse<T> = {
   status: number;
   success?: boolean;
@@ -141,9 +142,11 @@ export type AllFindResponse = {
   message: string;
   data: [{ name: string; logo: string }];
 };
+
 export type shortDescParams = {
   about: string;
 };
+
 export type topicParam = {
   brokerProfile: {
     location: string;
@@ -162,6 +165,7 @@ export type socialMediaParams = {
     mediaUrl: string;
   }[];
 };
+
 export type experienceParams = {
   company: {
     id?: string | undefined;
@@ -176,6 +180,7 @@ export type experienceParams = {
     workingType: string;
   }[];
 };
+
 export type educationParams = {
   education: {
     id?: string | undefined;
@@ -189,6 +194,7 @@ export type educationParams = {
     description: string;
   }[];
 };
+
 export type licenseParams = {
   licenses: {
     id?: string | undefined;

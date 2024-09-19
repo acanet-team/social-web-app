@@ -354,6 +354,13 @@
     "no_rating_found": "No rating found. Be the first to rate this broker!"
   },
   "Wallet": {
-    "connect_wallet": "Connect your wallet to Acanet"
+    "connect_wallet": "Connect your wallet to Acanet",
+    "donate_success": "Donate succeeded!",
+    "input_donate_amount": "Input"
+  },
+  "Signal": {
+    "discover_tab": "Discover",
+    "history_tab": "History",
+    "signal_station_title": "Signal Station"
   }
 }
