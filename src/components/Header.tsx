@@ -12,6 +12,7 @@ import { useWebSocket } from "@/context/websocketProvider";
 import Notifications from "./Notification";
 import type { Notification } from "@/api/notification/model";
 import { getNotifications } from "@/api/notification";
+import { useRouter } from "next/router";
 
 export default function Header(props: { isOnboarding: boolean }) {
   const [isOpen, toggleOpen] = useState(false);
@@ -32,6 +33,8 @@ export default function Header(props: { isOnboarding: boolean }) {
   const [nickName, setNickName] = useState<string>("");
   const userId = session?.user?.id;
   const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
+  const router = useRouter();
+  const { locale } = router;
 
   useEffect(() => {
     // console.log("notifications-yy", notifications);
@@ -233,8 +236,8 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li className="logo d-none d-xl-block d-lg-block"></li>
                   <li>
                     <Link
-                      href={nickName ? `/profile/${nickName}` : "#"}
-                      // href={() => window.location.replace(nickName ? `/profile/${nickName}` : "#")}
+                      href={nickName ? `/${locale}/profile/${nickName}` : "#"}
+                      as={nickName ? `/profile/${nickName}` : "#"}
                       className="nav-content-bttn open-font"
                     >
                       <i className="feather-user btn-round-md bg-blue-gradiant me-3"></i>
@@ -256,6 +259,12 @@ export default function Header(props: { isOnboarding: boolean }) {
                     >
                       <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
                       <span>{t("brokers")}</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/signal" className="nav-content-bttn open-font">
+                      <i className="feather-trending-up btn-round-md bg-red-gradiant me-3"></i>
+                      <span>{t("signal")}</span>
                     </Link>
                   </li>
                   <li>

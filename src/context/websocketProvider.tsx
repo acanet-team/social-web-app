@@ -76,8 +76,13 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 
     setSocket(newSocket);
 
+    // return () => {
+    //   newSocket.close();
+    // };
     return () => {
-      // newSocket.close();
+      if (newSocket.readyState === 1) {
+        newSocket.close();
+      }
     };
   }, [session, addNotification]);
 

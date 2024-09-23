@@ -78,11 +78,7 @@ export type BaseArrayResponsVersionDocs<T> = {
   message: string;
   data: {
     docs: T[];
-    meta: {
-      page: number;
-      total: number;
-      totalPage: number;
-    };
+    meta: Meta;
   };
 };
 

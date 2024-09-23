@@ -84,6 +84,7 @@ export type Photo = {
   courseId: number;
   category: string;
 };
+
 export type IUserInfo = {
   id: number | null;
   email: string;
@@ -91,6 +92,7 @@ export type IUserInfo = {
   socialId: string;
   firstName: string;
   lastName: string;
+  nickName: string;
   photo: Photo;
   role: Role;
   status: Status;
@@ -101,6 +103,7 @@ export type IUserInfo = {
   isProfile: boolean;
   image?: string;
 };
+
 export type IUserSession = {
   user?: IUserInfo;
   expires: string;

@@ -7,7 +7,7 @@ import { combineUniqueById } from "@/utils/combine-arrs";
 import type { IPost } from "@/api/newsfeed/model";
 import CreatePost from "../newsfeed/Createpost";
 import CommunityOverview from "./CommunityOverview";
-import type { ICommunity } from "@/api/community/model";
+import type { ICommunity, IPostCommunityInfo } from "@/api/community/model";
 
 export default function CommunityFeed(props: {
   posts: any;
@@ -110,21 +110,34 @@ export default function CommunityFeed(props: {
           {posts.map((p) => (
             <div key={p.id}>
               <PostCard
+                // groupOwnerId={props.groupData?.owner?.userId || ""}
+                // groupName={""}
+                // groupAvatar={""}
+                // groupId={p.community?.communityId || ""}
+                // postId={p.id}
+                // nickName={
+                //   p.user?.nickName || p.user?.firstName + " " + p.user?.lastName
+                // }
+                // authorId={p.user?.userId}
+                // authorNickname={p.user?.nickName || ""}
+                // avatar={
+                //   p.user?.photo?.id
+                //     ? cleanPath(p.user?.photo?.path)
+                //     : "/assets/images/user.png"
+                // }
+                // content={p.content}
+                // assets={p?.assets}
+                // createdAt={p.createdAt}
+                // like={p.favoriteCount}
+                // comment={p.commentCount}
+                // columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
+                // liked={p.liked}
+                // setPostHandler={setPosts}
+
                 groupOwnerId={props.groupData?.owner?.userId || ""}
-                groupName={""}
-                groupAvatar={""}
-                groupId={p.community?.communityId || ""}
+                community={p.community as IPostCommunityInfo}
+                postAuthor={p.user}
                 postId={p.id}
-                nickName={
-                  p.user?.nickName || p.user?.firstName + " " + p.user?.lastName
-                }
-                authorId={p.user?.userId}
-                authorNickname={p.user?.nickName || ""}
-                avatar={
-                  p.user?.photo?.id
-                    ? cleanPath(p.user?.photo?.path)
-                    : "/assets/images/user.png"
-                }
                 content={p.content}
                 assets={p?.assets}
                 createdAt={p.createdAt}

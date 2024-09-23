@@ -56,18 +56,18 @@
   },
   "CreateSignal": {
     "create_signal": "Tạo signal",
-    "error_missing_currency_pairs": "Vui lòng chọn cặp tỷ giá",
+    "error_missing_currency_pairs": "Hãy chọn cặp tỷ giá",
     "error_missing_type": "Hãy chọn kiểu lệnh",
     "error_missing_expiry": "Hãy nhập ngày hết hạn",
-    "error_invalid_expiry": "Ngày hết hạn phải ở trong tương lai",
-    "error_missing_entry": "Vui lòng nhập giá vào lệnh",
-    "error_missing_target": "Vui lòng nhập giá mục tiêu",
+    "error_invalid_expiry": "Ngày hết hạn phải ở tương lai",
+    "error_missing_entry": "Hãy nhập giá vào lệnh",
+    "error_missing_target": "Hãy nhập giá mục tiêu",
     "error_min_entry": "Giá vào phải lớn hơn 0.0000000001",
     "error_min_stop": "Giá cắt lỗ phải lớn hơn 0.0000000001.",
     "error_min_target": "Giá mục tiêu phải lớn hơn 0.0000000001.",
     "error_invalid_low_target": "Giá mục tiêu phải cao hơn giá vào lệnh",
     "error_invalid_high_target": "Giá mục tiêu phải thấp hơn giá vào lệnh",
-    "error_missing_stop": "Vui lòng nhập giá cắt lỗ",
+    "error_missing_stop": "Hãy nhập giá cắt lỗ",
     "error_invalid_high_stop": "Giá cắt lỗ phải thấp hơn giá vào lệnh",
     "error_invalid_low_stop": "Giá cắt lỗ phải cao hơn giá vào lệnh",
     "signal_pair": "Cặp tỷ giá",
@@ -182,6 +182,7 @@
     "brokers": "Nhà môi giới",
     "courses": "Khoá học",
     "community": "Cộng đồng",
+    "signal": "Tín hiệu",
     "messages": "Tin nhắn",
     "settings": "Cài đặt",
     "logout": "Đăng xuất",
@@ -290,7 +291,7 @@
     "error_missing_description": "Vui lòng thêm mô tả cộng đồng.",
     "error_invalid_description": "Mô tả phải có từ 4 đến 350 ký tự.",
     "error_missing_fee": "Vui lòng điền phí tham gia.",
-    "error_joining_fee": "Phí tham gia phải lớn hơn 0.",
+    "error_joining_fee": "Phí tham gia phải lớn hơn 0.0000000001",
     "joined": "Đã tham gia",
     "pending": "Chờ duyệt",
     "join": "Tham gia",
@@ -363,6 +364,7 @@
   "Signal": {
     "discover_tab": "Khám phá",
     "history_tab": "Lịch sử",
-    "signal_station_title": "Trạm Signal"
+    "signal_station_title": "Trạm Signal",
+    "no_signal_found": "Không có signal."
   }
 }

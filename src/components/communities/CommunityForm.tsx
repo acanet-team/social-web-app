@@ -9,11 +9,9 @@ import { useFormik } from "formik";
 import { throwToast } from "@/utils/throw-toast";
 import { FormHelperText, TextField } from "@mui/material";
 import { useTranslations } from "next-intl";
-import type { ICommunityForm } from "@/types";
 import * as Yup from "yup";
 import { useLoading } from "@/context/Loading/context";
 import Modal from "react-bootstrap/Modal";
-import { S3_GROUP_AVATAR, S3_GROUP_BANNER } from "@/utils/const";
 import { createCommunity, editCommunity, getACommunity } from "@/api/community";
 import type { ICommunity } from "@/api/community/model";
 import Image from "next/image";
@@ -24,6 +22,7 @@ import { v4 as uuidV4 } from "uuid";
 // import { uuid } from "uuidv4";
 import { ethers } from "ethers";
 import "dotenv/config";
+import { group } from "console";
 
 interface CommunityFormProps {
   isEditing: string;
@@ -63,13 +62,8 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
-  const {
-    communityContract,
-    account,
-    provider,
-    connectedChain,
-    connectWallet,
-  } = useWeb3();
+  const { communityContract, account, connectedChain, connectWallet } =
+    useWeb3();
 
   const fetchCommunity = async () => {
     try {
@@ -116,20 +110,12 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
     feeNum: Yup.lazy((value, { parent }) =>
       parent.hasFee
         ? Yup.number()
+            .transform((value) => (isNaN(value) ? 0 : Number(value)))
             .required(t("error_missing_fee"))
-            .transform((originalValue, transformedValue) => {
-              console.log(
-                "Original Value:",
-                originalValue,
-                typeof originalValue,
-              );
-              // Convert string to number before validation
-              const numValue = Number(originalValue);
-              // console.log("Transformed Value:", numValue, typeof numValue);
-              return isNaN(numValue) ? 0 : numValue;
-            })
-            .min(0.01, t("error_joining_fee"))
-        : Yup.mixed().notRequired(),
+            .min(0.00001, t("error_joining_fee"))
+        : Yup.mixed()
+            .transform((value) => (isNaN(value) ? 0 : Number(value)))
+            .notRequired(),
     ),
   });
 
@@ -138,7 +124,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       name: isEditing ? groupInfo.name : "",
       description: isEditing ? groupInfo.description : "",
       hasFee: groupInfo.fee > 0 ? true : false,
-      feeNum: isEditing ? Number(groupInfo.fee) : null,
+      feeNum: isEditing ? Number(groupInfo.fee) : "",
     },
     enableReinitialize: true,
     validationSchema,
@@ -148,7 +134,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       communityData.append("description", values.description?.trim());
       communityData.append(
         "fee",
-        values.hasFee ? String(Number(values.feeNum)) : "0",
+        values.hasFee ? String(Number(values.feeNum).toFixed(5)) : "0",
       );
       if (uploadedAvatarImage) {
         communityData.append("avatar", uploadedAvatarImage);
@@ -159,7 +145,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       if (isEditing) {
         communityData.append("communityId", isEditing);
       }
-      if (values.feeNum) {
+      if (values.hasFee && values.feeNum) {
         if (!account) {
           connectWallet();
           handleClose();
@@ -167,26 +153,109 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         }
       }
       try {
-        // Calling api to edit/create a community
+        // // Calling api to edit/create a community
+        // if (isEditing) {
+        //   const editedCommunity = await editCommunity(communityData);
+        //   setCommunities &&
+        //     setCommunities(
+        //       (prev: ICommunity[]) =>
+        //         prev.map((group: ICommunity) =>
+        //           group.id === editedCommunity.data.id
+        //             ? editedCommunity.data
+        //             : group
+        //         ) as ICommunity[]
+        //     );
+        //   setCommunity && setCommunity(editedCommunity.data);
+        // } else {
+        //   // Create group with fee on smart contract
+        //   const groupId = uuidV4();
+        //   communityData.append("id", groupId);
+        //   if (values.hasFee && values.feeNum) {
+        //     console.log(communityContract);
+        //     console.log('feeeee', values.feeNum);
+        //     console.log("group", groupId);
+        //     console.log("broker", brokerId);
+        //     console.log(
+        //       "fee",
+        //       ethers.utils.parseEther(values.feeNum.toString())
+        //     );
+        //     const newGroupContract = await communityContract.createGroup(
+        //       groupId.toString(),
+        //       brokerId?.toString(),
+        //       ethers.utils.parseEther(values.feeNum.toString()).toString(),
+        //       {
+        //         from: account?.address,
+        //       }
+        //     );
+        //     console.log("new group", newGroupContract);
+        //     const communityHash = newGroupContract.hash;
+        //     console.log('hash', communityHash);
+        //     if (communityHash && connectedChain) {
+        //       // console.log('connectedChain', connectedChain);
+        //       communityData.append("hashTransaction", communityHash);
+        //       communityData.append(
+        //         "network",
+        //         connectedChain.id === "0x780c" ? "30732" : "97"
+        //       );
+        //     }
+        //     // const awaits = await newGroupContract.wait();
+        //     // console.log(awaits);
+        //   }
+        //   // Create group on DB
+        //   // console.log('to send', communityData);
+        //   const newCommunity = await createCommunity(communityData);
+
+        //   if (!values.hasFee) {
+        //     throwToast("Community created", "success");
+        //     setCommunities &&
+        //       setCommunities(
+        //         (prev) => [newCommunity.data, ...prev] as ICommunity[]
+        //       );
+        //   } else {
+        //     throwToast("Your community is in review", "success");
+        //   }
+        // }
+        // handleClose();
+
+        // Editing community
         if (isEditing) {
-          const editedCommunity = await editCommunity(communityData);
-          setCommunities &&
-            setCommunities(
-              (prev: ICommunity[]) =>
-                prev.map((group: ICommunity) =>
-                  group.id === editedCommunity.data.id
-                    ? editedCommunity.data
-                    : group,
-                ) as ICommunity[],
+          if (values.hasFee && values.feeNum) {
+            communityContract.createGroup(
+              groupInfo.id.toString(),
+              brokerId?.toString(),
+              ethers.utils.parseEther(values.feeNum.toString()).toString(),
+              {
+                from: account?.address,
+              },
             );
-          setCommunity && setCommunity(editedCommunity.data);
+          }
+          const editedCommunity = await editCommunity(communityData);
+
+          if (!values.hasFee) {
+            setCommunities &&
+              setCommunities(
+                (prev: ICommunity[]) =>
+                  prev.map((group: ICommunity) =>
+                    group.id === editedCommunity.data.id
+                      ? editedCommunity.data
+                      : group,
+                  ) as ICommunity[],
+              );
+            setCommunity && setCommunity(editedCommunity.data);
+          }
         } else {
-          if (values.feeNum) {
-            // Create group with fee on smart contract
-            const groupId = uuidV4();
+          // Creating comminity
+          const groupId = uuidV4();
+          communityData.append("id", groupId);
+          if (values.hasFee && values.feeNum) {
             // console.log(communityContract);
+            // console.log("feeeee", String(Number(values.feeNum).toFixed(10)));
             // console.log("group", groupId);
             // console.log("broker", brokerId);
+            // console.log(
+            //   "fee",
+            //   ethers.utils.parseEther(values.feeNum.toString())
+            // );
             const newGroupContract = await communityContract.createGroup(
               groupId.toString(),
               brokerId?.toString(),
@@ -195,15 +264,16 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 from: account?.address,
               },
             );
-            // console.log("new group", newGroupContract);
+            const test = newGroupContract.wait();
+            console.log("newgroup", newGroupContract);
+            console.log("newgroup2", test);
             const communityHash = newGroupContract.hash;
+            console.log("old hash", communityHash);
             if (communityHash && connectedChain) {
-              // console.log('connectedChain', connectedChain);
               communityData.append("hashTransaction", communityHash);
-              communityData.append("id", groupId);
               communityData.append(
                 "network",
-                connectedChain.id === "0x780c" ? "30732" : "72",
+                connectedChain.id === "0x780c" ? "30732" : "97",
               );
             }
             // const awaits = await newGroupContract.wait();
@@ -211,18 +281,22 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           }
           // Create group on DB
           // console.log('to send', communityData);
-          createCommunity(communityData);
-          throwToast("Your community is in review", "success");
+          const newCommunity = await createCommunity(communityData);
 
-          // setCommunities &&
-          //   setCommunities(
-          //     (prev) => [newCommunity.data, ...prev] as ICommunity[]
-          //   );
+          if (!values.hasFee) {
+            throwToast("Community created", "success");
+            setCommunities &&
+              setCommunities(
+                (prev) => [newCommunity.data, ...prev] as ICommunity[],
+              );
+          } else {
+            throwToast("Your community is in review", "success");
+          }
         }
         handleClose();
       } catch (err) {
         console.log(err);
-        throwToast(err.message, "error");
+        throwToast("Can't create community", "error");
       } finally {
       }
     },
@@ -322,22 +396,6 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         <form onSubmit={formik.handleSubmit}>
           {/* Images upload */}
           <div className="position-relative w-100 bg-image-cover bg-image-center">
-            {/* <div
-              className="rounded-3"
-              style={{
-                backgroundImage: `url(${
-                  previewCover
-                    ? previewCover
-                    : `/assets/images/default-upload.jpg`
-                })`,
-                objectFit: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundColor: "#232425",
-                width: "100%",
-                paddingBottom: "26.04%",
-              }}
-            ></div> */}
             <Image
               src={
                 previewCover
@@ -500,12 +558,13 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
             <div className="d-flex flex-column g-0">
               <label className="fw-600 mt-3 mb-1">{t("joining_fee")}</label>
               <TextField
-                type="number"
+                type="string"
+                name="feeNum"
                 value={formik.values.feeNum}
-                inputProps={{
-                  min: 0,
-                  step: 0.01,
-                }}
+                // inputProps={{
+                //   min: 0,
+                //   step: 0.01,
+                // }}
                 // placeholder={tProfile("donate_input")}
                 // onBlur={(e) =>
                 //   formik.setFieldValue(
@@ -513,27 +572,26 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 //     Number(e.target.value).toFixed(2)
                 //   )
                 // }
-                onBlur={(e) =>
-                  formik.setFieldValue(
-                    "feeNum",
-                    Number(Number(e.target.value).toFixed(2)),
-                  )
-                }
+                // onBlur={(e) => formik.setFieldValue("feeNum", e.target.value)}
+                onBlur={formik.handleBlur}
                 // onChange={(e) => formik.setFieldValue("feeNum", e.target.value)}
                 onChange={(e) =>
-                  formik.setFieldValue("feeNum", Number(e.target.value))
+                  formik.setFieldValue(
+                    "feeNum",
+                    e.target.value.replace(/,/g, "."),
+                  )
                 }
                 InputProps={{
                   style: {
                     borderRadius: "5px",
                   },
-                  className: `${formik.touched.hasFee && formik.errors.hasFee ? "border-danger" : ""}`,
+                  className: `${formik.touched.feeNum && formik.errors.feeNum ? "border-danger" : ""}`,
                 }}
                 sx={{
                   fieldset: { border: "2px solid rgb(241, 241, 241)" },
                 }}
               />
-              {formik.errors.feeNum ? (
+              {formik.touched.feeNum && formik.errors.feeNum ? (
                 <FormHelperText sx={{ color: "error.main" }}>
                   {JSON.stringify(formik.errors.feeNum).replace(/^"|"$/g, "")}
                 </FormHelperText>

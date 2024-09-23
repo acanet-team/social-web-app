@@ -79,7 +79,7 @@ export default function CommunitySection(props: {
           ? filterValues.filterValue.toLowerCase()
           : "",
       });
-      // console.log("Communities fetched:", response);
+      console.log("Communities fetched:", response);
       setCommunityArr((prev) => {
         const newCommunities = combineUniqueById(
           prev,

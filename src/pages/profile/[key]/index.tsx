@@ -11,7 +11,7 @@ import TabGroupProfile from "@/components/profile/TabGroupProfile";
 import TabAbout from "@/components/profile/TabAbout";
 import Banner from "@/components/profile/Banner";
 import TabRating from "@/components/profile/TabRating";
-import Wallet from "@/components/wallets/Wallet";
+import ProfileSignal from "@/components/signal/ProfileSignal";
 
 const TAKE = 10;
 
@@ -186,12 +186,14 @@ export default function Profile({
               <p>{t("Rating")}</p>
             </div>
           )}
-          <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-            onClick={(e) => onSelectTabHandler(e)}
-          >
-            <p>{t("Signal")}</p>
-          </div>
+          {dataUser.role.name === "broker" && (
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>{t("Signal")}</p>
+            </div>
+          )}
         </div>
       </div>
       {curTab === TabPnum.About && (
@@ -228,7 +230,9 @@ export default function Profile({
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
         <TabRating brokerData={dataUser} />
       )}
-      {curTab === TabPnum.Signal && <Wallet />}
+      {dataUser.role.name === "broker" && curTab === TabPnum.Signal && (
+        <ProfileSignal brokerId={dataUser.id} />
+      )}
     </div>
   );
 }

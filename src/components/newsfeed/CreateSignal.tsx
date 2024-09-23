@@ -9,7 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FormHelperText, TextField } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { useFormik, Formik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
@@ -18,6 +18,9 @@ import { throwToast } from "@/utils/throw-toast";
 
 export default function CreateSignal() {
   const tSignal = useTranslations("CreateSignal");
+  // fetch from server
+  const options = ["a", "b", "c"];
+  const filter = createFilterOptions<string>();
 
   const validationSchema = Yup.object({
     pairs: Yup.string().required(tSignal("error_missing_currency_pairs")),
@@ -59,7 +62,7 @@ export default function CreateSignal() {
     stop: Yup.lazy((value, { parent }) =>
       parent.type === "long"
         ? Yup.number()
-            .transform((value) => (isNaN(value) ? undefined : Number(value)))
+            .transform((value) => (isNaN(value) ? 0 : Number(value)))
             .required(tSignal("error_missing_stop"))
             .min(0.0000000001, tSignal("error_min_stop"))
             .test(
@@ -70,7 +73,7 @@ export default function CreateSignal() {
               },
             )
         : Yup.number()
-            .transform((value) => (isNaN(value) ? undefined : Number(value)))
+            .transform((value) => (isNaN(value) ? 0 : Number(value)))
             .required(tSignal("error_missing_stop"))
             .min(0.0000000001, tSignal("error_min_stop"))
             .test(
@@ -94,11 +97,9 @@ export default function CreateSignal() {
       description: "",
     },
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         if (values.expiry) {
-          console.log("values", values);
-          console.log("expiry", new Date(values.expiry).getTime());
           const expiryAt = new Date(values.expiry).getTime();
           await donateBroker({
             signalPair: values.pairs,
@@ -110,6 +111,7 @@ export default function CreateSignal() {
             description: values.description,
           });
           throwToast("Signal created!", "success");
+          resetForm();
         }
       } catch (err) {
         console.log(err);
@@ -139,12 +141,25 @@ export default function CreateSignal() {
           >
             <Autocomplete
               id="pairs"
-              options={["", "a", "b", "c"]}
+              options={options}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                const { inputValue } = params;
+                // Suggest the creation of a new value
+                const isExisting = options.some(
+                  (option) => inputValue === option,
+                );
+                if (inputValue !== "" && !isExisting) {
+                  filtered.push(inputValue);
+                }
+                return filtered;
+              }}
               value={formik.values.pairs}
               onChange={(
                 e: React.ChangeEvent<HTMLInputElement>,
-                newValue: string | null,
-              ) => formik.setFieldValue("pairs", newValue)}
+                newValue: string,
+              ) => formik.setFieldValue("pairs", newValue || e.target.value)}
               // onBlur={handleBlur("pairs")}
               onBlur={formik.handleBlur}
               sx={{
@@ -275,7 +290,9 @@ export default function CreateSignal() {
               //   )
               // }
               onBlur={formik.handleBlur}
-              onChange={(e) => formik.setFieldValue("entry", e.target.value)}
+              onChange={(e) =>
+                formik.setFieldValue("entry", e.target.value.replace(/,/g, "."))
+              }
               InputProps={{
                 style: {
                   borderRadius: "5px",
@@ -324,7 +341,12 @@ export default function CreateSignal() {
               //   )
               // }
               onBlur={formik.handleBlur}
-              onChange={(e) => formik.setFieldValue("target", e.target.value)}
+              onChange={(e) =>
+                formik.setFieldValue(
+                  "target",
+                  e.target.value.replace(/,/g, "."),
+                )
+              }
               InputProps={{
                 style: {
                   borderRadius: "5px",
@@ -374,7 +396,9 @@ export default function CreateSignal() {
               //   )
               // }
               onBlur={formik.handleBlur}
-              onChange={(e) => formik.setFieldValue("stop", e.target.value)}
+              onChange={(e) =>
+                formik.setFieldValue("stop", e.target.value.replace(/,/g, "."))
+              }
               InputProps={{
                 style: {
                   borderRadius: "5px",
@@ -413,6 +437,7 @@ export default function CreateSignal() {
           inputProps={{
             maxLength: 100,
           }}
+          value={formik.values.description}
           onChange={(e) => formik.setFieldValue("description", e.target.value)}
           sx={{
             width: "100%",

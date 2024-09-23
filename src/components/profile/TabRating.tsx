@@ -173,8 +173,8 @@ export default function TabRating(props: { brokerData: User }) {
               }}
               sx={{
                 border: "none",
-                "& fieldset": { border: "2px solid #eee" },
-                borderRadius: "5px",
+                "& fieldset": { border: "1px solid #ced4da" },
+                borderRadius: "10px",
               }}
             />
           </Box>

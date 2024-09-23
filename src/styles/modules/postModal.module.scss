@@ -73,6 +73,13 @@
   color: #111;
 }
 
+.post .expand-btn {
+  color: var(--theme-color-main) !important;
+  display: inline-block;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
 :global(.theme-dark) {
   .modal-header,
   .modal-content,

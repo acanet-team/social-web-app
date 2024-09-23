@@ -1,8 +1,7 @@
 .signal {
   display: inline-block;
-  width: 300px;
-  // width: 100%;
-  height: 400px;
+  width: 320px;
+  height: 420px;
   // margin: 1.5rem 0;
   perspective: 600px;
 }
@@ -14,7 +13,7 @@
   cursor: pointer;
   transform-style: preserve-3d;
   transform-origin: center right;
-  transition: transform 0.5s;
+  transition: transform 1s;
 }
 
 .card.is-flipped {
@@ -23,22 +22,179 @@
 
 .card__face {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  line-height: 260px;
   color: white;
-  text-align: center;
   font-weight: bold;
-  font-size: 40px;
+  font-size: 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   backface-visibility: hidden;
+  padding: 25px;
 }
 
 .card__face--front {
-  background: crimson;
+  // background: linear-gradient(135deg, #000000, #434343);
+  background: #020202;
+  position: relative;
+}
+
+.card-icon {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.view-card__cta {
+  position: absolute;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: linear-gradient(
+    96.39deg,
+    #1c1c1c -50%,
+    #ffffff 49.6%,
+    #303030 160.26%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.currency_pair {
+  position: absolute;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  line-height: 40px;
+  background: linear-gradient(
+    96.39deg,
+    #1c1c1c -50%,
+    #ffffff 49.6%,
+    #303030 160.26%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .card__face--back {
   background: slateblue;
   transform: rotateY(180deg);
+}
+
+.back-card__long {
+  // background: linear-gradient(
+  //   to bottom,
+  //   #100c28e9 0%,
+  //   #1c0931f5 25%,
+  //   #3d114a 50%,
+  //   #e3455f 100%
+  // );
+  background: linear-gradient(180deg, #004b49 0%, #006c67 50%, #00a9a5 100%);
+}
+
+.back-card__short {
+  // background: linear-gradient(
+  //   180deg,
+  //   #154848e9 0%,
+  //   #1a6b6be9 25%,
+  //   #1a6b6be9 35%,
+  //   #38d2d2e9 50%,
+  //   #38d2d2e9 100%
+  // );
+  background: linear-gradient(180deg, #241734 0%, #4c1e4f 50%, #b42f62 100%);
+}
+
+.signal-expiry {
+  font-size: 12px;
+  font-weight: 100;
+  margin-top: -6px;
+}
+
+.signal-price {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.signal-price__title {
+  display: inline-block;
+  width: 50px;
+  font-weight: 200;
+  position: relative;
+}
+
+// Graph
+
+.target-long {
+  order: 1;
+  margin-bottom: 40px;
+}
+
+.target-short {
+  order: 3;
+}
+
+.entry-long {
+  order: 2;
+}
+
+.entry-short {
+  order: 2;
+  margin-bottom: 40px;
+}
+
+.stop-long {
+  order: 3;
+}
+
+.stop-short {
+  order: 1;
+}
+
+.signal-graph__vertical_line {
+  position: absolute;
+  top: 5px;
+  left: 55px;
+  width: 0.5px;
+  height: 92%;
+  background-color: var(--border-color-lighter);
+}
+
+.signal-price__title::before {
+  content: "";
+  width: 7px;
+  height: 0.5px;
+  position: absolute;
+  top: 12px;
+  left: 55.5px;
+  background-color: var(--border-color-lighter);
+}
+
+.signal-broker__avatar {
+  border-radius: 50%;
+  border: 3px solid var(--light);
+}
+
+@media (max-width: 1024px) {
+  .signal {
+    width: 310px;
+  }
+
+  .card__face {
+    padding: 20px;
+  }
 }

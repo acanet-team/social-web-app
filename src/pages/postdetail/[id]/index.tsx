@@ -17,6 +17,7 @@ import Comments from "@/components/newsfeed/Comments";
 import { likeRequest } from "@/api/newsfeed";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "react-responsive";
+import type { IPostCommunityInfo } from "@/api/community/model";
 
 const DetailPost = ({
   idParam,
@@ -172,34 +173,54 @@ const DetailPost = ({
     <>
       {dataPost && (
         <PostModal
+          // show={openMobileComments}
+          // handleClose={handleClose}
+          // postId={idParam as string}
+          // userId={userId}
+          // nickName={
+          //   dataPost.user?.nickName ||
+          //   dataPost.user?.firstName + dataPost.user?.lastName
+          // }
+          // avatar={dataPost.user?.photo?.path}
+          // content={dataPost.content}
+          // assets={dataPost.assets}
+          // authorId={dataPost.user?.userId}
+          // authorNickname={dataPost.user?.nickName || ""}
+          // createdAt={dataPost.createdAt}
+          // columnsCount={
+          //   dataPost.assets?.length > 3 ? 3 : dataPost.assets?.length
+          // }
+          // groupAvatar={dataPost.community?.avatar.path || ""}
+          // groupName={dataPost.community?.name || ""}
+          // groupOwnerId={""}
+          // groupId={dataPost.community?.communityId || ""}
+          // like={likeNum}
+          // comment={commentNum}
+          // liked={isLiked}
+          // updateLike={updateLikeHandler}
+          // updateComments={updateCommentHandler}
+          // updateIsLiked={setIsLiked}
+
+          groupOwnerId=""
           show={openMobileComments}
-          handleClose={handleClose}
+          curUser={userId}
+          postAuthor={dataPost.user}
+          community={dataPost.community as IPostCommunityInfo}
           postId={idParam as string}
-          userId={userId}
-          nickName={
-            dataPost.user?.nickName ||
-            dataPost.user?.firstName + dataPost.user?.lastName
-          }
-          avatar={dataPost.user?.photo?.path}
           content={dataPost.content}
           assets={dataPost.assets}
-          authorId={dataPost.user?.userId}
-          authorNickname={dataPost.user?.nickName || ""}
           createdAt={dataPost.createdAt}
           columnsCount={
             dataPost.assets?.length > 3 ? 3 : dataPost.assets?.length
           }
-          groupAvatar={dataPost.community?.avatar.path || ""}
-          groupName={dataPost.community?.name || ""}
-          groupOwnerId={""}
-          groupId={dataPost.community?.communityId || ""}
           like={likeNum}
           comment={commentNum}
           liked={isLiked}
+          handleClose={handleClose}
           updateLike={updateLikeHandler}
           updateComments={updateCommentHandler}
           updateIsLiked={setIsLiked}
-          // setPostHandler={setPosts}
+          // setPostHandler={setDataPost}
         />
         // <Modal
         //   fullscreen={fullscreen}

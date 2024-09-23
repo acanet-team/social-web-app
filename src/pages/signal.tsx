@@ -1,21 +1,23 @@
 import { SignalStationEnum } from "@/types";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/signal.module.scss";
-import SignalCard from "@/components/signal/SignalCard";
+import SignalSection from "@/components/signal/SignalSection";
+import type { getSignalCardResponse } from "@/api/signal/model";
+import { getSignalCards } from "@/api/signal";
 
-const Signal = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Signal = ({
+  cards,
+  totalPage,
+  hasNextPage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [curTab, setCurTab] = useState<string>("discover");
   const tSignal = useTranslations("Signal");
+  const existedSignalIds = cards.map((c) => c.id);
+  // const [existedSignalIds, setExistedSignalIds] = useState<any[]>([]);
   // const [feedPosts, setPosts] = useState<IPost[]>(posts);
   // const { data: session } = useSession() as any;
-  // const tPost = useTranslations("CreatePost");
-  // const [postType, setPostType] = useState<"post" | "signal">("post");
-
-  // const postTypeChangeHandler = (event: SelectChangeEvent) => {
-  //   setPostType(event.target.value as "post" | "signal");
-  // };
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -47,27 +49,13 @@ const Signal = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
         </div>
       </div>
 
-      {/* <CommunitySection
-        isBroker={isBroker}
-        communities={communityPosts}
-        communityType={curTab}
-        take={TAKE}
+      <SignalSection
+        cards={cards}
+        tab={curTab}
         allPage={totalPage}
-        curPage={page}
-      /> */}
-      <div
-        className={`${styles["card_container"]} card shadow-xss w-100 border-0 mt-4`}
-      >
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-        <SignalCard />
-      </div>
+        hasNextPage={hasNextPage}
+        existedSignalIds={existedSignalIds}
+      />
     </div>
   );
 };
@@ -75,9 +63,23 @@ const Signal = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 export default Signal;
 
 export async function getServerSideProps(context: NextPageContext) {
+  // Get 9 front cards from server
+  const res = await getSignalCards({
+    page: 1,
+    type: "unread",
+    brokerId: "",
+    existedSignalIds: "",
+  });
+  console.log("signalll", res);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
+      cards: res?.data?.docs || [],
+      totalPage: res?.data?.meta?.totalPage || 1,
+      hasNextPage: res?.data?.meta?.hasNextPage || true,
+      // cards: [] as getSignalCardResponse[],
+      // totalPage: 1,
+      // hasNextPage: true,
     },
   };
 }

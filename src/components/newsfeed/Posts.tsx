@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getPosts } from "@/api/newsfeed";
 import { cleanPath } from "@/utils/Helpers";
 import PostCard from "./Postcard";
 import { useTranslations } from "next-intl";
 import DotWaveLoader from "../DotWaveLoader";
-import { combineUniqueById } from "@/utils/combine-arrs";
 import { IPost } from "@/api/newsfeed/model";
+import type { IPostCommunityInfo } from "@/api/community/model";
 
 export default function Posts(props: {
   posts: any;
@@ -16,7 +16,6 @@ export default function Posts(props: {
   curPage: number;
 }): JSX.Element {
   const { posts, setPosts } = props;
-  // const [posts, setPosts] = useState<any[]>(props.posts);
   const [take, setTake] = useState<number>(props.take);
   const [page, setPage] = useState<number>(props.curPage);
   const [totalPage, setTotalPage] = useState<number>(props.allPage);
@@ -26,26 +25,12 @@ export default function Posts(props: {
   const [readyToFetch, setReadyToFetch] = useState<boolean>(false);
   const t = useTranslations("Post");
 
-  // const post = usePostStore((state) => state.posts);
-
-  // useEffect(() => {
-  //   // setPosts(prev => [...posts, ...prev]);
-  //   setPosts((prev) => {
-  //     const newPosts = combineUniqueById(prev, posts);
-  //     return newPosts;
-  //   });
-  // }, [post]);
-
   const fetchPosts = async (page = 1) => {
     setIsLoading(true);
     try {
       const response: any = await getPosts(page, take, props.feedType);
       console.log("posts", response);
       setPosts((prev) => [...prev, ...response.data.docs]);
-      // setPosts((prev) => {
-      //   const newPosts = combineUniqueById(prev, response.data.docs);
-      //   return newPosts;
-      // });
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -130,21 +115,34 @@ export default function Posts(props: {
           posts.map((p: IPost) => (
             <div key={p.id}>
               <PostCard
+                // groupOwnerId={""}
+                // groupName={p.community?.name || ""}
+                // groupAvatar={p.community?.avatar?.path || ""}
+                // groupId={p.community?.communityId || ""}
+                // postId={p.id}
+                // nickName={
+                //   p.user.nickName || p.user.firstName + " " + p.user.lastName
+                // }
+                // authorId={p.user.userId}
+                // authorNickname={p.user.nickName || ""}
+                // avatar={
+                //   p.user?.photo?.id
+                //     ? cleanPath(p.user?.photo?.path)
+                //     : "/assets/images/user.png"
+                // }
+                // content={p.content}
+                // assets={p?.assets}
+                // createdAt={p.createdAt}
+                // like={p.favoriteCount}
+                // comment={p.commentCount}
+                // columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
+                // liked={p.liked}
+                // setPostHandler={setPosts}
+
                 groupOwnerId={""}
-                groupName={p.community?.name || ""}
-                groupAvatar={p.community?.avatar?.path || ""}
-                groupId={p.community?.communityId || ""}
+                community={p.community as IPostCommunityInfo}
+                postAuthor={p.user}
                 postId={p.id}
-                nickName={
-                  p.user.nickName || p.user.firstName + " " + p.user.lastName
-                }
-                authorId={p.user.userId}
-                authorNickname={p.user.nickName || ""}
-                avatar={
-                  p.user?.photo?.id
-                    ? cleanPath(p.user?.photo?.path)
-                    : "/assets/images/user.png"
-                }
                 content={p.content}
                 assets={p?.assets}
                 createdAt={p.createdAt}
