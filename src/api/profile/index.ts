@@ -97,6 +97,7 @@ export const updateSchool = (school: educationParams) => {
 export const deleteEducation = (id: string) => {
   return httpClient.delete(`/v1/user-profile/delete-education/${id}`);
 };
+
 export const createNewLicense = (license: licenseParams) => {
   return httpClient.post<licenseParams, BaseArrayResponse<FormDtLicense>>(
     `/v1/user-profile/add-license`,

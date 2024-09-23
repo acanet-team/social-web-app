@@ -4,33 +4,33 @@ import DotWaveLoader from "../DotWaveLoader";
 import styles from "@/styles/modules/signal.module.scss";
 import { getSignalCards } from "@/api/signal";
 import { useTranslations } from "next-intl";
-import type { cardData } from "@/api/signal/model";
+import type { getSignalCardResponse } from "@/api/signal/model";
 
 export default function ProfileSignal(props: { brokerId: number }) {
   const tSignal = useTranslations("Signal");
-  const [cards, setCards] = useState<cardData[]>([]);
+  const [cards, setCards] = useState<getSignalCardResponse[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<Boolean>(true);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
 
-  const fetchCards = async () => {
+  const fetchCards = async (page: number) => {
     setIsLoading(true);
     try {
       const res = await getSignalCards({
-        page: "",
-        type: "unread",
+        page: page,
+        type: "",
         brokerId: props.brokerId,
         existedSignalIds: "",
       });
-      setCards((prev) => [...prev, ...res.data.docs] as cardData[]);
+      setCards(
+        (prev) => [...prev, ...res.data.docs] as getSignalCardResponse[],
+      );
       console.log("cards", res.data.docs);
-      console.log("cards state", cards);
 
       // setTotalPage(res.data?.meta?.totalPage);
       setHasNextPage(res.data?.meta?.hasNextPage);
-      setPage((page) => page + 1);
     } catch (err) {
       console.error(err);
     } finally {
@@ -48,7 +48,7 @@ export default function ProfileSignal(props: { brokerId: number }) {
         !isLoading &&
         hasNextPage
       ) {
-        fetchCards();
+        setPage((page) => page + 1);
       }
     }
   };
@@ -65,26 +65,45 @@ export default function ProfileSignal(props: { brokerId: number }) {
   }, [hasNextPage, isLoading]);
 
   useEffect(() => {
+    if (hasFetchedInitialData) {
+      fetchCards(1);
+    }
+  }, [hasFetchedInitialData]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchCards(page);
+    }
+  }, [page]);
+
+  useEffect(() => {
     if (!hasFetchedInitialData) {
       setHasFetchedInitialData(true);
-      fetchCards();
     }
   }, []);
 
-  // useEffect(() => {
-  //   fetchCards();
-  // }, [hasNextPage]);
-
   return (
     <div className={`card shadow-xss w-100 border-0 mt-4 mb-5 nunito-font`}>
-      {cards?.length === 0 && (
-        <div className="mt-4 text-center">{tSignal("no_signal_found")}</div>
+      {!isLoading && cards?.length === 0 && (
+        <div className="mt-5 text-center">{tSignal("no_signal_found")}</div>
       )}
       <div className={styles["card_container"]}>
         {cards?.length > 0 &&
           cards.map((card) => (
             <div key={card.id}>
-              <SignalCard cardId={card.id} />
+              <SignalCard
+                id={card.id}
+                signalPair={card.signalPair}
+                entry={card.entry}
+                target={card.target}
+                stop={card.stop}
+                description={card.description}
+                expiryAt={card.expiryAt}
+                readAt={card.readAt && card.readAt}
+                type={card.type}
+                owner={card.owner}
+                createdAt={card.readAt}
+              />
             </div>
           ))}
       </div>

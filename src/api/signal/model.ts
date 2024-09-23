@@ -8,12 +8,14 @@ export interface getSignalCardParams {
 export interface getSignalCardResponse {
   id: string;
   signalPair: string;
-  isRead: boolean;
+  readAt: number;
   owner: {
     userId: number;
     firstName: string;
     lastName: string;
     nickName: string;
+    followed: boolean;
+    followersCount: string;
     photo: {
       id: string;
       path: string;
@@ -26,20 +28,4 @@ export interface getSignalCardResponse {
   target: string;
   expiryAt: number;
   createdAt: number;
-}
-
-export interface cardData {
-  id: string;
-  signalPair: string;
-  readAt: number;
-  owner: {
-    userId: number;
-    firstName: string;
-    lastName: string;
-    nickName: string;
-    photo: {
-      id: string;
-      path: string;
-    };
-  };
 }

@@ -15,9 +15,7 @@ const Signal = ({
   const [curTab, setCurTab] = useState<string>("discover");
   const tSignal = useTranslations("Signal");
   const existedSignalIds = cards.map((c) => c.id);
-  // const [existedSignalIds, setExistedSignalIds] = useState<any[]>([]);
-  // const [feedPosts, setPosts] = useState<IPost[]>(posts);
-  // const { data: session } = useSession() as any;
+  console.log("existed", existedSignalIds);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -65,21 +63,17 @@ export default Signal;
 export async function getServerSideProps(context: NextPageContext) {
   // Get 9 front cards from server
   const res = await getSignalCards({
-    page: 1,
+    page: "",
     type: "unread",
     brokerId: "",
     existedSignalIds: "",
   });
-  console.log("signalll", res);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
       cards: res?.data?.docs || [],
       totalPage: res?.data?.meta?.totalPage || 1,
       hasNextPage: res?.data?.meta?.hasNextPage || true,
-      // cards: [] as getSignalCardResponse[],
-      // totalPage: 1,
-      // hasNextPage: true,
     },
   };
 }

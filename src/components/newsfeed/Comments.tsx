@@ -49,13 +49,14 @@ const Comments = forwardRef(
       setIsLoading(true);
       try {
         const response: any = await getComments(page, props.take, props.postId);
-        setComments((prevState) => {
-          const newCommentArr = combineUniqueById(
-            prevState,
-            response.data.docs,
-          );
-          return newCommentArr;
-        });
+        setComments((prev) => [...prev, ...response.data.docs]);
+        // setComments((prevState) => {
+        //   const newCommentArr = combineUniqueById(
+        //     prevState,
+        //     response.data.docs,
+        //   );
+        //   return newCommentArr;
+        // });
         setTotalPage(response.data.meta.totalPage);
         return response.data;
       } catch (err) {
@@ -166,14 +167,18 @@ const Comments = forwardRef(
           setIsLoading(true);
           // Call api to post the comment
           const res: any = await postComment(values);
-          console.log("new comment", res.data);
           newComment.id = res.data.id;
-          setComments((prevState) => [newComment, ...prevState]);
+          setComments((prevState) => [...prevState, newComment]);
           // props.setCommentNum((prevState: number) => prevState + 1);
           props.setCommentNum("add");
-          // Scroll to top of the comment section
+          // Scroll to bottom of the comment section
           if (commentListRef.current) {
-            commentListRef.current.scrollTop = 0;
+            if (isMobile) {
+              commentListRef.current?.lastElementChild?.scrollIntoView();
+            } else {
+              commentListRef.current.scrollTop =
+                commentListRef.current.scrollHeight;
+            }
           }
         } catch (err) {
           setComments((prevState) => [
