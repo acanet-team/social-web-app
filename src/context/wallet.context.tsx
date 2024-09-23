@@ -12,6 +12,7 @@ import React, {
 } from "react";
 import rateAbi from "@/web3/abi/rate.json";
 import communityAbi from "@/web3/abi/community.json";
+import donateAbi from "@/web3/abi/donate.json";
 import { useSession } from "next-auth/react";
 import { updateWalletAddress } from "@/api/wallet";
 
@@ -32,6 +33,7 @@ interface WalletContextType {
   signer: any;
   rateContract: any;
   communityContract: any;
+  donateContract: any;
 }
 
 export interface Account {
@@ -93,6 +95,14 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     ),
   );
 
+  const [donateContract, setDonateContract] = useState<any>(
+    new ethers.Contract(
+      contracts.Donate["0x61"] as string,
+      donateAbi as any,
+      provider,
+    ),
+  );
+
   const updateUserWalletAddress = (address: string) => {
     // Update address in DB
     updateWalletAddress(address);
@@ -120,6 +130,13 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         signer || provider,
       );
       setCommunityContract(community);
+
+      const donate = new ethers.Contract(
+        contracts.Donate[connectedChain?.id] as string,
+        donateAbi as any,
+        signer || provider,
+      );
+      setDonateContract(donate);
     }
   }, [provider, signer, connectedChain]);
 
@@ -194,6 +211,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         signer,
         rateContract,
         communityContract,
+        donateContract,
       }}
     >
       {children}

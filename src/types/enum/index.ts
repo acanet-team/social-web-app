@@ -2,6 +2,7 @@ export enum TabEnum {
   ForYou = "for_you",
   Suggestion = "suggestion",
 }
+
 export enum TabPnum {
   Posts = "posts",
   Communities = "communities",
@@ -28,6 +29,11 @@ export enum CommunityJoiningStatus {
   invited = "invited", // Đã gửi lời mời vào nhóm
   rejected = "rejected", // Bị từ chối
   banned = "banned", // Bị ban
+}
+
+export enum SignalStationEnum {
+  discover = "discover",
+  history = "history",
 }
 
 export enum ConvertType {

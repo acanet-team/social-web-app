@@ -12,6 +12,7 @@ import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
 import "dotenv/config";
 import { joinPaidCommunity } from "@/api/wallet";
+import { useRouter } from "next/router";
 
 export default function CommunityCard(props: {
   ownerId: number;
@@ -49,10 +50,15 @@ export default function CommunityCard(props: {
   } = props;
   const t = useTranslations("Community");
   const tBase = useTranslations("Base");
-  const [joiningStatus, setJoiningStatus] = useState(communityStatus);
+  const [joiningStatus, setJoiningStatus] = useState<string | null>(
+    communityStatus,
+  );
   const [curUser, setCurUser] = useState<number>();
   const { data: session } = useSession();
-  const { connectWallet, communityContract, account } = useWeb3();
+  const { connectWallet, communityContract, account, connectedChain } =
+    useWeb3();
+  const router = useRouter();
+  const { locale } = router;
 
   useEffect(() => {
     if (session) {
@@ -71,20 +77,22 @@ export default function CommunityCard(props: {
           {
             from: account?.address,
             gasLimit: 2000000,
+            value: ethers.utils.parseEther(fee.toString()),
           },
         );
-        console.log("response", res);
         const hasTransaction = res.hash;
         // Calling api
         joinPaidCommunity({
           communityId: groupId,
           hashTransaction: hasTransaction,
+          network: connectedChain?.id === "0x780c" ? "30732" : "72",
         });
       } else {
         joinCommunity({ communityId: groupId });
       }
       setJoiningStatus("pending_request");
     } catch (err) {
+      setJoiningStatus(null);
       console.log(err);
     }
   };
@@ -171,7 +179,10 @@ export default function CommunityCard(props: {
       </div>
       <div className="card-body h-100 mt-2 pb-4 cursor-pointer">
         <div className="d-flex align-items-center mb-2">
-          <Link href={`/communities/detail/${groupId}`}>
+          <Link
+            href={`${locale}/communities/detail/${groupId}`}
+            as={`/communities/detail/${groupId}`}
+          >
             <h3 className="fw-bold fs-3 m-0">{name}</h3>
           </Link>
           {isBroker && communityType === "owned" && (

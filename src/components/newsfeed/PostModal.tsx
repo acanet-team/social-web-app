@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/postModal.module.scss";
 import Image from "next/image";
@@ -11,57 +10,49 @@ import RoundedNumber from "../RoundedNumber";
 import { deletePost, getComments, likeRequest } from "@/api/newsfeed";
 import { throwToast } from "@/utils/throw-toast";
 import { useTranslations } from "next-intl";
-import page from "@/pages/courses/investor/page";
 import DotWaveLoader from "../DotWaveLoader";
 import React from "react";
 import Comments from "./Comments";
 import { useMediaQuery } from "react-responsive";
+import type { IUserInfo } from "@/api/onboard/model";
+import type { IPostCommunityInfo } from "@/api/community/model";
+import { cleanPath } from "@/utils/Helpers";
 
 function PostModal(props: {
+  groupOwnerId: number | "";
   show: boolean;
-  handleClose: () => void;
+  postAuthor: IUserInfo;
+  community: IPostCommunityInfo;
   postId: string;
-  nickName: string;
-  authorId: number;
-  authorNickname: string;
-  avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
-  like: number;
-  comment: number;
   createdAt: string;
   columnsCount: number;
+  like: number;
+  comment: number;
   liked: boolean;
-  groupAvatar: string;
-  groupName: string | "";
-  groupOwnerId: number | "";
-  groupId: string;
-  userId: number | undefined;
-  setPostHandler?: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
+  curUser: number | undefined;
+  handleClose: () => void;
   updateLike: React.Dispatch<React.SetStateAction<string>>;
   updateComments: React.Dispatch<React.SetStateAction<string>>;
   updateIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
+  setPostHandler?: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
 }) {
   const {
     show,
     handleClose,
+    community,
+    postAuthor,
     postId,
-    nickName,
-    avatar,
     content,
     assets,
-    authorId,
-    authorNickname,
     like = 0,
     comment = 0,
     createdAt,
     columnsCount = 1,
     liked,
-    groupAvatar,
-    groupName,
     groupOwnerId,
-    groupId,
-    userId,
+    curUser,
     setPostHandler,
     updateLike,
     updateComments,
@@ -77,6 +68,7 @@ function PostModal(props: {
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const tComment = useTranslations("Comment");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const tBase = useTranslations("Base");
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -87,15 +79,21 @@ function PostModal(props: {
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
-  const tBase = useTranslations("Base");
+
+  // Props
+  const groupAvatar = community?.avatar?.path || "";
+  const authorId = postAuthor?.userId;
+  const authorNickname =
+    postAuthor?.nickName || postAuthor?.firstName + " " + postAuthor?.lastName;
+  const avatar = postAuthor?.photo?.id
+    ? cleanPath(postAuthor?.photo?.path)
+    : "/assets/images/user.png";
 
   const initialFetchComments = async () => {
     setIsLoading(true);
     try {
       const response: any = await getComments(page, take, postId);
-      // Update the comments state with the fetched data
-      // setComments((prevState) => [...prevState, ...response.data.docs]);
-      setComments(response.data.docs);
+      setComments(response.data.docs.reverse());
       // console.log("comment array", response.data.docs);
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
@@ -225,7 +223,7 @@ function PostModal(props: {
           ></i>
         )}
         <div className="w-100 d-flex justify-content-center">
-          <h2 className="p-0 m-0 fs-4 fw-bold">{nickName}&apos;s post</h2>
+          <h2 className="p-0 m-0 fs-4 fw-bold">{authorNickname}&apos;s post</h2>
         </div>
       </Modal.Header>
       <div className="border-top" />
@@ -274,7 +272,7 @@ function PostModal(props: {
             <div>
               <Link href={`/profile/${authorNickname}`}>
                 <h4 className="fw-700 text-grey-900 font-xss m-0 mt-1">
-                  @{nickName}
+                  @{authorNickname}
                 </h4>
               </Link>
               <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
@@ -282,7 +280,7 @@ function PostModal(props: {
               </span>
             </div>
 
-            {userId && (userId === authorId || userId === groupOwnerId) && (
+            {curUser && (curUser === authorId || curUser === groupOwnerId) && (
               <div
                 className="ms-auto pointer position-relative"
                 onClick={() => setOpenSettings((open) => !open)}
@@ -311,10 +309,10 @@ function PostModal(props: {
               <p className="fw-500 lh-26 font-xss w-100 mb-2">
                 {expandPost
                   ? content
-                  : content.length > 150
-                    ? content.substring(0, 150) + "..."
+                  : content?.length > 150
+                    ? content?.substring(0, 150) + "..."
                     : content}
-                {content.length > 150 && !expandPost ? (
+                {content?.length > 150 && !expandPost ? (
                   <span
                     className={styles["expand-btn"]}
                     onClick={() => setExpandPost((open) => !open)}

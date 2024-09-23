@@ -33,7 +33,11 @@ const Notifications: React.FC<NotificationProps> = ({
   // const [newNotifications, setNewNotifications] = useState<Set<string>>(
   //   new Set()
   // );
-  // console.log("notiApi", notis);
+  // useEffect(() => {
+  //   console.log("notiApi", notis);
+  // }, [])
+  // console.log("notiApiii", notis);
+
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
     const diffInMs = now - createdAt;
@@ -288,6 +292,7 @@ const Notifications: React.FC<NotificationProps> = ({
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     const allRead = notis.every(
       (notification) => notification.read_at !== null,
@@ -297,7 +302,7 @@ const Notifications: React.FC<NotificationProps> = ({
     } else {
       setReadAllNotis(false);
     }
-  }, [notis]);
+  }, []);
 
   useEffect(() => {
     // if (page > 1) {

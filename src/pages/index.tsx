@@ -8,7 +8,7 @@ import { TabEnum } from "@/types/enum";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/api/newsfeed/model";
 import Box from "@mui/material/Box";
@@ -29,6 +29,7 @@ const Home = ({
   const [feedPosts, setPosts] = useState<IPost[]>(posts);
   const [curTab, setCurTab] = useState<string>("suggestion");
   const { data: session } = useSession() as any;
+  const [isBroker, setIsBroker] = useState<boolean>(false);
   const t = useTranslations("FeedTabs");
   const tPost = useTranslations("CreatePost");
   const [postType, setPostType] = useState<"post" | "signal">("post");
@@ -36,6 +37,12 @@ const Home = ({
   const postTypeChangeHandler = (event: SelectChangeEvent) => {
     setPostType(event.target.value as "post" | "signal");
   };
+
+  useEffect(() => {
+    if (session) {
+      setIsBroker(session.user?.isBroker);
+    }
+  }, [session]);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -76,31 +83,35 @@ const Home = ({
                   className="card w-100 shadow-xss border-0 mb-3 nunito-font"
                   style={{ padding: "1.5rem" }}
                 >
-                  <Box>
-                    <FormControl>
-                      <Select
-                        labelId="create"
-                        id="create"
-                        value={postType}
-                        onChange={postTypeChangeHandler}
-                        sx={{
-                          height: "40px",
-                          fontSize: "15px",
-                          color: "#0707079a",
-                          borderRadius: "10px",
-                          "& fieldset": {
-                            minWidth: "100px",
-                            border: "2px solid #eee",
-                          },
-                        }}
-                      >
-                        <MenuItem value="post">{tPost("create_Post")}</MenuItem>
-                        <MenuItem value="signal">
-                          {tPost("create_signal")}
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
+                  {isBroker && (
+                    <Box>
+                      <FormControl>
+                        <Select
+                          labelId="create"
+                          id="create"
+                          value={postType}
+                          onChange={postTypeChangeHandler}
+                          sx={{
+                            height: "40px",
+                            fontSize: "15px",
+                            color: "#0707079a",
+                            borderRadius: "10px",
+                            "& fieldset": {
+                              minWidth: "100px",
+                              border: "2px solid #eee",
+                            },
+                          }}
+                        >
+                          <MenuItem value="post">
+                            {tPost("create_Post")}
+                          </MenuItem>
+                          <MenuItem value="signal">
+                            {tPost("create_signal")}
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  )}
 
                   {postType === "post" ? (
                     <CreatePost

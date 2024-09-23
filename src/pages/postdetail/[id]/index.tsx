@@ -17,6 +17,7 @@ import Comments from "@/components/newsfeed/Comments";
 import { likeRequest } from "@/api/newsfeed";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "react-responsive";
+import type { IPostCommunityInfo } from "@/api/community/model";
 
 const DetailPost = ({
   idParam,
@@ -172,233 +173,27 @@ const DetailPost = ({
     <>
       {dataPost && (
         <PostModal
+          groupOwnerId=""
           show={openMobileComments}
-          handleClose={handleClose}
+          curUser={userId}
+          postAuthor={dataPost.user}
+          community={dataPost.community as IPostCommunityInfo}
           postId={idParam as string}
-          userId={userId}
-          nickName={
-            dataPost.user?.nickName ||
-            dataPost.user?.firstName + dataPost.user?.lastName
-          }
-          avatar={dataPost.user?.photo?.path}
           content={dataPost.content}
           assets={dataPost.assets}
-          authorId={dataPost.user?.userId}
-          authorNickname={dataPost.user?.nickName || ""}
           createdAt={dataPost.createdAt}
           columnsCount={
             dataPost.assets?.length > 3 ? 3 : dataPost.assets?.length
           }
-          groupAvatar={dataPost.community?.avatar.path || ""}
-          groupName={dataPost.community?.name || ""}
-          groupOwnerId={""}
-          groupId={dataPost.community?.communityId || ""}
           like={likeNum}
           comment={commentNum}
           liked={isLiked}
+          handleClose={handleClose}
           updateLike={updateLikeHandler}
           updateComments={updateCommentHandler}
           updateIsLiked={setIsLiked}
-          // setPostHandler={setPosts}
+          // setPostHandler={setDataPost}
         />
-        // <Modal
-        //   fullscreen={fullscreen}
-        //   show={openMobileComments}
-        //   onHide={handleClose}
-        //   centered
-        //   size="lg"
-        //   className={`${styles["customModal"]} nunito-font`}
-        // >
-        //   <Modal.Header
-        //     closeButton={fullscreen === "sm-down" ? false : true}
-        //     className={styles["modal-header"]}
-        //     style={{ height: "50px" }}
-        //   >
-        //     {fullscreen && (
-        //       <i
-        //         className={`${styles["modal-back__btn"]} bi bi-arrow-left h1 m-0`}
-        //         onClick={handleClose}
-        //       ></i>
-        //     )}
-        //     <h2 className="p-0 m-0 fs-4 fw-bold">
-        //       {dataPost.user?.nickName ||
-        //         dataPost.user?.firstName + dataPost.user?.lastName}
-        //       &apos;s post
-        //     </h2>
-        //   </Modal.Header>
-        //   <div className="border-top" />
-        //   <Modal.Body className={styles["modal-content"]}>
-        //     {/* Post content */}
-        //     <div
-        //       className={`${styles.post} post-card card w-100 h-100 shadow-xss rounded-3 border-0 p-sm-3 p-1 mb-3`}
-        //       ref={commentListMobileRef}
-        //     >
-        //       <div className="card-body p-0 d-flex">
-        //         <figure className="avatar me-3">
-        //           {dataPost.community?.avatar.path || "" ? (
-        //             <div className="position-relative">
-        //               <Image
-        //                 src={dataPost.community?.avatar.path || ""}
-        //                 width={45}
-        //                 height={45}
-        //                 alt="avater"
-        //                 className="shadow-sm rounded-3 w45"
-        //                 style={{ border: "1px solid #ddd" }}
-        //               />
-        //               <Image
-        //                 src={dataPost.user?.photo?.path}
-        //                 width={30}
-        //                 height={30}
-        //                 alt="avater"
-        //                 className="shadow-sm rounded-circle position-absolute border-1"
-        //                 style={{
-        //                   bottom: "-5px",
-        //                   right: "-5px",
-        //                   border: "1px solid #eee",
-        //                 }}
-        //               />
-        //             </div>
-        //           ) : (
-        //             <Image
-        //               src={dataPost.user?.photo?.path}
-        //               width={45}
-        //               height={45}
-        //               alt="avater"
-        //               className="shadow-sm rounded-circle w45"
-        //             />
-        //           )}
-        //         </figure>
-
-        //         <div>
-        //           <Link href={`/profile/${dataPost.user?.nickName || ""}`}>
-        //             <h4 className="fw-700 text-grey-900 font-xss m-0 mt-1">
-        //               @{dataPost.user?.nickName ||
-        //                 dataPost.user?.firstName + dataPost.user?.lastName}
-        //             </h4>
-        //           </Link>
-        //           <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
-        //             {dataPost.createdAt ? TimeSinceDate(dataPost.createdAt) : ""}
-        //           </span>
-        //         </div>
-
-        //         {userId && (userId === dataPost.user?.userId || userId === groupOwnerId) && (
-        //           <div
-        //             className="ms-auto pointer position-relative"
-        //             onClick={() => setOpenSettings((open) => !open)}
-        //             ref={settingsRef}
-        //           >
-        //             <i className="bi bi-three-dots h1 me-2 position-absolute right-0"></i>
-        //             {openSettings && (
-        //               <div
-        //                 className={`${styles["delete-post__btn"]} font-xsss border-0 py-2 px-3 py-1 rounded-3 cursor-pointer`}
-        //                 // onClick={(e) => onDeletePost(e, idParam as string)}
-        //               >
-        //                 Delete
-        //               </div>
-        //             )}
-        //           </div>
-        //         )}
-        //       </div>
-        //       <div className="card-body p-0 ms-1 mt-2 me-lg-6">
-        //         <Box
-        //           sx={{
-        //             width: "100%",
-        //             maxHeight: 500,
-        //             overflow: "hidden",
-        //           }}
-        //         >
-        //           <p className="fw-500 lh-26 font-xss w-100 mb-2">
-        //             {expandPost
-        //               ? dataPost.content
-        //               : dataPost.content.length > 150
-        //                 ? dataPost.content.substring(0, 150) + "..."
-        //                 : dataPost.content}
-        //             {dataPost.content.length > 150 && !expandPost ? (
-        //               <span
-        //                 className={styles["expand-btn"]}
-        //                 onClick={() => setExpandPost((open) => !open)}
-        //               >
-        //                 See more
-        //               </span>
-        //             ) : (
-        //               ""
-        //             )}
-        //           </p>
-        //           <Masonry columns={dataPost.assets?.length > 3 ? 3 : dataPost.assets?.length}>
-        //             {dataPost.assets?.slice(0, 5).map(({ path, id }) =>
-        //               path ? (
-        //                 <div key={id}>
-        //                   <img
-        //                     srcSet={`${path}?w=162&auto=format&dpr=2 2x`}
-        //                     src={`${path}?w=162&auto=format`}
-        //                     alt={id}
-        //                     loading="lazy"
-        //                     style={{
-        //                       borderBottomLeftRadius: 4,
-        //                       borderBottomRightRadius: 4,
-        //                       display: "block",
-        //                       width: "100%",
-        //                     }}
-        //                   />
-        //                 </div>
-        //               ) : null
-        //             )}
-        //           </Masonry>
-        //         </Box>
-        //       </div>
-
-        //       <div className="card-body d-flex p-0 mt-4">
-        //         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
-        //           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
-        //           <i
-        //             className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
-        //             onClick={(e) => onClickLikeHandler(e, idParam as string, likeNum)}
-        //           ></i>
-        //           <span className="like-number">
-        //             {likeNum >= 1000
-        //               ? Math.round(likeNum / 1000).toFixed(1)
-        //               : likeNum}
-        //           </span>
-        //           <span className="like-thousand">
-        //             {likeNum >= 1000 ? "k" : ""}
-        //           </span>
-        //         </div>
-        //         <div
-        //           className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
-        //         >
-        //           <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
-        //           <span className="d-none-xss">
-        //             <RoundedNumber
-        //               num={commentNum}
-        //               unitSingular={tBase("comment")}
-        //               unitPlural={tBase("comments")}
-        //             />
-        //           </span>
-        //         </div>
-        //       </div>
-        //       {/* All comments */}
-        //       {commentNum?.length === 0 && (
-        //         <div className="text-center pointer align-items-center text-dark lh-26 font-xss">
-        //           <span className="d-none-xs font-xss fw-600 text-grey-700">
-        //             {tComment("no_comment")}
-        //           </span>
-        //         </div>
-        //       )}
-        //       {isMobile && (
-        //         <Comments
-        //           comments={comments}
-        //           page={page}
-        //           totalPage={totalPage}
-        //           take={take}
-        //           postId={postId}
-        //           setCommentNum={setCommentNumHandler}
-        //           postAuthor={authorId}
-        //           ref={childRef}
-        //         />
-        //       )}
-        //     </div>
-        //   </Modal.Body>
-        // </Modal>
       )}
     </>
   );

@@ -17,43 +17,36 @@ import Link from "next/link";
 import PostModal from "./PostModal";
 import { useMediaQuery } from "react-responsive";
 import Comments from "./Comments";
+import { cleanPath } from "@/utils/Helpers";
+import type { IPostCommunityInfo } from "@/api/community/model";
+import type { IUserInfo } from "@/api/onboard/model";
 
 export default function PostCard(props: {
+  groupOwnerId: number | "";
+  community: IPostCommunityInfo;
+  postAuthor: IUserInfo;
   postId: string;
-  nickName: string;
-  authorId: number;
-  authorNickname: string;
-  avatar: string;
   content: string;
   assets: Array<{ id: string; path: string }>;
+  createdAt: string;
   like: number;
   comment: number;
-  createdAt: string;
   columnsCount: number;
   liked: boolean;
-  groupAvatar: string;
-  groupName: string | "";
-  groupOwnerId: number | "";
-  groupId: string;
   setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
 }) {
   const {
+    groupOwnerId,
+    community,
+    postAuthor,
     postId,
-    nickName,
-    avatar,
     content,
     assets,
-    authorId,
-    authorNickname,
-    like = 0,
-    comment = 0,
     createdAt,
-    columnsCount = 1,
+    like,
+    comment,
+    columnsCount,
     liked,
-    groupAvatar,
-    groupName,
-    groupOwnerId,
-    groupId,
     setPostHandler,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
@@ -62,15 +55,16 @@ export default function PostCard(props: {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [commentNum, setCommentNum] = useState<number>(comment || 0);
-  // const router = useRouter();
-  // const pathname = usePathname();
-  // const searchParams = useSearchParams();
-  // const [isPending, startTransition] = useTransition();
+  const [openDonate, setOpenDonate] = useState<boolean>(false);
+  // const donateData ={
+  //   wallet_address:
+  //   id: authorId
+  // }
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likeNum, setLikeNum] = useState<number>(like);
   const settingsRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession() as any;
-  const [userId, setUserId] = useState<number>();
+  const [userId, setUserId] = useState<number | undefined>(undefined);
   const tBase = useTranslations("Base");
 
   // Comment states
@@ -80,6 +74,17 @@ export default function PostCard(props: {
   const [take, setTake] = useState<number>(20);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Props
+  const groupAvatar = community?.avatar?.path || "";
+  const groupId = community?.communityId || "";
+  const groupName = community?.name || "";
+  const authorId = postAuthor?.userId;
+  const authorNickname =
+    postAuthor?.nickName || postAuthor?.firstName + " " + postAuthor?.lastName;
+  const avatar = postAuthor?.photo?.id
+    ? cleanPath(postAuthor?.photo?.path)
+    : "/assets/images/user.png";
+
   // Function to fetch comments
   const fetchComments = async () => {
     setIsLoading(true);
@@ -87,7 +92,7 @@ export default function PostCard(props: {
       const response: any = await getComments(page, take, postId);
       // Update the comments state with the fetched data
       // setComments((prevState) => [...prevState, ...response.data.docs]);
-      setComments(response.data.docs);
+      setComments(response.data.docs.reverse());
       console.log("comment array", response.data.docs);
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
@@ -271,10 +276,10 @@ export default function PostCard(props: {
                 <span className="font-xsss fw-500 text-break text-grey-600">
                   @
                   {isMobile
-                    ? nickName.length > 20
-                      ? `${nickName.substring(0, 20)}...`
-                      : nickName
-                    : nickName}
+                    ? authorNickname.length > 20
+                      ? `${authorNickname.substring(0, 20)}...`
+                      : authorNickname
+                    : authorNickname}
                 </span>
               </Link>
               <div className="d-flex align-items-end">
@@ -291,10 +296,10 @@ export default function PostCard(props: {
               <h4 className="fw-700 text-grey-900 font-xss mt-1">
                 @
                 {isMobile
-                  ? nickName.length > 20
-                    ? `${nickName.substring(0, 20)}...`
-                    : nickName
-                  : nickName}
+                  ? authorNickname.length > 20
+                    ? `${authorNickname.substring(0, 20)}...`
+                    : authorNickname
+                  : authorNickname}
               </h4>
             </Link>
             <span className="d-block font-xsss fw-500 mt-1 lh-3 text-grey-500">
@@ -331,10 +336,10 @@ export default function PostCard(props: {
           <p className="fw-500 lh-26 font-xss w-100 mb-2">
             {expandPost
               ? content
-              : content.length > 150
-                ? content.substring(0, 150) + "..."
+              : content?.length > 150
+                ? content?.substring(0, 150) + "..."
                 : content}
-            {content.length > 150 && !expandPost ? (
+            {content?.length > 150 && !expandPost ? (
               <span
                 className={styles["expand-btn"]}
                 onClick={() => setExpandPost((open) => !open)}
@@ -369,6 +374,7 @@ export default function PostCard(props: {
       </div>
 
       <div className="card-body d-flex p-0 mt-4">
+        {/* Like & comment */}
         <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
           {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
           <i
@@ -394,16 +400,23 @@ export default function PostCard(props: {
             />
           </span>
         </div>
-        {/* <div
-          className="pointer ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"
-          id={`dropdownMenu${props.id}`}
+        {/* Donate & Share */}
+        <div
+          className="pointer ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss gap-3"
+          // id={`dropdownMenu${props.id}`}
           data-bs-toggle="dropdown"
           aria-expanded="false"
-          onClick={() => toggleOpen((prevState) => !prevState)}
+          // onClick={() => toggleOpen((prevState) => !prevState)}
         >
-          <i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg"></i>
-          <span className="d-none-xs">Share</span>
-        </div> */}
+          <div className="d-flex align-items-center cursor-pointer">
+            <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
+            <span className="d-none-xs">Donate</span>
+          </div>
+          <div className="d-flex align-items-center cursor-pointer">
+            <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
+            <span className="d-none-xs">Share</span>
+          </div>
+        </div>
 
         {/* <div
           className="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg right-0"
@@ -497,32 +510,57 @@ export default function PostCard(props: {
       )}
       {isMobile && openMobileComments && (
         <PostModal
-          // notiPopup={false}
+          // show={openMobileComments}
+          // handleClose={handleClose}
+          // postId={postId}
+          // userId={userId}
+          // nickName={authorNickname}
+          // avatar={avatar}
+          // content={content}
+          // assets={assets}
+          // authorId={authorId}
+          // authorNickname={authorNickname}
+          // createdAt={createdAt}
+          // columnsCount={columnsCount}
+          // groupAvatar={groupAvatar}
+          // groupName={groupName}
+          // groupOwnerId={groupOwnerId}
+          // groupId={groupId}
+          // like={likeNum}
+          // comment={commentNum}
+          // liked={isLiked}
+          // updateLike={updateLikeHandler}
+          // updateComments={updateCommentHandler}
+          // updateIsLiked={setIsLiked}
+          // setPostHandler={setPostHandler}
+
+          groupOwnerId={groupOwnerId}
           show={openMobileComments}
-          handleClose={handleClose}
+          curUser={userId as number | undefined}
+          postAuthor={postAuthor}
+          community={community}
           postId={postId}
-          userId={userId}
-          nickName={nickName}
-          avatar={avatar}
           content={content}
           assets={assets}
-          authorId={authorId}
-          authorNickname={authorNickname}
           createdAt={createdAt}
           columnsCount={columnsCount}
-          groupAvatar={groupAvatar}
-          groupName={groupName}
-          groupOwnerId={groupOwnerId}
-          groupId={groupId}
           like={likeNum}
           comment={commentNum}
           liked={isLiked}
+          handleClose={handleClose}
           updateLike={updateLikeHandler}
           updateComments={updateCommentHandler}
           updateIsLiked={setIsLiked}
           setPostHandler={setPostHandler}
         />
       )}
+      {/* {openDonate && (
+        <DonateModal
+          handleClose={handleClose}
+          show={openDonate}
+          brokerData={dataUser}
+        />
+      )} */}
     </div>
   );
 }

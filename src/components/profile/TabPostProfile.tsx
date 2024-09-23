@@ -6,6 +6,7 @@ import { getMyPosts } from "@/api/profile";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { cleanPath } from "@/utils/Helpers";
 import { id } from "ethers/lib/utils";
+import type { IPostCommunityInfo } from "@/api/community/model";
 
 const TabPostProfile = (props: {
   myPosts: any;
@@ -102,22 +103,37 @@ const TabPostProfile = (props: {
         myPosts.map((myPost) => (
           <div key={""}>
             <PostCard
-              groupOwnerId=""
-              groupName=""
-              groupId=""
-              groupAvatar={myPost.community?.avatar?.path || ""}
+              // groupOwnerId=""
+              // groupName=""
+              // groupId=""
+              // groupAvatar={myPost.community?.avatar?.path || ""}
+              // postId={myPost.id}
+              // nickName={
+              //   myPost.user?.nickName ||
+              //   myPost.user?.firstName + " " + myPost.user.lastName
+              // }
+              // authorId={myPost.user?.userId}
+              // authorNickname={myPost.user?.nickName || ""}
+              // avatar={
+              //   myPost.user?.photo?.id
+              //     ? cleanPath(myPost.user?.photo?.path)
+              //     : "/assets/images/user.png"
+              // }
+              // content={myPost.content}
+              // assets={myPost.assets}
+              // createdAt={myPost.createdAt}
+              // like={myPost.favoriteCount}
+              // comment={myPost.commentCount}
+              // columnsCount={
+              //   myPost.assets?.length > 3 ? 3 : myPost.assets?.length
+              // }
+              // liked={myPost.liked}
+              // setPostHandler={setMyPosts}
+
+              groupOwnerId={""}
+              community={myPost.community as IPostCommunityInfo}
+              postAuthor={myPost.user}
               postId={myPost.id}
-              nickName={
-                myPost.user?.nickName ||
-                myPost.user?.firstName + " " + myPost.user.lastName
-              }
-              authorId={myPost.user?.userId}
-              authorNickname={myPost.user?.nickName || ""}
-              avatar={
-                myPost.user?.photo?.id
-                  ? cleanPath(myPost.user?.photo?.path)
-                  : "/assets/images/user.png"
-              }
               content={myPost.content}
               assets={myPost.assets}
               createdAt={myPost.createdAt}

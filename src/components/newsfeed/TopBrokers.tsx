@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
 import { followABroker } from "@/api/onboard";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 /* eslint-disable react/display-name */
 export const TopBrokers = (props: {
@@ -14,6 +15,7 @@ export const TopBrokers = (props: {
   followersCount: number;
   brokerId: number;
 }) => {
+  const tBase = useTranslations("Base");
   const { photoUrl, firstName, lastName, followersCount, brokerId } = props;
   const [followerNum, setFollowerNum] = useState<number>(
     Number(followersCount),
@@ -68,7 +70,7 @@ export const TopBrokers = (props: {
               ? (followerNum / 1000).toFixed(1)
               : followerNum}{" "}
             {followerNum >= 1000 ? "k" : ""}{" "}
-            {followerNum > 1 ? "followers" : "follower"}
+            {followerNum > 1 ? tBase("followers") : tBase("follower")}
           </p>
           <span
             className={`${styles["follow-btn"]} mt-2 mb-0 px-3 py-2 z-index-1 rounded-3 text-white font-xsssss cursor-pointer text-uppersace fw-700 ls-3`}

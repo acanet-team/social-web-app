@@ -173,8 +173,8 @@ export default function TabRating(props: { brokerData: User }) {
               }}
               sx={{
                 border: "none",
-                "& fieldset": { border: "2px solid #eee" },
-                borderRadius: "5px",
+                "& fieldset": { border: "1px solid #ced4da" },
+                borderRadius: "10px",
               }}
             />
           </Box>
@@ -196,7 +196,7 @@ export default function TabRating(props: { brokerData: User }) {
             <div className="text-grey-600 mt-3 text-center">
               You have submited a review for{" "}
               {brokerData.firstName + " " + brokerData.lastName} on{" "}
-              {new Date().toLocaleString("en-US", {
+              {new Date().toLocaleString("en-GB", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",

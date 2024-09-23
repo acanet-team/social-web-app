@@ -52,7 +52,7 @@ export interface ICommunity {
   communityStatus: string;
 }
 
-export interface ICommunityInfo {
+export interface IPostCommunityInfo {
   avatar: Photo;
   coverImage: Photo;
   communityId: string;

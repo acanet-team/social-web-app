@@ -178,6 +178,7 @@
     "brokers": "Brokers",
     "courses": "Courses",
     "community": "Communities",
+    "signal": "Signals",
     "messages": "Messages",
     "settings": "Settings",
     "logout": "Log out",
@@ -205,7 +206,7 @@
     "error_missing_description": "Please fill out a community description.",
     "error_invalid_description": "Description must be between 4 and 350 characters.",
     "error_missing_fee": "Please fill out a joining fee.",
-    "error_joining_fee": "Joining fee must be greater than 0.",
+    "error_joining_fee": "Joining fee must be greater than 0.0000000001",
     "joined": "Joined",
     "pending": "Pending",
     "join": "Join",
@@ -354,6 +355,14 @@
     "no_rating_found": "No rating found. Be the first to rate this broker!"
   },
   "Wallet": {
-    "connect_wallet": "Connect your wallet to Acanet"
+    "connect_wallet": "Connect your wallet to Acanet",
+    "donate_success": "Donate succeeded!",
+    "input_donate_amount": "Input"
+  },
+  "Signal": {
+    "discover_tab": "Discover",
+    "history_tab": "History",
+    "signal_station_title": "Signal Station",
+    "no_signal_found": "No signal found."
   }
 }

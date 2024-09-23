@@ -33,7 +33,7 @@ export default function Appfooter() {
       <Link href="/defaultlive" className="nav-content-bttn" data-tab="chats">
         <i className="feather-inbox"></i>
       </Link>
-      <Link href="/shop2" className="nav-content-bttn">
+      <Link href="/signal" className="nav-content-bttn">
         <i className="feather-trending-up"></i>
       </Link>
       <Link
