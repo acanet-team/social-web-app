@@ -248,14 +248,6 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           const groupId = uuidV4();
           communityData.append("id", groupId);
           if (values.hasFee && values.feeNum) {
-            // console.log(communityContract);
-            // console.log("feeeee", String(Number(values.feeNum).toFixed(10)));
-            // console.log("group", groupId);
-            // console.log("broker", brokerId);
-            // console.log(
-            //   "fee",
-            //   ethers.utils.parseEther(values.feeNum.toString())
-            // );
             const newGroupContract = await communityContract.createGroup(
               groupId.toString(),
               brokerId?.toString(),
@@ -290,13 +282,13 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 (prev) => [newCommunity.data, ...prev] as ICommunity[],
               );
           } else {
-            throwToast("Your community is in review", "success");
+            throwToast(t("community_created_success"), "success");
           }
         }
         handleClose();
       } catch (err) {
         console.log(err);
-        throwToast("Can't create community", "error");
+        throwToast(t("community_created_fail"), "error");
       } finally {
       }
     },

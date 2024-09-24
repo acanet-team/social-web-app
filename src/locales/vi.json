@@ -188,13 +188,13 @@
     "logout": "Đăng xuất",
     "chat": "Trò chuyện",
     "account": "Tài khoản",
-    "home_page": "Trang chủ"
+    "home_page": "Trang chủ",
+    "request_connect": "Yêu cầu kết nối"
   },
   "MyProfile": {
     "follow": "Theo dõi",
     "messages": "Tin nhắn",
     "donate": "Ủng hộ",
-    "about": "Giới thiệu",
     "experience": "Kinh nghiệm",
     "education": "Học vấn",
     "license&certifications": "Chứng chỉ & Bằng cấp",
@@ -270,7 +270,12 @@
     "following": "Đang theo dõi",
     "donate_amount": "Số tiền ủng hộ",
     "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.",
-    "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân"
+    "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân",
+    "Connect": "Kết nối",
+    "connect": "kết nối",
+    "connects": "kết nối",
+    "connecting": "Đang kết nối",
+    "waiting": "Đang chờ"
   },
   "Community": {
     "community": "Cộng đồng",
@@ -307,7 +312,9 @@
     "private": "Riêng tư",
     "owner": "Chủ cộng đồng",
     "invite_user": "Thêm thành viên mới",
-    "found_no_members": "Không có thành viên."
+    "found_no_members": "Không có thành viên.",
+    "community_created_success": "Cộng đồng của bạn đang được tạo.",
+    "community_created_fail": "Không thể tạo cộng đồng."
   },
   "FeedTabs": {
     "for_you": "Dành cho bạn",
@@ -361,10 +368,36 @@
     "donate_success": "Ủng hộ thành công!",
     "input_donate_amount": "Nhập"
   },
+  "Connect_investor": {
+    "friend_request": "Yêu cầu kết nối",
+    "confirm": "Đồng ý",
+    "delete": "Huỷ",
+    "see_all": "Xem tất cả"
+  },
   "Signal": {
     "discover_tab": "Khám phá",
     "history_tab": "Lịch sử",
     "signal_station_title": "Trạm Signal",
     "no_signal_found": "Không có signal."
+  },
+  "Notification": {
+    "has_requested_to_join_your": "đã yêu cầu tham gia ",
+    "you_are_now_a_member_of": "Bạn hiện là thành viên của",
+    "your_request_to_join": "Yêu cầu tham gia",
+    "has_been_unsuccessful": "không thành công",
+    "your_request_to_create_a paid_group_has_failed._Please_try_again_later.": "Yêu cầu tạo nhóm trả phí của bạn đã thất bại. Vui lòng thử lại sau.",
+    "liked_your_post": "đã thích bài viết của bạn",
+    "people_liked_your_post": "người đã thích bài viết của bạn",
+    "Group": "nhóm",
+    "and": "và",
+    "commented_on_your_post": "đã bình luận về bài viết của bạn",
+    "people_commented_your_post": "người đã bình luận về bài viết của bạn",
+    "has followed you": "đã theo dõi bạn",
+    "you_and": "Bạn và",
+    "are_now_connected": "đã kết nối",
+    "sent_you_the_connection": "đã gửi cho bạn kết nối",
+    "you": "Bạn",
+    "confirm": "Đồng ý",
+    "delete": "Huỷ"
   }
 }

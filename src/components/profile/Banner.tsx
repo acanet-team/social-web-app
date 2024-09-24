@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { BrokerProfile, User, UserProfile } from "@/api/profile/model";
 import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/profile.module.scss";
-import { updateProfile } from "@/api/profile";
+import { connectAInvestor, updateProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import { ImageCropModal } from "@/components/ImageCropModal";
 import { createGetBrokersRequest, followABroker } from "@/api/onboard";
@@ -49,21 +49,17 @@ const Banner: React.FC<TabBannerProps> = ({
     null,
   );
   const [flCount, setFlCount] = useState(0);
+  const [connectCount, setConnectCount] = useState(0);
   const [previewCover, setPreviewCover] = useState<string>(
     "/assets/images/profile/u-bg.png",
   );
   const [previewAvatar, setPreviewAvatar] = useState<string>(
     "/assets/images/profile/ava.png",
   );
-
-  useEffect(() => {
-    setPreviewAvatar(dataUser?.photo?.path);
-    setPreviewCover(dataUser?.profileCoverPhoto?.path);
-    setFlCount(Number(followersCount));
-  }, [dataUser, dataUserProfile, followersCount]);
   const coverInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const numbersFollowers = formatNumber(flCount);
+  const numbersConnects = formatNumber(connectCount);
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
@@ -71,13 +67,19 @@ const Banner: React.FC<TabBannerProps> = ({
   const [avarageRating, setAverageRating] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
+  const [isConnectStatus, setIsConnectStatus] = useState<string>("CONNECT");
+
+  useEffect(() => {
+    setPreviewAvatar(dataUser?.photo?.path);
+    setPreviewCover(dataUser?.profileCoverPhoto?.path);
+    setFlCount(Number(followersCount));
+  }, [dataUser, dataUserProfile, followersCount]);
 
   const fetchAverageRating = async () => {
     try {
       console.log("broker id", dataUser.id);
       const res = await rateContract.getAverageRating(dataUser.id.toString());
       const avgRating = res.brokerTotalScore.toNumber();
-      // const avgRating = convertBigNumber(res.brokerTotalScore, ConvertType.normal_number);
       console.log("aaa", res);
       console.log("average rating", avgRating);
       setAverageRating(Number(avgRating));
@@ -196,6 +198,7 @@ const Banner: React.FC<TabBannerProps> = ({
     }
     getBrokers();
   }, []);
+
   const onFollowBrokerHandler = async (e: any, brokerId: number) => {
     setIsFollowing(!isFollowing);
     followABroker({
@@ -207,6 +210,19 @@ const Banner: React.FC<TabBannerProps> = ({
     } else {
       setFlCount((prevState) => prevState - 1);
     }
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onConnectInvestorHandler = async (e: any, investorId: number) => {
+    setIsConnectStatus("Waiting");
+    connectAInvestor({
+      userId: investorId,
+      connectStatus: "",
+      // connectType: isConnecting? "UNCONNECT" : "CONNECT",
+    });
     try {
     } catch (error) {
       console.log(error);
@@ -227,73 +243,77 @@ const Banner: React.FC<TabBannerProps> = ({
           height: "auto",
         }}
       >
-        <Image
-          src={
-            previewCover ? previewCover : `/assets/images/default-upload.jpg`
-          }
-          width={1075}
-          height={250}
-          alt=""
-          className="w__100"
-          style={{
-            objectFit: "cover",
-            borderTopRightRadius: "5px",
-            borderTopLeftRadius: "5px",
-          }}
-        />
-        {role === true && (
-          <>
-            <label htmlFor="cover" className="cursor-pointer">
-              <i
-                className={`${styles["image-edit__btn"]} ${styles["cover-image-edit__btn"]} bi bi-camera m-0 position-absolute`}
-              ></i>
-            </label>
-            <input
-              id="cover"
-              ref={coverInputRef}
-              className="visually-hidden"
-              type="file"
-              onChange={(e) => handleFileChange(e, "cover")}
-              accept="image/*"
-              style={{ display: "none" }}
-            />
-          </>
-        )}
-
-        <div className={styles["profile-avatar"]}>
+        <div className={`${styles["cover-profile"]}`}>
           <Image
             src={
-              previewAvatar ? previewAvatar : `/assets/images/profile/ava.png`
+              previewCover ? previewCover : `/assets/images/default-upload.jpg`
             }
-            width={119}
-            height={119}
-            alt={dataUserProfile?.nickName}
-            className=""
-            onError={() => setPreviewAvatar("/assets/images/profile/ava.png")}
+            width={960}
+            height={250}
+            alt=""
+            className={`${styles["cover-profile-img"]}`}
             style={{
               objectFit: "cover",
-              borderRadius: "100%",
-              border: "4px solid white",
+              borderTopRightRadius: "5px",
+              borderTopLeftRadius: "5px",
             }}
           />
           {role === true && (
             <>
-              <label htmlFor="avatar" className="cursor-pointer">
+              <label htmlFor="cover" className="cursor-pointer">
                 <i
-                  className={`bi bi-camera ${styles["icon-profile"]} ${styles["image-edit__btn"]} m-0 position-absolute right-0 bottom-0`}
+                  className={`${styles["image-edit__btn"]} ${styles["cover-image-edit__btn"]} bi bi-camera m-0 position-absolute`}
                 ></i>
               </label>
               <input
-                id="avatar"
-                ref={avatarInputRef}
+                id="cover"
+                ref={coverInputRef}
                 className="visually-hidden"
                 type="file"
-                onChange={(e) => handleFileChange(e, "avatar")}
+                onChange={(e) => handleFileChange(e, "cover")}
                 accept="image/*"
-                style={{ display: "none", margin: "auto" }}
+                style={{ display: "none" }}
               />
             </>
           )}
+        </div>
+
+        <div className={styles["profile-avatar"]}>
+          <div className={`${styles["ava-profile"]}`}>
+            <Image
+              src={
+                previewAvatar ? previewAvatar : `/assets/images/profile/ava.png`
+              }
+              width={119}
+              height={119}
+              alt={dataUserProfile?.nickName}
+              className={`${styles["ava-profile-img"]} rounded-circle`}
+              onError={() => setPreviewAvatar("/assets/images/profile/ava.png")}
+              style={{
+                objectFit: "cover",
+                // borderRadius: "100%",
+                border: "4px solid white",
+              }}
+            />
+            {role === true && (
+              <>
+                <label htmlFor="avatar" className="cursor-pointer">
+                  <i
+                    className={`bi bi-camera ${styles["icon-profile"]} ${styles["image-edit__btn"]} m-0 position-absolute right-0 bottom-0`}
+                  ></i>
+                </label>
+                <input
+                  id="avatar"
+                  ref={avatarInputRef}
+                  className="visually-hidden"
+                  type="file"
+                  onChange={(e) => handleFileChange(e, "avatar")}
+                  accept="image/*"
+                  style={{ display: "none", margin: "auto" }}
+                />
+              </>
+            )}
+          </div>
         </div>
         {openImageCrop && (
           <ImageCropModal
@@ -301,7 +321,7 @@ const Banner: React.FC<TabBannerProps> = ({
             onCancel={onCancel}
             cropped={onCropped}
             imageUrl={selectedImage}
-            aspect={imageType === "cover" ? 960 / 250 : 1}
+            aspect={imageType === "cover" ? 960 / 250 : 119 / 119}
           />
         )}
       </div>
@@ -370,10 +390,15 @@ const Banner: React.FC<TabBannerProps> = ({
               </div>
             </div>
             <div className="font-xss fw-600 text-gray-follow text-center text-sm-start">
-              {numbersFollowers}{" "}
-              {Number(numbersFollowers) > 1
-                ? t("followers")
-                : tBase("follower")}
+              {dataUser?.role?.name === "broker"
+                ? numbersFollowers
+                : dataUser?.role?.name === "investor" && numbersConnects}{" "}
+              {dataUser?.role?.name === "broker"
+                ? Number(numbersFollowers) > 1
+                  ? t("followers")
+                  : tBase("follower")
+                : dataUser?.role?.name === "investor" &&
+                  (Number(numbersConnects) > 1 ? t("connect") : t("connects"))}
             </div>
           </div>
           {dataUser.role.name === "broker" && (
@@ -428,33 +453,6 @@ const Banner: React.FC<TabBannerProps> = ({
                 </button>
               </>
             )}
-            {/* <button
-              className={`px-3 btn bg-white ${styles["profile-banner__btn"]}`}
-              style={{
-                borderRadius: "16px",
-                border: "1px solid #0A66C2",
-                display: "flex",
-                flexDirection: "row",
-                gap: "2px",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "130px",
-              }}
-            >
-              <Image
-                src="/assets/images/profile/send-privately-small.png"
-                width={16}
-                height={16}
-                alt=""
-                className=""
-                style={{
-                  objectFit: "cover",
-                }}
-              />
-              <div className="text-blue-button font-xss fw-600">
-                {t("messages")}
-              </div>
-            </button> */}
 
             {dataUser.role.name === "broker" && dataUser.wallet_address && (
               <button
@@ -464,6 +462,39 @@ const Banner: React.FC<TabBannerProps> = ({
                 <i className="bi bi-cash-coin text-success me-1"></i>
                 <span>{t("donate")}</span>
               </button>
+            )}
+
+            {dataUser.role.name === "investor" && (
+              <>
+                <button
+                  onClick={(e) => onConnectInvestorHandler(e, dataUser.id)}
+                  className={`px-3 ${isConnectStatus === "CONNECTING" ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
+                >
+                  {isConnectStatus === "CONNECTING" && (
+                    <h4 className="text-white m-0">
+                      <i
+                        className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
+                      ></i>
+                    </h4>
+                  )}
+                  {(isConnectStatus === "CONNECT" ||
+                    isConnectStatus === "Waiting") && (
+                    <h4 className="text-white m-0">
+                      <i
+                        className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
+                      ></i>
+                    </h4>
+                  )}
+
+                  <span className="font-xss fw-600">
+                    {isConnectStatus === "CONNECTING"
+                      ? t("connecting")
+                      : isConnectStatus === "CONNECT"
+                        ? t("Connect")
+                        : t("waiting")}
+                  </span>
+                </button>
+              </>
             )}
           </div>
         )}

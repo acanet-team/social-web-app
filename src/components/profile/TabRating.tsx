@@ -103,6 +103,7 @@ export default function TabRating(props: { brokerData: User }) {
       connectWallet();
       try {
         showLoading();
+        console.log("contract", rateContract);
         const res = await rateContract.createRating(
           values.review,
           brokerId?.toString(),

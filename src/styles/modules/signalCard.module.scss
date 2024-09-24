@@ -2,7 +2,6 @@
   display: inline-block;
   width: 320px;
   height: 420px;
-  // margin: 1.5rem 0;
   perspective: 600px;
   position: relative;
 }
@@ -36,19 +35,19 @@
   padding: 25px;
 }
 
+// FRONT
+.card__face--front {
+  background: #020202;
+  position: relative;
+  z-index: 105;
+}
+
 .card__face--loading {
   background: #020202;
   transform: rotateY(180deg);
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.card__face--front {
-  // background: linear-gradient(135deg, #000000, #434343);
-  background: #020202;
-  position: relative;
-  z-index: 105;
 }
 
 .card-icon {
@@ -103,45 +102,16 @@
   background-clip: text;
   color: transparent;
 }
-
+// BACK
 .card__face--back {
-  background: slateblue;
   transform: rotateY(180deg);
 }
 
-.signal-author {
-  position: absolute;
-  width: 100%;
-  bottom: 20px;
-  left: 0;
-  padding: 25px 25px 0 25px;
-}
-
-.signal-author__details {
-  gap: 15px;
-  justify-content: center;
-}
-
 .back-card__long {
-  // background: linear-gradient(
-  //   to bottom,
-  //   #100c28e9 0%,
-  //   #1c0931f5 25%,
-  //   #3d114a 50%,
-  //   #e3455f 100%
-  // );
   background: linear-gradient(180deg, #004b49 0%, #006c67 50%, #00a9a5 100%);
 }
 
 .back-card__short {
-  // background: linear-gradient(
-  //   180deg,
-  //   #154848e9 0%,
-  //   #1a6b6be9 25%,
-  //   #1a6b6be9 35%,
-  //   #38d2d2e9 50%,
-  //   #38d2d2e9 100%
-  // );
   background: linear-gradient(180deg, #241734 0%, #4c1e4f 50%, #b42f62 100%);
 }
 
@@ -162,6 +132,19 @@
   width: 50px;
   font-weight: 200;
   position: relative;
+}
+
+.signal-author {
+  position: absolute;
+  width: 100%;
+  bottom: 20px;
+  left: 0;
+  padding: 25px 25px 0 25px;
+}
+
+.signal-author__details {
+  gap: 15px;
+  justify-content: center;
 }
 
 .follow-btn {
@@ -224,6 +207,53 @@
 .signal-broker__avatar {
   border-radius: 50%;
   border: 3px solid var(--light);
+  object-fit: cover;
+}
+
+// Lucky draw
+.back__lucky-draw {
+  background: linear-gradient(183.26deg, #923b4d 2.6%, #6a82fb 97.31%);
+}
+
+.claim-btn {
+  background: #f2bc57;
+  color: black;
+  font-weight: 500;
+  font-size: 22px;
+  border: none;
+  // padding: 15px 25px;
+  height: 60px;
+  width: 170px;
+  border-radius: 15px;
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.lucky-icon {
+  position: absolute;
+  height: auto;
+  object-fit: cover;
+  top: -70px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.lucky-draw__content {
+  text-align: center;
+  position: absolute;
+  top: 59%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lucky-draw__content h2 {
+  font-size: 27px;
+}
+
+.lucky-draw__content h3 {
+  font-size: 22px;
 }
 
 @media (max-width: 1024px) {
@@ -238,5 +268,4 @@
   .signal-author {
     padding: 20px 20px 0 20px;
   }
-
 }

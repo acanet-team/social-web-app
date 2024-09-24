@@ -57,7 +57,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
   const t = useTranslations("MyProfile");
   const [formData, setFormData] = useState({
     location: dataBrokerProfile.location || "",
-    selectedServiceIds: dataBrokerProfile.skills.map(
+    selectedServiceIds: dataBrokerProfile?.skills?.map(
       (skill) => skill.interestTopic.id,
     ),
     selectedTopicIds: dataBrokerProfile.interestTopics.map((topic) => topic.id),

@@ -77,7 +77,7 @@ const SocialMedia = ({
   const iconMap: Record<string, string> = {
     facebook: "bi-facebook",
     twitter: "bi-twitter-x",
-    linkedIn: "bi-linkedin",
+    linkedin: "bi-linkedin",
     instagram: "bi-instagram",
     github: "bi-github",
     google: "bi-google",

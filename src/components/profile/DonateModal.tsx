@@ -86,12 +86,6 @@ function DonateModal(props: {
           handleClose();
         }
         if (brokerData.wallet_address && donateUser) {
-          console.log(
-            brokerData.wallet_address,
-            brokerData.id.toString(),
-            donateUser.toString(),
-            ethers.utils.parseEther(values.amount.toString()).toNumber(),
-          );
           await donateContract.donate(
             brokerData.wallet_address,
             brokerData.id.toString(),

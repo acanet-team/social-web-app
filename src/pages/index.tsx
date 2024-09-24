@@ -11,12 +11,15 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { IPost } from "@/api/newsfeed/model";
+import { useMediaQuery } from "react-responsive";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CreateSignal from "@/components/newsfeed/CreateSignal";
+import GetSignalNewFeed from "@/components/newsfeed/GetSignalNewFeed";
+import Friends from "@/components/Friends";
 
 const TAKE = 10;
 
@@ -31,6 +34,7 @@ const Home = ({
   const { data: session } = useSession() as any;
   const [isBroker, setIsBroker] = useState<boolean>(false);
   const t = useTranslations("FeedTabs");
+  const isTablet = useMediaQuery({ query: "(max-width:992px)" });
   const tPost = useTranslations("CreatePost");
   const [postType, setPostType] = useState<"post" | "signal">("post");
 
@@ -55,30 +59,30 @@ const Home = ({
   return (
     // <RootLayout>
     <div className="" id={styles.home}>
-      <div className="">
-        <div className="middle-sidebar-left">
-          <div className="row feed-body">
-            <div className="col-xl-8 col-xxl-9 col-lg-8">
-              <FetchBrokers brokers={topBrokers} />
+      <div className="middle-sidebar-left">
+        <div className="row feed-body">
+          <div className="col-xl-8 col-xxl-9 col-lg-8">
+            <FetchBrokers brokers={topBrokers} />
 
-              {/* Tabs */}
-              <div className={styles["home-tabs"]}>
-                <div
-                  className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-                  onClick={(e) => onSelectTabHandler(e)}
-                >
-                  {t("for_you")}
-                </div>
-                <div
-                  className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-                  onClick={(e) => onSelectTabHandler(e)}
-                >
-                  {t("suggestion")}
-                </div>
+            {/* Tabs */}
+            <div className={styles["home-tabs"]}>
+              <div
+                className={`${styles["button-tab"]} ${curTab === TabEnum.ForYou ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                onClick={(e) => onSelectTabHandler(e)}
+              >
+                {t("for_you")}
               </div>
+              <div
+                className={`${styles["button-tab"]} ${curTab === TabEnum.Suggestion ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                onClick={(e) => onSelectTabHandler(e)}
+              >
+                {t("suggestion")}
+              </div>
+            </div>
 
-              {/* Signal/Post creation */}
-              {curTab === "for_you" && (
+            {/* Signal/Post creation */}
+            {curTab === "for_you" && (
+              <>
                 <div
                   className="card w-100 shadow-xss border-0 mb-3 nunito-font"
                   style={{ padding: "1.5rem" }}
@@ -125,21 +129,28 @@ const Home = ({
                     <CreateSignal />
                   )}
                 </div>
-              )}
+                <div
+                  className=" w-100 border-0 mb-3 nunito-font"
+                  style={{ padding: "1.5rem" }}
+                >
+                  <GetSignalNewFeed />
+                </div>
+              </>
+            )}
 
-              <Posts
-                // posts={posts}
-                posts={feedPosts}
-                setPosts={setPosts}
-                feedType={curTab}
-                take={TAKE}
-                allPage={totalPage}
-                curPage={page}
-              />
-            </div>
-            <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-              <Contacts />
-            </div>
+            <Posts
+              // posts={posts}
+              posts={feedPosts}
+              setPosts={setPosts}
+              feedType={curTab}
+              take={TAKE}
+              allPage={totalPage}
+              curPage={page}
+            />
+          </div>
+          <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
+            {!isTablet && <Friends />}
+            {/* <Contacts /> */}
           </div>
         </div>
       </div>
