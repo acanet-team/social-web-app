@@ -312,7 +312,9 @@
     "private": "Riêng tư",
     "owner": "Chủ cộng đồng",
     "invite_user": "Thêm thành viên mới",
-    "found_no_members": "Không có thành viên."
+    "found_no_members": "Không có thành viên.",
+    "community_created_success": "Cộng đồng của bạn đang được tạo.",
+    "community_created_fail": "Không thể tạo cộng đồng."
   },
   "FeedTabs": {
     "for_you": "Dành cho bạn",

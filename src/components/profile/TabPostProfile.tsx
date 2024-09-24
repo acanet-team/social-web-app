@@ -33,14 +33,14 @@ const TabPostProfile = (props: {
         Number(props.id),
       );
       console.log("postsssss", response);
-      setMyPosts((prev) => [...prev, ...response.data.docs]);
-      // setMyPosts((prev: IPost[]) => {
-      //   const newPosts: IPost[] = combineUniqueById(
-      //     prev,
-      //     response.data.docs,
-      //   ) as IPost[];
-      //   return newPosts;
-      // });
+      // setMyPosts((prev) => [...prev, ...response.data.docs]);
+      setMyPosts((prev: IPost[]) => {
+        const newPosts: IPost[] = combineUniqueById(
+          prev,
+          response.data.docs,
+        ) as IPost[];
+        return newPosts;
+      });
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
