@@ -36,6 +36,16 @@ export default function Appfooter() {
       <Link href="/signal" className="nav-content-bttn">
         <i className="feather-trending-up"></i>
       </Link>
+      <Link href="/listrequest" className="nav-content-bttn">
+        <Image
+          src="/assets/images/iconListRequest.svg"
+          alt=""
+          width={25}
+          height={25}
+          className="w25 rounded-circle shadow-xss"
+          style={{ objectFit: "cover" }}
+        />
+      </Link>
       <Link
         href={nickName ? `/profile/${nickName}` : "#"}
         className="nav-content-bttn"

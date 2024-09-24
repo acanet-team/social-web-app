@@ -7,7 +7,11 @@ export type NotificationType =
   | "community_join_request"
   | "community_join_accept"
   | "community_join_reject"
-  | "community_kicked";
+  | "community_kicked"
+  | "connection_accept"
+  | "community_creation_failed"
+  | "connection_request"
+  | "connection_request";
 export type Notification = {
   id: string;
   type: NotificationType;

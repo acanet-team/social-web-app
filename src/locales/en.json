@@ -185,7 +185,8 @@
     "chat": "Chat",
     "account": "Account",
     "my profile": "My Profile",
-    "home_page": "Home Page"
+    "home_page": "Home Page",
+    "request_connect": "Request Connect"
   },
   "Community": {
     "community": "Communities",
@@ -304,7 +305,12 @@
     "following": "Following",
     "donate_amount": "Donate amount",
     "donate_amount_missing": "Donate amount must be greater than 0.",
-    "donate_input": "Please use comma as the decimal seperator"
+    "donate_input": "Please use comma as the decimal seperator",
+    "connect": "connect",
+    "connects": "connects",
+    "Connect": "Connect",
+    "connecting": "Connecting",
+    "waiting": "Waiting"
   },
   "FeedTabs": {
     "for_you": "For you",
@@ -359,10 +365,36 @@
     "donate_success": "Donate succeeded!",
     "input_donate_amount": "Input"
   },
+  "Connect_investor": {
+    "friend_request": "Friend Request",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "see_all": "See All"
+  },
   "Signal": {
     "discover_tab": "Discover",
     "history_tab": "History",
     "signal_station_title": "Signal Station",
     "no_signal_found": "No signal found."
+  },
+  "Notification": {
+    "has_requested_to_join_your": "has requested to join your",
+    "you_are_now_a_member_of": "You are now a member of",
+    "your_request_to_join": "Your request to join",
+    "has_been_unsuccessful": "has been unsuccessful",
+    "your_request_to_create_a paid_group_has_failed._Please_try_again_later.": "Your request to create a paid group has failed. Please try again later.",
+    "liked_your_post": "liked your post",
+    "people_liked_your_post": "people liked your post",
+    "Group": "Group",
+    "and": "and",
+    "commented_on_your_post": "commented on your post",
+    "people_commented_your_post": "people commented your post",
+    "has followed you": "has followed you",
+    "you_and": "You and",
+    "are_now_connected": "are now connected",
+    "sent_you_the_connection": "sent you the connection",
+    "you": "You",
+    "confirm": "Confirm",
+    "delete": "Delete"
   }
 }

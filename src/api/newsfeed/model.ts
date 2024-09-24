@@ -126,3 +126,27 @@ export interface IBrokers {
   skills: { interestTopicId: string; topicName: string };
   userId: number;
 }
+
+export interface ISignal {
+  id: string;
+  description: string;
+  signal_pair: string;
+  type: string;
+  expiry_at: string;
+  createdAt: string;
+  entry: string;
+  taget: string;
+  stop: string;
+  read_at: string;
+  owner: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    nickName: string;
+    photoId: string;
+    photo_path: string;
+  };
+  is_read: boolean;
+  followers_count: string;
+  followed: boolean;
+}

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import type { Notification, NotificationType } from "@/api/notification/model";
 import type { UUID } from "crypto";
@@ -9,35 +15,35 @@ import { combineUniqueById } from "@/utils/combine-arrs";
 import { useRouter } from "next/navigation";
 import PostNotiDetail from "./PostNotiDetal";
 import WaveLoader from "./WaveLoader";
+import { useTranslations } from "next-intl";
+import { useMediaQuery } from "react-responsive";
 interface NotificationProps {
-  photo: string;
   notifications: Notification[];
   toggleisNoti: React.Dispatch<React.SetStateAction<boolean>>;
   setReadAllNotis: React.Dispatch<React.SetStateAction<boolean>>;
+  isNoti: boolean;
 }
 
 const Notifications: React.FC<NotificationProps> = ({
-  photo,
   notifications,
   toggleisNoti,
   setReadAllNotis,
+  isNoti,
 }) => {
+  const t = useTranslations("Notification");
   const router = useRouter();
   const [notis, setNotis] = useState<Notification[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [take] = useState<number>(10);
+  const isQuery = useMediaQuery({ query: "(max-width: 650px" });
+  const [take] = useState<number>(isQuery ? 7 : 4);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openPostModal, setOpenPostModal] = useState<string>("");
   const notisListRef = useRef<HTMLDivElement>(null);
-  // const [newNotifications, setNewNotifications] = useState<Set<string>>(
-  //   new Set()
-  // );
-  // useEffect(() => {
-  //   console.log("notiApi", notis);
-  // }, [])
-  // console.log("notiApiii", notis);
-
+  const photo = `/assets/images/default-ava-not-bg.jpg`;
+  useEffect(() => {
+    console.log("notiApi", notis);
+  }, [notis]);
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
     const diffInMs = now - createdAt;
@@ -92,6 +98,7 @@ const Notifications: React.FC<NotificationProps> = ({
     } | null,
     createdAt: number,
     notiAt: number | null,
+    read_at: number | null,
   ) => {
     switch (type) {
       case "like_post":
@@ -105,20 +112,33 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
+              <h5
+                className={`font-xsss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
-                <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  {additionalData
-                    ? Number(additionalData?.notificationCount) === 1
-                      ? `liked your post`
-                      : `and ${Number(additionalData?.notificationCount) - 1} people liked your post`
-                    : ""}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {additionalData ? (
+                    Number(additionalData?.notificationCount) === 1 ? (
+                      t("liked_your_post")
+                    ) : (
+                      <>
+                        {t("and")}{" "}
+                        {`${Number(additionalData?.notificationCount) - 1}`}{" "}
+                        {t("people_liked_your_post")}
+                      </>
+                    )
+                  ) : (
+                    ""
+                  )}
                 </span>
               </h5>
-              <p className="text-grey-500 font-xsssss fw-600 m-0">
-                {/* {getTimeDifference(createdAt)} */}
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
@@ -135,19 +155,33 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
+              <h5
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
-                <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  {additionalData
-                    ? Number(additionalData?.notificationCount) === 1
-                      ? `commented on your post`
-                      : `and ${Number(additionalData?.notificationCount) - 1} people commented on your post`
-                    : ""}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {additionalData ? (
+                    Number(additionalData?.notificationCount) === 1 ? (
+                      t("commented_on_your_post")
+                    ) : (
+                      <>
+                        {t("and")}{" "}
+                        {`${Number(additionalData?.notificationCount) - 1}`}{" "}
+                        {t("people_commented_your_post")}{" "}
+                      </>
+                    )
+                  ) : (
+                    ""
+                  )}
                 </span>
               </h5>
-              <p className="text-grey-500 font-xsssss fw-600 m-0">
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
@@ -165,18 +199,24 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
+              <h5
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
-                <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  has requested to join your{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("has_requested_to_join_your")}{" "}
                   <span className="fw-700 text-grey-900">
-                    {community?.name} Group
+                    {community?.name} {t("Group")}
                   </span>
                 </span>
               </h5>
-              <p className="text-grey-500 font-xsssss fw-600 m-0">
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
@@ -194,13 +234,19 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
-                <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  You are new a member of{" "}
+              <h5
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("you_are_now_a_member_of")}{" "}
                 </span>
-                {community?.name} Group
+                {community?.name} {t("Group")}
               </h5>
-              <p className="text-grey-500 font-xsssss fw-600 m-0">
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
@@ -218,21 +264,26 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
-                Your request to join{" "}
-                <span className="fw-700 text-grey-900">
-                  {community?.name} Group
+              <h5
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
+                {t("your_request_to_join")}{" "}
+                <span
+                  className={`fw-700 ${!read_at ? "text-grey-900" : "text-grey-600"}`}
+                >
+                  {community?.name} {t("Group")}
                 </span>{" "}
-                has been unsuccessful
+                {t("has_been_unsuccessful")}
               </h5>
-              <p className="text-grey-500 font-xsssss fw-600 m-0">
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
             </div>
           </>
         );
-
       case "follow":
         return (
           <>
@@ -244,18 +295,127 @@ const Notifications: React.FC<NotificationProps> = ({
               className="w40 rounded-xl object-cover"
             />
             <div>
-              <h5 className="font-xsss text-grey-900 mb-0 mt-0 fw-700 d-block">
+              <h5
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
                   : sourceUser?.firstName + sourceUser?.lastName}{" "}
-                <span className="text-grey-600 fw-500 font-xssss lh-4 m-0">
-                  has followed you
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("has followed you")}
                 </span>
               </h5>
-              <p className="text-grey-500 font-xsssss fw-600 m-0">
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+            </div>
+          </>
+        );
+      case "connection_accept":
+        return (
+          <>
+            <Image
+              src={sourceUser?.photo?.path || photo}
+              width={40}
+              height={40}
+              alt="user"
+              className="w40 rounded-xl object-cover"
+            />
+            <div>
+              <h5
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("you")} {t("and")}
+                </span>
+                {sourceUser?.nickName
+                  ? sourceUser?.nickName
+                  : sourceUser?.firstName + sourceUser?.lastName}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("are_now_connected")}
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+            </div>
+          </>
+        );
+      case "community_creation_failed":
+        return (
+          <>
+            <Image
+              src={sourceUser?.photo?.path || photo}
+              width={40}
+              height={40}
+              alt="user"
+              className="w40 rounded-xl object-cover"
+            />
+            <div>
+              <span
+                className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+              >
+                {t(
+                  "your_request_to_create_a paid_group_has_failed._Please_try_again_later.",
+                )}
+              </span>
+
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+            </div>
+          </>
+        );
+      case "connection_request":
+        return (
+          <>
+            <Image
+              src={sourceUser?.photo?.path || photo}
+              width={40}
+              height={40}
+              alt="user"
+              className="w40 rounded-xl object-cover"
+            />
+            <div>
+              <h5
+                className={`font-xsss ${!read_at ? "text-gray-700" : "text-grey-900"}  mb-0 mt-0 fw-700 d-block`}
+              >
+                {sourceUser?.nickName
+                  ? sourceUser?.nickName
+                  : sourceUser?.firstName + sourceUser?.lastName}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("sent_you_the_connection")}
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
+              <div className="d-flex align-items-center pt-0 pb-2">
+                <div className="cursor-pointer p-1 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                  {t("confirm")}
+                </div>
+
+                <div className="cursor-pointer p-1 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl">
+                  {t("delete")}
+                </div>
+              </div>
             </div>
           </>
         );
@@ -269,14 +429,7 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponsVersionDocs<Notification> =
         await getNotifications(page, take);
-
-      // if (
-      //   response.data.docs.some((notification) => notification.read_at === null)
-      // ) {
-      //   setReadAllNotis(false);
-      // } else {
-      //   setReadAllNotis(true);
-      // }
+      // setNotis(response?.data?.docs);
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           response?.data?.docs,
@@ -284,7 +437,6 @@ const Notifications: React.FC<NotificationProps> = ({
         ) as Notification[];
         return newNotis;
       });
-
       setTotalPages(response?.data?.meta?.totalPage);
     } catch (err) {
       console.error(err);
@@ -292,31 +444,65 @@ const Notifications: React.FC<NotificationProps> = ({
       setIsLoading(false);
     }
   };
+  // useEffect(() => {
+  //   console.log("totalPage", totalPages);
+  //   console.log("page", page);
+  // }, [page, totalPages]);
 
   useEffect(() => {
-    const allRead = notis.every(
-      (notification) => notification.read_at !== null,
-    );
-    if (allRead) {
-      setReadAllNotis(true);
-    } else {
-      setReadAllNotis(false);
+    if (isNoti === true) {
+      fetchNotifications();
     }
-  }, []);
+  }, [isNoti]);
 
   useEffect(() => {
-    // if (page > 1) {
-    fetchNotifications();
+    if (page > 1) {
+      fetchNotifications();
+    }
   }, [page]);
 
-  const onScrollHandler = () => {
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const onScrollHandlerNoti = () => {
     if (notisListRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = notisListRef.current;
-      if (scrollTop + clientHeight === scrollHeight && page < totalPages) {
+      if (scrollTop + clientHeight + 2 >= scrollHeight && page < totalPages) {
         setPage((prevPage) => prevPage + 1);
       }
     }
   };
+
+  useEffect(() => {
+    const currentList = notisListRef.current;
+    if (currentList && page < totalPages) {
+      currentList.addEventListener("scroll", onScrollHandlerNoti);
+    }
+
+    return () => {
+      if (currentList) {
+        currentList.removeEventListener("scroll", onScrollHandlerNoti);
+      }
+    };
+  }, [page, totalPages]);
+
+  useEffect(() => {
+    if (notifications.length > 0) {
+      setNotis((prevState: Notification[]) => {
+        const updatedNotis: Notification[] = prevState.filter(
+          (notiApi) =>
+            !notifications.some((notiSocket) => notiSocket.id === notiApi.id),
+        );
+        const notification: Notification[] = [
+          ...notifications,
+          ...updatedNotis,
+        ] as Notification[];
+        return notification;
+      });
+      console.log("Updated notification", notis);
+    }
+  }, [notifications]);
 
   const resetPostId = useCallback(() => {
     setOpenPostModal("");
@@ -330,7 +516,6 @@ const Notifications: React.FC<NotificationProps> = ({
   ) => {
     if (read_at === null) {
       await readNoti(id);
-      // await fetchNotifications()
       setNotis((prevNotis) =>
         prevNotis.map((notification) =>
           notification.id === id
@@ -348,47 +533,39 @@ const Notifications: React.FC<NotificationProps> = ({
       toggleisNoti(false);
     } else if (
       notificationType === "community_join_request" ||
-      notificationType === "community_join_accept" ||
-      notificationType === "community_join_reject"
+      notificationType === "community_join_accept"
     ) {
       router.push(`/communities/detail/${idDetail}`);
       toggleisNoti(false);
     } else if (notificationType === "follow") {
       router.push(`/profile/${idDetail}`);
       toggleisNoti(false);
+    } else if (notificationType === "connection_accept") {
+      router.push(`/profile/${idDetail}`);
+      toggleisNoti(false);
+    } else if (notificationType === "community_join_reject") {
+      router.push(`/communities`);
+    } else if (notificationType === "connection_request") {
     } else {
       console.log("");
     }
   };
+  const checkReadAllNotis = () => {
+    const allRead = notis.every(
+      (notification) => notification.read_at !== null,
+    );
+    if (allRead) {
+      console.log("All notifications are read, updating state.");
+      setReadAllNotis(true);
+    } else {
+      setReadAllNotis(false);
+    }
+  };
+  useEffect(() => {
+    checkReadAllNotis();
+  }, [notis]);
 
-  useEffect(() => {
-    const currentList = notisListRef.current;
-    if (currentList) {
-      currentList.addEventListener("scroll", onScrollHandler);
-    }
-    return () => {
-      if (currentList) {
-        currentList.removeEventListener("scroll", onScrollHandler);
-      }
-    };
-  }, [page, totalPages, isLoading]);
   // console.log("notissoc", notifications);
-  useEffect(() => {
-    if (notifications.length > 0) {
-      setNotis((prevNotis: Notification[]) => {
-        const updatedNotis: Notification[] = combineUniqueById(
-          notifications,
-          prevNotis,
-        ) as Notification[];
-        return updatedNotis;
-      });
-      // setNewNotifications((prev) => {
-      //   const newNotis = new Set(prev);
-      //   notifications.forEach((notif) => newNotis.add(notif.id));
-      //   return newNotis;
-      // });
-    }
-  }, [notifications]);
 
   return (
     <div ref={notisListRef} className={`${styles["height-dropdown-menu"]}`}>
@@ -401,75 +578,107 @@ const Notifications: React.FC<NotificationProps> = ({
             No Notifications Found
           </p>
         ) : (
-          notis?.map((notification) => {
-            const renderedMessage = renderNotificationMessage(
-              notification?.type,
-              notification?.user,
-              notification?.sourceUser,
-              notification?.community,
-              notification?.additionalData,
-              notification?.createdAt,
-              notification?.notiAt,
-            );
-
-            if (!renderedMessage) return null;
-
-            return (
+          <div>
+            {notis?.map((notification) => (
               <div
                 key={notification?.id}
-                style={{ height: "72px", padding: "4px" }}
-                className={`card w-100 border-0 mb-3 cursor-pointer  ${
-                  !notification?.read_at ? "bg-lightblue" : ""
-                }`}
+                style={{
+                  height:
+                    notification.type === "connection_request"
+                      ? "108px"
+                      : "72px",
+                  padding: "4px",
+                }}
+                className={`card w-100 border-0 mb-1 cursor-pointer  
+                `}
+                //   newNotifications.has(notification.id) ||
+                //  ${!notification?.read_at ? "bg-lightblue" : ""}
               >
-                <div
-                  onClick={() => {
-                    if (
-                      notification?.type === "like_post" ||
-                      notification?.type === "comment_post"
-                    ) {
-                      readNotis(
-                        notification?.id,
-                        notification?.additionalData?.post_id,
-                        notification?.type,
-                        notification?.read_at ? notification?.read_at : null,
-                      );
-                    } else if (
-                      notification?.type === "community_join_request" ||
-                      notification?.type === "community_join_accept" ||
-                      notification?.type === "community_join_reject"
-                    ) {
-                      readNotis(
-                        notification?.id,
-                        notification?.community?.communityId || "",
-                        notification?.type,
-                        notification?.read_at ? notification?.read_at : null,
-                      );
-                    } else if (notification?.type === "follow") {
-                      readNotis(
-                        notification?.id,
-                        String(notification?.user.nickName),
-                        notification?.type,
-                        notification?.read_at ? notification?.read_at : null,
-                      );
-                    } else {
-                      console.log("Notification type not messages");
-                    }
-                  }}
-                  className="p-2"
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "8px",
-                  }}
-                >
-                  {renderedMessage}
+                <div className={`${styles["group-card-noti"]}`}>
+                  <div
+                    onClick={() => {
+                      if (
+                        notification?.type === "like_post" ||
+                        notification?.type === "comment_post"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          notification?.additionalData?.post_id,
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "community_join_request" ||
+                        notification?.type === "community_join_accept" ||
+                        notification?.type === "community_join_reject"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          notification?.community?.communityId || "",
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (notification?.type === "follow") {
+                        readNotis(
+                          notification?.id,
+                          String(notification?.user.userId),
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (notification?.type === "connection_accept") {
+                        readNotis(
+                          notification?.id,
+                          String(notification?.sourceUser.userId),
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "community_creation_failed"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          "",
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else {
+                        console.log("Notification type not found");
+                      }
+                    }}
+                    className="p-2"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "8px",
+                    }}
+                  >
+                    {renderNotificationMessage(
+                      notification?.type,
+                      notification?.user,
+                      notification?.sourceUser,
+                      notification?.community,
+                      notification?.additionalData,
+                      notification?.createdAt,
+                      notification?.notiAt,
+                      notification?.read_at,
+                    )}
+                  </div>
+                  <>
+                    {!notification?.read_at && (
+                      <span
+                        style={{ width: "10px", height: "10px" }}
+                        className={`dot-count rounded-circle bg-primary`}
+                      >
+                        .
+                      </span>
+                    )}
+                  </>
                 </div>
               </div>
-            );
-          })
+            ))}
+          </div>
         )}
-        {isLoading && <WaveLoader />}
+        {isLoading && page > 1 && <WaveLoader />}
         {openPostModal && (
           <PostNotiDetail id={openPostModal} resetPostId={resetPostId} />
         )}

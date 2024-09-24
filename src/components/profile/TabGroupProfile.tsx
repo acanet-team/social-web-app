@@ -15,7 +15,6 @@ const TabGroupProfile = (props: {
   take: number;
   id: number;
 }) => {
-  console.log("comuuuuu", props);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [communityArr, setCommunityArr] = useState<ICommunity[]>([]);
   const [take, setTake] = useState<number>(props.take);
@@ -34,7 +33,7 @@ const TabGroupProfile = (props: {
         page,
         take,
         type: isBroker ? "" : "joined",
-        brokerId: idBroker,
+        brokerId: isBroker ? idBroker : "",
         search: "",
         feeType: "",
       });
@@ -84,10 +83,15 @@ const TabGroupProfile = (props: {
   }, [page, totalPage, isLoading]);
 
   useEffect(() => {
-    // if (page > 1) {
-    fetchCommunities(page);
-    // }
-  }, [page, props]);
+    if (page > 1) {
+      fetchCommunities(page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    setCommunityArr([]);
+    fetchCommunities(1);
+  }, [props.id]);
 
   const handleShow = useCallback(() => {
     setShow(true);
