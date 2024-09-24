@@ -432,8 +432,8 @@ const Notifications: React.FC<NotificationProps> = ({
       // setNotis(response?.data?.docs);
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
-          response?.data?.docs,
           prevNotis,
+          response?.data?.docs,
         ) as Notification[];
         return newNotis;
       });

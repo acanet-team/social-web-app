@@ -6,11 +6,42 @@ import Link from "next/link";
 import styles from "@/styles/modules/listConnect.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useRef, useState } from "react";
 
 const ListRequest = () => {
   const t = useTranslations("Connect_investor");
+  const listConnectRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
+  const onScrollHandler = () => {
+    if (document.documentElement) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const currentList = listConnectRef.current;
+    if (currentList && page < totalPages) {
+      currentList.addEventListener("scroll", onScrollHandler);
+    }
+
+    return () => {
+      if (currentList) {
+        currentList.removeEventListener("scroll", onScrollHandler);
+      }
+    };
+  }, [page, totalPages]);
+
   return (
-    <div className="card border-0 rounder-3 h_100 pb-5">
+    <div
+      ref={listConnectRef}
+      className="card border-0 rounder-3 h_100 pb-5 nunito-font"
+    >
       <div
         style={{
           display: "flex",
@@ -19,7 +50,7 @@ const ListRequest = () => {
         }}
       >
         <div className="card-body d-flex align-items-center p-4">
-          <h4 className="fw-700 mb-0 font-xs text-grey-900">
+          <h4 className="fw-700 mb-0 font-sm text-grey-900">
             {t("friend_request")}
           </h4>
         </div>
@@ -56,6 +87,9 @@ const ListRequest = () => {
                           />
                         </span>
                       </h4>
+                      <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
+                        @nickName
+                      </span>
                     </div>
                   </Link>
                   <div className="d-flex align-items-center justify-content-center pb-0">

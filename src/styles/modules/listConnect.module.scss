@@ -1,7 +1,6 @@
 .layout-page-list-connect {
   display: flex;
   justify-content: center;
-  
 }
 .layout-card-connect {
   max-width: 210px;
@@ -12,9 +11,8 @@
 .list-connect {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 30px;
+  gap: 28px;
   justify-content: center;
-  
 }
 .list-connect-newfeed {
   display: grid;

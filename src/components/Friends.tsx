@@ -67,7 +67,7 @@ const Friends = () => {
   };
 
   return (
-    <div className="card px-2 w-100 shadow-xss rounded-3 border-0 mb-sm-3 mb-5">
+    <div className="card px-2 w-100 shadow-xss rounded-3 border-0 mb-sm-3 mb-5 nunito-font">
       <div className="card-body d-flex align-items-center">
         <h4 className="fw-700 mb-0 font-xsss text-grey-900">
           {t("friend_request")}

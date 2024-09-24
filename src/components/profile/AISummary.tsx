@@ -59,7 +59,7 @@ const AiSummary = ({
   }, []);
 
   useEffect(() => {
-    if (text != summary && readyUpdate) {
+    if (text != summary) {
       setText(summary);
     }
   }, [summary]);

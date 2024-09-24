@@ -1,7 +1,15 @@
 import { removePropertiesEmpty } from "@/utils/Helpers";
 import httpClient from "..";
-import type { getSignalCardParams, getSignalCardResponse } from "./model";
-import type { BaseArrayResponsVersionDocs, BaseResponse } from "../model";
+import type {
+  getSignalCardParams,
+  getSignalCardResponse,
+  ISignalDaily,
+} from "./model";
+import type {
+  BaseArrayResponse,
+  BaseArrayResponsVersionDocs,
+  BaseResponse,
+} from "../model";
 
 export const getSignalCards = (values: getSignalCardParams) => {
   const data = removePropertiesEmpty(values);
@@ -16,4 +24,8 @@ export const getSignalDetail = (cardId: string) => {
     { cardId: string },
     BaseResponse<getSignalCardResponse>
   >(`/v1/signal/read/${cardId}`, {});
+};
+
+export const getSignalsNewFeed = () => {
+  return httpClient.get<BaseArrayResponse<ISignalDaily>>(`/v1/signal/daily`);
 };

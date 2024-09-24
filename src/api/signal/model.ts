@@ -29,3 +29,22 @@ export interface getSignalCardResponse {
   expiryAt: number;
   createdAt: number;
 }
+
+export interface ISignalDaily {
+  id: string;
+  signal_pair: string;
+  type: string;
+  expiryAt: number;
+  owner: {
+    uerId: number;
+    firstName: string;
+    lastName: string;
+    nickName: string;
+    followed: boolean;
+    followersCount: string;
+    photo: {
+      id: string;
+      path: string;
+    };
+  };
+}
