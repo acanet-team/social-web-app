@@ -48,6 +48,7 @@
   // background: linear-gradient(135deg, #000000, #434343);
   background: #020202;
   position: relative;
+  z-index: 105;
 }
 
 .card-icon {
@@ -55,6 +56,7 @@
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 103;
 }
 
 .view-card__cta {
@@ -64,8 +66,11 @@
   letter-spacing: 0.5px;
   top: 60%;
   left: 50%;
+  width: 150px;
+  height: 50px;
+  text-align: center;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 104;
   background: linear-gradient(
     96.39deg,
     #1c1c1c -50%,
