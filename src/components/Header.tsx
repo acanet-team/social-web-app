@@ -307,7 +307,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <span>{t("courses")}</span>
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       href="/defaultgroup"
                       className="nav-content-bttn open-font"
@@ -315,7 +315,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <i className="feather-zap btn-round-md bg-mini-gradiant me-3"></i>
                       <span>{t("messages")}</span>
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
 

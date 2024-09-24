@@ -4,11 +4,13 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/modules/listConnect.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 const ListRequest = () => {
   const t = useTranslations("Connect_investor");
   return (
-    <div className="card border-0 rounder-3 h_100">
+    <div className="card border-0 rounder-3 h_100 pb-5">
       <div
         style={{
           display: "flex",
@@ -25,14 +27,10 @@ const ListRequest = () => {
           {friendList.map((value, index) => (
             <div
               key={index}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
+              className={`${styles["layout-page-list-connect"]}`}
             >
               <div
-                style={{ maxWidth: "210px" }}
-                className="card d-block border-0 shadow-md bg-light rounded-3 overflow-hidden my-1 mx-1"
+                className={`${styles["layout-card-connect"]} card d-block border-0 shadow-md bg-light rounded-3 overflow-hidden my-1 mx-1`}
               >
                 <div className="card-body d-block w-100 ps-4 pe-4 pb-4 text-center">
                   <Link href={""}>
@@ -50,15 +48,22 @@ const ListRequest = () => {
                     <div style={{ minHeight: "70px" }}>
                       <h4 className="fw-700 font-xsss mt-2 mb-1">
                         {value.name}
+                        <span className="px-1">
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            size="sm"
+                            style={{ color: "#56e137" }}
+                          />
+                        </span>
                       </h4>
                     </div>
                   </Link>
                   <div className="d-flex align-items-center justify-content-center pb-0">
-                    <div className="p-2 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                      Confirm
+                    <div className="cursor-pointer p-2 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
+                      {t("confirm")}
                     </div>
-                    <div className="p-2 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl">
-                      Delete
+                    <div className="cursor-pointer p-2 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl">
+                      {t("delete")}
                     </div>
                   </div>
                 </div>

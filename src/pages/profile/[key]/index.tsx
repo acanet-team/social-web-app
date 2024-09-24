@@ -110,7 +110,7 @@ export default function Profile({
       setCurTab("posts");
     } else if (chosenTab === t("Communities")) {
       setCurTab("communities");
-    } else if (chosenTab === t("about")) {
+    } else if (chosenTab === t("About")) {
       setCurTab("about");
     } else if (chosenTab === t("Signal")) {
       setCurTab("signal");

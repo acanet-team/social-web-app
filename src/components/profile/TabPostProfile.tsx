@@ -98,8 +98,8 @@ const TabPostProfile = (props: {
       )}
       {myPosts &&
         myPosts.length > 0 &&
-        myPosts.map((myPost) => (
-          <div key={""}>
+        myPosts.map((myPost, index) => (
+          <div key={index}>
             <PostCard
               groupOwnerId=""
               groupName=""

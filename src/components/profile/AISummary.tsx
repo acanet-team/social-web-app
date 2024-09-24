@@ -34,6 +34,8 @@ const AiSummary = ({
   const [skills, setSkills] = useState<Skill[]>([]);
   const [location, setLocation] = useState("");
   const [summary, setSummary] = useState<string | null>();
+  const [text, setText] = useState<string | null>();
+  const [readyUpdate, setReadyUpdate] = useState(false);
   useEffect(() => {
     setInterestTopics(dataBrokerProfile?.interestTopics ?? []);
     setSkills(dataBrokerProfile?.skills ?? []);
@@ -56,10 +58,23 @@ const AiSummary = ({
     setShow(false);
   }, []);
 
+  useEffect(() => {
+    if (text != summary && readyUpdate) {
+      setText(summary);
+    }
+  }, [summary]);
+
   const updateSummary = async () => {
     setIsLoading(true);
     try {
-      await postUpdateSummary({});
+      if (readyUpdate === false) {
+        await postUpdateSummary({});
+        setReadyUpdate(true);
+        setSummary(null);
+        throwToast("New report is coming soon", "success");
+      } else {
+        throwToast("Please wait. New report is coming soon.", "error");
+      }
     } catch (error) {
       throwToast("Error updating", "error");
     } finally {
@@ -110,16 +125,16 @@ const AiSummary = ({
           ></i>
         </h4>
       </div>
-      {summary ? (
+      {text ? (
         <>
           {expandPost
-            ? summary
-            : summary.length > 20
-              ? summary.substring(0, 20) + "..."
-              : summary}
-          {summary.length > 20 && !expandPost ? (
+            ? text
+            : text.length > 20
+              ? text.substring(0, 20) + "..."
+              : text}
+          {text.length > 20 && !expandPost ? (
             <span
-              className={"cursor-pointer text-blue"}
+              className={"cursor-pointer text-black"}
               onClick={() => setExpandPost((open) => !open)}
             >
               {t("See more")}

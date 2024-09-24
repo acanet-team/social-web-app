@@ -407,7 +407,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   <p className="text-red font-xsss">{errors.startDate}</p>
                 )}
               </div>
-              {!formData.isGraduated && (
+              {formData.isGraduated && (
                 <div style={{ width: "48.5%" }}>
                   <p className="m-0 py-1 fw-600 font-xs">{t("end year")}</p>
                   <DatePicker
