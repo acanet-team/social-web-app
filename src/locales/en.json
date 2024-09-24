@@ -222,7 +222,9 @@
     "private": "Private",
     "owner": "Owner",
     "invite_user": "Add a new member",
-    "found_no_members": "No members found."
+    "found_no_members": "No members found.",
+    "community_created_success": "Your community is being created.",
+    "community_created_fail": "Can't create community"
   },
   "MyProfile": {
     "follow": "Follow",

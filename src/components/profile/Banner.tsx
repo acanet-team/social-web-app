@@ -55,12 +55,6 @@ const Banner: React.FC<TabBannerProps> = ({
   const [previewAvatar, setPreviewAvatar] = useState<string>(
     "/assets/images/profile/ava.png",
   );
-
-  useEffect(() => {
-    setPreviewAvatar(dataUser?.photo?.path);
-    setPreviewCover(dataUser?.profileCoverPhoto?.path);
-    setFlCount(Number(followersCount));
-  }, [dataUser, dataUserProfile, followersCount]);
   const coverInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const numbersFollowers = formatNumber(flCount);
@@ -72,12 +66,17 @@ const Banner: React.FC<TabBannerProps> = ({
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
 
+  useEffect(() => {
+    setPreviewAvatar(dataUser?.photo?.path);
+    setPreviewCover(dataUser?.profileCoverPhoto?.path);
+    setFlCount(Number(followersCount));
+  }, [dataUser, dataUserProfile, followersCount]);
+
   const fetchAverageRating = async () => {
     try {
       console.log("broker id", dataUser.id);
       const res = await rateContract.getAverageRating(dataUser.id.toString());
       const avgRating = res.brokerTotalScore.toNumber();
-      // const avgRating = convertBigNumber(res.brokerTotalScore, ConvertType.normal_number);
       console.log("aaa", res);
       console.log("average rating", avgRating);
       setAverageRating(Number(avgRating));
@@ -196,6 +195,7 @@ const Banner: React.FC<TabBannerProps> = ({
     }
     getBrokers();
   }, []);
+
   const onFollowBrokerHandler = async (e: any, brokerId: number) => {
     setIsFollowing(!isFollowing);
     followABroker({
