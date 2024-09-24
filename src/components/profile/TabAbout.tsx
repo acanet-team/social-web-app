@@ -16,7 +16,7 @@ import { useSession } from "next-auth/react";
 import DotWaveLoader from "../DotWaveLoader";
 
 const TabAbout = (props: {
-  ssi: SSI[] | null;
+  ssi: SSI | null;
   dataBrokerProfile: BrokerProfile;
   dataUser: User;
   interestTopic: InterestTopics[];
@@ -43,56 +43,50 @@ const TabAbout = (props: {
   return (
     <>
       <div className="row">
-        <div className="col-md-3 col-12">
-          {ssi && (
-            <>
+        <div className="col-xl-3 col-12">
+          {ssi ? (
+            <div
+              className="card p-4 border-0 shadow-xss"
+              style={{
+                background: "#FFFFFF",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                borderRadius: "5px",
+                marginTop: "40px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
               <div
-                className="card p-4 border-0 shadow-xss"
                 style={{
-                  background: "#FFFFFF",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  borderRadius: "5px",
-                  marginTop: "40px",
                   display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
+                  flexDirection: "row",
+                  gap: "12px",
+                  alignItems: "center",
                 }}
               >
-                {ssi?.length > 0 &&
-                  ssi.map((ssi) => (
-                    <>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          gap: "12px",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Image
-                          src={
-                            ssi.company.logo ||
-                            "/assets/images/profile/image 2 (1).png"
-                          }
-                          width={48}
-                          height={48}
-                          alt=""
-                          className=""
-                          style={{
-                            objectFit: "cover",
-                          }}
-                        />
-                        <div>
-                          <p className="m-0 fw-700 font-xss">
-                            {ssi.company.name || "Certified SSI Broker"}
-                          </p>
-                        </div>
-                      </div>
-                    </>
-                  ))}
+                <Image
+                  src={
+                    ssi.company.logo || "/assets/images/profile/image 2 (1).png"
+                  }
+                  width={48}
+                  height={48}
+                  alt=""
+                  className=""
+                  style={{
+                    objectFit: "cover",
+                  }}
+                />
+                <div>
+                  <p className="m-0 fw-700 font-xss">
+                    {ssi.company.name || "Certified SSI Broker"}
+                  </p>
+                </div>
               </div>
-            </>
+            </div>
+          ) : (
+            <></>
           )}
           <AISummary
             role={role}
@@ -102,7 +96,7 @@ const TabAbout = (props: {
           />
           <SocialMedia role={role} dataBrokerProfile={dataBrokerProfile} />
         </div>
-        <div className="col-md-9 col-12">
+        <div className="col-xl-9 col-12">
           <About role={role} dataBrokerProfile={dataBrokerProfile} />
           <Experience
             role={role}

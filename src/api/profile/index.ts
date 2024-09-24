@@ -145,3 +145,7 @@ export const getMyGroups = ({
     query: data,
   });
 };
+
+export const connectAInvestor = (values: any) => {
+  return httpClient.post("", values, {});
+};

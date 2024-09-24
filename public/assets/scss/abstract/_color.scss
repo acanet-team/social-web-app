@@ -188,6 +188,12 @@
 .text-gray-follow {
   color: #8b8d8d !important;;
 }
+.text-green {
+  color: #05B706 !important;
+}
+.text-red {
+  color: #E50202 !important;
+}
 
 .bg-black-08 {
   background: rgba(0, 0, 0, 0.8);
@@ -217,6 +223,12 @@
 }
 .bg-blue-gradiant {
   background: linear-gradient(to right, #0575e6, #021b79) !important;
+}
+.bg-green-gradient {
+  background: linear-gradient(180deg, #004B49 0%, #006C67 50%, #00A9A5 100%) !important;
+}
+.bg-red-gradiant {
+  background: linear-gradient(180deg, #241734 0%, #4C1E4F 50%, #B42F62 100%) !important;
 }
 
 .bg-grey {

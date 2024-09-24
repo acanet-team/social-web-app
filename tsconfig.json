@@ -63,6 +63,7 @@
     "**/*.mts",
     "src/middleware.ts",
     "src/templatePages/Notification.js",
-    "src/components/R"
+    "src/components/R",
+    "src/components/Friends.tsx"
   ]
 }

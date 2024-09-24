@@ -126,7 +126,7 @@ export type AllProfileResponse = {
     brokerProfile: BrokerProfile;
     followersCount: number;
     followingsCount: number;
-    ssi?: SSI[];
+    ssi?: SSI;
     // rating: string;
     // coursesEnrolledCount: string;
     followed: boolean;

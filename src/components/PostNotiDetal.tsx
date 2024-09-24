@@ -160,11 +160,9 @@ const PostNotiDetail = (props: {
   const { data: session } = useSession() as any;
   const [userId, setUserId] = useState<number>();
   const [feedPosts, setPosts] = useState<IPost[]>();
-  const [isLiked, setIsLiked] = useState<boolean>(dataPost?.liked || false);
-  const [likeNum, setLikeNum] = useState<number>(dataPost?.favoriteCount || 0);
-  const [commentNum, setCommentNum] = useState<number>(
-    dataPost?.commentCount || 0,
-  );
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [likeNum, setLikeNum] = useState<number>(0);
+  const [commentNum, setCommentNum] = useState<number>(0);
 
   const handleClose = useCallback(() => {
     if (isMobile) {
