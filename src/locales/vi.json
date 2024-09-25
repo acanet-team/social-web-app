@@ -368,7 +368,8 @@
     "connect_wallet": "Kết nối ví của bạn với Acanet",
     "donate_success": "Ủng hộ thành công",
     "donate_fail": "Ủng hộ thất bại",
-    "input_donate_amount": "Nhập"
+    "input_donate_amount": "Nhập",
+    "connect_wallet_error": "Hãy kết nối ví của bạn với Acanet"
   },
   "Connect_investor": {
     "friend_request": "Yêu cầu kết nối",

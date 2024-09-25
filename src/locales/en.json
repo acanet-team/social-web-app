@@ -367,7 +367,8 @@
     "connect_wallet": "Connect your wallet to Acanet",
     "donate_success": "Donate succeeded!",
     "donate_fail": "Donate failed!",
-    "input_donate_amount": "Input"
+    "input_donate_amount": "Input",
+    "connect_wallet_error": "Please connect your wallet to Acanet"
   },
   "Connect_investor": {
     "friend_request": "Friend Request",

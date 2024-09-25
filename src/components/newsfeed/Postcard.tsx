@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/postCard.module.scss";
 import { deletePost, getComments, likeRequest } from "@/api/newsfeed";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
 import Image from "next/image";
 import Box from "@mui/material/Box";
@@ -11,16 +9,15 @@ import DotWaveLoader from "../DotWaveLoader";
 import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
 import RoundedNumber from "../RoundedNumber";
-import type { IPost } from "@/api/newsfeed/model";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import PostModal from "./PostModal";
 import { useMediaQuery } from "react-responsive";
 import Comments from "./Comments";
 import { cleanPath } from "@/utils/Helpers";
-import type { IPostCommunityInfo } from "@/api/community/model";
-import type { IUserInfo } from "@/api/onboard/model";
+import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 import DonateModal from "../profile/DonateModal";
+import type { User } from "@/api/profile/model";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -71,6 +68,7 @@ export default function PostCard(props: {
   const [take, setTake] = useState<number>(20);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  console.log("pos", postAuthor);
   // Props
   const groupAvatar = community?.avatar?.path || "";
   const groupId = community?.communityId || "";
@@ -220,36 +218,42 @@ export default function PostCard(props: {
               <Link href={`/communities/detail/${groupId}`}>
                 <Image
                   src={groupAvatar}
-                  width={45}
-                  height={45}
+                  width={50}
+                  height={50}
                   alt="group"
-                  className="shadow-sm rounded-3 w45"
-                  style={{ border: "1px solid #ddd" }}
+                  className={`${styles["group-avatar"]} shadow-sm rounded-3`}
                 />
               </Link>
               <Link href={`/profile/${authorNickname}`}>
                 <Image
                   src={avatar}
-                  width={30}
-                  height={30}
+                  width={40}
+                  height={40}
                   alt="avatar"
-                  className="shadow-sm rounded-circle position-absolute border-1"
+                  className={`${postAuthor.role.name === "broker" ? styles["broker-ava__effect"] : ""} ${styles["author-avatar"]} shadow-sm rounded-circle position-absolute border-1`}
                   style={{
                     bottom: "-5px",
                     right: "-5px",
-                    border: "1px solid #eee",
                   }}
                 />
+                {/* {postAuthor.role.name === "broker" && (
+                <Image
+                  src="/assets/images/profile/check-mark.svg"
+                  width={24}
+                  height={24}
+                  alt="logo"
+                />
+              )} */}
               </Link>
             </div>
           ) : (
             <Link href={`/profile/${authorNickname}`}>
               <Image
                 src={avatar}
-                width={45}
-                height={45}
+                width={40}
+                height={40}
                 alt="avater"
-                className="shadow-sm rounded-circle w45"
+                className={`${postAuthor.role.name === "broker" ? styles["broker-ava__effect"] : ""} ${styles["author-avatar"]} shadow-sm rounded-circle`}
               />
             </Link>
           )}
@@ -536,7 +540,7 @@ export default function PostCard(props: {
         <DonateModal
           handleClose={() => setOpenDonate(false)}
           show={openDonate}
-          brokerData={postAuthor}
+          brokerData={postAuthor as IUserInfo | User}
         />
       )}
     </div>

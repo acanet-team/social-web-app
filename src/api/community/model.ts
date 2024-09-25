@@ -1,3 +1,4 @@
+import type { Role } from "@/types";
 import type { Meta } from "../model";
 
 export interface GetCommunitiesParams {
@@ -32,12 +33,14 @@ interface Photo {
   path: string;
 }
 
-interface IUserInfo {
+export interface IUserInfo {
   userId: number;
   firstName: string;
   lastName: string;
   nickName: string;
+  role: Role;
   photo: Photo;
+  walletAddress: string | null;
 }
 
 export interface ICommunity {

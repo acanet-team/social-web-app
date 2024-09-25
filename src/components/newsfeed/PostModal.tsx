@@ -14,11 +14,12 @@ import DotWaveLoader from "../DotWaveLoader";
 import React from "react";
 import Comments from "./Comments";
 import { useMediaQuery } from "react-responsive";
-import type { IUserInfo } from "@/api/onboard/model";
+import type { IUserInfo } from "@/api/community/model";
 import type { IPostCommunityInfo } from "@/api/community/model";
 import { cleanPath } from "@/utils/Helpers";
 import { useSession } from "next-auth/react";
 import DonateModal from "../profile/DonateModal";
+import type { User } from "@/api/profile/model";
 
 function PostModal(props: {
   groupOwnerId: number | "";
@@ -426,7 +427,7 @@ function PostModal(props: {
             <DonateModal
               handleClose={() => setOpenDonate(false)}
               show={openDonate}
-              brokerData={postAuthor}
+              brokerData={postAuthor as User | IUserInfo}
             />
           )}
         </div>

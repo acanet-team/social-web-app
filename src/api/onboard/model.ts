@@ -97,6 +97,7 @@ export interface IUserInfo {
   image?: string;
   walletAddress: string | null;
 }
+
 export interface IUserSession {
   user?: IUserInfo;
   expires: string;
