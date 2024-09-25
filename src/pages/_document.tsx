@@ -12,11 +12,6 @@ export default function Document({
           content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, viewport-fit=cover"
         />
         <title>Acanet</title> */}
-
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <body>
         <Main />

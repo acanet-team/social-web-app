@@ -1,7 +1,19 @@
-.nunito-font {font-family: "Nunito Sans", sans-serif;}
-.mont-font {font-family: "Montserrat", sans-serif; }
-.roboto-font {font-family: 'Roboto', sans-serif;}
-.open-font {font-family: 'Open Sans', sans-serif;}
-.fredoka-font {font-family: 'Fredoka One', cursive;}
-
- 
+.nunito-font {
+  font-family: "Nunito Sans", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+}
+.mont-font {
+  font-family: "Montserrat", sans-serif;
+}
+.roboto-font {
+  font-family: "Roboto", sans-serif;
+}
+.open-font {
+  font-family: "Open Sans", sans-serif;
+}
+.fredoka-font {
+  font-family: "Fredoka One", cursive;
+}
