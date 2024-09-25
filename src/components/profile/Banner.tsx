@@ -13,8 +13,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
-import convertBigNumber from "@/utils/convert-bigNumber";
-import { ConvertType } from "@/types";
 
 interface TabBannerProps {
   role: boolean;
@@ -77,11 +75,9 @@ const Banner: React.FC<TabBannerProps> = ({
 
   const fetchAverageRating = async () => {
     try {
-      console.log("broker id", dataUser.id);
       const res = await rateContract.getAverageRating(dataUser.id.toString());
-      const avgRating = res.brokerTotalScore.toNumber();
-      console.log("aaa", res);
-      console.log("average rating", avgRating);
+      const avgRating =
+        res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -454,7 +450,7 @@ const Banner: React.FC<TabBannerProps> = ({
               </>
             )}
 
-            {dataUser.role.name === "broker" && dataUser.wallet_address && (
+            {dataUser.role.name === "broker" && dataUser.walletAddress && (
               <button
                 className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
                 onClick={() => setOpenDonate(true)}

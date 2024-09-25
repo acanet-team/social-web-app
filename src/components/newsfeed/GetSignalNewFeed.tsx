@@ -63,56 +63,58 @@ const GetSignalNewFeed = () => {
 
   return (
     <>
-      <Slider {...signalsettingsilder}>
-        <div className="d-flex pe-5">
-          <div className="">
-            <div className="d-flex justify-content-center">
-              <Image
-                src={`/assets/images/default-ava-not-bg.jpg`}
-                alt=""
-                width={45}
-                height={45}
-                className="rounded-circle"
-              />
+      {!isLoading && (
+        <Slider {...signalsettingsilder}>
+          <div className="d-flex pe-5">
+            <div className="">
+              <div className="d-flex justify-content-center">
+                <Image
+                  src={`/assets/images/default-ava-not-bg.jpg`}
+                  alt=""
+                  width={45}
+                  height={45}
+                  className="rounded-circle"
+                />
+              </div>
+              <span className="m-0 fw-700 font-xssssss">NamNguyen22</span>
             </div>
-            <span className="m-0 fw-700 font-xssssss">NamNguyen22</span>
-          </div>
-          <Image
-            src={
-              curTheme === "theme-light"
-                ? `/assets/images/black-icon-signal.png`
-                : `/assets/images/white_icon_with_transparent_background.png`
-            }
-            alt=""
-            width={12}
-            height={12}
-          />
-          <div
-            className={`d-flex ms-2 border-0 ${typeSignal === "LONG" ? "bg-green-gradient" : "bg-red-gradiant"} p-3 rounded-xxl`}
-          >
-            <div>
-              <p className="m-0 fw-700 font-xsss text-white">BTCUSDT</p>
-              <p className="m-0 fw-100 font-xsssss text-white">
-                Expiring on <span>20/09/24</span>
+            <Image
+              src={
+                curTheme === "theme-light"
+                  ? `/assets/images/black-icon-signal.png`
+                  : `/assets/images/white_icon_with_transparent_background.png`
+              }
+              alt=""
+              width={12}
+              height={12}
+            />
+            <div
+              className={`d-flex ms-2 border-0 ${typeSignal === "LONG" ? "bg-green-gradient" : "bg-red-gradiant"} p-3 rounded-xxl`}
+            >
+              <div>
+                <p className="m-0 fw-700 font-xsss text-white">BTCUSDT</p>
+                <p className="m-0 fw-100 font-xsssss text-white">
+                  Expiring on <span>20/09/24</span>
+                </p>
+              </div>
+              <p
+                className={`m-0 ms-3 fw-700 ${typeSignal === "LONG" ? "text-green" : "text-red"}`}
+              >
+                {typeSignal}
               </p>
             </div>
-            <p
-              className={`m-0 ms-3 fw-700 ${typeSignal === "LONG" ? "text-green" : "text-red"}`}
-            >
-              {typeSignal}
-            </p>
           </div>
-        </div>
-        <Link
-          href="/signal"
-          className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12"
-        >
-          See more
-          <span>
-            <i className="bi bi-arrow-up-right ps-1"></i>
-          </span>
-        </Link>
-      </Slider>
+          <Link
+            href="/signal"
+            className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12"
+          >
+            See more
+            <span>
+              <i className="bi bi-arrow-up-right ps-1"></i>
+            </span>
+          </Link>
+        </Slider>
+      )}
       {isLoading && <CircleLoader />}
     </>
   );

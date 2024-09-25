@@ -26,7 +26,7 @@ export default function CommunityView({
 
   return (
     <Fragment>
-      <div className="pe-0 mb-5">
+      <div className="pe-0" style={{ paddingBottom: "40px" }}>
         <div className="mb-3">
           <CommunityHeader
             community={communityMetaData}

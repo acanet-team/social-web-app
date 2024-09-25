@@ -142,7 +142,11 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     // If `wallet` is defined then the user is connected
-    // console.log(wallet);
+    // console.log('waaa', wallet);
+    if (!wallet) {
+      setAccount(null);
+      return;
+    }
     if (wallet) {
       const { name, avatar }: any = wallet?.accounts?.[0]?.ens ?? {};
       setAccount({
@@ -151,7 +155,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         ens: { name, avatar: avatar?.url },
       });
       // if user has no wallet address in DB
-      if (!session?.user?.wallet_address) {
+      if (!session?.user?.walletAddress) {
         updateUserWalletAddress(wallet?.accounts?.[0]?.address as string);
       }
     }

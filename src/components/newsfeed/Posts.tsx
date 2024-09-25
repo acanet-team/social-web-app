@@ -115,30 +115,6 @@ export default function Posts(props: {
           posts.map((p: IPost) => (
             <div key={p.id}>
               <PostCard
-                // groupOwnerId={""}
-                // groupName={p.community?.name || ""}
-                // groupAvatar={p.community?.avatar?.path || ""}
-                // groupId={p.community?.communityId || ""}
-                // postId={p.id}
-                // nickName={
-                //   p.user.nickName || p.user.firstName + " " + p.user.lastName
-                // }
-                // authorId={p.user.userId}
-                // authorNickname={p.user.nickName || ""}
-                // avatar={
-                //   p.user?.photo?.id
-                //     ? cleanPath(p.user?.photo?.path)
-                //     : "/assets/images/user.png"
-                // }
-                // content={p.content}
-                // assets={p?.assets}
-                // createdAt={p.createdAt}
-                // like={p.favoriteCount}
-                // comment={p.commentCount}
-                // columnsCount={p.assets?.length > 3 ? 3 : p.assets?.length}
-                // liked={p.liked}
-                // setPostHandler={setPosts}
-
                 groupOwnerId={""}
                 community={p.community as IPostCommunityInfo}
                 postAuthor={p.user}
@@ -156,7 +132,11 @@ export default function Posts(props: {
           ))
         )}
       </div>
-      {isLoading && <DotWaveLoader />}
+      {isLoading && (
+        <div className="mt-5">
+          <DotWaveLoader />
+        </div>
+      )}
     </>
   );
 }

@@ -238,7 +238,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         <nav
           className={`navigation scroll-bar ${navClass} header-navbar__margin`}
         >
-          <div className="container ps-0 pe-0">
+          <div className={`${styles["left-navBar"]} container ps-0 pe-0`}>
             <div className="nav-content">
               <div className="nav-wrap bg-white bg-transparent-card rounded-3 shadow-xss pt-3 pb-1 mb-2 mt-2">
                 <div className="nav-caption fw-600 font-xsss text-grey-500">

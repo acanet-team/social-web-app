@@ -20,6 +20,7 @@ import Comments from "./Comments";
 import { cleanPath } from "@/utils/Helpers";
 import type { IPostCommunityInfo } from "@/api/community/model";
 import type { IUserInfo } from "@/api/onboard/model";
+import DonateModal from "../profile/DonateModal";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -56,10 +57,6 @@ export default function PostCard(props: {
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [commentNum, setCommentNum] = useState<number>(comment || 0);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
-  // const donateData ={
-  //   wallet_address:
-  //   id: authorId
-  // }
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likeNum, setLikeNum] = useState<number>(like);
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -408,10 +405,15 @@ export default function PostCard(props: {
           aria-expanded="false"
           // onClick={() => toggleOpen((prevState) => !prevState)}
         >
-          <div className="d-flex align-items-center cursor-pointer">
-            <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
-            <span className="d-none-xs">Donate</span>
-          </div>
+          {userId !== postAuthor.userId && postAuthor.walletAddress && (
+            <div
+              className="d-flex align-items-center cursor-pointer"
+              onClick={() => setOpenDonate(true)}
+            >
+              <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
+              <span className="d-none-xs">Donate</span>
+            </div>
+          )}
           <div className="d-flex align-items-center cursor-pointer">
             <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
             <span className="d-none-xs">Share</span>
@@ -510,30 +512,6 @@ export default function PostCard(props: {
       )}
       {isMobile && openMobileComments && (
         <PostModal
-          // show={openMobileComments}
-          // handleClose={handleClose}
-          // postId={postId}
-          // userId={userId}
-          // nickName={authorNickname}
-          // avatar={avatar}
-          // content={content}
-          // assets={assets}
-          // authorId={authorId}
-          // authorNickname={authorNickname}
-          // createdAt={createdAt}
-          // columnsCount={columnsCount}
-          // groupAvatar={groupAvatar}
-          // groupName={groupName}
-          // groupOwnerId={groupOwnerId}
-          // groupId={groupId}
-          // like={likeNum}
-          // comment={commentNum}
-          // liked={isLiked}
-          // updateLike={updateLikeHandler}
-          // updateComments={updateCommentHandler}
-          // updateIsLiked={setIsLiked}
-          // setPostHandler={setPostHandler}
-
           groupOwnerId={groupOwnerId}
           show={openMobileComments}
           curUser={userId as number | undefined}
@@ -554,13 +532,13 @@ export default function PostCard(props: {
           setPostHandler={setPostHandler}
         />
       )}
-      {/* {openDonate && (
+      {openDonate && (
         <DonateModal
-          handleClose={handleClose}
+          handleClose={() => setOpenDonate(false)}
           show={openDonate}
-          brokerData={dataUser}
+          brokerData={postAuthor}
         />
-      )} */}
+      )}
     </div>
   );
 }

@@ -1,3 +1,8 @@
+.left-navBar {
+  height: 100vh;
+  padding-bottom: 120px;
+  overflow: auto;
+}
 .height-dropdown-menu {
   width: 370px;
   height: auto;
@@ -27,7 +32,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap:4px
+  gap: 4px;
 }
 @media (max-width: 650px) {
   .height-dropdown-menu {
@@ -51,6 +56,6 @@
   }
   .bg-dropdown-border-noti {
     background-color: var(--theme-color);
-    border: 2px solid #1A1237 !important
+    border: 2px solid #1a1237 !important;
   }
 }

@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/brokerProfile.module.scss";
 import { faSuitcase, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { followABroker } from "@/api/onboard";
+import { useWeb3 } from "@/context/wallet.context";
+import Ratings from "../Ratings";
 
 export default function BrokerProfile(props: {
   brokerId: number;
@@ -30,7 +32,26 @@ export default function BrokerProfile(props: {
     rank,
     photo,
   } = { ...props };
+  const { rateContract } = useWeb3();
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
+  const [avarageRating, setAverageRating] = useState<number>(0);
+
+  useEffect(() => {
+    fetchAverageRating(brokerId);
+  }, [brokerId]);
+
+  const fetchAverageRating = async (brokerId: number) => {
+    try {
+      const res = await rateContract.getAverageRating(brokerId.toString());
+      console.log("resss", res);
+      const avgRating =
+        res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
+      setAverageRating(Number(avgRating));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onFollowBrokerHandler = (e: any, brokerId: number) => {
     try {
       setIsFollowing((following) => !following);
@@ -48,6 +69,7 @@ export default function BrokerProfile(props: {
       console.log(err);
     }
   };
+
   return (
     <div className="col-xl-2 col-lg-4 col-sm-6 pe-2 ps-2">
       <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
@@ -101,21 +123,7 @@ export default function BrokerProfile(props: {
             <div className="row d-flex w-100 mt-2 m-0">
               <div className="col p-0">
                 <div>Rating</div>
-                {Array.from({ length: Math.round(rating) }, (_, index) => (
-                  <FontAwesomeIcon
-                    key={index}
-                    icon={faStar}
-                    className={`${styles["broker-icon"]} fa-solid fa-star me-2`}
-                    style={{ color: "#FFD43B" }}
-                  ></FontAwesomeIcon>
-                ))}
-                {Array.from({ length: 5 - Math.round(rating) }, (_, index) => (
-                  <FontAwesomeIcon
-                    key={index}
-                    icon={faStar}
-                    className={`${styles["broker-icon"]} fa-regular fa-star me-2`}
-                  ></FontAwesomeIcon>
-                ))}
+                <Ratings rating={avarageRating} size={14} />
               </div>
               <div className="col p-0">
                 <div>Ranking</div>

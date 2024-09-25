@@ -65,6 +65,7 @@ export default function CommentView(props: {
         height={35}
         className="rounded-circle"
         alt={""}
+        style={{ objectFit: "cover" }}
       />
       <div className="d-flex flex-column">
         <div

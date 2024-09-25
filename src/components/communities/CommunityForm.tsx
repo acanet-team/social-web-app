@@ -567,12 +567,11 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
                 // onBlur={(e) => formik.setFieldValue("feeNum", e.target.value)}
                 onBlur={formik.handleBlur}
                 // onChange={(e) => formik.setFieldValue("feeNum", e.target.value)}
-                onChange={(e) =>
-                  formik.setFieldValue(
-                    "feeNum",
-                    e.target.value.replace(/,/g, "."),
-                  )
-                }
+                onChange={(e) => {
+                  const value = e.target.value.replace(/,/g, ".");
+                  const numericValue = value.replace(/[^0-9.]/g, "");
+                  formik.setFieldValue("feeNum", numericValue);
+                }}
                 InputProps={{
                   style: {
                     borderRadius: "5px",

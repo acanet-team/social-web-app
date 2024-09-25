@@ -8,14 +8,18 @@ import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/modules/onboard.module.scss";
 import type { NextPageWithLayout } from "./_app";
+import { useRouter } from "next/navigation";
 
 const Onboarding: NextPageWithLayout = () => {
   /* eslint-disable react-hooks/rules-of-hooks */
   const numSteps = 3;
   const [curstep, setCurStep] = useState<number>(0);
   const { data: session } = useSession();
+  const { update } = useSession();
+  const router = useRouter();
 
-  const onClickNextStep = useCallback(() => {
+  const onClickNextStep = useCallback(async () => {
+    await update();
     setCurStep((step) => step + 1);
     if (curstep > numSteps) {
       setCurStep(1);
@@ -31,6 +35,8 @@ const Onboarding: NextPageWithLayout = () => {
           setCurStep(1);
         } else if (onboardingStep === "select_interest_topic") {
           setCurStep(2);
+        } else {
+          router.push("/");
         }
       }
     }

@@ -40,8 +40,6 @@ export const createGetAllTopicsRequest = (
   take: number,
   headers: Headers = undefined as unknown as Headers,
 ) => {
-  console.log("headers", headers);
-
   return httpClient.get<GetRequestParams<topicsResponse>>(
     `/v1/interest-topic?page=${page}&take=${take}&sort={"orderBy":"topic_name","order":"ASC"}`,
     {

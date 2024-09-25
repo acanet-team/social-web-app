@@ -6,6 +6,7 @@ import styles from "@/styles/modules/signal.module.scss";
 import SignalSection from "@/components/signal/SignalSection";
 import type { getSignalCardResponse } from "@/api/signal/model";
 import { getSignalCards } from "@/api/signal";
+import { redirect } from "next/navigation";
 
 const Signal = ({
   cards,
@@ -15,7 +16,7 @@ const Signal = ({
   const [curTab, setCurTab] = useState<string>("discover");
   const tSignal = useTranslations("Signal");
   const existedSignalIds = cards.map((c) => c.id);
-  console.log("existed", existedSignalIds);
+  // console.log("existed", existedSignalIds);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
