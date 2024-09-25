@@ -72,7 +72,8 @@
   color: #111;
 }
 
-.profile-following__btn, .profile-follow__btn {
+.profile-following__btn,
+.profile-follow__btn {
   border-radius: 16px;
   display: flex;
   gap: 2px;
@@ -123,12 +124,33 @@
   height: 119px;
   width: 119px;
   object-fit: cover;
+  position: relative;
 }
 
 .ava-profile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border: 5px solid white;
+  background-clip: padding-box;
+}
+
+.broker-ava__effect {
+  display: inline-block;
+  padding: 5px;
+  background: linear-gradient(180deg, #206d5d 0%, #3ca859 50%, #34a375 100%);
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 4px;
+}
+
+.broker-ava__mark {
+  position: absolute;
+  width: 24px;
+  top: 10px;
+  right: 3px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background-color: white;
 }
 
 .cover-profile {
@@ -136,7 +158,8 @@
   height: 250px;
   object-fit: cover;
 }
-.cover-profile-img{
+
+.cover-profile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -156,8 +179,9 @@
     border: 2px solid #fff;
   }
 
-  .icon-profile {
+  .icon-profile, .profile-followers {
     color: white !important;
+    font-weight: 400 !important;
   }
 
   .image-edit__btn {
@@ -172,7 +196,9 @@
     color: var(--light);
   }
 
-  .profile-following__btn, .profile-followed__btn, .profile-donate__btn {
+  .profile-following__btn,
+  .profile-followed__btn,
+  .profile-donate__btn {
     background-color: var(--theme-color-shade);
   }
 
@@ -240,10 +266,15 @@
 
   #user-profile .group-tabs {
     font-size: 14px !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10px;
   }
 
   #user-profile .group-tabs .button-tab {
     flex-basis: 1 !important;
+    height: 35px;
   }
 
   #user-profile .button-tab__communities {

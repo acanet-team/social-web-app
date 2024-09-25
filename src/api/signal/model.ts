@@ -28,4 +28,7 @@ export interface getSignalCardResponse {
   target: string;
   expiryAt: number;
   createdAt: number;
+  // These 2 are props
+  brokerId?: number;
+  curUserId?: number | undefined;
 }

@@ -35,7 +35,7 @@ export interface IUser {
   isBroker: boolean;
   location: string;
   userProfile: UserProfile;
-  wallet_address: string | null;
+  walletAddress: string | null;
 }
 
 // export interface IUser {

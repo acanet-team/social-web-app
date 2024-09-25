@@ -10,6 +10,24 @@
   cursor: pointer;
 }
 
+.group-avatar {
+  object-fit: cover;
+  border: 1px solid var(--light),
+}
+
+.author-avatar {
+  object-fit: cover;
+  border: 1px solid var(--light),
+}
+
+.broker-ava__effect {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 2px solid #249c09;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .post .expand-btn {
   color: var(--theme-color-main);
   display: inline-block;

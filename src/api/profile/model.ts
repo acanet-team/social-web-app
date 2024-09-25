@@ -1,5 +1,6 @@
 export interface User {
   id: number;
+  userId?: number;
   email: string;
   provider: string;
   socialId: string;
@@ -46,7 +47,7 @@ export interface User {
   phone: string;
   userInterestTopicRelations: string[];
   whiteList: {};
-  wallet_address: string | null;
+  walletAddress: string | null;
 }
 
 export interface UserProfile {

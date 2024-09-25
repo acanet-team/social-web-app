@@ -14,6 +14,7 @@ export async function middleware(request: NextRequest) {
   if (!token || token.needToLogin) {
     return NextResponse.redirect(new URL("/login", request.nextUrl.origin));
   }
+
   if (token.user.onboarding_data?.step !== ONBOARDING_STEP.COMPLETE) {
     return NextResponse.redirect(
       new URL("/onboarding", request.nextUrl.origin),
@@ -23,5 +24,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/communities"],
+  matcher: ["/", "/communities", "/communities/detail/:id*", "/signal"],
 };

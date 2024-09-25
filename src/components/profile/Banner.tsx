@@ -13,9 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
-import convertBigNumber from "@/utils/convert-bigNumber";
-import { ConvertType } from "@/types";
-
+import type { IUserInfo } from "@/api/community/model";
 interface TabBannerProps {
   role: boolean;
   dataUser: User;
@@ -77,11 +75,9 @@ const Banner: React.FC<TabBannerProps> = ({
 
   const fetchAverageRating = async () => {
     try {
-      console.log("broker id", dataUser.id);
       const res = await rateContract.getAverageRating(dataUser.id.toString());
-      const avgRating = res.brokerTotalScore.toNumber();
-      console.log("aaa", res);
-      console.log("average rating", avgRating);
+      const avgRating =
+        res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -287,14 +283,15 @@ const Banner: React.FC<TabBannerProps> = ({
               width={119}
               height={119}
               alt={dataUserProfile?.nickName}
-              className={`${styles["ava-profile-img"]} rounded-circle`}
+              className={`${dataUser.role.name === "broker" ? styles["broker-ava__effect"] : ""} ${styles["ava-profile-img"]} rounded-circle`}
               onError={() => setPreviewAvatar("/assets/images/profile/ava.png")}
-              style={{
-                objectFit: "cover",
-                // borderRadius: "100%",
-                border: "4px solid white",
-              }}
             />
+            {/* {dataUser.role.name === "broker" && <FontAwesomeIcon
+              icon={faCircleCheck}
+              size="xl"
+              style={{ color: "#249c09" }}
+              className={styles['broker-ava__mark']}
+            />} */}
             {role === true && (
               <>
                 <label htmlFor="avatar" className="cursor-pointer">
@@ -334,7 +331,7 @@ const Banner: React.FC<TabBannerProps> = ({
         >
           <div className="w-100">
             <div
-              className="d-flex align-items-sm-start align-items-center flex-lg-row flex-column gap-md-3 gap-2 mb-2"
+              className="d-flex align-items-sm-start align-items-center flex-md-row flex-column gap-md-3 gap-2 mb-2"
               style={{
                 marginTop: "30px",
               }}
@@ -343,7 +340,7 @@ const Banner: React.FC<TabBannerProps> = ({
                 <h2 className={`m-0 fw-700 font-md ${styles["profile-name"]}`}>
                   {dataUser?.firstName} {dataUser?.lastName}
                 </h2>
-                <div className="font-xsss text-gray m-0">
+                <div className="font-xsss text-grey-600 m-0">
                   @{dataUserProfile?.nickName}
                 </div>
               </div>
@@ -360,28 +357,32 @@ const Banner: React.FC<TabBannerProps> = ({
                       gap: "2px",
                     }}
                   >
-                    <FontAwesomeIcon
-                      icon={faCircleCheck}
-                      size="xl"
-                      style={{ color: "#56e137" }}
+                    <Image
+                      src="/assets/images/profile/check-mark.svg"
+                      width={24}
+                      height={24}
+                      alt="logo"
                     />
-                    <p className="font-xss fw-400 m-0 ms-1">
+                    <p
+                      className="font-xss fw-600 m-0 ms-1"
+                      style={{ color: "rgb(107, 173, 97)" }}
+                    >
                       {t("Certified Broker")}
                     </p>
                     <Tooltip
                       title={t("This broker has been verified by Acanet")}
                     >
                       <Image
-                        src="/assets/images/profile/icons8-info-50.png"
-                        width={13}
-                        height={13}
+                        src="/assets/images/profile/verified-tooltip.svg"
+                        width={16}
+                        height={16}
                         alt=""
                         className="position-absolute top-0"
                         style={{
-                          objectFit: "cover",
-                          backgroundColor: "white",
-                          right: "-15px",
+                          right: "-20px",
+                          top: "5px",
                           borderRadius: "50%",
+                          color: "rgb(107, 173, 97)",
                         }}
                       />
                     </Tooltip>
@@ -389,7 +390,9 @@ const Banner: React.FC<TabBannerProps> = ({
                 )}
               </div>
             </div>
-            <div className="font-xss fw-600 text-gray-follow text-center text-sm-start">
+            <div
+              className={`${styles["profile-followers"]} font-xss fw-500 text-grey-600 text-center text-sm-start`}
+            >
               {dataUser?.role?.name === "broker"
                 ? numbersFollowers
                 : dataUser?.role?.name === "investor" && numbersConnects}{" "}
@@ -454,7 +457,7 @@ const Banner: React.FC<TabBannerProps> = ({
               </>
             )}
 
-            {dataUser.role.name === "broker" && dataUser.wallet_address && (
+            {dataUser.role.name === "broker" && dataUser.walletAddress && (
               <button
                 className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
                 onClick={() => setOpenDonate(true)}
@@ -510,7 +513,7 @@ const Banner: React.FC<TabBannerProps> = ({
         <DonateModal
           handleClose={handleClose}
           show={openDonate}
-          brokerData={dataUser}
+          brokerData={dataUser as User}
         />
       )}
     </div>

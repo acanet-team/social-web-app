@@ -280,19 +280,12 @@ export default function CreateSignal() {
               type="string"
               name="entry"
               value={formik.values.entry}
-              // inputProps={{
-              //   min: 0.0000000001,
-              // }}
-              // onBlur={(e) =>
-              //   formik.setFieldValue(
-              //     "entry",
-              //     Number(Number(e.target.value).toFixed(10))
-              //   )
-              // }
               onBlur={formik.handleBlur}
-              onChange={(e) =>
-                formik.setFieldValue("entry", e.target.value.replace(/,/g, "."))
-              }
+              onChange={(e) => {
+                const value = e.target.value.replace(/,/g, ".");
+                const numericValue = value.replace(/[^0-9.]/g, "");
+                formik.setFieldValue("entry", numericValue);
+              }}
               InputProps={{
                 style: {
                   borderRadius: "5px",
@@ -330,23 +323,13 @@ export default function CreateSignal() {
               type="string"
               name="target"
               value={formik.values.target}
-              // inputProps={{
-              //   min: 0.0000000001,
-              // }}
               placeholder="Target"
-              // onBlur={(e) =>
-              //   formik.setFieldValue(
-              //     "target",
-              //     Number(Number(e.target.value).toFixed(10))
-              //   )
-              // }
               onBlur={formik.handleBlur}
-              onChange={(e) =>
-                formik.setFieldValue(
-                  "target",
-                  e.target.value.replace(/,/g, "."),
-                )
-              }
+              onChange={(e) => {
+                const value = e.target.value.replace(/,/g, ".");
+                const numericValue = value.replace(/[^0-9.]/g, "");
+                formik.setFieldValue("target", numericValue);
+              }}
               InputProps={{
                 style: {
                   borderRadius: "5px",
@@ -385,20 +368,13 @@ export default function CreateSignal() {
               type="string"
               name="stop"
               value={formik.values.stop}
-              // inputProps={{
-              //   min: 0.0000000001,
-              // }}
               placeholder="Stop"
-              // onBlur={(e) =>
-              //   formik.setFieldValue(
-              //     "stop",
-              //     Number(Number(e.target.value).toFixed(10))
-              //   )
-              // }
               onBlur={formik.handleBlur}
-              onChange={(e) =>
-                formik.setFieldValue("stop", e.target.value.replace(/,/g, "."))
-              }
+              onChange={(e) => {
+                const value = e.target.value.replace(/,/g, ".");
+                const numericValue = value.replace(/[^0-9.]/g, "");
+                formik.setFieldValue("stop", numericValue);
+              }}
               InputProps={{
                 style: {
                   borderRadius: "5px",

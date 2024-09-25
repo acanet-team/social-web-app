@@ -6,12 +6,14 @@ import { followABroker } from "@/api/onboard";
 import Ratings from "../Ratings";
 import { getSignalDetail } from "@/api/signal";
 import type { getSignalCardResponse } from "@/api/signal/model";
-import type { number } from "zod";
 import convertDate from "@/utils/convert-date";
 import CircleLoader from "../CircleLoader";
 import { useTranslations } from "next-intl";
 import { useWeb3 } from "@/context/wallet.context";
 import CountdownTimer from "./CountdownTimer";
+import LuckyDrawEffect from "./LuckyDrawEffect";
+import Link from "next/link";
+import { throwToast } from "@/utils/throw-toast";
 
 const SignalCard: React.FC<getSignalCardResponse> = ({
   id,
@@ -24,13 +26,20 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   signalPair,
   readAt,
   type,
+  brokerId,
+  curUserId,
 }) => {
-  const { rateContract, connectWallet } = useWeb3();
   const tBase = useTranslations("Base");
+  const tSignal = useTranslations("Signal");
+  const { rateContract, connectWallet } = useWeb3();
   const [cardDetail, setCardDetail] = useState<getSignalCardResponse>();
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [isLuckyDraw, setIsLuckyDraw] = useState<boolean>(false);
   const [luckyCoin, setluckyCoin] = useState<number>(100000);
+  const [flipDepleted, setFlipDepleted] = useState<boolean>(false);
+  const [countdownDuration, setCountdownDuration] = useState<number>(
+    Date.now() + 24 * 60 * 60 * 1000,
+  );
   const [isFollowing, setIsFollowing] = useState<boolean>(
     owner?.followed || false,
   );
@@ -42,38 +51,54 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const [avarageRating, setAverageRating] = useState<number>(0);
 
   useEffect(() => {
-    if (readAt) {
+    console.log("cur", curUserId);
+    console.log("owner", brokerId);
+    if (readAt || (brokerId && curUserId === brokerId)) {
       setIsFlipped(true);
     }
     if (type) {
       setSignalType(type);
     }
-  }, [readAt, type]);
+  }, [readAt, type, curUserId]);
+
+  useEffect(() => {
+    fetchAverageRating(
+      owner?.userId
+        ? Number(owner?.userId)
+        : (Number(cardDetail?.owner?.userId) as number),
+    );
+  }, [isFlipped]);
 
   const fetchAverageRating = async (brokerId: number) => {
     try {
-      console.log("broker", brokerId);
       const res = await rateContract.getAverageRating(brokerId.toString());
-      const avgRating = res.brokerTotalScore.toNumber();
-      console.log("aaa", res);
-      console.log("average rating", avgRating);
+      const avgRating =
+        res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
     }
   };
 
-  const onFlipCardHandler = async (id: string, brokerId: number) => {
+  const onFlipCardHandler = async (id: string) => {
     if (!isFlipped) {
       try {
         setIsLoading(true);
-        setIsFlipped(true);
         const res = await getSignalDetail(id);
-        fetchAverageRating(brokerId);
-        console.log("backkkk", res);
-        setCardDetail(res.data);
-        setSignalType(res.data.type);
-        setIsFollowing(res.data.owner.followed);
+        if (flipDepleted) {
+          return throwToast(tSignal("flip_turn_depleted"), "error");
+        }
+        if (isLuckyDraw) {
+          setCountdownDuration(Date.now() + 24 * 60 * 60 * 1000);
+        } else {
+          console.log("backkkk", res);
+          setCardDetail(res.data);
+          setSignalType(res.data.type);
+          setIsFollowing(res.data.owner.followed);
+          // setFlipDepleted
+          // setluckyCoin
+        }
+        setIsFlipped(true);
       } catch (err) {
         console.log(err);
       } finally {
@@ -101,17 +126,14 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
       console.log(err);
     }
   };
+
+  const onClaimLuckyTokenHandler = () => {
+    connectWallet();
+  };
   return (
     <div
       className={classNames(styles.signal, styles["signal--card"])}
-      onClick={() =>
-        onFlipCardHandler(
-          id,
-          owner?.userId
-            ? Number(owner?.userId)
-            : (Number(cardDetail?.owner?.userId) as number),
-        )
-      }
+      onClick={() => onFlipCardHandler(id)}
     >
       <div
         className={`${isFlipped ? styles["is-flipped"] : ""} ${styles.card}`}
@@ -143,6 +165,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
             <CircleLoader />
           </div>
         )}
+        {/* {isLuckyDraw && <LuckyDrawEffect />} */}
         {!isLoading && (
           <div
             className={`
@@ -156,6 +179,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
           >
             {isLuckyDraw ? (
               <div>
+                <LuckyDrawEffect />
                 <Image
                   src="/assets/images/signal/lucky-icon.svg"
                   width={222}
@@ -169,9 +193,17 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                   <h3 className="text-white">
                     {luckyCoin.toLocaleString()} ACN
                   </h3>
-                  <CountdownTimer />
+                  <CountdownTimer
+                    time={countdownDuration}
+                    onFinish={setIsFlipped}
+                  />
                 </div>
-                <button className={styles["claim-btn"]}>Claim Now</button>
+                <button
+                  className={styles["claim-btn"]}
+                  onClick={onClaimLuckyTokenHandler}
+                >
+                  Claim Now
+                </button>
               </div>
             ) : (
               <div>
@@ -253,23 +285,40 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
 
                 <div className={styles["signal-author"]}>
                   <div className={`${styles["signal-author__details"]} d-flex`}>
-                    <Image
-                      src={
-                        owner?.photo?.path
-                          ? owner?.photo?.path
-                          : "/assets/images/user.png"
-                      }
-                      width={50}
-                      height={50}
-                      alt="broker avatar"
-                      className={styles["signal-broker__avatar"]}
-                    />
-                    <div className="d-flex flex-column justify-content-center">
-                      <h2 className="text-white font-xss fw-800 m-0">
-                        {owner?.nickName
+                    <Link
+                      href={`/profile/${
+                        owner?.nickName
                           ? owner?.nickName
-                          : cardDetail?.owner?.nickName}
-                      </h2>
+                          : cardDetail?.owner?.nickName
+                      }`}
+                    >
+                      <Image
+                        src={
+                          owner?.photo?.path
+                            ? owner?.photo?.path
+                            : cardDetail?.owner?.photo?.path ||
+                              "/assets/images/user.png"
+                        }
+                        width={50}
+                        height={50}
+                        alt="broker avatar"
+                        className={styles["signal-broker__avatar"]}
+                      />
+                    </Link>
+                    <div className="d-flex flex-column justify-content-center">
+                      <Link
+                        href={`/profile/${
+                          owner?.nickName
+                            ? owner?.nickName
+                            : cardDetail?.owner?.nickName
+                        }`}
+                      >
+                        <h2 className="text-white font-xss fw-800 m-0">
+                          {owner?.nickName
+                            ? owner?.nickName
+                            : cardDetail?.owner?.nickName}
+                        </h2>
+                      </Link>
                       <div className="font-xssss fw-300">
                         {" "}
                         {followerNum >= 1000
@@ -287,19 +336,22 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       <span className="font-xsss">{avarageRating}</span>
                     </div>
                   </div>
-                  <button
-                    className={`${isFollowing ? styles["follow-broker"] : styles["follow-btn"]} main-btn mt-2 mb-0 border-0 px-3 py-1 z-index-1 rounded-4 text-white font-xssss cursor-pointer fw-700 ls-1`}
-                    onClick={(e) =>
-                      onFollowBrokerHandler(
-                        e,
-                        owner?.userId
-                          ? Number(owner?.userId)
-                          : (Number(cardDetail?.owner?.userId) as number),
-                      )
-                    }
-                  >
-                    {isFollowing ? "Following" : "Follow"}
-                  </button>
+                  {(brokerId !== owner?.userId ||
+                    brokerId !== cardDetail?.owner?.userId) && (
+                    <button
+                      className={`${isFollowing ? styles["follow-broker"] : styles["follow-btn"]} main-btn mt-2 mb-0 border-0 px-3 py-1 z-index-1 rounded-4 text-white font-xssss cursor-pointer fw-700 ls-1`}
+                      onClick={(e) =>
+                        onFollowBrokerHandler(
+                          e,
+                          owner?.userId
+                            ? Number(owner?.userId)
+                            : (Number(cardDetail?.owner?.userId) as number),
+                        )
+                      }
+                    >
+                      {isFollowing ? "Following" : "Follow"}
+                    </button>
+                  )}
                 </div>
               </div>
             )}

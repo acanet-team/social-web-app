@@ -17,7 +17,7 @@ import Comments from "@/components/newsfeed/Comments";
 import { likeRequest } from "@/api/newsfeed";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "react-responsive";
-import type { IPostCommunityInfo } from "@/api/community/model";
+import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 
 const DetailPost = ({
   idParam,
@@ -156,7 +156,7 @@ const DetailPost = ({
       if (idParam) {
         try {
           const res = await getDetailPost(idParam as string);
-          console.log("detaillll", res);
+          // console.log("detaillll", res);
           setDataPost(res.data);
         } catch (error) {
           console.error("Failed to fetch post details", error);
@@ -176,7 +176,7 @@ const DetailPost = ({
           groupOwnerId=""
           show={openMobileComments}
           curUser={userId}
-          postAuthor={dataPost.user}
+          postAuthor={dataPost.user as IUserInfo}
           community={dataPost.community as IPostCommunityInfo}
           postId={idParam as string}
           content={dataPost.content}

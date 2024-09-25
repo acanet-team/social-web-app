@@ -1,4 +1,4 @@
-import type { User, UserProfile } from "@/api/profile/model";
+import type { User } from "@/api/profile/model";
 import styles from "@/styles/modules/tabRating.module.scss";
 import { FormHelperText, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -13,10 +13,6 @@ import { useWeb3 } from "@/context/wallet.context";
 import { useSession } from "next-auth/react";
 import { useLoading } from "@/context/Loading/context";
 import { throwToast } from "@/utils/throw-toast";
-import { ethers } from "ethers";
-import convertBigNumber from "@/utils/convert-bigNumber";
-import { ConvertType } from "@/types";
-import page from "@/pages/courses/investor/page";
 import DotWaveLoader from "../DotWaveLoader";
 
 export default function TabRating(props: { brokerData: User }) {
@@ -43,9 +39,6 @@ export default function TabRating(props: { brokerData: User }) {
         (curPage - 1) * TAKE,
       );
       setReviews(res[0]);
-      console.log("ressss", curPage, res);
-      console.log("totalPage", res.totalPage.toNumber());
-      console.log("curPage", curPage);
       setTotalPage(res.totalPage.toNumber());
     } catch (err) {
       console.log(err);
@@ -99,8 +92,10 @@ export default function TabRating(props: { brokerData: User }) {
     validationSchema: Yup.object({
       rating: Yup.number().min(1, tRating("error_missing_rating")),
     }),
-    onSubmit: async (values, { resetForm, setValues }) => {
-      connectWallet();
+    onSubmit: async (values, { resetForm }) => {
+      if (!account) {
+        return connectWallet();
+      }
       try {
         showLoading();
         console.log("contract", rateContract);
@@ -115,7 +110,11 @@ export default function TabRating(props: { brokerData: User }) {
         );
         setReviewSubmitted(true);
       } catch (error) {
-        throwToast(tRating("reivew_fail"), "error");
+        if (!account) {
+          throwToast(tRating("connect_wallet_error"), "error");
+        } else {
+          throwToast(tRating("reivew_fail"), "error");
+        }
         console.error(error);
       } finally {
         hideLoading();

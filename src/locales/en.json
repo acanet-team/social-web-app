@@ -11,7 +11,7 @@
     "followers": "followers"
   },
   "Error": {
-    "not_found": "The page you are looking for isn't available."
+    "not_found": "The page you are looking for isn't available"
   },
   "Onboard": {
     "continue": "Continue",
@@ -79,7 +79,7 @@
   },
   "SignIn": {
     "meta_title": "Sign in",
-    "meta_description": "Seamlessly sign in to your account with our user-friendly login process.",
+    "meta_description": "Seamlessly sign in to your account with our user-friendly login process",
     "sign_in_with": "Sign in with",
     "your_social_account": "Your social account",
     "sign_in_with_google": "Sign in with Google",
@@ -87,7 +87,7 @@
   },
   "SignUp": {
     "meta_title": "Sign up",
-    "meta_description": "Effortlessly create an account through our intuitive sign-up process."
+    "meta_description": "Effortlessly create an account through our intuitive sign-up process"
   },
   "Dashboard": {
     "meta_title": "Dashboard",
@@ -103,15 +103,15 @@
   },
   "BrokerList": {
     "broker_title": "Broker List",
-    "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
+    "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully"
   },
   "Interest": {
     "interest_title": "What are you interested in?",
-    "interest_description": "Select at least 1 topic you are interested in to help personalize your experience."
+    "interest_description": "Select at least 1 topic you are interested in to help personalize your experience"
   },
   "CoursesList": {
     "course_title": "Courses",
-    "course_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully."
+    "course_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully"
   },
   "TopBrokers": {
     "top_broker_title": "Top Brokers"
@@ -123,13 +123,13 @@
     "create_Post": "Create Post",
     "create_signal": "Create Signal",
     "select_Topic": "Select a topic",
-    "no_topics": "No topics found.",
+    "no_topics": "No topics found",
     "loading_topics": "Loading topics...",
-    "please_enter_text": "Please enter some text for your post.",
-    "please_select_a_topic": "Please select a topic for your post.",
+    "please_enter_text": "Please enter some text for your post",
+    "please_select_a_topic": "Please select a topic for your post",
     "post_create_success": "Post created successfully!",
-    "post_create_error": "Error creating post.",
-    "error_fetch_topic": "Error fetching topics."
+    "post_create_error": "Error creating post",
+    "error_fetch_topic": "Error fetching topics"
   },
   "CreateSignal": {
     "create_signal": "Create signal",
@@ -142,7 +142,7 @@
     "error_invalid_low_target": "Target must be higher than entry",
     "error_min_entry": "Entry must exceed 0.0000000001",
     "error_min_stop": "Stop must exceed 0.0000000001",
-    "error_min_target": "Target must exceed 0.0000000001.",
+    "error_min_target": "Target must exceed 0.0000000001",
     "error_invalid_high_target": "Target must be lower than entry",
     "error_missing_stop": "Please enter an stop point",
     "error_invalid_high_stop": "Stop must be lower than entry",
@@ -157,20 +157,20 @@
   },
   "Post": {
     "Explore_More": "Explore More",
-    "No_Posts_Found": "No Posts Found."
+    "No_Posts_Found": "No Posts Found"
   },
   "CreateProfile": {
     "create_profile_title": "Account Details",
-    "create_profile_desc": "Please fill out some basic information about you.",
+    "create_profile_desc": "Please fill out some basic information about you",
     "region": "Region",
     "user_type": "User type",
     "broker": "I am a Broker",
     "investor": "I am an Investor",
-    "error_location": "Please choose a location.",
-    "error_user_type": "Please choose the user type.",
-    "error_missing_nickname": "Please fill out a valid nickname.",
-    "error_invalid_nickname": "Nick name must be between 8 and 20 characters.",
-    "error_missing_email": "Please fill out a valid email.",
+    "error_location": "Please choose a location",
+    "error_user_type": "Please choose the user type",
+    "error_missing_nickname": "Please fill out a valid nickname",
+    "error_invalid_nickname": "Nick name must be between 8 and 20 characters",
+    "error_missing_email": "Please fill out a valid email",
     "error_invalid_email": "Invalid email address"
   },
   "NavBar": {
@@ -202,17 +202,17 @@
     "joining_fee": "Joining fee",
     "free": "Free Community",
     "paid": "Paid Community",
-    "error_missing_community_name": "Please fill out a community name.",
-    "error_invalid_community_name": "Name must be between 4 and 40 characters.",
-    "error_missing_description": "Please fill out a community description.",
-    "error_invalid_description": "Description must be between 4 and 350 characters.",
-    "error_missing_fee": "Please fill out a joining fee.",
+    "error_missing_community_name": "Please fill out a community name",
+    "error_invalid_community_name": "Name must be between 4 and 40 characters",
+    "error_missing_description": "Please fill out a community description",
+    "error_invalid_description": "Description must be between 4 and 350 characters",
+    "error_missing_fee": "Please fill out a joining fee",
     "error_joining_fee": "Joining fee must be greater than 0.0000000001",
     "joined": "Joined",
     "pending": "Pending",
     "join": "Join",
-    "approve_member_notification": "Member added to your community.",
-    "delete_member_notification": "Member successfully removed.",
+    "approve_member_notification": "Member added to your community",
+    "delete_member_notification": "Member successfully removed",
     "invite new user": "Invite new user",
     "table_name": "Name",
     "table_joined": "Joined",
@@ -223,8 +223,8 @@
     "private": "Private",
     "owner": "Owner",
     "invite_user": "Add a new member",
-    "found_no_members": "No members found.",
-    "community_created_success": "Your community is being created.",
+    "found_no_members": "No members found",
+    "community_created_success": "Your community is being created",
     "community_created_fail": "Can't create community"
   },
   "MyProfile": {
@@ -357,15 +357,18 @@
     "review_submitted": "Review Submitted",
     "rank_desc": "Rating powered by Acanet Blockchain",
     "rank_desc_guarantee": "100% Fairness Guarantee",
-    "error_missing_rating": "Please rate the broker.",
-    "review_success": "Review sent.",
-    "reivew_fail": "Can't sent review.",
-    "no_rating_found": "No rating found. Be the first to rate this broker!"
+    "error_missing_rating": "Please rate the broker",
+    "review_success": "Review sent",
+    "reivew_fail": "Can't sent review",
+    "no_rating_found": "No rating found. Be the first to rate this broker!",
+    "connect_wallet_error": "Please connect your wallet to Acanet"
   },
   "Wallet": {
     "connect_wallet": "Connect your wallet to Acanet",
     "donate_success": "Donate succeeded!",
-    "input_donate_amount": "Input"
+    "donate_fail": "Donate failed!",
+    "input_donate_amount": "Input",
+    "connect_wallet_error": "Please connect your wallet to Acanet"
   },
   "Connect_investor": {
     "friend_request": "Friend Request",
@@ -377,14 +380,15 @@
     "discover_tab": "Discover",
     "history_tab": "History",
     "signal_station_title": "Signal Station",
-    "no_signal_found": "No signal found."
+    "no_signal_found": "No signal found",
+    "flip_turn_depleted": "You've used up all your available flip turns"
   },
   "Notification": {
     "has_requested_to_join_your": "has requested to join your",
     "you_are_now_a_member_of": "You are now a member of",
     "your_request_to_join": "Your request to join",
     "has_been_unsuccessful": "has been unsuccessful",
-    "your_request_to_create_a paid_group_has_failed._Please_try_again_later.": "Your request to create a paid group has failed. Please try again later.",
+    "create_paid_group_failed": "Your request to create a paid group has failed. Please try again later",
     "liked_your_post": "liked your post",
     "people_liked_your_post": "people liked your post",
     "Group": "Group",

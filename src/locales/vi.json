@@ -14,7 +14,7 @@
     "join": ""
   },
   "Error": {
-    "not_found": "Trang bạn đang tìm kiếm không tồn tại."
+    "not_found": "Trang bạn đang tìm kiếm không tồn tại"
   },
   "Onboard": {
     "continue": "Tiếp tục",
@@ -36,7 +36,7 @@
     "sign_in_with_facebook": "Đăng nhập bằng facebook",
     "your_social_account": "tài khoản xã hội của bạn",
     "sign_in_with": "Đăng nhập bằng",
-    "meta_description": "Đăng nhập liền mạch vào tài khoản của bạn bằng quy trình đăng nhập thân thiện với người dùng của chúng tôi.",
+    "meta_description": "Đăng nhập liền mạch vào tài khoản của bạn bằng quy trình đăng nhập thân thiện với người dùng của chúng tôi",
     "meta_title": "Đăng nhập"
   },
   "CreatePost": {
@@ -49,9 +49,9 @@
     "no_topics": "Không tìm thấy chủ đề nào.",
     "loading_topics": "Đang tải chủ đề...",
     "please_select_a_topic": "Vui lòng chọn một chủ đề cho bài viết của bạn.",
-    "please_enter_text": "Vui lòng nhập một số văn bản cho bài viết của bạn.",
+    "please_enter_text": "Vui lòng nhập một số văn bản cho bài viết của bạn",
     "post_create_success": "Bài viết được tạo thành công!",
-    "post_create_error": "Lỗi tạo bài viết.",
+    "post_create_error": "Lỗi tạo bài viết",
     "error_fetch_topic": "Lỗi khi tìm nạp chủ đề."
   },
   "CreateSignal": {
@@ -63,8 +63,8 @@
     "error_missing_entry": "Hãy nhập giá vào lệnh",
     "error_missing_target": "Hãy nhập giá mục tiêu",
     "error_min_entry": "Giá vào phải lớn hơn 0.0000000001",
-    "error_min_stop": "Giá cắt lỗ phải lớn hơn 0.0000000001.",
-    "error_min_target": "Giá mục tiêu phải lớn hơn 0.0000000001.",
+    "error_min_stop": "Giá cắt lỗ phải lớn hơn 0.0000000001",
+    "error_min_target": "Giá mục tiêu phải lớn hơn 0.0000000001",
     "error_invalid_low_target": "Giá mục tiêu phải cao hơn giá vào lệnh",
     "error_invalid_high_target": "Giá mục tiêu phải thấp hơn giá vào lệnh",
     "error_missing_stop": "Hãy nhập giá cắt lỗ",
@@ -79,15 +79,15 @@
     "description": "Mô tả"
   },
   "BrokerList": {
-    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
+    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận",
     "broker_title": "Danh sách môi giới"
   },
   "Interest": {
     "interest_title": "Bạn quan tâm đến điều gì?",
-    "interest_description": "Chọn ít nhất 1 chủ đề bạn quan tâm để giúp cá nhân hóa trải nghiệm của bạn."
+    "interest_description": "Chọn ít nhất 1 chủ đề bạn quan tâm để giúp cá nhân hóa trải nghiệm của bạn"
   },
   "About": {
-    "about_paragraph": "Chào mừng bạn đến với trang Giới thiệu của chúng tôi! \nChúng tôi là một nhóm gồm những cá nhân đam mê tạo ra phần mềm tuyệt vời.",
+    "about_paragraph": "Chào mừng bạn đến với trang Giới thiệu của chúng tôi! \nChúng tôi là một nhóm gồm những cá nhân đam mê tạo ra phần mềm tuyệt vời",
     "meta_description": "Giới thiệu về mô tả trang",
     "meta_title": "Về",
     "translation_powered_by": "Bản dịch được cung cấp bởi"
@@ -97,7 +97,7 @@
     "made_with": "Làm với"
   },
   "CoursesList": {
-    "course_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận.",
+    "course_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận",
     "course_title": "Khóa học"
   },
   "Dashboard": {
@@ -122,7 +122,7 @@
     "username": "tên tài khoản"
   },
   "Index": {
-    "meta_description": "Next js Boilerplate là mã khởi đầu hoàn hảo cho dự án của bạn. \nXây dựng ứng dụng React của bạn với khung Next.js.",
+    "meta_description": "Next js Boilerplate là mã khởi đầu hoàn hảo cho dự án của bạn. \nXây dựng ứng dụng React của bạn với khung Next.js",
     "meta_title": "Bản trình bày bản tóm tắt Next.js"
   },
   "Portfolio": {
@@ -131,10 +131,10 @@
     "meta_description": "Chào mừng đến với trang danh mục đầu tư của tôi!",
     "meta_title": "danh mục đầu tư",
     "portfolio_name": "Danh mục đầu tư {name}",
-    "presentation": "Chào mừng đến với trang danh mục đầu tư của tôi! \nỞ đây bạn sẽ tìm thấy một bộ sưu tập được tuyển chọn cẩn thận về công việc và thành tích của tôi. \nThông qua danh mục đầu tư này, tôi muốn thể hiện chuyên môn, sự sáng tạo và giá trị mà tôi có thể mang lại cho các dự án của bạn."
+    "presentation": "Chào mừng đến với trang danh mục đầu tư của tôi! \nỞ đây bạn sẽ tìm thấy một bộ sưu tập được tuyển chọn cẩn thận về công việc và thành tích của tôi. \nThông qua danh mục đầu tư này, tôi muốn thể hiện chuyên môn, sự sáng tạo và giá trị mà tôi có thể mang lại cho các dự án của bạn"
   },
   "PortfolioSlug": {
-    "content": "Tạo một bộ tài liệu quảng cáo và các yếu tố xây dựng thương hiệu cho một sự kiện của công ty. \nTạo một chủ đề thống nhất về mặt hình ảnh, bao gồm logo, áp phích, biểu ngữ và nội dung kỹ thuật số. \nTích hợp nhận diện thương hiệu của khách hàng đồng thời truyền tải nó bằng cách tiếp cận hiện đại và sáng tạo. \nThu được phản hồi tích cực từ những người tham dự sự kiện, dẫn đến một sự kiện thành công với mức độ tương tác của người tham gia tăng cao và khả năng hiển thị thương hiệu tăng lên.",
+    "content": "Tạo một bộ tài liệu quảng cáo và các yếu tố xây dựng thương hiệu cho một sự kiện của công ty. \nTạo một chủ đề thống nhất về mặt hình ảnh, bao gồm logo, áp phích, biểu ngữ và nội dung kỹ thuật số. \nTích hợp nhận diện thương hiệu của khách hàng đồng thời truyền tải nó bằng cách tiếp cận hiện đại và sáng tạo. \nThu được phản hồi tích cực từ những người tham dự sự kiện, dẫn đến một sự kiện thành công với mức độ tương tác của người tham gia tăng cao và khả năng hiển thị thương hiệu tăng lên",
     "header": "Danh mục đầu tư {sên}",
     "log_management_powered_by": "Quản lý nhật ký được cung cấp bởi",
     "meta_description": "Mô tả danh mục đầu tư {sên}",
@@ -149,7 +149,7 @@
     "sign_up_link": "Đăng ký"
   },
   "SignUp": {
-    "meta_description": "Dễ dàng tạo tài khoản thông qua quy trình đăng ký trực quan của chúng tôi.",
+    "meta_description": "Dễ dàng tạo tài khoản thông qua quy trình đăng ký trực quan của chúng tôi",
     "meta_title": "Đăng ký"
   },
   "TopBrokers": {
@@ -160,21 +160,21 @@
   },
   "Post": {
     "Explore_More": "Khám phá",
-    "No_Posts_Found": "Không tìm thấy bài viết."
+    "No_Posts_Found": "Không tìm thấy bài viết"
   },
   "CreateProfile": {
     "create_profile_title": "Chi tiết tài khoản",
-    "create_profile_desc": "Vui lòng điền một số thông tin cơ bản về bạn.",
+    "create_profile_desc": "Vui lòng điền một số thông tin cơ bản về bạn",
     "region": "Địa điểm",
     "user_type": "Vai trò",
     "broker": "Tôi là nhà môi giới",
     "investor": "Tôi là nhà đầu tư",
     "error_location": "Vui lòng chọn địa điểm.",
-    "error_user_type": "VVui lòng chọn vai trò người dùng.",
-    "error_missing_nickname": "Please fill out a valid nickname.",
-    "error_invalid_nickname": "Biệt danh phải có từ 8 đến 20 ký tự.",
-    "error_missing_email": "Vui lòng điền một email hợp lệ.",
-    "error_invalid_email": "Địa chỉ email không hợp lệ."
+    "error_user_type": "VVui lòng chọn vai trò người dùng",
+    "error_missing_nickname": "Please fill out a valid nickname",
+    "error_invalid_nickname": "Biệt danh phải có từ 8 đến 20 ký tự",
+    "error_missing_email": "Vui lòng điền một email hợp lệ",
+    "error_invalid_email": "Địa chỉ email không hợp lệ"
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",
@@ -269,7 +269,7 @@
     "False": "Sai",
     "following": "Đang theo dõi",
     "donate_amount": "Số tiền ủng hộ",
-    "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.",
+    "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.00001",
     "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân",
     "Connect": "Kết nối",
     "connect": "kết nối",
@@ -291,17 +291,17 @@
     "joining_fee": "Phí tham gia",
     "free": "Cộng đồng miễn phí",
     "paid": "Cộng đồng trả phí",
-    "error_missing_community_name": "Vui lòng điền tên cộng đồng.",
-    "error_invalid_community_name": "Tên phải có từ 4 đến 40 ký tự.",
-    "error_missing_description": "Vui lòng thêm mô tả cộng đồng.",
-    "error_invalid_description": "Mô tả phải có từ 4 đến 350 ký tự.",
+    "error_missing_community_name": "Vui lòng điền tên cộng đồng",
+    "error_invalid_community_name": "Tên phải có từ 4 đến 40 ký tự",
+    "error_missing_description": "Vui lòng thêm mô tả cộng đồng",
+    "error_invalid_description": "Mô tả phải có từ 4 đến 350 ký tự",
     "error_missing_fee": "Vui lòng điền phí tham gia.",
     "error_joining_fee": "Phí tham gia phải lớn hơn 0.0000000001",
     "joined": "Đã tham gia",
     "pending": "Chờ duyệt",
     "join": "Tham gia",
-    "approve_member_notification": "Thành viên được thêm vào cộng đồng.",
-    "delete_member_notification": "Xóa thành viên thành công.",
+    "approve_member_notification": "Thành viên được thêm vào cộng đồng",
+    "delete_member_notification": "Xóa thành viên thành công",
     "invite new user": "Mời thành viên mới",
     "table_name": "Tên",
     "table_joined": "Tham gia",
@@ -312,8 +312,8 @@
     "private": "Riêng tư",
     "owner": "Chủ cộng đồng",
     "invite_user": "Thêm thành viên mới",
-    "found_no_members": "Không có thành viên.",
-    "community_created_success": "Cộng đồng của bạn đang được tạo.",
+    "found_no_members": "Không có thành viên",
+    "community_created_success": "Cộng đồng của bạn đang được tạo",
     "community_created_fail": "Không thể tạo cộng đồng."
   },
   "FeedTabs": {
@@ -358,15 +358,18 @@
     "review_submitted": "Đã đánh giá",
     "rank_desc": "Xếp hạng được cung cấp bởi Acanet Blockchain",
     "rank_desc_guarantee": "Đảm bảo khách quan 100%",
-    "error_missing_rating": "Vui lòng điền điểm đánh giá.",
-    "review_success": "Đánh giá thành công.",
-    "reivew_fail": "Không thể gửi đánh giá.",
-    "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!"
+    "error_missing_rating": "Vui lòng điền điểm đánh giá",
+    "review_success": "Đánh giá thành công",
+    "reivew_fail": "Không thể gửi đánh giá",
+    "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!",
+    "connect_wallet_error": "Hãy kết nối ví của bạn với Acanet"
   },
   "Wallet": {
-    "connect_wallet": "Kết nối ví của bạn tới Acanet",
-    "donate_success": "Ủng hộ thành công!",
-    "input_donate_amount": "Nhập"
+    "connect_wallet": "Kết nối ví của bạn với Acanet",
+    "donate_success": "Ủng hộ thành công",
+    "donate_fail": "Ủng hộ thất bại",
+    "input_donate_amount": "Nhập",
+    "connect_wallet_error": "Hãy kết nối ví của bạn với Acanet"
   },
   "Connect_investor": {
     "friend_request": "Yêu cầu kết nối",
@@ -378,14 +381,15 @@
     "discover_tab": "Khám phá",
     "history_tab": "Lịch sử",
     "signal_station_title": "Trạm Signal",
-    "no_signal_found": "Không có signal."
+    "no_signal_found": "Không có signal",
+    "flip_turn_depleted": "Bạn đã dùng hết lượt lật"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",
     "you_are_now_a_member_of": "Bạn hiện là thành viên của",
     "your_request_to_join": "Yêu cầu tham gia",
     "has_been_unsuccessful": "không thành công",
-    "your_request_to_create_a paid_group_has_failed._Please_try_again_later.": "Yêu cầu tạo nhóm trả phí của bạn đã thất bại. Vui lòng thử lại sau.",
+    "create_paid_group_failed": "Yêu cầu tạo nhóm trả phí của bạn đã thất bại. Vui lòng thử lại sau",
     "liked_your_post": "đã thích bài viết của bạn",
     "people_liked_your_post": "người đã thích bài viết của bạn",
     "Group": "nhóm",
