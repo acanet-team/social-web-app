@@ -14,6 +14,7 @@ import CountdownTimer from "./CountdownTimer";
 import LuckyDrawEffect from "./LuckyDrawEffect";
 import Link from "next/link";
 import { throwToast } from "@/utils/throw-toast";
+import { setConstantValue } from "typescript";
 
 const SignalCard: React.FC<getSignalCardResponse> = ({
   id,
@@ -35,11 +36,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const [cardDetail, setCardDetail] = useState<getSignalCardResponse>();
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [isLuckyDraw, setIsLuckyDraw] = useState<boolean>(false);
-  const [luckyCoin, setluckyCoin] = useState<number>(100000);
+  const [luckyCoin, setluckyCoin] = useState<number | undefined>(0);
   const [flipDepleted, setFlipDepleted] = useState<boolean>(false);
-  const [countdownDuration, setCountdownDuration] = useState<number>(
-    Date.now() + 24 * 60 * 60 * 1000,
-  );
+  const [countdownDuration, setCountdownDuration] = useState<number | null>(0);
   const [isFollowing, setIsFollowing] = useState<boolean>(
     owner?.followed || false,
   );
@@ -51,8 +50,6 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const [avarageRating, setAverageRating] = useState<number>(0);
 
   useEffect(() => {
-    console.log("cur", curUserId);
-    console.log("owner", brokerId);
     if (readAt || (brokerId && curUserId === brokerId)) {
       setIsFlipped(true);
     }
@@ -85,18 +82,28 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
       try {
         setIsLoading(true);
         const res = await getSignalDetail(id);
+        console.log("resss", res);
+        // setFlipDepleted: field name to be define later
         if (flipDepleted) {
           return throwToast(tSignal("flip_turn_depleted"), "error");
         }
-        if (isLuckyDraw) {
-          setCountdownDuration(Date.now() + 24 * 60 * 60 * 1000);
+        if ((res.data.type = "luckydraw")) {
+          setCountdownDuration(res.data.expiryAt);
+          setluckyCoin(res.data.luckyAmount);
+          if (res.data.expiryAt - Date.now() > 0) {
+            setIsLuckyDraw(true);
+          } else {
+            setIsFlipped(false);
+            setIsLuckyDraw(false);
+            console.log("expiry date must be in the future");
+            return throwToast("Something went wrong", "error");
+          }
         } else {
           console.log("backkkk", res);
           setCardDetail(res.data);
           setSignalType(res.data.type);
           setIsFollowing(res.data.owner.followed);
-          // setFlipDepleted
-          // setluckyCoin
+          setIsLuckyDraw(false);
         }
         setIsFlipped(true);
       } catch (err) {
@@ -130,6 +137,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const onClaimLuckyTokenHandler = () => {
     connectWallet();
   };
+
   return (
     <div
       className={classNames(styles.signal, styles["signal--card"])}
@@ -165,7 +173,6 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
             <CircleLoader />
           </div>
         )}
-        {/* {isLuckyDraw && <LuckyDrawEffect />} */}
         {!isLoading && (
           <div
             className={`
@@ -191,12 +198,14 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                 <div className={styles["lucky-draw__content"]}>
                   <h2 className="text-white">Lucky Draw</h2>
                   <h3 className="text-white">
-                    {luckyCoin.toLocaleString()} ACN
+                    {luckyCoin?.toLocaleString()} ACN
                   </h3>
-                  <CountdownTimer
-                    time={countdownDuration}
-                    onFinish={setIsFlipped}
-                  />
+                  {countdownDuration && (
+                    <CountdownTimer
+                      time={countdownDuration}
+                      onFinish={() => setIsFlipped(false)}
+                    />
+                  )}
                 </div>
                 <button
                   className={styles["claim-btn"]}
@@ -244,7 +253,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                         Target
                       </span>
                       <span className="fw-bold">
-                        {target ? target : cardDetail?.target}
+                        {target
+                          ? target.toLocaleString()
+                          : cardDetail?.target.toLocaleString()}
                       </span>
                     </div>
                     <div
@@ -254,7 +265,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                         Entry
                       </span>
                       <span className="fw-bold">
-                        {entry ? entry : cardDetail?.entry}
+                        {entry
+                          ? entry.toLocaleString()
+                          : cardDetail?.entry.toLocaleString()}
                       </span>
                     </div>
                     <div
@@ -264,7 +277,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                         Stop
                       </span>
                       <span className="fw-bold">
-                        {stop ? stop : cardDetail?.stop}
+                        {stop
+                          ? stop.toLocaleString()
+                          : cardDetail?.stop.toLocaleString()}
                       </span>
                     </div>
                     <div className={styles["signal-graph__vertical_line"]} />

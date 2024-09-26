@@ -1,26 +1,70 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import dayjs, { Dayjs } from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import Select from "@mui/material/Select";
+import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FormHelperText, TextField } from "@mui/material";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { useFormik, Formik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
 import { donateBroker } from "@/api/wallet";
 import { throwToast } from "@/utils/throw-toast";
+import { getSignalPairs } from "@/api/signal";
+import _debounce from "lodash/debounce";
+import styles from "@/styles/modules/signal.module.scss";
+export interface OptionType {
+  description: string;
+  exchange: string;
+  symbol: string;
+  type: string;
+}
 
 export default function CreateSignal() {
   const tSignal = useTranslations("CreateSignal");
-  // fetch from server
-  const options = ["a", "b", "c"];
-  const filter = createFilterOptions<string>();
+  const [options, setOptions] = useState<OptionType[]>([]);
+  const filter = createFilterOptions<OptionType>();
+
+  const removeHtmlTags = (str: string) => {
+    return str.replace(/<\/?[^>]+(>|$)/g, "");
+  };
+
+  // Debounced fetch function
+  const fetchOptions = useCallback(
+    _debounce(async (inputValue: string) => {
+      if (inputValue) {
+        try {
+          const res: any = await getSignalPairs(inputValue);
+          setOptions(res.data);
+        } catch (error) {
+          console.error("Error fetching options:", error);
+        }
+      }
+    }, 500),
+    [],
+  );
+
+  const renderOption = (
+    props: React.HTMLAttributes<HTMLLIElement>,
+    option: OptionType,
+  ): React.ReactNode => {
+    return (
+      <li {...props}>
+        <div className="d-flex gap-sm-5 gap-2">
+          <div className={styles["create-signal__symbol"]}>
+            {removeHtmlTags(option.symbol)}
+          </div>
+          <div className={styles["create-signal__desc"]}>
+            {removeHtmlTags(option.description)}
+          </div>
+        </div>
+      </li>
+    );
+  };
 
   const validationSchema = Yup.object({
     pairs: Yup.string().required(tSignal("error_missing_currency_pairs")),
@@ -99,6 +143,7 @@ export default function CreateSignal() {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
+        console.log("values", values);
         if (values.expiry) {
           const expiryAt = new Date(values.expiry).getTime();
           await donateBroker({
@@ -139,28 +184,55 @@ export default function CreateSignal() {
           <FormControl
             sx={{ width: "100%", minWidth: "160px", marginTop: "1rem" }}
           >
-            <Autocomplete
+            <Autocomplete<OptionType>
               id="pairs"
               options={options}
-              filterOptions={(options, params) => {
+              getOptionLabel={(option) =>
+                removeHtmlTags(option.symbol).toUpperCase()
+              }
+              filterOptions={(options: OptionType[], params) => {
                 const filtered = filter(options, params);
-
                 const { inputValue } = params;
                 // Suggest the creation of a new value
-                const isExisting = options.some(
-                  (option) => inputValue === option,
-                );
+                const isExisting = options.some((option) => {
+                  return (
+                    inputValue.toUpperCase() ===
+                    removeHtmlTags(option.symbol).toUpperCase()
+                  );
+                });
                 if (inputValue !== "" && !isExisting) {
-                  filtered.push(inputValue);
+                  filtered.push({
+                    description: "",
+                    exchange: "",
+                    symbol: inputValue.toUpperCase(),
+                    type: "",
+                  });
+                }
+                if (inputValue === "") {
+                  return [];
                 }
                 return filtered;
               }}
-              value={formik.values.pairs}
+              // filterOptions={filterOptions}
+              value={
+                options.find(
+                  (option) =>
+                    removeHtmlTags(option.symbol).toUpperCase() ===
+                    formik.values.pairs,
+                ) || null
+              }
               onChange={(
-                e: React.ChangeEvent<HTMLInputElement>,
-                newValue: string,
-              ) => formik.setFieldValue("pairs", newValue || e.target.value)}
-              // onBlur={handleBlur("pairs")}
+                event: React.SyntheticEvent<Element, Event>,
+                value: OptionType | null,
+              ) =>
+                formik.setFieldValue(
+                  "pairs",
+                  value ? removeHtmlTags(value.symbol).toUpperCase() : "",
+                )
+              }
+              onInputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                fetchOptions(e?.target?.value)
+              }
               onBlur={formik.handleBlur}
               sx={{
                 "& fieldset": {
@@ -182,6 +254,7 @@ export default function CreateSignal() {
                   color: "#ddd",
                 },
               }}
+              renderOption={renderOption}
               renderInput={(params) => (
                 <TextField label={tSignal("signal_pair")} {...params} />
               )}

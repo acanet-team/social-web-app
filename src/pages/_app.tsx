@@ -1,5 +1,4 @@
 import httpClient from "@/api";
-import { Nunito } from "next/font/google";
 import { type ISession } from "@/api/auth/auth.model";
 import { RouterProgressBar } from "@/components/RouterProgressBar";
 import Loading from "@/context/Loading";
@@ -20,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { WebSocketProvider } from "@/context/websocketProvider";
-import { GuestTokenProvider } from "@/context/guestToken";
 import RootLayout from "@/layout/root";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -32,14 +30,8 @@ type AppPropsWithLayout = AppProps & {
 };
 initWeb3Onboard();
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const nunito = Nunito({ subsets: ["latin"] });
   const getLayout =
-    Component.getLayout ??
-    ((page) => (
-      <RootLayout>
-        <div className={nunito.className}>{page}</div>
-      </RootLayout>
-    ));
+    Component.getLayout ?? ((page) => <RootLayout>{page}</RootLayout>);
 
   return (
     <SessionProvider refetchInterval={10}>

@@ -4,17 +4,15 @@ import styles from "@/styles/modules/countdownTimer.module.scss";
 
 export default function CountdownTimer(props: {
   time: number;
-  onFinish: Dispatch<SetStateAction<boolean>>;
+  onFinish: Dispatch<SetStateAction<void>>;
 }) {
   const renderer = ({
-    hours,
-    minutes,
-    seconds,
+    formatted: { hours, minutes, seconds },
     completed,
-  }: CountdownRenderProps) => {
+  }: any) => {
     if (completed) {
       // Trigger onFinish callback
-      props.onFinish(false);
+      props.onFinish();
       return null;
     } else {
       // Render a countdown
@@ -42,5 +40,5 @@ export default function CountdownTimer(props: {
       );
     }
   };
-  return <Countdown date={props.time} renderer={renderer} />;
+  return <Countdown date={props.time} renderer={renderer} daysInHours={true} />;
 }
