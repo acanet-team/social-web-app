@@ -1,20 +1,22 @@
 .layout-page-list-connect {
   display: flex;
-  justify-content: center;
-  
+  // justify-content: center;
+  flex-wrap: wrap;
 }
 .layout-card-connect {
-  max-width: 210px;
+    max-width: 200px;
   :hover {
     transform: scale(1.02);
   }
 }
 .list-connect {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 30px;
-  justify-content: center;
-  
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  // display: flex;
+  // flex-wrap: wrap;
+  justify-content: start;
+  gap: 20px;
+  justify-items: center;
 }
 .list-connect-newfeed {
   display: grid;

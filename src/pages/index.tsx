@@ -34,7 +34,7 @@ const Home = ({
   const { data: session } = useSession() as any;
   const [isBroker, setIsBroker] = useState<boolean>(false);
   const t = useTranslations("FeedTabs");
-  const isTablet = useMediaQuery({ query: "(max-width:992px)" });
+  const isTablet = useMediaQuery({ query: "(max-width:1220px)" });
   const tPost = useTranslations("CreatePost");
   const [postType, setPostType] = useState<"post" | "signal">("post");
 
@@ -61,7 +61,7 @@ const Home = ({
     <div className="" id={styles.home}>
       <div className="middle-sidebar-left">
         <div className="row feed-body">
-          <div className="col-xl-8 col-xxl-9 col-lg-8">
+          <div className={`col-xl-8 col-xxl-9 col-lg-8}`}>
             <FetchBrokers brokers={topBrokers} />
 
             {/* Tabs */}
@@ -148,9 +148,9 @@ const Home = ({
               curPage={page}
             />
           </div>
-          <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
+
+          <div className={"col-xl-4 col-xxl-3 col-lg-4 ps-lg-0"}>
             {!isTablet && <Friends />}
-            {/* <Contacts /> */}
           </div>
         </div>
       </div>

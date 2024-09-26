@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     secret: "Vsmn1iPTxPak0x3q2+HHSI23ZLX+rZMAoQylm5Uyoew=",
   })) as any;
 
-  console.log("trace =>>>>>>>>", token);
+  // console.log("trace =>>>>>>>>", token);
   if (!token || token.needToLogin) {
     return NextResponse.redirect(new URL("/login", request.nextUrl.origin));
   }
@@ -24,5 +24,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/communities", "/communities/detail/:id*", "/signal"],
+  matcher: [
+    "/",
+    "/communities",
+    "/listrequest",
+    "/profile/:key*",
+    "/communities/detail/:id*",
+    "/signal",
+  ],
 };

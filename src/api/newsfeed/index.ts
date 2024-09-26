@@ -14,7 +14,6 @@ import {
   type ResponseDto,
   type IPost,
   type IBrokers,
-  type ISignal,
 } from "./model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
@@ -71,8 +70,4 @@ export const deleteComment = (commentId: string) => {
 
 export const deletePost = (postId: string) => {
   return httpClient.delete(`/v1/post/${postId}`);
-};
-
-export const getSignalsNewFeed = () => {
-  return httpClient.get<BaseArrayResponse<ISignal>>(`/v1/signal/daily`);
 };

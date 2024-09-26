@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
+import { postConnectRequest } from "@/api/connect";
 import type { IUserInfo } from "@/api/community/model";
 interface TabBannerProps {
   role: boolean;
@@ -21,6 +22,8 @@ interface TabBannerProps {
   dataUserProfile: UserProfile;
   followersCount: number;
   followed: boolean;
+  connectionCount: number;
+  connectStatus: string;
 }
 const Banner: React.FC<TabBannerProps> = ({
   role,
@@ -29,6 +32,8 @@ const Banner: React.FC<TabBannerProps> = ({
   dataUserProfile,
   followersCount,
   followed,
+  connectionCount,
+  connectStatus,
 }) => {
   const t = useTranslations("MyProfile");
   const tRating = useTranslations("Rating");
@@ -57,7 +62,6 @@ const Banner: React.FC<TabBannerProps> = ({
   const coverInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const numbersFollowers = formatNumber(flCount);
-  const numbersConnects = formatNumber(connectCount);
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
@@ -65,13 +69,21 @@ const Banner: React.FC<TabBannerProps> = ({
   const [avarageRating, setAverageRating] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
-  const [isConnectStatus, setIsConnectStatus] = useState<string>("CONNECT");
+  const [connectionStatus, setConnectionStatus] = useState("");
 
   useEffect(() => {
     setPreviewAvatar(dataUser?.photo?.path);
     setPreviewCover(dataUser?.profileCoverPhoto?.path);
     setFlCount(Number(followersCount));
-  }, [dataUser, dataUserProfile, followersCount]);
+    setConnectCount(Number(connectionCount));
+    setConnectionStatus(connectStatus);
+  }, [
+    dataUser,
+    dataUserProfile,
+    followersCount,
+    connectionCount,
+    connectStatus,
+  ]);
 
   const fetchAverageRating = async () => {
     try {
@@ -84,6 +96,21 @@ const Banner: React.FC<TabBannerProps> = ({
     }
   };
 
+  const fetchConnectRequest = async (id: number, action: string) => {
+    try {
+      await postConnectRequest(id, action);
+      if (action === "request") {
+        setConnectionStatus("request_send");
+        console.log("request sent");
+      } else if (action === "cancel_request") {
+        setConnectionStatus("not_connected");
+        console.log("not_connected");
+      }
+      // setIsPendingConnect(!isPendingConnect);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     if (selectedImage && imageType) {
       setOpenImageCrop(true);
@@ -206,19 +233,6 @@ const Banner: React.FC<TabBannerProps> = ({
     } else {
       setFlCount((prevState) => prevState - 1);
     }
-    try {
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onConnectInvestorHandler = async (e: any, investorId: number) => {
-    setIsConnectStatus("Waiting");
-    connectAInvestor({
-      userId: investorId,
-      connectStatus: "",
-      // connectType: isConnecting? "UNCONNECT" : "CONNECT",
-    });
     try {
     } catch (error) {
       console.log(error);
@@ -395,13 +409,14 @@ const Banner: React.FC<TabBannerProps> = ({
             >
               {dataUser?.role?.name === "broker"
                 ? numbersFollowers
-                : dataUser?.role?.name === "investor" && numbersConnects}{" "}
+                : dataUser?.role?.name === "investor" &&
+                  formatNumber(connectCount)}{" "}
               {dataUser?.role?.name === "broker"
                 ? Number(numbersFollowers) > 1
                   ? t("followers")
                   : tBase("follower")
                 : dataUser?.role?.name === "investor" &&
-                  (Number(numbersConnects) > 1 ? t("connect") : t("connects"))}
+                  (Number(connectCount) > 1 ? t("connect") : t("connects"))}
             </div>
           </div>
           {dataUser.role.name === "broker" && (
@@ -430,15 +445,64 @@ const Banner: React.FC<TabBannerProps> = ({
 
         {!role && (
           <div className="d-flex flex-wrap gap-sm-3 gap-2 mt-md-2 mt-3 mt-3 justify-content-sm-start justify-content-center">
-            {dataUser.role.name === "broker" && (
+            {dataUser.role.name === "broker" &&
+              !(connectStatus === "connected") && (
+                <>
+                  <button
+                    onClick={(e) => onFollowBrokerHandler(e, dataUser.id)}
+                    className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
+                  >
+                    {isFollowing ? (
+                      <h4 className="text-white m-0">
+                        <i
+                          className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
+                        ></i>
+                      </h4>
+                    ) : (
+                      <h4 className="text-white m-0">
+                        <i
+                          className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
+                        ></i>
+                      </h4>
+                    )}
+
+                    <span className="font-xss fw-600">
+                      {isFollowing ? t("following") : t("follow")}
+                    </span>
+                  </button>
+                </>
+              )}
+
+            {dataUser.role.name === "broker" && dataUser.walletAddress && (
+              <button
+                className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
+                onClick={() => setOpenDonate(true)}
+              >
+                <i className="bi bi-cash-coin text-success me-1"></i>
+                <span>{t("donate")}</span>
+              </button>
+            )}
+
+            {(dataUser.role.name === "investor" ||
+              connectStatus === "connected") && (
               <>
                 <button
-                  onClick={(e) => onFollowBrokerHandler(e, dataUser.id)}
-                  className={`px-3 ${isFollowing ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
+                  onClick={() =>
+                    fetchConnectRequest(
+                      Number(idParam),
+                      connectionStatus === "not_connected"
+                        ? "request"
+                        : connectionStatus === "request_send"
+                          ? "cancel_request"
+                          : "",
+                    )
+                  }
+                  className={`px-3 ${connectionStatus === "connected" ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
                 >
-                  {isFollowing ? (
-                    <h4 className="text-white m-0">
+                  {connectionStatus === "connected" ? (
+                    <h4 className=" m-0">
                       <i
+                        style={{ color: "white" }}
                         className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
                       ></i>
                     </h4>
@@ -451,50 +515,13 @@ const Banner: React.FC<TabBannerProps> = ({
                   )}
 
                   <span className="font-xss fw-600">
-                    {isFollowing ? t("following") : t("follow")}
-                  </span>
-                </button>
-              </>
-            )}
-
-            {dataUser.role.name === "broker" && dataUser.walletAddress && (
-              <button
-                className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
-                onClick={() => setOpenDonate(true)}
-              >
-                <i className="bi bi-cash-coin text-success me-1"></i>
-                <span>{t("donate")}</span>
-              </button>
-            )}
-
-            {dataUser.role.name === "investor" && (
-              <>
-                <button
-                  onClick={(e) => onConnectInvestorHandler(e, dataUser.id)}
-                  className={`px-3 ${isConnectStatus === "CONNECTING" ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
-                >
-                  {isConnectStatus === "CONNECTING" && (
-                    <h4 className="text-white m-0">
-                      <i
-                        className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
-                      ></i>
-                    </h4>
-                  )}
-                  {(isConnectStatus === "CONNECT" ||
-                    isConnectStatus === "Waiting") && (
-                    <h4 className="text-white m-0">
-                      <i
-                        className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
-                      ></i>
-                    </h4>
-                  )}
-
-                  <span className="font-xss fw-600">
-                    {isConnectStatus === "CONNECTING"
+                    {connectionStatus === "connected"
                       ? t("connecting")
-                      : isConnectStatus === "CONNECT"
+                      : connectionStatus === "not_connected"
                         ? t("Connect")
-                        : t("waiting")}
+                        : connectionStatus === "request_send"
+                          ? t("waiting")
+                          : ""}
                   </span>
                 </button>
               </>

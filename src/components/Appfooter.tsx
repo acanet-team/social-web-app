@@ -8,6 +8,7 @@ export default function Appfooter() {
   const { data: session } = useSession() as any;
   const [userInfo, setUserInfo] = useState<IUser>({} as IUser);
   const [nickName, setNickName] = useState();
+  const [role, setRole] = useState<string>("");
   const userId = session?.user?.id;
   useEffect(() => {
     if (session) {
@@ -16,6 +17,7 @@ export default function Appfooter() {
         ...session.user,
         avatar: session.user?.photo?.path || "/assets/images/user.png",
       });
+      setRole(session?.user?.role?.name);
     }
   }, [session]);
 
@@ -36,16 +38,18 @@ export default function Appfooter() {
       <Link href="/signal" className="nav-content-bttn">
         <i className="feather-trending-up"></i>
       </Link>
-      <Link href="/listrequest" className="nav-content-bttn">
-        <Image
-          src="/assets/images/iconListRequest.svg"
-          alt=""
-          width={25}
-          height={25}
-          className="w25 rounded-circle shadow-xss"
-          style={{ objectFit: "cover" }}
-        />
-      </Link>
+      {!(role === "broker") && (
+        <Link href="/listrequest" className="nav-content-bttn">
+          <Image
+            src="/assets/images/iconListRequest.svg"
+            alt=""
+            width={25}
+            height={25}
+            className="w25 rounded-circle shadow-xss"
+            style={{ objectFit: "cover" }}
+          />
+        </Link>
+      )}
       <Link
         href={nickName ? `/profile/${nickName}` : "#"}
         className="nav-content-bttn"
