@@ -29,3 +29,7 @@ export const getSignalDetail = (cardId: string) => {
 export const getSignalsNewFeed = () => {
   return httpClient.get<BaseArrayResponse<ISignalDaily>>(`/v1/signal/daily`);
 };
+
+export const getSignalPairs = (search: string) => {
+  return httpClient.get(`/v1/signal/symbols?search=${search}`);
+};

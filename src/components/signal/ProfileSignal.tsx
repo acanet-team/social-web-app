@@ -6,7 +6,10 @@ import { getSignalCards } from "@/api/signal";
 import { useTranslations } from "next-intl";
 import type { getSignalCardResponse } from "@/api/signal/model";
 
-export default function ProfileSignal(props: { brokerId: number }) {
+export default function ProfileSignal(props: {
+  brokerId: number;
+  userId: number | undefined;
+}) {
   const tSignal = useTranslations("Signal");
   const [cards, setCards] = useState<getSignalCardResponse[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -28,8 +31,6 @@ export default function ProfileSignal(props: { brokerId: number }) {
         (prev) => [...prev, ...res.data.docs] as getSignalCardResponse[],
       );
       console.log("cards", res.data.docs);
-
-      // setTotalPage(res.data?.meta?.totalPage);
       setHasNextPage(res.data?.meta?.hasNextPage);
     } catch (err) {
       console.error(err);
@@ -103,6 +104,8 @@ export default function ProfileSignal(props: { brokerId: number }) {
                 type={card.type}
                 owner={card.owner}
                 createdAt={card.readAt}
+                brokerId={props.brokerId}
+                curUserId={props.userId}
               />
             </div>
           ))}

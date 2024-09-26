@@ -19,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { WebSocketProvider } from "@/context/websocketProvider";
-import { GuestTokenProvider } from "@/context/guestToken";
 import RootLayout from "@/layout/root";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {

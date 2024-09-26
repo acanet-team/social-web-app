@@ -14,9 +14,12 @@ import DotWaveLoader from "../DotWaveLoader";
 import React from "react";
 import Comments from "./Comments";
 import { useMediaQuery } from "react-responsive";
-import type { IUserInfo } from "@/api/onboard/model";
+import type { IUserInfo } from "@/api/community/model";
 import type { IPostCommunityInfo } from "@/api/community/model";
 import { cleanPath } from "@/utils/Helpers";
+import { useSession } from "next-auth/react";
+import DonateModal from "../profile/DonateModal";
+import type { User } from "@/api/profile/model";
 
 function PostModal(props: {
   groupOwnerId: number | "";
@@ -66,9 +69,12 @@ function PostModal(props: {
   const [likeNum, setLikeNum] = useState<number>(like);
   const [commentNum, setCommentNum] = useState<number>(comment || 0);
   const [expandPost, setExpandPost] = useState<boolean>(false);
+  const [openDonate, setOpenDonate] = useState<boolean>(false);
   const tComment = useTranslations("Comment");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const tBase = useTranslations("Base");
+  const { data: session } = useSession() as any;
+  const [userId, setUserId] = useState<number | undefined>(undefined);
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -102,6 +108,12 @@ function PostModal(props: {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (session) {
+      setUserId(session.user?.id);
+    }
+  }, [session]);
 
   useEffect(() => {
     if (show) {
@@ -243,7 +255,7 @@ function PostModal(props: {
                     height={45}
                     alt="avater"
                     className="shadow-sm rounded-3 w45"
-                    style={{ border: "1px solid #ddd" }}
+                    style={{ border: "1px solid #ddd", objectFit: "cover" }}
                   />
                   <Image
                     src={avatar}
@@ -255,6 +267,7 @@ function PostModal(props: {
                       bottom: "-5px",
                       right: "-5px",
                       border: "1px solid #eee",
+                      objectFit: "cover",
                     }}
                   />
                 </div>
@@ -265,6 +278,7 @@ function PostModal(props: {
                   height={45}
                   alt="avater"
                   className="shadow-sm rounded-circle w45"
+                  style={{ objectFit: "cover" }}
                 />
               )}
             </figure>
@@ -374,6 +388,26 @@ function PostModal(props: {
                 />
               </span>
             </div>
+            <div
+              /* Donate & Share */
+              className="pointer ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss gap-3"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {userId !== postAuthor.userId && postAuthor.walletAddress && (
+                <div
+                  className="d-flex align-items-center cursor-pointer"
+                  onClick={() => setOpenDonate(true)}
+                >
+                  <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
+                  <span className="d-none-xs">Donate</span>
+                </div>
+              )}
+              <div className="d-flex align-items-center cursor-pointer">
+                <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
+                <span className="d-none-xs">Share</span>
+              </div>
+            </div>
           </div>
           {/* All comments */}
           {isLoading && <DotWaveLoader />}
@@ -387,6 +421,13 @@ function PostModal(props: {
               setCommentNum={setCommentNumHandler}
               postAuthor={authorId}
               ref={childRef}
+            />
+          )}
+          {openDonate && (
+            <DonateModal
+              handleClose={() => setOpenDonate(false)}
+              show={openDonate}
+              brokerData={postAuthor as User | IUserInfo}
             />
           )}
         </div>

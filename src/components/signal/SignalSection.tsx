@@ -122,9 +122,6 @@ export default function SignalSection(props: {
       className={`card shadow-xss w-100 border-0 mb-5 nunito-font`}
       style={{ marginTop: "40px" }}
     >
-      {!isLoading && cards?.length === 0 && (
-        <div className="mt-5 text-center">{tSignal("no_signal_found")}</div>
-      )}
       <div className={styles["card_container"]}>
         {cards?.length > 0 &&
           cards.map((card) => (
@@ -145,7 +142,16 @@ export default function SignalSection(props: {
             </div>
           ))}
       </div>
-      {isLoading && <DotWaveLoader />}
+      {!isLoading && cards?.length === 0 && (
+        <div className={`${styles["no-signal"]} mb-5 text-center`}>
+          {tSignal("no_signal_found")}
+        </div>
+      )}
+      {isLoading && (
+        <div className="mb-5">
+          <DotWaveLoader />
+        </div>
+      )}
     </div>
   );
 }

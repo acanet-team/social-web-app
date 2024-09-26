@@ -221,7 +221,7 @@ export default function Profile({
         <TabRating brokerData={dataUser} />
       )}
       {dataUser.role.name === "broker" && curTab === TabPnum.Signal && (
-        <ProfileSignal brokerId={dataUser.id} />
+        <ProfileSignal brokerId={dataUser.id} userId={id} />
       )}
     </div>
   );

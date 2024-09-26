@@ -54,11 +54,26 @@
 .card_container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
+  column-gap: 3rem;
+  row-gap: 3.5rem;
   justify-content: center;
   justify-items: center;
   align-items: center;
   padding: 3rem;
+  // Collapse when empty
+  &:empty {
+    height: 0;
+    padding: 0;
+    margin-bottom: 3rem;
+  }
+}
+
+.no-signal {
+  &:empty {
+    height: 0;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 :global(.theme-dark) {
@@ -86,18 +101,30 @@
   }
 }
 
+// Create signal
+.create-signal__symbol {
+  width: 100px;
+  word-break: break-all;
+}
+
+.create-signal__desc {
+  width: 200px;
+  word-wrap: break-word; /* Allows long words to be broken and wrap to the next line */
+  white-space: normal; /* Allows text to wrap normally */
+}
+
 // MEDIA QUERIES
 @media (max-width: 1024px) {
   .card_container {
-    padding: 1rem !important;
-    gap: 1rem !important;
+    padding: 2rem 1rem 1rem 1rem !important;
+    column-gap: 1rem !important;
   }
 }
 
 @media (max-width: 768px) {
   .card_container {
-    padding: 1.5rem !important;
-    gap: 1.5rem !important;
+    padding: 2rem 1.5rem 1.5rem 1.5rem !important;
+    column-gap: 1.5rem !important;
   }
 
   #signal-station .signal-tabs {
@@ -116,5 +143,9 @@
 
   #signal-station .signal-tabs .button-tab {
     padding: 30px 0 !important;
+  }
+
+  .create-signal__desc {
+    width: 100px;
   }
 }

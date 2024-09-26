@@ -1,17 +1,19 @@
-import React from "react";
+import React, { type Dispatch, type SetStateAction } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import styles from "@/styles/modules/countdownTimer.module.scss";
 
-export default function CountdownTimer() {
+export default function CountdownTimer(props: {
+  time: number;
+  onFinish: Dispatch<SetStateAction<void>>;
+}) {
   const renderer = ({
-    hours,
-    minutes,
-    seconds,
+    formatted: { hours, minutes, seconds },
     completed,
-  }: CountdownRenderProps) => {
+  }: any) => {
     if (completed) {
-      // Render a complete state
-      return <span>Time&apos; up!</span>;
+      // Trigger onFinish callback
+      props.onFinish();
+      return null;
     } else {
       // Render a countdown
       return (
@@ -38,7 +40,5 @@ export default function CountdownTimer() {
       );
     }
   };
-  return (
-    <Countdown date={Date.now() + 24 * 60 * 60 * 1000} renderer={renderer} />
-  );
+  return <Countdown date={props.time} renderer={renderer} daysInHours={true} />;
 }

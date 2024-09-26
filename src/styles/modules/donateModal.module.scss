@@ -174,9 +174,14 @@
     gap: 15px;
   }
 
+  .donate-content__mobile {
+    border-radius: 0 !important;
+  }
+
   :global(.theme-dark) {
     .donate-content__mobile {
       background-color: var(--theme-dark-color-bg);
     }
   }
 }
+

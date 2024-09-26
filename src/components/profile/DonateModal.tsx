@@ -11,11 +11,12 @@ import type { User } from "@/api/profile/model";
 import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
 import { ethers } from "ethers";
+import type { IUserInfo } from "@/api/community/model";
 
 function DonateModal(props: {
   show: boolean;
   handleClose: () => void;
-  brokerData: User;
+  brokerData: User | IUserInfo; // Banner: User, Post: IUserInfo
 }) {
   const { show, handleClose, brokerData } = props;
   const t = useTranslations("MyProfile");
@@ -83,12 +84,14 @@ function DonateModal(props: {
         console.log("amount", values.amount);
         if (!account) {
           connectWallet();
-          handleClose();
+          throwToast(tWallet("connect_wallet_error"), "error");
+          return handleClose();
         }
-        if (brokerData.wallet_address && donateUser) {
+        if (brokerData.walletAddress && donateUser) {
           await donateContract.donate(
-            brokerData.wallet_address,
-            brokerData.id.toString(),
+            brokerData.walletAddress,
+            (brokerData as User).id?.toString() ||
+              (brokerData as IUserInfo).userId?.toString(),
             donateUser.toString(),
             {
               from: account?.address,
@@ -101,6 +104,8 @@ function DonateModal(props: {
         handleClose();
       } catch (err) {
         console.log(err);
+        throwToast(tWallet("donate_fail"), "error");
+        handleClose();
       }
     },
   });
@@ -170,7 +175,7 @@ function DonateModal(props: {
             {isDonateInputSelected && (
               <div>
                 <TextField
-                  type="number"
+                  type="string"
                   name="amount"
                   value={formik.values.amount}
                   // placeholder={t("donate_input")}
@@ -187,9 +192,11 @@ function DonateModal(props: {
                   //   )
                   // }
                   onBlur={formik.handleBlur}
-                  onChange={(e) =>
-                    formik.setFieldValue("amount", Number(e.target.value))
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/,/g, ".");
+                    const numericValue = value.replace(/[^0-9.]/g, "");
+                    formik.setFieldValue("amount", numericValue);
+                  }}
                   InputProps={{
                     style: {
                       borderRadius: "5px",

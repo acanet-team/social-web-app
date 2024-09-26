@@ -49,7 +49,7 @@ export const TopBrokers = (props: {
       className={styles["image-slider-container"]}
       id={styles["top-brokers"]}
     >
-      <div className="card w140 h210 d-block border-0 shadow-md bg-light rounded-3 overflow-hidden my-3 me-3">
+      <div className="card w140 h210 d-block border-0 shadow-md bg-light rounded-xxl overflow-hidden mb-3 me-3">
         <div className="card-body d-block w-100 ps-4 pe-4 pb-4 text-center">
           <Link href={`/profile/${brokerId}`}>
             <figure className="avatar overflow-hidden ms-auto me-auto mb-0 position-relative w75 z-index-1">

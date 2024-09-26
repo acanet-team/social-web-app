@@ -61,7 +61,7 @@ export default function Brokers(props: { onNextHandler: () => void }) {
             rank={b.rank}
           />
         ))}
-      <div style={{ marginBottom: "150px" }}>
+      <div className={styles["brokers-pagination"]}>
         <Pagination
           pageUpdateFn={setPage}
           page={page}

@@ -6,7 +6,7 @@ import { getMyPosts } from "@/api/profile";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { cleanPath } from "@/utils/Helpers";
 import { id } from "ethers/lib/utils";
-import type { IPostCommunityInfo } from "@/api/community/model";
+import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 
 const TabPostProfile = (props: {
   take: number;
@@ -103,7 +103,7 @@ const TabPostProfile = (props: {
               <PostCard
                 groupOwnerId={""}
                 community={myPost.community as IPostCommunityInfo}
-                postAuthor={myPost.user}
+                postAuthor={myPost.user as IUserInfo}
                 postId={myPost.id}
                 content={myPost.content}
                 assets={myPost.assets}

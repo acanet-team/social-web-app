@@ -412,9 +412,7 @@ const Notifications: React.FC<NotificationProps> = ({
               <span
                 className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
               >
-                {t(
-                  "your_request_to_create_a paid_group_has_failed._Please_try_again_later.",
-                )}
+                {t("create_paid_group_failed")}
               </span>
 
               <p

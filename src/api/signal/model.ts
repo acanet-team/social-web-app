@@ -28,6 +28,10 @@ export interface getSignalCardResponse {
   target: string;
   expiryAt: number;
   createdAt: number;
+  luckyAmount?: number | undefined;
+  // These 2 are props
+  brokerId?: number;
+  curUserId?: number | undefined;
 }
 
 export interface ISignalDaily {

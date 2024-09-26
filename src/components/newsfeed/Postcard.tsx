@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/postCard.module.scss";
 import { deletePost, getComments, likeRequest } from "@/api/newsfeed";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
 import { TimeSinceDate } from "@/utils/time-since-date";
 import Image from "next/image";
 import Box from "@mui/material/Box";
@@ -11,15 +9,15 @@ import DotWaveLoader from "../DotWaveLoader";
 import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
 import RoundedNumber from "../RoundedNumber";
-import type { IPost } from "@/api/newsfeed/model";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import PostModal from "./PostModal";
 import { useMediaQuery } from "react-responsive";
 import Comments from "./Comments";
 import { cleanPath } from "@/utils/Helpers";
-import type { IPostCommunityInfo } from "@/api/community/model";
-import type { IUserInfo } from "@/api/onboard/model";
+import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
+import DonateModal from "../profile/DonateModal";
+import type { User } from "@/api/profile/model";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -56,10 +54,6 @@ export default function PostCard(props: {
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [commentNum, setCommentNum] = useState<number>(comment || 0);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
-  // const donateData ={
-  //   wallet_address:
-  //   id: authorId
-  // }
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likeNum, setLikeNum] = useState<number>(like);
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -217,43 +211,53 @@ export default function PostCard(props: {
       className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-sm-4 p-3 mb-3`}
     >
       <div className="card-body p-0 d-flex">
-        <figure className="avatar me-3">
+        <figure className="avatar me-3 d-flex align-items-center justify-content-center">
           {groupAvatar ? (
             <div className="position-relative">
               <Link href={`/communities/detail/${groupId}`}>
                 <Image
                   src={groupAvatar}
-                  width={45}
-                  height={45}
+                  width={50}
+                  height={50}
                   alt="group"
-                  className="shadow-sm rounded-3 w45"
-                  style={{ border: "1px solid #ddd" }}
+                  className={`${styles["group-avatar"]} shadow-sm rounded-3`}
                 />
               </Link>
               <Link href={`/profile/${authorNickname}`}>
                 <Image
                   src={avatar}
-                  width={30}
-                  height={30}
+                  width={40}
+                  height={40}
                   alt="avatar"
-                  className="shadow-sm rounded-circle position-absolute border-1"
+                  className={`${postAuthor.role.name === "broker" ? styles["broker-ava__effect"] : ""} ${styles["author-avatar"]} shadow-sm rounded-circle position-absolute border-1`}
                   style={{
                     bottom: "-5px",
                     right: "-5px",
-                    border: "1px solid #eee",
                   }}
                 />
               </Link>
             </div>
           ) : (
-            <Link href={`/profile/${authorNickname}`}>
+            <Link
+              href={`/profile/${authorNickname}`}
+              className="position-relative"
+            >
               <Image
                 src={avatar}
-                width={45}
-                height={45}
+                width={40}
+                height={40}
                 alt="avater"
-                className="shadow-sm rounded-circle w45"
+                className={`${postAuthor.role.name === "broker" ? styles["broker-ava__effect"] : ""} ${styles["author-avatar"]} shadow-sm rounded-circle`}
               />
+              {postAuthor.role.name === "broker" && (
+                <Image
+                  src="/assets/images/profile/check-mark.svg"
+                  width={24}
+                  height={24}
+                  alt="logo"
+                  className={styles["verified-broker"]}
+                />
+              )}
             </Link>
           )}
         </figure>
@@ -408,10 +412,15 @@ export default function PostCard(props: {
           aria-expanded="false"
           // onClick={() => toggleOpen((prevState) => !prevState)}
         >
-          <div className="d-flex align-items-center cursor-pointer">
-            <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
-            <span className="d-none-xs">Donate</span>
-          </div>
+          {userId !== postAuthor.userId && postAuthor.walletAddress && (
+            <div
+              className="d-flex align-items-center cursor-pointer"
+              onClick={() => setOpenDonate(true)}
+            >
+              <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
+              <span className="d-none-xs">Donate</span>
+            </div>
+          )}
           <div className="d-flex align-items-center cursor-pointer">
             <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
             <span className="d-none-xs">Share</span>
@@ -510,30 +519,6 @@ export default function PostCard(props: {
       )}
       {isMobile && openMobileComments && (
         <PostModal
-          // show={openMobileComments}
-          // handleClose={handleClose}
-          // postId={postId}
-          // userId={userId}
-          // nickName={authorNickname}
-          // avatar={avatar}
-          // content={content}
-          // assets={assets}
-          // authorId={authorId}
-          // authorNickname={authorNickname}
-          // createdAt={createdAt}
-          // columnsCount={columnsCount}
-          // groupAvatar={groupAvatar}
-          // groupName={groupName}
-          // groupOwnerId={groupOwnerId}
-          // groupId={groupId}
-          // like={likeNum}
-          // comment={commentNum}
-          // liked={isLiked}
-          // updateLike={updateLikeHandler}
-          // updateComments={updateCommentHandler}
-          // updateIsLiked={setIsLiked}
-          // setPostHandler={setPostHandler}
-
           groupOwnerId={groupOwnerId}
           show={openMobileComments}
           curUser={userId as number | undefined}
@@ -554,13 +539,13 @@ export default function PostCard(props: {
           setPostHandler={setPostHandler}
         />
       )}
-      {/* {openDonate && (
+      {openDonate && (
         <DonateModal
-          handleClose={handleClose}
+          handleClose={() => setOpenDonate(false)}
           show={openDonate}
-          brokerData={dataUser}
+          brokerData={postAuthor as IUserInfo | User}
         />
-      )} */}
+      )}
     </div>
   );
 }

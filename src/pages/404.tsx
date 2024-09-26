@@ -4,8 +4,9 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Popupchat from "@/components/Popupchat";
 import Appfooter from "@/components/Appfooter";
+import { type InferGetStaticPropsType, type NextPageContext } from "next";
 
-const Custom404 = () => {
+const Custom404 = ({}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const tError = useTranslations("Error");
   const tMenu = useTranslations("NavBar");
   return (
@@ -21,16 +22,14 @@ const Custom404 = () => {
           alt="not found"
         />
         <h1 className="text-center text-grey-600 font-xs mt-3">
-          {/* {tError("not_found")} */}
-          The page you are looking for isn&apos;t available.
+          {tError("not_found")}
         </h1>
         <Link
           href="/"
           className="main-btn text-white text-center mt-3"
           style={{ width: "200px" }}
         >
-          {/* {tMenu("home_page")} */}
-          Home Page
+          {tMenu("home_page")}
         </Link>
       </div>
     </>
@@ -49,3 +48,11 @@ Custom404.getLayout = function getLayout(page: any) {
     </>
   );
 };
+
+export async function getStaticProps(context: NextPageContext) {
+  return {
+    props: {
+      messages: (await import(`@/locales/${context.locale}.json`)).default,
+    },
+  };
+}
