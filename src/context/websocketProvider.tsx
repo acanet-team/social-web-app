@@ -47,7 +47,6 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     const handleMessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       const message = JSON.parse(data.message);
-      // console.log(66666666666, message);
 
       addNotification(message);
       console.log("sockettt", message);

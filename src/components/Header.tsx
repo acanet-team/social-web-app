@@ -31,6 +31,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   const avatarRef = useRef<HTMLImageElement>(null);
   const t = useTranslations("NavBar");
   const [nickName, setNickName] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   const userId = session?.user?.id;
   const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
   const router = useRouter();
@@ -38,15 +39,16 @@ export default function Header(props: { isOnboarding: boolean }) {
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
   // useEffect(() => {
-  //   setNotiSocket(notifications);
+  //   console.log("notifications-yy", notifications);
   // }, [notifications]);
   // console.log("soket", notiSocket);
-  // console.log("notifications-yy", notifications);
 
   useEffect(() => {
     if (session) {
+      // console.log("session", session)
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
       setNickName(session?.user?.userProfile?.nickName);
+      setRole(session?.user?.role?.name);
     }
   }, [session]);
 
@@ -206,7 +208,7 @@ export default function Header(props: { isOnboarding: boolean }) {
         className={`dropdown-menu right-0 ${styles["bg-dropdown-border-noti"]} rounded-3 border-0 shadow-lg ${notiClass}`}
       >
         <Notifications
-          notifications={notifications}
+          notificationsSocket={notifications}
           toggleisNoti={toggleisNoti}
           setReadAllNotis={setReadAllNotis}
           isNoti={isNoti}
@@ -264,25 +266,27 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <span>{t("newsfeed")}</span>
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      href="/listrequest"
-                      className="nav-content-bttn open-font "
-                    >
-                      <div className=" btn-round-md bg-instagram me-3">
-                        <Image
-                          src="/assets/images/iconListRequest.svg"
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="w20 rounded-circle shadow-xss"
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
+                  {!(role === "broker") && (
+                    <li>
+                      <Link
+                        href="/listrequest"
+                        className="nav-content-bttn open-font "
+                      >
+                        <div className=" btn-round-md bg-instagram me-3">
+                          <Image
+                            src="/assets/images/iconListRequest.svg"
+                            alt=""
+                            width={20}
+                            height={20}
+                            className="w20 rounded-circle shadow-xss"
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
 
-                      <span>{t("request_connect")}</span>
-                    </Link>
-                  </li>
+                        <span>{t("request_connect")}</span>
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       href="/brokers"

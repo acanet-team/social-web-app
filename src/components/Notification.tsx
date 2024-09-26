@@ -17,15 +17,17 @@ import PostNotiDetail from "./PostNotiDetal";
 import WaveLoader from "./WaveLoader";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "react-responsive";
+import { postConnectResponse } from "@/api/connect";
+import { throwToast } from "@/utils/throw-toast";
 interface NotificationProps {
-  notifications: Notification[];
+  notificationsSocket: Notification[];
   toggleisNoti: React.Dispatch<React.SetStateAction<boolean>>;
   setReadAllNotis: React.Dispatch<React.SetStateAction<boolean>>;
   isNoti: boolean;
 }
 
 const Notifications: React.FC<NotificationProps> = ({
-  notifications,
+  notificationsSocket,
   toggleisNoti,
   setReadAllNotis,
   isNoti,
@@ -41,9 +43,12 @@ const Notifications: React.FC<NotificationProps> = ({
   const [openPostModal, setOpenPostModal] = useState<string>("");
   const notisListRef = useRef<HTMLDivElement>(null);
   const photo = `/assets/images/default-ava-not-bg.jpg`;
-  useEffect(() => {
-    console.log("notiApi", notis);
-  }, [notis]);
+  // const [showAcceptResConnection, setShowAcceptResConnection] =
+  //   useState<boolean>(false);
+  // const [showRejectResConnection, setShowRejectResConnection] =
+  //   useState<boolean>(false);
+  // const [showConnection, setShowConnection] = useState<boolean>(true);
+
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
     const diffInMs = now - createdAt;
@@ -61,6 +66,46 @@ const Notifications: React.FC<NotificationProps> = ({
       return `${minutes} minute${minutes > 1 ? "s" : ""}`;
     } else {
       return `${seconds} second${seconds > 1 ? "s" : ""}`;
+    }
+  };
+
+  const fetchConnectResponse = async (
+    requestId: string,
+    action: string,
+    idNoti: string,
+  ) => {
+    setIsLoading(true);
+    try {
+      await postConnectResponse(requestId, action);
+      setNotis((prevNotis) =>
+        prevNotis.map((notification) =>
+          notification.id === idNoti
+            ? { ...notification, read_at: Date.now() }
+            : notification,
+        ),
+      );
+      // setNotis((prev) =>
+      //   prev.filter((connectNoti) => connectNoti.id !== idNoti),
+      // );
+      // if (action === "accept") {
+      //   setShowConnection(false);
+      //   setShowAcceptResConnection(true);
+      // } else if (action === "reject") {
+      //   setShowConnection(false);
+      //   setShowRejectResConnection(true);
+      // }
+    } catch (err) {
+      console.error(err);
+      throwToast("Connection was cancelled", "error");
+      setNotis((prevNotis) =>
+        prevNotis.map((notification) =>
+          notification.id === idNoti
+            ? { ...notification, read_at: Date.now() }
+            : notification,
+        ),
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,10 +140,12 @@ const Notifications: React.FC<NotificationProps> = ({
       comment_id?: string;
       community_id: string | UUID;
       notificationCount: number;
+      connection_id: string;
     } | null,
     createdAt: number,
     notiAt: number | null,
     read_at: number | null,
+    id: string,
   ) => {
     switch (type) {
       case "like_post":
@@ -332,7 +379,7 @@ const Notifications: React.FC<NotificationProps> = ({
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  {t("you")} {t("and")}
+                  {t("you")} {t("and")}{" "}
                 </span>
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -390,7 +437,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-gray-700" : "text-grey-900"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -399,6 +446,13 @@ const Notifications: React.FC<NotificationProps> = ({
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
                   {t("sent_you_the_connection")}
+                  {/* {showConnection
+                    ? t("sent_you_the_connection")
+                    : showAcceptResConnection
+                      ? "and you are now connected"
+                      : showRejectResConnection
+                        ? "and you aren't connected"
+                        : ""} */}
                 </span>
               </h5>
               <p
@@ -407,15 +461,41 @@ const Notifications: React.FC<NotificationProps> = ({
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
-              <div className="d-flex align-items-center pt-0 pb-2">
-                <div className="cursor-pointer p-1 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl">
-                  {t("confirm")}
-                </div>
+              {!read_at && (
+                <div className="d-flex align-items-center pt-0 pb-2">
+                  <div
+                    onClick={
+                      additionalData
+                        ? () =>
+                            fetchConnectResponse(
+                              additionalData?.connection_id,
+                              "accept",
+                              id,
+                            )
+                        : undefined
+                    }
+                    className="cursor-pointer p-1 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl"
+                  >
+                    {t("confirm")}
+                  </div>
 
-                <div className="cursor-pointer p-1 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl">
-                  {t("delete")}
+                  <div
+                    onClick={
+                      additionalData
+                        ? () =>
+                            fetchConnectResponse(
+                              additionalData?.connection_id,
+                              "reject",
+                              id,
+                            )
+                        : undefined
+                    }
+                    className="cursor-pointer p-1 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl"
+                  >
+                    {t("delete")}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </>
         );
@@ -429,7 +509,6 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponsVersionDocs<Notification> =
         await getNotifications(page, take);
-      // setNotis(response?.data?.docs);
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           prevNotis,
@@ -437,6 +516,8 @@ const Notifications: React.FC<NotificationProps> = ({
         ) as Notification[];
         return newNotis;
       });
+      // console.log("notiApiiiiiii", response.data.docs);
+      // console.log("notiApiiiiiiiNotis", notis);
       setTotalPages(response?.data?.meta?.totalPage);
     } catch (err) {
       console.error(err);
@@ -444,11 +525,6 @@ const Notifications: React.FC<NotificationProps> = ({
       setIsLoading(false);
     }
   };
-  // useEffect(() => {
-  //   console.log("totalPage", totalPages);
-  //   console.log("page", page);
-  // }, [page, totalPages]);
-
   useEffect(() => {
     if (isNoti === true) {
       fetchNotifications();
@@ -488,21 +564,24 @@ const Notifications: React.FC<NotificationProps> = ({
   }, [page, totalPages]);
 
   useEffect(() => {
-    if (notifications.length > 0) {
+    if (notificationsSocket.length > 0) {
+      // setShowConnection(true)
       setNotis((prevState: Notification[]) => {
         const updatedNotis: Notification[] = prevState.filter(
           (notiApi) =>
-            !notifications.some((notiSocket) => notiSocket.id === notiApi.id),
+            !notificationsSocket.some(
+              (notiSocket) => notiSocket.id === notiApi.id,
+            ),
         );
         const notification: Notification[] = [
-          ...notifications,
+          ...notificationsSocket,
           ...updatedNotis,
         ] as Notification[];
         return notification;
       });
       console.log("Updated notification", notis);
     }
-  }, [notifications]);
+  }, [notificationsSocket]);
 
   const resetPostId = useCallback(() => {
     setOpenPostModal("");
@@ -524,7 +603,6 @@ const Notifications: React.FC<NotificationProps> = ({
         ),
       );
     }
-
     if (
       notificationType === "like_post" ||
       notificationType === "comment_post"
@@ -545,7 +623,8 @@ const Notifications: React.FC<NotificationProps> = ({
       toggleisNoti(false);
     } else if (notificationType === "community_join_reject") {
       router.push(`/communities`);
-    } else if (notificationType === "connection_request") {
+      // } else if (notificationType === "connection_request") {
+      //   router.push(`/profile/${idDetail}`);
     } else {
       console.log("");
     }
@@ -565,7 +644,9 @@ const Notifications: React.FC<NotificationProps> = ({
     checkReadAllNotis();
   }, [notis]);
 
-  // console.log("notissoc", notifications);
+  useEffect(() => {
+    console.log("notissoc", notificationsSocket);
+  }, [notificationsSocket]);
 
   return (
     <div ref={notisListRef} className={`${styles["height-dropdown-menu"]}`}>
@@ -584,8 +665,10 @@ const Notifications: React.FC<NotificationProps> = ({
                 key={notification?.id}
                 style={{
                   height:
-                    notification.type === "connection_request"
-                      ? "108px"
+                    notification.type === "connection_request" &&
+                    !notification.read_at
+                      ? // showConnection
+                        "108px"
                       : "72px",
                   padding: "4px",
                 }}
@@ -621,14 +704,14 @@ const Notifications: React.FC<NotificationProps> = ({
                       } else if (notification?.type === "follow") {
                         readNotis(
                           notification?.id,
-                          String(notification?.user.userId),
+                          String(notification?.user?.nickName),
                           notification?.type,
                           notification?.read_at,
                         );
                       } else if (notification?.type === "connection_accept") {
                         readNotis(
                           notification?.id,
-                          String(notification?.sourceUser.userId),
+                          String(notification?.user?.nickName),
                           notification?.type,
                           notification?.read_at,
                         );
@@ -661,6 +744,7 @@ const Notifications: React.FC<NotificationProps> = ({
                       notification?.createdAt,
                       notification?.notiAt,
                       notification?.read_at,
+                      notification?.id,
                     )}
                   </div>
                   <>

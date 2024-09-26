@@ -40,3 +40,13 @@ export enum ConvertType {
   normal_number = "normal",
   datetime = "datetime",
 }
+
+export enum QuerryConnectionType {
+  requester = "requester",
+  addressee = "addressee",
+}
+
+export enum ConnectionStatus {
+  pending = "pending_request",
+  accepted = "accepted",
+}

@@ -64,71 +64,75 @@ const GetSignalNewFeed = () => {
   return (
     <>
       <Slider {...signalsettingsilder}>
-        <>
-          {signalNewFeed?.length > 0 ? (
-            signalNewFeed.map((signal, index) => {
-              <div className="d-flex pe-5" key={index}>
-                <div className="">
-                  <div className="d-flex justify-content-center">
-                    <Image
-                      src={
-                        signal?.owner?.photo?.path
-                          ? signal?.owner?.photo?.path
-                          : `/assets/images/default-ava-not-bg.jpg`
-                      }
-                      alt=""
-                      width={45}
-                      height={45}
-                      className="rounded-circle"
-                    />
-                  </div>
-                  <span className="m-0 fw-700 font-xssssss">
-                    {signal?.owner?.nickName}
-                  </span>
+        {signalNewFeed?.length > 0 ? (
+          signalNewFeed.map((signal, index) => (
+            <div className="d-flex pe-5" key={index}>
+              <div className="">
+                <div className="d-flex justify-content-center">
+                  <Image
+                    src={
+                      signal?.owner?.photo?.path
+                        ? signal?.owner?.photo?.path
+                        : `/assets/images/default-ava-not-bg.jpg`
+                    }
+                    alt=""
+                    width={45}
+                    height={45}
+                    className="rounded-circle"
+                  />
                 </div>
-                <Image
-                  src={
-                    curTheme === "theme-light"
-                      ? `/assets/images/black-icon-signal.png`
-                      : `/assets/images/white_icon_with_transparent_background.png`
-                  }
-                  alt=""
-                  width={12}
-                  height={12}
-                />
-                <div
-                  className={`d-flex ms-2 border-0 ${signal?.type === "long" ? "bg-green-gradient" : "bg-red-gradiant"} p-3 rounded-xxl`}
-                >
-                  <div>
-                    <p className="m-0 fw-700 font-xsss text-white">
-                      {signal?.signal_pair}
-                    </p>
-                    <p className="m-0 fw-100 font-xsssss text-white">
-                      Expiring on{" "}
-                      <span>{dayjs(signal?.expiryAt).format("DD/MM/YY")}</span>
-                    </p>
-                  </div>
-                  <p
-                    className={`m-0 ms-3 fw-700 ${signal?.type === "long" ? "text-green" : "text-red"}`}
-                  >
-                    {signal?.type?.toUpperCase()}
+                <span className="m-0 fw-700 font-xsssss">
+                  {signal?.owner?.nickName}
+                </span>
+              </div>
+              <Image
+                src={
+                  curTheme === "theme-light"
+                    ? `/assets/images/black-icon-signal.png`
+                    : `/assets/images/white_icon_with_transparent_background.png`
+                }
+                alt=""
+                width={12}
+                height={12}
+              />
+              <div
+                className={`d-flex ms-2 border-0 ${
+                  signal?.type === "long"
+                    ? "bg-green-gradient"
+                    : "bg-red-gradiant"
+                } p-3 rounded-xxl`}
+              >
+                <div>
+                  <p className="m-0 fw-700 font-xsss text-white">
+                    {signal?.signal_pair}
+                  </p>
+                  <p className="m-0 fw-100 font-xsssss text-white">
+                    Expiring on{" "}
+                    <span>{dayjs(signal?.expiryAt).format("DD/MM/YY")}</span>
                   </p>
                 </div>
-              </div>;
-            })
-          ) : (
-            <p className="m-0">No signal</p>
-          )}
-          <Link
-            href="/signal"
-            className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12 font-xsss"
-          >
-            See more
-            <span>
-              <i className="bi bi-arrow-up-right ps-1"></i>
-            </span>
-          </Link>
-        </>
+                <p
+                  className={`m-0 ms-3 fw-700 ${
+                    signal?.type === "long" ? "text-green" : "text-red"
+                  }`}
+                >
+                  {signal?.type?.toUpperCase()}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="m-0">No signal</p>
+        )}
+        <Link
+          href="/signal"
+          className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12 font-xsss"
+        >
+          See more
+          <span>
+            <i className="bi bi-arrow-up-right ps-1"></i>
+          </span>
+        </Link>
       </Slider>
       {isLoading && <CircleLoader />}
     </>
