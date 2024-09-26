@@ -17,3 +17,7 @@ export const getSignalDetail = (cardId: string) => {
     BaseResponse<getSignalCardResponse>
   >(`/v1/signal/read/${cardId}`, {});
 };
+
+export const getSignalPairs = (search: string) => {
+  return httpClient.get(`/v1/signal/symbols?search=${search}`);
+};

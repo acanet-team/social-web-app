@@ -68,7 +68,6 @@ export default function PostCard(props: {
   const [take, setTake] = useState<number>(20);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log("pos", postAuthor);
   // Props
   const groupAvatar = community?.avatar?.path || "";
   const groupId = community?.communityId || "";
@@ -212,7 +211,7 @@ export default function PostCard(props: {
       className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-sm-4 p-3 mb-3`}
     >
       <div className="card-body p-0 d-flex">
-        <figure className="avatar me-3">
+        <figure className="avatar me-3 d-flex align-items-center justify-content-center">
           {groupAvatar ? (
             <div className="position-relative">
               <Link href={`/communities/detail/${groupId}`}>
@@ -236,18 +235,13 @@ export default function PostCard(props: {
                     right: "-5px",
                   }}
                 />
-                {/* {postAuthor.role.name === "broker" && (
-                <Image
-                  src="/assets/images/profile/check-mark.svg"
-                  width={24}
-                  height={24}
-                  alt="logo"
-                />
-              )} */}
               </Link>
             </div>
           ) : (
-            <Link href={`/profile/${authorNickname}`}>
+            <Link
+              href={`/profile/${authorNickname}`}
+              className="position-relative"
+            >
               <Image
                 src={avatar}
                 width={40}
@@ -255,6 +249,15 @@ export default function PostCard(props: {
                 alt="avater"
                 className={`${postAuthor.role.name === "broker" ? styles["broker-ava__effect"] : ""} ${styles["author-avatar"]} shadow-sm rounded-circle`}
               />
+              {postAuthor.role.name === "broker" && (
+                <Image
+                  src="/assets/images/profile/check-mark.svg"
+                  width={24}
+                  height={24}
+                  alt="logo"
+                  className={styles["verified-broker"]}
+                />
+              )}
             </Link>
           )}
         </figure>

@@ -21,11 +21,17 @@
 }
 
 .broker-ava__effect {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
   border: 2px solid #249c09;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.verified-broker {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .post .expand-btn {

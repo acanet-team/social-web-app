@@ -101,6 +101,18 @@
   }
 }
 
+// Create signal
+.create-signal__symbol {
+  width: 100px;
+  word-break: break-all;
+}
+
+.create-signal__desc {
+  width: 200px;
+  word-wrap: break-word; /* Allows long words to be broken and wrap to the next line */
+  white-space: normal; /* Allows text to wrap normally */
+}
+
 // MEDIA QUERIES
 @media (max-width: 1024px) {
   .card_container {
@@ -131,5 +143,9 @@
 
   #signal-station .signal-tabs .button-tab {
     padding: 30px 0 !important;
+  }
+
+  .create-signal__desc {
+    width: 100px;
   }
 }
