@@ -72,7 +72,7 @@ export const About = ({
               justifyContent: "space-between",
             }}
           >
-            <h2 className="m-0 fw-600">{t("about")}</h2>
+            <h2 className="m-0 fw-600">{t("About")}</h2>
             {role === true && (
               <h4>
                 <i

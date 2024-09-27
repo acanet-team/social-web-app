@@ -59,7 +59,7 @@ const AiSummary = ({
   }, []);
 
   useEffect(() => {
-    if (text != summary && readyUpdate) {
+    if (text != summary) {
       setText(summary);
     }
   }, [summary]);
@@ -129,10 +129,10 @@ const AiSummary = ({
         <>
           {expandPost
             ? text
-            : text.length > 20
-              ? text.substring(0, 20) + "..."
+            : text.length > 100
+              ? text.substring(0, 100) + "..."
               : text}
-          {text.length > 20 && !expandPost ? (
+          {text.length > 100 && !expandPost ? (
             <span
               className={"cursor-pointer text-black"}
               onClick={() => setExpandPost((open) => !open)}

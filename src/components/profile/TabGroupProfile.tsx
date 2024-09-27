@@ -15,6 +15,7 @@ const TabGroupProfile = (props: {
   take: number;
   id: number;
 }) => {
+  console.log("id in tab group", props.id);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [communityArr, setCommunityArr] = useState<ICommunity[]>([]);
   const [take, setTake] = useState<number>(props.take);
@@ -32,8 +33,8 @@ const TabGroupProfile = (props: {
       const response = await getCommunities({
         page,
         take,
-        type: isBroker ? "" : "joined",
-        brokerId: isBroker ? idBroker : "",
+        type: isBroker ? "not_joined" : "joined",
+        brokerId: isBroker ? idBroker : idBroker,
         search: "",
         feeType: "",
       });

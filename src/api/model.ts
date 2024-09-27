@@ -130,6 +130,8 @@ export type AllProfileResponse = {
     // rating: string;
     // coursesEnrolledCount: string;
     followed: boolean;
+    connectionsCount: number;
+    connectionStatus: string;
   };
 };
 

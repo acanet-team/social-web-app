@@ -46,6 +46,7 @@ export type Notification = {
     comment_id?: string;
     community_id: string | UUID;
     notificationCount: number;
+    connection_id: string;
   };
   createdAt: number;
 };

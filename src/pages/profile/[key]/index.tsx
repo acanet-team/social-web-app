@@ -24,6 +24,8 @@ export default function Profile({
   interestTopic,
   ssi,
   followed,
+  connectionCount,
+  connectionStatus,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
@@ -31,6 +33,7 @@ export default function Profile({
   const [dtUserProfile, setDtUserProfile] = useState(dataUserProfile);
   const [flCount, setFlCount] = useState(followersCount);
   const [fllowed, setFolowed] = useState(followed);
+  const [connectCount, setConnectCount] = useState(connectionCount);
   const [listInterestTopic, setListInterestTopic] = useState(interestTopic);
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
@@ -38,19 +41,13 @@ export default function Profile({
   const [initialFetch, setInitialFetch] = useState(false);
   const [switchTab, setSwitchTab] = useState<boolean>(false);
   const [curTab, setCurTab] = useState<string>("about");
+  const [connectStatus, setConnectStatus] = useState(connectionStatus);
 
   useEffect(() => {
     if (session) {
       setId(session?.user?.id);
     }
   }, [session]);
-
-  // useEffect(() => {
-  //   setCurTab(
-  //     (dataUser?.role.name === "broker" || dataUser?.role.name === "guest") &&
-  //       "about",
-  //   );
-  // }, [dataUser]);
 
   useEffect(() => {
     if (Number(idUser) === id) {
@@ -84,7 +81,6 @@ export default function Profile({
 
   useEffect(() => {
     if (initialFetch) {
-      console.log("eeeeeee");
       fetchProfileData();
     }
   }, [idUser]);
@@ -99,6 +95,8 @@ export default function Profile({
       setListInterestTopic(interestTopicRes?.data.docs || []);
       setFlCount(dtProfileRes?.data?.followersCount || 0);
       setFolowed(dtProfileRes.data?.followed);
+      setConnectCount(dtProfileRes?.data?.connectionsCount);
+      setConnectStatus(dtProfileRes?.data?.connectionStatus);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -147,6 +145,8 @@ export default function Profile({
           dataUserProfile={dtUserProfile}
           followersCount={flCount}
           followed={fllowed}
+          connectionCount={connectCount}
+          connectStatus={connectStatus}
         />
         <div className={`${styles["group-tabs"]} ${tabClass}`}>
           <div
@@ -199,7 +199,12 @@ export default function Profile({
         />
       )}
       {curTab === TabPnum.Posts && (
-        <TabPostProfile id={String(idUser)} take={TAKE} />
+        <TabPostProfile
+          id={String(idUser)}
+          take={TAKE}
+          isConnected={connectStatus === "connected"}
+          isBroker={dataUser.role.name === "broker"}
+        />
       )}
       {curTab === TabPnum.Communities && (
         <TabGroupProfile
@@ -229,6 +234,7 @@ export async function getServerSideProps(context: NextPageContext) {
     };
   }
   const profileRes = await getProfile(key as string);
+  console.log("profileRes", profileRes);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   return {
@@ -239,6 +245,8 @@ export async function getServerSideProps(context: NextPageContext) {
       dataUser: profileRes?.data?.user || [],
       followersCount: profileRes?.data?.followersCount,
       followed: profileRes?.data?.followed,
+      connectionCount: profileRes?.data?.connectionsCount,
+      connectionStatus: profileRes?.data?.connectionStatus,
       ssi: profileRes?.data?.ssi || null,
       idUser: idUser,
       interestTopic: interestTopic?.data.docs || [],

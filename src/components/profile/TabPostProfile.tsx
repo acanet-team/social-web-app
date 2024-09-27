@@ -9,11 +9,12 @@ import { id } from "ethers/lib/utils";
 import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 
 const TabPostProfile = (props: {
-  // myPosts: any;
   take: number;
   // totalPages: number;
   // curPage: number;
   id: string;
+  isConnected: boolean;
+  isBroker: boolean;
 }) => {
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [take, setTake] = useState<number>(props.take);
@@ -33,14 +34,14 @@ const TabPostProfile = (props: {
         Number(props.id),
       );
       console.log("postsssss", response);
-      setMyPosts((prev) => [...prev, ...response.data.docs]);
-      // setMyPosts((prev: IPost[]) => {
-      //   const newPosts: IPost[] = combineUniqueById(
-      //     prev,
-      //     response.data.docs,
-      //   ) as IPost[];
-      //   return newPosts;
-      // });
+      // setMyPosts((prev) => [...prev, ...response.data.docs]);
+      setMyPosts((prev: IPost[]) => {
+        const newPosts: IPost[] = combineUniqueById(
+          prev,
+          response.data.docs,
+        ) as IPost[];
+        return newPosts;
+      });
       setTotalPage(response.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -95,58 +96,36 @@ const TabPostProfile = (props: {
 
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
-      {!isLoading && myPosts?.length === 0 && (
-        <div className="mt-5 text-center">No posts found.</div>
+      {props.isConnected || props.isBroker ? (
+        myPosts && myPosts.length > 0 ? (
+          myPosts.map((myPost, index) => (
+            <div key={index}>
+              <PostCard
+                groupOwnerId={""}
+                community={myPost.community as IPostCommunityInfo}
+                postAuthor={myPost.user as IUserInfo}
+                postId={myPost.id}
+                content={myPost.content}
+                assets={myPost.assets}
+                createdAt={myPost.createdAt}
+                like={myPost.favoriteCount}
+                comment={myPost.commentCount}
+                columnsCount={
+                  myPost.assets?.length > 3 ? 3 : myPost.assets?.length
+                }
+                liked={myPost.liked}
+                setPostHandler={setMyPosts}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="mt-5 text-center">No posts found.</div>
+        )
+      ) : (
+        <div className="mt-5 text-center">
+          Please connect to see this person&apos;s posts.
+        </div>
       )}
-      {myPosts &&
-        myPosts.length > 0 &&
-        myPosts.map((myPost, index) => (
-          <div key={index}>
-            <PostCard
-              // groupOwnerId=""
-              // groupName=""
-              // groupId=""
-              // groupAvatar={myPost.community?.avatar?.path || ""}
-              // postId={myPost.id}
-              // nickName={
-              //   myPost.user?.nickName ||
-              //   myPost.user?.firstName + " " + myPost.user.lastName
-              // }
-              // authorId={myPost.user?.userId}
-              // authorNickname={myPost.user?.nickName || ""}
-              // avatar={
-              //   myPost.user?.photo?.id
-              //     ? cleanPath(myPost.user?.photo?.path)
-              //     : "/assets/images/user.png"
-              // }
-              // content={myPost.content}
-              // assets={myPost.assets}
-              // createdAt={myPost.createdAt}
-              // like={myPost.favoriteCount}
-              // comment={myPost.commentCount}
-              // columnsCount={
-              //   myPost.assets?.length > 3 ? 3 : myPost.assets?.length
-              // }
-              // liked={myPost.liked}
-              // setPostHandler={setMyPosts}
-
-              groupOwnerId={""}
-              community={myPost.community as IPostCommunityInfo}
-              postAuthor={myPost.user as IUserInfo}
-              postId={myPost.id}
-              content={myPost.content}
-              assets={myPost.assets}
-              createdAt={myPost.createdAt}
-              like={myPost.favoriteCount}
-              comment={myPost.commentCount}
-              columnsCount={
-                myPost.assets?.length > 3 ? 3 : myPost.assets?.length
-              }
-              liked={myPost.liked}
-              setPostHandler={setMyPosts}
-            />
-          </div>
-        ))}
       {isLoading && <DotWaveLoader />}
     </div>
   );

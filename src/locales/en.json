@@ -189,7 +189,7 @@
     "account": "Account",
     "my profile": "My Profile",
     "home_page": "Home Page",
-    "request_connect": "Request Connect"
+    "request_connect": "Connect Request"
   },
   "Community": {
     "community": "Communities",
@@ -377,7 +377,8 @@
     "friend_request": "Friend Request",
     "confirm": "Confirm",
     "delete": "Delete",
-    "see_all": "See All"
+    "see_all": "See All",
+    "no_friend_request": "No friend request"
   },
   "Signal": {
     "discover_tab": "Discover",
