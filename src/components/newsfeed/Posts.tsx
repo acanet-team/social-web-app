@@ -240,6 +240,15 @@ export default function Posts(props: {
   return (
     <>
       <div>
+        {!isLoading &&
+          posts?.length === 0 &&
+          props.feedType === "suggestion" && (
+            <div className="text-center pointer align-items-center lh-26 font-xss mt-5 mb-3">
+              <span className="d-none-xs fw-600 text-grey-700">
+                {t("No_Posts_Found")}
+              </span>
+            </div>
+          )}
         {!isLoading && posts?.length === 0 && props.feedType === "for_you" ? (
           <div>
             <div className="text-center pointer align-items-center lh-26 font-xss mt-5 mb-3">

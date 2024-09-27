@@ -117,7 +117,7 @@ export default function CreateSignal() {
     expiry: Yup.date()
       .required(tSignal("error_missing_expiry"))
       .test("is-future-date", tSignal("error_invalid_expiry"), (value) => {
-        return value && new Date(value) > new Date();
+        return value && new Date(value) >= new Date();
       }),
     entry: Yup.number()
       .transform((value) => (isNaN(value) ? 0 : Number(value)))
@@ -243,10 +243,13 @@ export default function CreateSignal() {
               filterOptions={(options: OptionType[], params) => {
                 console.log("before", options);
                 const { inputValue } = params;
+                if (inputValue === "") {
+                  return options;
+                }
                 // Suggest the creation of a new value
                 const isExisting = options.some((option) => {
                   return (
-                    inputValue.toUpperCase() ===
+                    inputValue?.toUpperCase() ===
                     removeHtmlTags(option.symbol).toUpperCase()
                   );
                 });
@@ -258,9 +261,6 @@ export default function CreateSignal() {
                     type: "",
                   });
                 }
-                // if (inputValue === "") {
-                //   return options;
-                // }
                 console.log("after", options);
                 return options;
               }}
@@ -284,8 +284,11 @@ export default function CreateSignal() {
                   value ? removeHtmlTags(value.symbol).toUpperCase() : "",
                 );
               }}
-              onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setInputValue(e?.target?.value);
+              onInputChange={(
+                e: React.ChangeEvent<HTMLInputElement>,
+                value: string,
+              ) => {
+                setInputValue(e?.target?.value || value);
                 fetchOptions(e?.target?.value);
               }}
               inputValue={inputValue}
@@ -368,6 +371,7 @@ export default function CreateSignal() {
             >
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                  disablePast
                   label={tSignal("expirary_date")}
                   value={formik.values.expiry}
                   onChange={(date) => {
