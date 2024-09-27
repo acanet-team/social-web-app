@@ -20,6 +20,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { WebSocketProvider } from "@/context/websocketProvider";
 import RootLayout from "@/layout/root";
+import ErrorBoundary from "./ErrorBoundary";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -34,6 +35,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     Component.getLayout ?? ((page) => <RootLayout>{page}</RootLayout>);
 
   return (
+    // <ErrorBoundary>
     <SessionProvider refetchInterval={10}>
       <WebSocketProvider>
         <NextIntlClientProvider
@@ -54,6 +56,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         </NextIntlClientProvider>
       </WebSocketProvider>
     </SessionProvider>
+    // </ErrorBoundary>
   );
 }
 

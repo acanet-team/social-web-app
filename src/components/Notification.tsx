@@ -48,7 +48,6 @@ const Notifications: React.FC<NotificationProps> = ({
   // const [showRejectResConnection, setShowRejectResConnection] =
   //   useState<boolean>(false);
   // const [showConnection, setShowConnection] = useState<boolean>(true);
-
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
     const diffInMs = now - createdAt;

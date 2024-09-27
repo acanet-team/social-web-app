@@ -4,7 +4,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import { followABroker } from "@/api/onboard";
 import Ratings from "../Ratings";
-import { getSignalDetail } from "@/api/signal";
+import { claimLuckyToken, getSignalDetail } from "@/api/signal";
 import type { getSignalCardResponse } from "@/api/signal/model";
 import convertDate from "@/utils/convert-date";
 import CircleLoader from "../CircleLoader";
@@ -133,8 +133,14 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
     }
   };
 
-  const onClaimLuckyTokenHandler = () => {
+  const onClaimLuckyTokenHandler = (id: string) => {
     connectWallet();
+    try {
+      claimLuckyToken(id);
+    } catch (err) {
+      console.log(err);
+      throwToast("Can't claim the lucky token", "error");
+    }
   };
 
   return (
@@ -210,7 +216,11 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                 </div>
                 <button
                   className={styles["claim-btn"]}
-                  onClick={onClaimLuckyTokenHandler}
+                  onClick={() =>
+                    onClaimLuckyTokenHandler(
+                      id ? id : cardDetail ? cardDetail.id : "",
+                    )
+                  }
                 >
                   {tSignal("claim_now")}
                 </button>
