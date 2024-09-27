@@ -12,6 +12,7 @@ const TabPostProfile = (props: {
   take: number;
   // totalPages: number;
   // curPage: number;
+  role: boolean;
   id: string;
   isConnected: boolean;
   isBroker: boolean;
@@ -96,7 +97,7 @@ const TabPostProfile = (props: {
 
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
-      {props.isConnected || props.isBroker ? (
+      {props.isConnected || props.isBroker || props.role ? (
         myPosts && myPosts.length > 0 ? (
           myPosts.map((myPost, index) => (
             <div key={index}>

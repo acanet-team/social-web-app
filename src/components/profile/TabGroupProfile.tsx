@@ -104,11 +104,11 @@ const TabGroupProfile = (props: {
 
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
-      {/* {!isLoading && communityArr?.length === 0 && (
-        
-      )} */}
+      {!isLoading && communityArr?.length === 0 && (
+        <div className="text-center mt-5">No community found.</div>
+      )}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {communityArr?.length > 0 ? (
+        {communityArr?.length > 0 &&
           communityArr.map((group, index) => (
             <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
               <CommunityCard
@@ -129,10 +129,7 @@ const TabGroupProfile = (props: {
                 onEditGroupHandler={onEditGroupHandler}
               />
             </div>
-          ))
-        ) : (
-          <div className="text-center mt-5">No community found.</div>
-        )}
+          ))}
       </div>
       {isLoading && <DotWaveLoader />}
       {show && (
