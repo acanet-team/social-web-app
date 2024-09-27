@@ -53,15 +53,16 @@ import type { IConnect } from "@/api/connect/model";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import CircleLoader from "./CircleLoader";
+import { useWebSocket } from "@/context/websocketProvider";
+import { throwToast } from "@/utils/throw-toast";
+import DotLoad from "./WaveLoader";
 
 const TAKE = 9;
 const Friends = () => {
   const t = useTranslations("Connect_investor");
-  const isQuery = useMediaQuery({ query: "(max-width: 1275px)" });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [listConnects, setListConnects] = useState<IConnect[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const { notifications } = useWebSocket();
   const displayName = (firstName: string, lastName: string): string => {
     const firstNameArr = firstName.split(" ");
     const lastNameArr = lastName.split(" ");
@@ -85,7 +86,6 @@ const Friends = () => {
         ) as IConnect[];
         return newListConnects;
       });
-      setTotalPages(response?.data?.meta?.totalPage);
     } catch (err) {
       console.error(err);
     } finally {
@@ -103,6 +103,10 @@ const Friends = () => {
       // console.log("connect response", response);
     } catch (err) {
       console.error(err);
+      throwToast("Connection was cancelled", "error");
+      setListConnects((prev) =>
+        prev.filter((connect) => connect.id !== requestId),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -111,6 +115,33 @@ const Friends = () => {
   useEffect(() => {
     fetchAllConnects(1);
   }, []);
+  const fetchConnects = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const response = await getAllConnect(
+        page,
+        TAKE,
+        "addressee",
+        "pending_request",
+      );
+      setListConnects(response?.data?.docs);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const hasNewConnectionRequest = notifications.some(
+        (notiSocket) => notiSocket.type === "connection_request",
+      );
+      if (hasNewConnectionRequest) {
+        fetchConnects(1);
+      }
+    }
+  }, [notifications]);
 
   return (
     <div className="card px-2 w-100 shadow-xss rounded-3 border-0 mb-sm-3 mb-5 nunito-font">
@@ -165,7 +196,7 @@ const Friends = () => {
                         </span>
                       )}
                       <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-                        @ {value?.requester?.nickName}
+                        @{value?.requester?.nickName}
                       </span>
                       {/* <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
                     {value.friend} mutual friends
@@ -203,7 +234,7 @@ const Friends = () => {
         ) : (
           <div className="text-center py-5">{t("no_friend_request")}</div>
         )}
-        {isLoading && <CircleLoader />}
+        {isLoading && <DotLoad />}
       </div>
     </div>
   );

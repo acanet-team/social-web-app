@@ -32,9 +32,9 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
-@media (max-width: 650px) {
+@media (max-width: 435px) {
   .height-dropdown-menu {
     min-height: calc(100vh - 135px);
     height: calc(100vh - 135px);
