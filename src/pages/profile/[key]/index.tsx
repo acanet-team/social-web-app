@@ -204,6 +204,7 @@ export default function Profile({
           take={TAKE}
           isConnected={connectStatus === "connected"}
           isBroker={dataUser.role.name === "broker"}
+          role={role}
         />
       )}
       {curTab === TabPnum.Communities && (
@@ -234,7 +235,7 @@ export async function getServerSideProps(context: NextPageContext) {
     };
   }
   const profileRes = await getProfile(key as string);
-  console.log("profileRes", profileRes);
+  console.log("profileRes", profileRes.data.user.role);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   return {

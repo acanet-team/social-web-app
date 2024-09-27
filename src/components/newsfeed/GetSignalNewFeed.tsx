@@ -63,9 +63,10 @@ const GetSignalNewFeed = () => {
 
   return (
     <>
-      <Slider {...signalsettingsilder}>
-        {signalNewFeed?.length > 0 ? (
-          signalNewFeed.map((signal, index) => (
+      {signalNewFeed?.length > 0 && (
+        <Slider {...signalsettingsilder}>
+          {/* {signalNewFeed?.length > 0 ? ( */}
+          {signalNewFeed.map((signal, index) => (
             <div className="d-flex pe-5" key={index}>
               <div className="">
                 <div className="d-flex justify-content-center">
@@ -121,20 +122,21 @@ const GetSignalNewFeed = () => {
                 </p>
               </div>
             </div>
-          ))
-        ) : (
+          ))}
+          {/* ) : (
           <p className="m-0">No signal</p>
-        )}
-        <Link
-          href="/signal"
-          className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12 font-xsss"
-        >
-          See more
-          <span>
-            <i className="bi bi-arrow-up-right ps-1"></i>
-          </span>
-        </Link>
-      </Slider>
+        )} */}
+          <Link
+            href="/signal"
+            className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12 font-xsss"
+          >
+            See more
+            <span>
+              <i className="bi bi-arrow-up-right ps-1"></i>
+            </span>
+          </Link>
+        </Slider>
+      )}
       {isLoading && <CircleLoader />}
     </>
   );

@@ -36,6 +36,7 @@ const AiSummary = ({
   const [summary, setSummary] = useState<string | null>();
   const [text, setText] = useState<string | null>();
   const [readyUpdate, setReadyUpdate] = useState(false);
+  // console.log("setSummary", interestTopics)
   useEffect(() => {
     setInterestTopics(dataBrokerProfile?.interestTopics ?? []);
     setSkills(dataBrokerProfile?.skills ?? []);

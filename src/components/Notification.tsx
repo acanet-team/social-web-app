@@ -84,13 +84,13 @@ const Notifications: React.FC<NotificationProps> = ({
     } catch (err) {
       console.error(err);
       throwToast("Connection was cancelled", "error");
-      setNotis((prevNotis) =>
-        prevNotis.map((notification) =>
-          notification.id === idNoti
-            ? { ...notification, read_at: Date.now() }
-            : notification,
-        ),
-      );
+      // setNotis((prevNotis) =>
+      //   prevNotis.map((notification) =>
+      //     notification.id === idNoti
+      //       ? { ...notification, read_at: Date.now() }
+      //       : notification,
+      //   ),
+      // );
     } finally {
       setIsLoading(false);
     }
@@ -144,6 +144,7 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               className="w40 rounded-xl"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -188,6 +189,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -233,6 +235,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -269,6 +272,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -300,6 +304,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -332,6 +337,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -364,6 +370,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -401,6 +408,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <span
@@ -427,6 +435,7 @@ const Notifications: React.FC<NotificationProps> = ({
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
+              onError={() => photo}
             />
             <div>
               <h5
@@ -439,13 +448,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
                   {t("sent_you_the_connection")}
-                  {/* {showConnection
-                    ? t("sent_you_the_connection")
-                    : showAcceptResConnection
-                      ? "and you are now connected"
-                      : showRejectResConnection
-                        ? "and you aren't connected"
-                        : ""} */}
                 </span>
               </h5>
               <p
@@ -454,41 +456,40 @@ const Notifications: React.FC<NotificationProps> = ({
                 {/* {getTimeDifference(createdAt)} */}
                 {notiAt ? getTimeDifference(notiAt) : ""}
               </p>
-              {!read_at && (
-                <div className="d-flex align-items-center pt-0 pb-2">
-                  <div
-                    onClick={
-                      additionalData
-                        ? () =>
-                            fetchConnectResponse(
-                              additionalData?.connection_id,
-                              "accept",
-                              id,
-                            )
-                        : undefined
-                    }
-                    className="cursor-pointer p-1 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl"
-                  >
-                    {t("confirm")}
-                  </div>
 
-                  <div
-                    onClick={
-                      additionalData
-                        ? () =>
-                            fetchConnectResponse(
-                              additionalData?.connection_id,
-                              "reject",
-                              id,
-                            )
-                        : undefined
-                    }
-                    className="cursor-pointer p-1 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl"
-                  >
-                    {t("delete")}
-                  </div>
+              <div className="d-flex align-items-center pt-0 pb-2">
+                <div
+                  onClick={
+                    additionalData
+                      ? () =>
+                          fetchConnectResponse(
+                            additionalData?.connection_id,
+                            "accept",
+                            id,
+                          )
+                      : undefined
+                  }
+                  className="cursor-pointer p-1 lh-20 w90 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl"
+                >
+                  {t("confirm")}
                 </div>
-              )}
+
+                <div
+                  onClick={
+                    additionalData
+                      ? () =>
+                          fetchConnectResponse(
+                            additionalData?.connection_id,
+                            "reject",
+                            id,
+                          )
+                      : undefined
+                  }
+                  className="cursor-pointer p-1 lh-20 w90 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl"
+                >
+                  {t("delete")}
+                </div>
+              </div>
             </div>
           </>
         );
@@ -635,7 +636,10 @@ const Notifications: React.FC<NotificationProps> = ({
     } else if (notificationType === "follow") {
       router.push(`/profile/${idDetail}`);
       toggleisNoti(false);
-    } else if (notificationType === "connection_accept") {
+    } else if (
+      notificationType === "connection_accept"
+      // || notificationType === "connection_request"
+    ) {
       router.push(`/profile/${idDetail}`);
       toggleisNoti(false);
     } else if (notificationType === "community_join_reject") {
@@ -726,10 +730,13 @@ const Notifications: React.FC<NotificationProps> = ({
                           notification?.type,
                           notification?.read_at,
                         );
-                      } else if (notification?.type === "connection_accept") {
+                      } else if (
+                        notification?.type === "connection_accept"
+                        // || notification?.type === "connection_request"
+                      ) {
                         readNotis(
                           notification?.id,
-                          String(notification?.user?.nickName),
+                          String(notification?.sourceUser?.nickName),
                           notification?.type,
                           notification?.read_at,
                         );
@@ -772,6 +779,7 @@ const Notifications: React.FC<NotificationProps> = ({
                           width: "10px",
                           height: "10px",
                           minWidth: "10px",
+                          minHeight: "10px",
                         }}
                         className={`dot-count rounded-circle bg-primary`}
                       ></span>
