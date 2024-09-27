@@ -321,7 +321,7 @@ export default function CommunitySection(props: {
         )}
       </div>
       {/* Communities */}
-      <div className="middle-sidebar-left pe-0">
+      <div className={`${styles["community-list"]} middle-sidebar-left pe-0`}>
         <div className="row">
           <div className="col-xl-12">
             <div className="row ps-2 pe-1">
