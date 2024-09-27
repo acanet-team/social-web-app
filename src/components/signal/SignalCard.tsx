@@ -82,32 +82,30 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
       try {
         setIsLoading(true);
         const res = await getSignalDetail(id);
-        console.log("resss", res);
-        // setFlipDepleted: field name to be define later
-        if (flipDepleted) {
-          return throwToast(tSignal("flip_turn_depleted"), "error");
-        }
-        if ((res.data.type = "luckydraw")) {
+        console.log("typeee", res.data.type);
+        if (res.data.type === "luckydraw") {
           setCountdownDuration(res.data.expiryAt);
           setluckyCoin(res.data.luckyAmount);
-          if (res.data.expiryAt - Date.now() > 0) {
-            setIsLuckyDraw(true);
-          } else {
+          if (res.data.expiryAt - Date.now() < 0) {
             setIsFlipped(false);
             setIsLuckyDraw(false);
             console.log("expiry date must be in the future");
             return throwToast("Something went wrong", "error");
           }
+          setIsLuckyDraw(true);
         } else {
-          console.log("backkkk", res);
+          setIsLuckyDraw(false);
+          // console.log("backkkk", res);
           setCardDetail(res.data);
           setSignalType(res.data.type);
           setIsFollowing(res.data.owner.followed);
-          setIsLuckyDraw(false);
         }
         setIsFlipped(true);
       } catch (err) {
         console.log(err);
+        if (err.code === "ER15010") {
+          return throwToast(err.message, "error");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -153,7 +151,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
             styles["card__face--front"],
           )}
         >
-          <span className={styles["view-card__cta"]}>Click to reveal</span>
+          <span className={styles["view-card__cta"]}>
+            {tSignal("reveal_card")}
+          </span>
           <span className={styles["currency_pair"]}>
             {signalPair.toUpperCase()}
           </span>
@@ -196,7 +196,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                 />
 
                 <div className={styles["lucky-draw__content"]}>
-                  <h2 className="text-white">Lucky Draw</h2>
+                  <h2 className="text-white">{tSignal("luck_draw")}</h2>
                   <h3 className="text-white">
                     {luckyCoin?.toLocaleString()} ACN
                   </h3>
@@ -211,7 +211,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                   className={styles["claim-btn"]}
                   onClick={onClaimLuckyTokenHandler}
                 >
-                  Claim Now
+                  {tSignal("claim_now")}
                 </button>
               </div>
             ) : (

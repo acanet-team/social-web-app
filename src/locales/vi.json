@@ -11,7 +11,10 @@
     "followers": "theo dõi",
     "joined": "",
     "pending": "",
-    "join": ""
+    "join": "",
+    "hour": "Giờ",
+    "min": "Phút",
+    "sec": "Giây"
   },
   "Error": {
     "not_found": "Trang bạn đang tìm kiếm không tồn tại"
@@ -382,7 +385,10 @@
     "history_tab": "Lịch sử",
     "signal_station_title": "Trạm Signal",
     "no_signal_found": "Không có signal",
-    "flip_turn_depleted": "Bạn đã dùng hết lượt lật"
+    "flip_turn_depleted": "Bạn đã dùng hết lượt lật",
+    "reveal_card": "Ấn để lật",
+    "luck_draw": "Lá bài may mắn",
+    "claim_now": "Nhận ngay"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",
