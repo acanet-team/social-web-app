@@ -5,7 +5,48 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { v4 as uuidV4 } from "uuid";
 import { ModalSocialMedia } from "@/components/profile/ModalSocialMedia";
-
+export const defaultSocials: SocialMedia[] = [
+  {
+    name: "facebook",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "twitter",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "youtube",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "github",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "linkedin",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "instagram",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "skype",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+  {
+    name: "google",
+    mediaUrl: "",
+    id: `${uuidV4()}`,
+  },
+];
 const SocialMedia = ({
   dataBrokerProfile,
   role,
@@ -23,49 +64,6 @@ const SocialMedia = ({
 
   useEffect(() => {
     if (dataBrokerProfile?.socialMedia?.length === 0) {
-      const defaultSocials: SocialMedia[] = [
-        {
-          name: "facebook",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "twitter",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "youtube",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "github",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "linkedin",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "instagram",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "skype",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-        {
-          name: "google",
-          mediaUrl: "",
-          id: `${uuidV4()}`,
-        },
-      ];
-
       setSocials(defaultSocials);
     } else {
       setSocials(dataBrokerProfile?.socialMedia);

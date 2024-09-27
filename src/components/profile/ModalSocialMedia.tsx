@@ -7,6 +7,7 @@ import { throwToast } from "@/utils/throw-toast";
 import type { BrokerProfile, SocialMedia } from "@/api/profile/model";
 import WaveLoader from "../WaveLoader";
 import { useTranslations } from "next-intl";
+import { defaultSocials } from "./SocialMedia";
 
 interface ModalSocialProp {
   title: string;
@@ -24,8 +25,11 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
   socials,
   setSocials,
 }) => {
+  console.log(`ModalSocialMedia`, socials);
   const t = useTranslations("MyProfile");
-  const [updatedSocials, setUpdatedSocials] = useState<SocialMedia[]>(socials);
+  const [updatedSocials, setUpdatedSocials] = useState<SocialMedia[]>(
+    socials ? socials : defaultSocials,
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const urlFormat = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
