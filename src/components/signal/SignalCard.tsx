@@ -83,6 +83,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
         setIsLoading(true);
         const res = await getSignalDetail(id);
         console.log("typeee", res.data.type);
+        setIsFlipped(true);
         if (res.data.type === "luckydraw") {
           setCountdownDuration(res.data.expiryAt);
           setluckyCoin(res.data.luckyAmount);
@@ -100,11 +101,11 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
           setSignalType(res.data.type);
           setIsFollowing(res.data.owner.followed);
         }
-        setIsFlipped(true);
       } catch (err) {
+        setIsFlipped(false);
         console.log(err);
         if (err.code === "ER15010") {
-          return throwToast(err.message, "error");
+          return throwToast(err.message, "warning");
         }
       } finally {
         setIsLoading(false);
