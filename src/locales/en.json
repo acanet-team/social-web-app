@@ -8,7 +8,10 @@
     "comment": "Comment",
     "comments": "Comments",
     "follower": "follower",
-    "followers": "followers"
+    "followers": "followers",
+    "hour": "Hour",
+    "min": "Min",
+    "sec": "Sec"
   },
   "Error": {
     "not_found": "The page you are looking for isn't available"
@@ -382,7 +385,10 @@
     "history_tab": "History",
     "signal_station_title": "Signal Station",
     "no_signal_found": "No signal found",
-    "flip_turn_depleted": "You've used up all your available flip turns"
+    "flip_turn_depleted": "You've used up all your flip turns",
+    "reveal_card": "Click to reveal",
+    "luck_draw": "Lucky Draw",
+    "claim_now": "Claim Now"
   },
   "Notification": {
     "has_requested_to_join_your": "has requested to join your",
