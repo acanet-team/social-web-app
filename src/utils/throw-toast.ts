@@ -12,10 +12,24 @@ export const throwToast = (message: string, notiType: string) => {
   };
 
   const notify = () => {
-    if (message !== "" && notiType === "success") {
-      toast.success(message, notiConfig);
-    } else if (message !== "" && notiType === "error") {
-      toast.error(message, notiConfig);
+    // if (message !== "" && notiType === "success") {
+    //   toast.success(message, notiConfig);
+    // } else if (message !== "" && notiType === "error") {
+    //   toast.error(message, notiConfig);
+    // }
+    if (message !== "") {
+      if (notiType === "success") {
+        toast.success(message, notiConfig);
+      }
+      if (notiType === "error") {
+        toast.error(message, notiConfig);
+      }
+      if (notiType === "warning") {
+        toast.warning(message, notiConfig);
+      }
+      if (notiType === "info") {
+        toast.info(message, notiConfig);
+      }
     }
   };
 

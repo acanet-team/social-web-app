@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { FormHelperText, TextField } from "@mui/material";
+import { debounce, FormHelperText, TextField } from "@mui/material";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -17,6 +17,7 @@ import { throwToast } from "@/utils/throw-toast";
 import { getSignalPairs } from "@/api/signal";
 import _debounce from "lodash/debounce";
 import styles from "@/styles/modules/signal.module.scss";
+import DotWaveLoader from "../DotWaveLoader";
 export interface OptionType {
   description: string;
   exchange: string;
@@ -27,7 +28,8 @@ export interface OptionType {
 export default function CreateSignal() {
   const tSignal = useTranslations("CreateSignal");
   const [options, setOptions] = useState<OptionType[]>([]);
-  const filter = createFilterOptions<OptionType>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState("");
 
   const removeHtmlTags = (str: string) => {
     return str.replace(/<\/?[^>]+(>|$)/g, "");
@@ -38,23 +40,64 @@ export default function CreateSignal() {
     _debounce(async (inputValue: string) => {
       if (inputValue) {
         try {
+          setIsLoading(true);
           const res: any = await getSignalPairs(inputValue);
+          console.log("create", res);
           setOptions(res.data);
         } catch (error) {
           console.error("Error fetching options:", error);
+        } finally {
+          setIsLoading(false);
         }
       }
     }, 500),
     [],
   );
 
+  // Fetch signal pairs
+  const fetchCurrencyPairs = async (inputValue: string) => {
+    try {
+      setIsLoading(true);
+      console.log("search term", inputValue);
+      const res: any = await getSignalPairs(inputValue);
+      console.log("create", res);
+      setOptions(res.data);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrencyPairs("");
+  }, []);
+
+  // // Debounced fetch function
+  // const debouncedFetchOptions = useCallback(
+  //   _debounce(fetchCurrencyPairs, 500),
+  //   []
+  // );
+
+  // // Immediate fetch function
+  // const fetchOptions = useCallback(
+  //   async (inputValue: string) => {
+  //     if (inputValue) {
+  //       debouncedFetchOptions(inputValue);
+  //     } else {
+  //       fetchCurrencyPairs(inputValue);
+  //     }
+  //   },
+  //   [debouncedFetchOptions]
+  // );
+
   const renderOption = (
     props: React.HTMLAttributes<HTMLLIElement>,
     option: OptionType,
   ): React.ReactNode => {
     return (
-      <li {...props}>
-        <div className="d-flex gap-sm-5 gap-2">
+      <li {...props} key={option.description}>
+        <div className="d-flex gap-md-4 gap-2">
           <div className={styles["create-signal__symbol"]}>
             {removeHtmlTags(option.symbol)}
           </div>
@@ -65,6 +108,8 @@ export default function CreateSignal() {
       </li>
     );
   };
+
+  // const filterOptions = (options: OptionType[]): OptionType[] => options;
 
   const validationSchema = Yup.object({
     pairs: Yup.string().required(tSignal("error_missing_currency_pairs")),
@@ -157,6 +202,7 @@ export default function CreateSignal() {
           });
           throwToast("Signal created!", "success");
           resetForm();
+          setInputValue("");
         }
       } catch (err) {
         console.log(err);
@@ -180,18 +226,22 @@ export default function CreateSignal() {
         }}
       >
         {/* Signal pairs */}
-        <div className="d-flex justify-content-between gap-2 mt-2 flex-xl-row flex-column">
+        <div className="d-flex justify-content-between gap-3 mt-2 flex-xl-row flex-column">
           <FormControl
             sx={{ width: "100%", minWidth: "160px", marginTop: "1rem" }}
           >
-            <Autocomplete<OptionType>
+            <Autocomplete
+              freeSolo
               id="pairs"
               options={options}
               getOptionLabel={(option) =>
-                removeHtmlTags(option.symbol).toUpperCase()
+                typeof option === "string"
+                  ? option
+                  : removeHtmlTags(option.symbol).toUpperCase()
               }
+              loading={isLoading}
               filterOptions={(options: OptionType[], params) => {
-                const filtered = filter(options, params);
+                console.log("before", options);
                 const { inputValue } = params;
                 // Suggest the creation of a new value
                 const isExisting = options.some((option) => {
@@ -201,17 +251,18 @@ export default function CreateSignal() {
                   );
                 });
                 if (inputValue !== "" && !isExisting) {
-                  filtered.push({
+                  options.push({
                     description: "",
                     exchange: "",
                     symbol: inputValue.toUpperCase(),
                     type: "",
                   });
                 }
-                if (inputValue === "") {
-                  return [];
-                }
-                return filtered;
+                // if (inputValue === "") {
+                //   return options;
+                // }
+                console.log("after", options);
+                return options;
               }}
               // filterOptions={filterOptions}
               value={
@@ -224,16 +275,21 @@ export default function CreateSignal() {
               onChange={(
                 event: React.SyntheticEvent<Element, Event>,
                 value: OptionType | null,
-              ) =>
+              ) => {
+                setInputValue(
+                  value ? removeHtmlTags(value.symbol).toUpperCase() : "",
+                );
                 formik.setFieldValue(
                   "pairs",
                   value ? removeHtmlTags(value.symbol).toUpperCase() : "",
-                )
-              }
-              onInputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                fetchOptions(e?.target?.value)
-              }
-              onBlur={formik.handleBlur}
+                );
+              }}
+              onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setInputValue(e?.target?.value);
+                fetchOptions(e?.target?.value);
+              }}
+              inputValue={inputValue}
+              // onBlur={formik.handleBlur}
               sx={{
                 "& fieldset": {
                   minWidth: "160px",
@@ -242,7 +298,8 @@ export default function CreateSignal() {
                   borderRadius: "0",
                 },
                 "& .MuiOutlinedInput-root": {
-                  padding: 0,
+                  // padding: 0,
+                  padding: "0 7.5px",
                 },
                 "& .MuiInputBase-input": {
                   fontSize: "16px",
@@ -267,7 +324,7 @@ export default function CreateSignal() {
             )}
           </FormControl>
 
-          <div className="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-0 mt-md-3">
+          <div className="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-0 mt-md-3">
             {/* Long short type */}
             <FormControl
               // variant="standard"
@@ -342,7 +399,7 @@ export default function CreateSignal() {
         </div>
 
         {/* Entry */}
-        <div className="d-flex justify-content-between flex-sm-row flex-column mt-2 mt-md-3 gap-2">
+        <div className="d-flex justify-content-between flex-sm-row flex-column mt-3 mt-md-3 gap-3">
           <FormControl
             variant="standard"
             sx={{ minWidth: "100px", width: "100%" }}
@@ -482,7 +539,7 @@ export default function CreateSignal() {
           name="description"
           label={tSignal("description")}
           multiline
-          rows={1}
+          rows={2}
           inputProps={{
             maxLength: 100,
           }}
