@@ -78,6 +78,7 @@ const GetSignalNewFeed = () => {
                     alt=""
                     width={45}
                     height={45}
+                    style={{ objectFit: "cover" }}
                     className="rounded-circle"
                   />
                 </div>
@@ -104,7 +105,7 @@ const GetSignalNewFeed = () => {
               >
                 <div>
                   <p className="m-0 fw-700 font-xsss text-white">
-                    {signal?.signal_pair}
+                    {signal?.signalPair}
                   </p>
                   <p className="m-0 fw-100 font-xsssss text-white">
                     Expiring on{" "}

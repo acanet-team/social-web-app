@@ -13,6 +13,8 @@ import { combineUniqueById } from "@/utils/combine-arrs";
 import CircleLoader from "@/components/CircleLoader";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useWebSocket } from "@/context/websocketProvider";
+import { throwToast } from "@/utils/throw-toast";
 
 const TAKE = 9;
 const ListRequest = ({
@@ -29,6 +31,7 @@ const ListRequest = ({
   const [listConnects, setListConnects] = useState<IConnect[]>(listAllConnects);
   const { data: session } = useSession() as any;
   const router = useRouter();
+  const { notifications } = useWebSocket();
 
   useEffect(() => {
     if (session?.user?.role?.name === "broker") {
@@ -79,6 +82,10 @@ const ListRequest = ({
       console.log("connect response", response);
     } catch (err) {
       console.error(err);
+      throwToast("Connection was cancelled", "error");
+      setListConnects((prev) =>
+        prev.filter((connect) => connect.id !== requestId),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -106,6 +113,34 @@ const ListRequest = ({
       }
     };
   }, [page, totalPages]);
+
+  const fetchConnects = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const response = await getAllConnect(
+        page,
+        TAKE,
+        "addressee",
+        "pending_request",
+      );
+      setListConnects(response?.data?.docs);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const hasNewConnectionRequest = notifications.some(
+        (notiSocket) => notiSocket.type === "connection_request",
+      );
+      if (hasNewConnectionRequest) {
+        fetchConnects(1);
+      }
+    }
+  }, [notifications]);
 
   return (
     <div

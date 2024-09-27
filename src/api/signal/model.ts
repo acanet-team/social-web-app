@@ -36,7 +36,7 @@ export interface getSignalCardResponse {
 
 export interface ISignalDaily {
   id: string;
-  signal_pair: string;
+  signalPair: string;
   type: string;
   expiryAt: number;
   owner: {
