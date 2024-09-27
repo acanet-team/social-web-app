@@ -147,7 +147,7 @@ export const Experience = ({
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
-                {company?.length != 0 && (
+                {company?.length > 0 && (
                   <>
                     {iconBack ? (
                       <h4>

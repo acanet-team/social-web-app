@@ -120,7 +120,7 @@ const License = ({
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
-                {licenses.length != 0 && (
+                {licenses.length > 0 && (
                   <>
                     {iconBack ? (
                       <h4>

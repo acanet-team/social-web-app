@@ -108,8 +108,7 @@ const TabGroupProfile = (props: {
         <div className="text-center mt-5">No community found.</div>
       )}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {communityArr &&
-          communityArr.length > 0 &&
+        {communityArr?.length > 0 &&
           communityArr.map((group, index) => (
             <div key={index} className="col-md-6 col-sm-6 pe-2 ps-2 mb-3">
               <CommunityCard

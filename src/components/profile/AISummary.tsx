@@ -36,6 +36,7 @@ const AiSummary = ({
   const [summary, setSummary] = useState<string | null>();
   const [text, setText] = useState<string | null>();
   const [readyUpdate, setReadyUpdate] = useState(false);
+  // console.log("setSummary", interestTopics)
   useEffect(() => {
     setInterestTopics(dataBrokerProfile?.interestTopics ?? []);
     setSkills(dataBrokerProfile?.skills ?? []);
@@ -118,12 +119,17 @@ const AiSummary = ({
             }}
           />
         </div>
-        <h4>
-          <i
-            className="bi bi-box-arrow-down cursor-pointer"
-            onClick={updateSummary}
-          ></i>
-        </h4>
+        <Image
+          src="/assets/images/icons8-refresh-100.png"
+          width={16}
+          height={16}
+          alt=""
+          className=""
+          style={{
+            objectFit: "cover",
+          }}
+          onClick={updateSummary}
+        />
       </div>
       {text ? (
         <>
@@ -204,13 +210,14 @@ const AiSummary = ({
 
       <div className="mb-2">
         <p className="m-0 fw-700 font-xsss">{t("servicesOffer")}</p>
-        {serviceToShow.map((service, index) => (
-          <div key={service.id}>
-            <p className="m-0 fw-500 font-xsss text-gray-follow">
-              {service.interestTopic.topicName}
-            </p>
-          </div>
-        ))}
+        {serviceToShow?.length > 0 &&
+          serviceToShow.map((service, index) => (
+            <div key={service.id}>
+              <p className="m-0 fw-500 font-xsss text-gray-follow">
+                {service.interestTopic.topicName}
+              </p>
+            </div>
+          ))}
         {!showAllServiceOffer && skills.length - serviceToShow.length > 0 && (
           <span onClick={() => setShowAllServiceOffer(true)}>....</span>
         )}
@@ -222,13 +229,14 @@ const AiSummary = ({
       </div>
       <div className="">
         <p className="m-0 fw-700 font-xsss">{t("interestTopic")}</p>
-        {interestToShow.map((topic, index) => (
-          <div key={topic.id}>
-            <p className="m-0 fw-500 font-xsss text-gray-follow">
-              {topic.topicName}
-            </p>
-          </div>
-        ))}
+        {interestToShow?.length > 0 &&
+          interestToShow.map((topic, index) => (
+            <div key={topic.id}>
+              <p className="m-0 fw-500 font-xsss text-gray-follow">
+                {topic.topicName}
+              </p>
+            </div>
+          ))}
         {!showAllInterestTopics &&
           interestTopics.length - interestToShow.length > 0 && (
             <span onClick={() => setShowAllInterestTopics(true)}>....</span>

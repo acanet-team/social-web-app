@@ -58,9 +58,10 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
   const [formData, setFormData] = useState({
     location: dataBrokerProfile.location || "",
     selectedServiceIds: dataBrokerProfile?.skills?.map(
-      (skill) => skill.interestTopic.id,
+      (skill) => skill.interestTopic.id || [],
     ),
-    selectedTopicIds: dataBrokerProfile.interestTopics.map((topic) => topic.id),
+    selectedTopicIds:
+      dataBrokerProfile?.interestTopics?.map((topic) => topic.id) || [],
   });
 
   const [fullscreen, setFullscreen] = useState(
@@ -175,7 +176,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
               <Select
                 multiple
                 displayEmpty
-                value={formData.selectedTopicIds}
+                value={formData.selectedTopicIds || []}
                 onChange={handleChangeSelectTopic}
                 input={<OutlinedInput />}
                 renderValue={(selected) => {
@@ -197,7 +198,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
                 }}
                 MenuProps={MenuProps}
               >
-                {listInterestTopics.map((topic) => (
+                {listInterestTopics?.map((topic) => (
                   <MenuItem key={topic.id} value={topic.id}>
                     {topic.topicName}
                   </MenuItem>
@@ -209,7 +210,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
               <Select
                 multiple
                 displayEmpty
-                value={formData.selectedServiceIds}
+                value={formData.selectedServiceIds || []}
                 onChange={handleChangeSelectService}
                 input={<OutlinedInput />}
                 renderValue={(selected) => {
@@ -223,7 +224,7 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
                   return selected
                     .map(
                       (id) =>
-                        listInterestTopics.find((topic) => topic.id === id)
+                        listInterestTopics?.find((topic) => topic.id === id)
                           ?.topicName,
                     )
                     .filter((name) => name !== undefined)
@@ -231,11 +232,12 @@ const ModalEditOtherInfo: React.FC<ModalEditOtherProps> = ({
                 }}
                 MenuProps={MenuProps}
               >
-                {listInterestTopics.map((topic) => (
-                  <MenuItem key={topic.id} value={topic.id}>
-                    {topic.topicName}
-                  </MenuItem>
-                ))}
+                {listInterestTopics &&
+                  listInterestTopics.map((topic) => (
+                    <MenuItem key={topic.id} value={topic.id}>
+                      {topic.topicName}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
             <p className="m-0 py-1 fw-600 font-xs">{t("location")}</p>

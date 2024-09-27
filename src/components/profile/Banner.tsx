@@ -14,7 +14,6 @@ import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
 import { postConnectRequest } from "@/api/connect";
-import type { IUserInfo } from "@/api/community/model";
 interface TabBannerProps {
   role: boolean;
   dataUser: User;
@@ -42,6 +41,7 @@ const Banner: React.FC<TabBannerProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
   const { rateContract, connectWallet } = useWeb3();
+  // console.log("ádaijf", dataUser.role.name ==="guest")
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -84,6 +84,7 @@ const Banner: React.FC<TabBannerProps> = ({
     connectionCount,
     connectStatus,
   ]);
+  // console.log("Connect", connectCount)
 
   const fetchAverageRating = async () => {
     try {
@@ -409,13 +410,15 @@ const Banner: React.FC<TabBannerProps> = ({
             >
               {dataUser?.role?.name === "broker"
                 ? numbersFollowers
-                : dataUser?.role?.name === "investor" &&
+                : (dataUser?.role?.name === "investor" ||
+                    dataUser.role.name === "guest") &&
                   formatNumber(connectCount)}{" "}
               {dataUser?.role?.name === "broker"
                 ? Number(numbersFollowers) > 1
                   ? t("followers")
                   : tBase("follower")
-                : dataUser?.role?.name === "investor" &&
+                : (dataUser?.role?.name === "investor" ||
+                    dataUser.role.name === "guest") &&
                   (Number(connectCount) > 1 ? t("connect") : t("connects"))}
             </div>
           </div>
@@ -484,7 +487,8 @@ const Banner: React.FC<TabBannerProps> = ({
             )}
 
             {(dataUser.role.name === "investor" ||
-              connectStatus === "connected") && (
+              connectStatus === "connected" ||
+              dataUser.role.name === "guest") && (
               <>
                 <button
                   onClick={() =>
