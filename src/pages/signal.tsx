@@ -17,6 +17,7 @@ const Signal = ({
   const tSignal = useTranslations("Signal");
   const existedSignalIds = cards.map((c) => c.id);
   // console.log("existed", existedSignalIds);
+  console.log("server signals", cards);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;

@@ -38,7 +38,7 @@ export default function SignalSection(props: {
             : "",
       });
       setCards((prev) => [...prev, ...res.data.docs]);
-      // console.log("cards", cards);
+      console.log("client cards", cards);
       setHasNextPage(res.data?.meta?.hasNextPage);
       if (props.tab === SignalStationEnum.discover) {
         const newExistedSignalIds = res.data.docs.map((c) => c.id);
@@ -133,10 +133,11 @@ export default function SignalSection(props: {
                 target={card.target}
                 stop={card.stop}
                 description={card.description}
-                expiryAt={card.expiryAt}
                 readAt={card.readAt && card.readAt}
                 type={card.type}
+                luckyAmount={card.luckyAmount}
                 owner={card.owner}
+                expiryAt={card.expiryAt}
                 createdAt={card.readAt}
               />
             </div>

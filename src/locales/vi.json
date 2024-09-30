@@ -163,7 +163,9 @@
   },
   "Post": {
     "Explore_More": "Khám phá",
-    "No_Posts_Found": "Không tìm thấy bài viết"
+    "No_Posts_Found": "Không tìm thấy bài viết",
+    "donate": "Ủng hộ",
+    "share": "Chia sẻ"
   },
   "CreateProfile": {
     "create_profile_title": "Chi tiết tài khoản",
