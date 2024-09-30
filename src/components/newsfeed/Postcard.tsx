@@ -60,6 +60,7 @@ export default function PostCard(props: {
   const { data: session } = useSession() as any;
   const [userId, setUserId] = useState<number | undefined>(undefined);
   const tBase = useTranslations("Base");
+  const tPost = useTranslations("Post");
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -412,18 +413,18 @@ export default function PostCard(props: {
           aria-expanded="false"
           // onClick={() => toggleOpen((prevState) => !prevState)}
         >
-          {userId !== postAuthor.userId && postAuthor.walletAddress && (
+          {userId !== postAuthor.userId && (
             <div
               className="d-flex align-items-center cursor-pointer"
               onClick={() => setOpenDonate(true)}
             >
               <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
-              <span className="d-none-xs">Donate</span>
+              <span className="d-none-xs">{tPost("donate")}</span>
             </div>
           )}
           <div className="d-flex align-items-center cursor-pointer">
             <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
-            <span className="d-none-xs">Share</span>
+            <span className="d-none-xs">{tPost("share")}</span>
           </div>
         </div>
 

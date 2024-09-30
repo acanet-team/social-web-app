@@ -15,6 +15,7 @@ import LuckyDrawEffect from "./LuckyDrawEffect";
 import Link from "next/link";
 import { throwToast } from "@/utils/throw-toast";
 import { setConstantValue } from "typescript";
+import { id } from "ethers/lib/utils";
 
 const SignalCard: React.FC<getSignalCardResponse> = ({
   id,
@@ -29,16 +30,23 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   type,
   brokerId,
   curUserId,
+  luckyAmount,
 }) => {
   const tBase = useTranslations("Base");
   const tSignal = useTranslations("Signal");
   const { rateContract, connectWallet } = useWeb3();
   const [cardDetail, setCardDetail] = useState<getSignalCardResponse>();
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [isLuckyDraw, setIsLuckyDraw] = useState<boolean>(false);
-  const [luckyCoin, setluckyCoin] = useState<number | undefined>(0);
+  const [isLuckyDraw, setIsLuckyDraw] = useState<boolean>(
+    type ? type === "luckydraw" : false,
+  );
+  const [luckyCoin, setluckyCoin] = useState<number | undefined>(
+    luckyAmount ? luckyAmount : 0,
+  );
   const [flipDepleted, setFlipDepleted] = useState<boolean>(false);
-  const [countdownDuration, setCountdownDuration] = useState<number | null>(0);
+  const [countdownDuration, setCountdownDuration] = useState<number | null>(
+    expiryAt ? expiryAt : 0,
+  );
   const [isFollowing, setIsFollowing] = useState<boolean>(
     owner?.followed || false,
   );
@@ -96,7 +104,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
           setIsLuckyDraw(true);
         } else {
           setIsLuckyDraw(false);
-          // console.log("backkkk", res);
+          console.log("backkkk", res);
           setCardDetail(res.data);
           setSignalType(res.data.type);
           setIsFollowing(res.data.owner.followed);
@@ -136,6 +144,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const onClaimLuckyTokenHandler = (id: string) => {
     connectWallet();
     try {
+      console.log("id", id);
       claimLuckyToken(id);
     } catch (err) {
       console.log(err);
@@ -359,7 +368,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                     <div className="mt-0 ms-2 text-center">
                       <Ratings rating={avarageRating} size={12} />
                       <span className="font-xssss fw-300">Rating: </span>
-                      <span className="font-xsss">{avarageRating}</span>
+                      <span className="font-xsss">
+                        {avarageRating.toFixed(1)}
+                      </span>
                     </div>
                   </div>
                   {(brokerId !== owner?.userId ||

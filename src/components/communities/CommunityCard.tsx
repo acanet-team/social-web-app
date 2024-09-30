@@ -185,7 +185,7 @@ export default function CommunityCard(props: {
           >
             <h3 className="fw-bold fs-3 m-0">{name}</h3>
           </Link>
-          {isBroker && communityType === "owned" && (
+          {isBroker && curUser === ownerId && (
             <i
               className={`${styles["edit-group__btn"]} bi bi-pencil ms-2 cursor-pointer`}
               onClick={() => onEditGroupHandler(groupId)}

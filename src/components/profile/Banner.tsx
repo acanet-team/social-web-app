@@ -430,7 +430,7 @@ const Banner: React.FC<TabBannerProps> = ({
               {/* <i className="bi bi-patch-check h1 m-0"></i> */}
               <Ratings rating={avarageRating} size={18} />
               <div className={`fw-bold ${styles["profile-rating__average"]}`}>
-                Rating: {avarageRating}
+                Rating: {avarageRating.toFixed(1)}
               </div>
               <div
                 style={{ fontSize: "13px" }}
@@ -478,7 +478,7 @@ const Banner: React.FC<TabBannerProps> = ({
                 </>
               )}
 
-            {dataUser.role.name === "broker" && dataUser.walletAddress && (
+            {dataUser.role.name === "broker" && (
               <button
                 className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
                 onClick={() => setOpenDonate(true)}
