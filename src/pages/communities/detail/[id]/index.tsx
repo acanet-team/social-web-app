@@ -9,6 +9,7 @@ import {
 import { useSession } from "next-auth/react";
 import CommunityFeed from "@/components/communities/CommunityFeed";
 import MemberTable from "@/components/communities/MemberTable";
+import { useRouter } from "next/navigation";
 
 const TAKE = 10;
 export default function CommunityView({
@@ -19,10 +20,20 @@ export default function CommunityView({
   groupId,
   pendingRequestNum,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
   const [curTab, setCurTab] = useState<string>("posts");
   const { data: session } = useSession() as any;
   const [pendingRequests, setPendingRequests] =
     useState<number>(pendingRequestNum);
+
+  const handleTabChange = (newTab: string) => {
+    setCurTab(newTab);
+    if (newTab === "posts") {
+      router.push(`/vi/communities/detail/${groupId}`);
+    } else {
+      router.push(`/vi/communities/detail/${groupId}/member`);
+    }
+  };
 
   return (
     <Fragment>
@@ -30,7 +41,7 @@ export default function CommunityView({
         <div className="mb-3">
           <CommunityHeader
             community={communityMetaData}
-            setCurTab={setCurTab}
+            setCurTab={handleTabChange}
             curTab={curTab}
             pendingRequests={pendingRequests}
             groupId={groupId}

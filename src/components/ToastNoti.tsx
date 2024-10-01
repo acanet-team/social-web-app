@@ -1,67 +1,48 @@
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import type { Notification, NotificationType } from "@/api/notification/model";
-import type { UUID } from "crypto";
-import type { BaseArrayResponsVersionDocs } from "@/api/model";
-import { getNotifications, patchReadAll, readNoti } from "@/api/notification";
-import styles from "@/styles/modules/header.module.scss";
-import { combineUniqueById } from "@/utils/combine-arrs";
-import { useRouter } from "next/navigation";
-import PostNotiDetail from "./PostNotiDetal";
-import WaveLoader from "./WaveLoader";
+import { useWebSocket } from "@/context/websocketProvider";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useMediaQuery } from "react-responsive";
+import type { UUID } from "crypto";
 import { postConnectResponse } from "@/api/connect";
-import { throwToast } from "@/utils/throw-toast";
-import { TimeSinceDate } from "@/utils/time-since-date";
-interface NotificationProps {
-  notificationsSocket: Notification[];
-  toggleisNoti: React.Dispatch<React.SetStateAction<boolean>>;
-  setReadAllNotis: React.Dispatch<React.SetStateAction<boolean>>;
-  isNoti: boolean;
-}
+import styles from "@/styles/modules/header.module.scss";
+import { readNoti } from "@/api/notification";
+import { useRouter } from "next/navigation";
+import { useMediaQuery } from "react-responsive";
 
-const Notifications: React.FC<NotificationProps> = ({
-  notificationsSocket,
-  toggleisNoti,
-  setReadAllNotis,
-  isNoti,
-}) => {
+const NotificationToast = () => {
+  const [show, setShow] = useState(false);
+  const [latestNoti, setLatestNoti] = useState<Notification[]>([]);
+  const { notifications } = useWebSocket();
   const t = useTranslations("Notification");
-  const router = useRouter();
-  const [notis, setNotis] = useState<Notification[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const isQuery = useMediaQuery({ query: "(max-width: 650px" });
-  const [take] = useState<number>(isQuery ? 7 : 4);
-  const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [openPostModal, setOpenPostModal] = useState<string>("");
-  const notisListRef = useRef<HTMLDivElement>(null);
-  const getTimeDifference = (createdAt: number) => {
-    const now = Date.now();
-    const diffInMs = now - createdAt;
+  const router = useRouter();
+  const isQuery = useMediaQuery({ query: "(max-width: 650px" });
 
-    const seconds = Math.floor(diffInMs / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const newNoti = notifications[notifications.length - 1];
+      setLatestNoti((prev) => [...prev, newNoti]);
 
-    if (days > 0) {
-      return `${days} day${days > 1 ? "s" : ""}`;
-    } else if (hours > 0) {
-      return `${hours} hour${hours > 1 ? "s" : ""}`;
-    } else if (minutes > 0) {
-      return `${minutes} minute${minutes > 1 ? "s" : ""}`;
-    } else {
-      return `${seconds} second${seconds > 1 ? "s" : ""}`;
+      const timerDelete = setTimeout(() => {
+        setLatestNoti((prev) => prev.slice(1));
+      }, 3000);
+
+      setShow(true);
+      const timer = setTimeout(() => {
+        setShow(false);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(timerDelete);
+      };
     }
-  };
+
+    return () => {};
+  }, [notifications]);
+
+  if (!latestNoti) return null;
 
   const fetchConnectResponse = async (
     requestId: string,
@@ -71,15 +52,8 @@ const Notifications: React.FC<NotificationProps> = ({
     setIsLoading(true);
     try {
       await postConnectResponse(requestId, action);
-      setNotis((prev) =>
-        prev.filter((connectNoti) => connectNoti.id !== idNoti),
-      );
     } catch (err) {
       console.error(err);
-      throwToast("Connection was cancelled", "error");
-      setNotis((prev) =>
-        prev.filter((connectNoti) => connectNoti.id !== idNoti),
-      );
     } finally {
       setIsLoading(false);
     }
@@ -163,11 +137,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   )}
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -216,11 +185,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   )}
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -260,11 +224,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   </span>
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -299,11 +258,6 @@ const Notifications: React.FC<NotificationProps> = ({
                 </span>
                 {community?.name} {t("Group")}
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -339,11 +293,6 @@ const Notifications: React.FC<NotificationProps> = ({
                 </span>{" "}
                 {t("has_been_unsuccessful")}
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -380,11 +329,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   {t("has followed you")}
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -426,11 +370,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   {t("are_now_connected")}
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -460,11 +399,7 @@ const Notifications: React.FC<NotificationProps> = ({
               >
                 {t("create_paid_group_failed")}
               </span>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
+
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -501,18 +436,13 @@ const Notifications: React.FC<NotificationProps> = ({
                   {t("sent_you_the_connection")}
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
                 {notiAt ? TimeSinceDate(notiAt) : ""}
               </p> */}
 
-              <div className="d-flex align-items-center pt-0 pb-2">
+              <div className="d-flex align-items-center pt-2 pb-2">
                 <div
                   onClick={
                     additionalData
@@ -553,115 +483,6 @@ const Notifications: React.FC<NotificationProps> = ({
     }
   };
 
-  const fetchNotifications = async (page: number) => {
-    setIsLoading(true);
-    try {
-      const response: BaseArrayResponsVersionDocs<Notification> =
-        await getNotifications(page, take);
-      setNotis((prevNotis: Notification[]) => {
-        const newNotis: Notification[] = combineUniqueById(
-          prevNotis,
-          response?.data?.docs,
-        ) as Notification[];
-        return newNotis;
-      });
-      // console.log("notiApiiiiiii", response.data.docs);
-      // console.log("notiApiiiiiiiNotis", notis);
-      setTotalPages(response?.data?.meta?.totalPage);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (isNoti === true) {
-      fetchNotifications(1);
-      readAll();
-    }
-  }, [isNoti]);
-
-  useEffect(() => {
-    if (page > 1) {
-      fetchNotifications(page);
-    }
-  }, [page]);
-
-  useEffect(() => {
-    fetchNotifications(1);
-  }, []);
-
-  const onScrollHandlerNoti = () => {
-    if (notisListRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = notisListRef.current;
-      if (scrollTop + clientHeight + 2 >= scrollHeight && page < totalPages) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    }
-  };
-
-  useEffect(() => {
-    const currentList = notisListRef.current;
-    if (currentList && page < totalPages) {
-      currentList.addEventListener("scroll", onScrollHandlerNoti);
-    }
-
-    return () => {
-      if (currentList) {
-        currentList.removeEventListener("scroll", onScrollHandlerNoti);
-      }
-    };
-  }, [page, totalPages]);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      if (notificationsSocket.length > 0) {
-        try {
-          const response: BaseArrayResponsVersionDocs<Notification> =
-            await getNotifications(1, take);
-          setNotis(response.data.docs);
-          console.log("eee");
-        } catch (error) {
-          console.error("Error fetching notifications:", error);
-        }
-      }
-    };
-    fetchNotifications();
-    setReadAllNotis(true);
-  }, [notificationsSocket]);
-
-  // useEffect(() => {
-  //   if (notificationsSocket.length > 0) {
-  //     fetchNotifications(1);
-  //     setNotis((prevState: Notification[]) => {
-  //       const connectionRequestId = notificationsSocket
-  //         .filter((notiSocket) => notiSocket.type === "connection_request")
-  //         .map((notiSocket) => notiSocket.id);
-
-  //       const updatedNotis: Notification[] = prevState.filter(
-  //         (notiApi) =>
-  //           !notificationsSocket.some(
-  //             (notiSocket) => notiSocket.id === notiApi.id,
-  //           ),
-  //       );
-  //       const notification: Notification[] = [
-  //         ...notificationsSocket,
-  //         ...updatedNotis,
-  //       ] as Notification[];
-
-  //       const afterFilterConnetionNotiRequest = notification.filter(
-  //         (noti) => !connectionRequestId.includes(noti.id),
-  //       );
-  //       return afterFilterConnetionNotiRequest;
-  //     });
-  //     console.log("Updated notification", notis);
-  //   }
-  // }, [notificationsSocket]);
-
-  const resetPostId = useCallback(() => {
-    setOpenPostModal("");
-  }, [openPostModal]);
-
   const readNotis = async (
     id: string,
     idDetail: string,
@@ -670,35 +491,23 @@ const Notifications: React.FC<NotificationProps> = ({
   ) => {
     if (read_at === null) {
       await readNoti(id);
-      setNotis((prevNotis) =>
-        prevNotis.map((notification) =>
-          notification.id === id
-            ? { ...notification, read_at: Date.now() }
-            : notification,
-        ),
-      );
     }
     if (
       notificationType === "like_post" ||
       notificationType === "comment_post"
     ) {
-      setOpenPostModal(idDetail);
-      toggleisNoti(false);
     } else if (
       notificationType === "community_join_request" ||
       notificationType === "community_join_accept"
     ) {
       router.push(`/communities/detail/${idDetail}`);
-      toggleisNoti(false);
     } else if (notificationType === "follow") {
       router.push(`/profile/${idDetail}`);
-      toggleisNoti(false);
     } else if (
       notificationType === "connection_accept"
       // || notificationType === "connection_request"
     ) {
       router.push(`/profile/${idDetail}`);
-      toggleisNoti(false);
     } else if (notificationType === "community_join_reject") {
       router.push(`/communities`);
     } else if (notificationType === "community_creation_failed") {
@@ -707,68 +516,43 @@ const Notifications: React.FC<NotificationProps> = ({
       console.log("");
     }
   };
-  // const checkReadAllNotis = () => {
-  //   const allRead = notis.every(
-  //     (notification) => notification.read_at !== null,
-  //   );
-  //   if (allRead) {
-  //     console.log("All notifications are read, updating state.");
-  //     setReadAllNotis(true);
-  //   } else {
-  //     setReadAllNotis(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   checkReadAllNotis();
-  // }, [notis]);
-
-  const readAll = async () => {
-    patchReadAll();
-    setReadAllNotis(false);
-    // toggleisNoti(false);
-  };
-
-  useEffect(() => {
-    console.log("notissoc", notificationsSocket);
-  }, [notificationsSocket]);
 
   return (
-    <div ref={notisListRef} className={`${styles["height-dropdown-menu"]}`}>
-      <div
-        className="d-flex justify-content-between"
-        // style={{ justifyContent: "space-between" }}
-      >
-        <h4 className={`fw-700 mb-4 ${styles["title-dropdown-menu"]}`}>
-          Notification
-        </h4>
-        {/* <div className="font-xsss" onClick={() => readAll()}>
-          Read All
-        </div> */}
-      </div>
-      <div>
-        {notis?.length === 0 ? (
-          <p className="font-xsss text-grey-500 mb-1 mt-0 fw-400 d-block">
-            No Notifications Found
-          </p>
-        ) : (
-          <div>
-            {notis?.map((notification) => (
+    <div className={``}>
+      {latestNoti?.map((notification, index) => (
+        <div
+          key={notification?.id}
+          className={`position-fixed start-0 p-3`}
+          style={{ zIndex: 99, bottom: `${index * 155}px` }}
+        >
+          <div
+            // className={`toast show  bg-white`}
+            className={`toast ${show ? "show" : "hide"}  bg-white`}
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header">
+              <strong className="me-auto">Thông báo mới</strong>
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={() => setShow(false)}
+              ></button>
+            </div>
+            <div className="toast-body">
               <div
-                key={notification?.id}
                 style={{
                   height:
                     notification.type === "connection_request"
-                      ? // && !notification.read_at
-                        "105px"
+                      ? "75px"
                       : notification.type === "community_creation_failed"
-                        ? "95px"
+                        ? "75px"
                         : "70px",
                   padding: "4px",
                 }}
-                className={`card w-100 border-0 mb-1 cursor-pointer  
-                `}
-                //   newNotifications.has(notification.id) ||
-                //  ${!notification?.read_at ? "bg-lightblue" : ""}
+                className={`card w-100 border-0 mb-1 cursor-pointer`}
               >
                 <div className={`${styles["group-card-noti"]}`}>
                   <div
@@ -842,32 +626,26 @@ const Notifications: React.FC<NotificationProps> = ({
                       notification?.read_at,
                       notification?.id,
                     )}
+                    <p
+                      className={`font-xssss fw-600 m-0 ${
+                        !notification?.read_at
+                          ? "text-primary"
+                          : "text-grey-500"
+                      }`}
+                    >
+                      {/* {notification?.notiAt
+                          ? TimeSinceDate(notification?.notiAt)
+                          : ""} */}
+                    </p>
                   </div>
-                  <>
-                    {!notification?.read_at && (
-                      <span
-                        style={{
-                          width: "10px",
-                          height: "10px",
-                          minWidth: "10px",
-                          minHeight: "10px",
-                        }}
-                        className={`dot-count rounded-circle bg-primary`}
-                      ></span>
-                    )}
-                  </>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        )}
-        {isLoading && page > 1 && <WaveLoader />}
-        {openPostModal && (
-          <PostNotiDetail id={openPostModal} resetPostId={resetPostId} />
-        )}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default Notifications;
+export default NotificationToast;

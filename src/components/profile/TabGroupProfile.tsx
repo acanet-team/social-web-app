@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import CommunityCard from "../communities/CommunityCard";
 import type { ICommunity } from "@/api/community/model";
 import DotWaveLoader from "../DotWaveLoader";
-import { getCommunities } from "@/api/community";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import CommunityForm from "../communities/CommunityForm";
+import { getGroups } from "@/api/profile";
 
 const TabGroupProfile = (props: {
   isBroker: boolean;
@@ -15,30 +15,30 @@ const TabGroupProfile = (props: {
   take: number;
   id: number;
 }) => {
-  console.log("id in tab group", props.id);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [communityArr, setCommunityArr] = useState<ICommunity[]>([]);
   const [take, setTake] = useState<number>(props.take);
   const [isBroker, setIsBroker] = useState<boolean>(props.isBroker);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(0);
-  const [type, setType] = useState<string>(props.communityType);
-  const [idBroker, setIdBroker] = useState<number>(props.id);
+  // const [type, setType] = useState<string>(props.communityType);
+  const [idUser, setIdUser] = useState<number>(props.id);
   const [show, setShow] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<string>("");
 
   const fetchCommunities = async (page = 1) => {
     setIsLoading(true);
     try {
-      const response = await getCommunities({
+      const response = await getGroups({
         page,
         take,
-        type: isBroker ? "not_joined" : "joined",
-        brokerId: isBroker ? idBroker : idBroker,
+        type: isBroker ? "" : "joined",
+        brokerId: isBroker ? idUser : "",
         search: "",
         feeType: "",
+        investorId: isBroker ? "" : idUser,
       });
-      console.log("Communities fetched:", response);
+      // console.log("Communities fetched:", response);
       setCommunityArr((prev) => {
         const newCommunities = combineUniqueById(
           prev,

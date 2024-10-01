@@ -16,3 +16,8 @@ export const readNoti = (id: string) => {
 export const getDetailPost = (id: string) => {
   return httpClient.get<ResponseGetOneDto<IPost>>(`/v1/post/${id}`, {});
 };
+
+export const patchReadAll = () => {
+  httpClient.patch(`/v1/signal/readAll`, {});
+  return;
+};

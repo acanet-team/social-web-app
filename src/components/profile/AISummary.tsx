@@ -119,17 +119,19 @@ const AiSummary = ({
             }}
           />
         </div>
-        <Image
-          src="/assets/images/icons8-refresh-100.png"
-          width={16}
-          height={16}
-          alt=""
-          className=""
-          style={{
-            objectFit: "cover",
-          }}
-          onClick={updateSummary}
-        />
+        {role && (
+          <Image
+            src="/assets/images/icons8-refresh-100.png"
+            width={16}
+            height={16}
+            alt=""
+            className=""
+            style={{
+              objectFit: "cover",
+            }}
+            onClick={updateSummary}
+          />
+        )}
       </div>
       {text ? (
         <>

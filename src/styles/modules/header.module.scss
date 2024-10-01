@@ -49,6 +49,14 @@
   .title-dropdown-menu {
     font-size: 20px;
   }
+  .size-noti-toast { 
+    width: 100vw !important;
+    min-width: 100vw !important;
+    left: 0;
+    right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 :global(.theme-dark) {
   .height-dropdown-menu {

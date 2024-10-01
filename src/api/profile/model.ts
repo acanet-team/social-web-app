@@ -85,6 +85,7 @@ export interface BrokerProfile {
   location: string | null;
   about: string;
   interestTopics: InterestTopics[];
+  logo: string;
 }
 
 export interface School {
@@ -192,4 +193,14 @@ export interface FormDtLicense {
   licenseStatus: string;
   licenseExpirationDate: string | Date;
   credentialID: string;
+}
+
+export interface GetCommunitiesParams {
+  page: number;
+  take: number;
+  type: string | "";
+  brokerId: number | "";
+  search: string | "";
+  feeType: string | "";
+  investorId: number | "";
 }
