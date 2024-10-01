@@ -40,7 +40,7 @@ const Banner: React.FC<TabBannerProps> = ({
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
-  const { rateContract, connectWallet } = useWeb3();
+  const { rateContract, connectWallet, account } = useWeb3();
   // console.log("ádaijf", dataUser.role.name ==="guest")
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -245,6 +245,13 @@ const Banner: React.FC<TabBannerProps> = ({
   const handleClose = useCallback(() => {
     setOpenDonate(false);
   }, []);
+
+  const onDonateHandler = () => {
+    if (!account) {
+      return connectWallet();
+    }
+    setOpenDonate(true);
+  };
 
   return (
     <div style={{ paddingRight: "16px", paddingLeft: "16px" }}>
@@ -481,7 +488,7 @@ const Banner: React.FC<TabBannerProps> = ({
             {dataUser.role.name === "broker" && (
               <button
                 className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
-                onClick={() => setOpenDonate(true)}
+                onClick={onDonateHandler}
               >
                 <i className="bi bi-cash-coin text-success me-1"></i>
                 <span>{t("donate")}</span>

@@ -16,6 +16,7 @@ import Link from "next/link";
 import { throwToast } from "@/utils/throw-toast";
 import { setConstantValue } from "typescript";
 import { id } from "ethers/lib/utils";
+import AlertModal from "../AlertModal";
 
 const SignalCard: React.FC<getSignalCardResponse> = ({
   id,
@@ -31,6 +32,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   brokerId,
   curUserId,
   luckyAmount,
+  readsCount,
 }) => {
   const tBase = useTranslations("Base");
   const tSignal = useTranslations("Signal");
@@ -40,10 +42,10 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const [isLuckyDraw, setIsLuckyDraw] = useState<boolean>(
     type ? type === "luckydraw" : false,
   );
+  const [luckyDrawId, setLuckyDrawId] = useState<string>(id);
   const [luckyCoin, setluckyCoin] = useState<number | undefined>(
     luckyAmount ? luckyAmount : 0,
   );
-  const [flipDepleted, setFlipDepleted] = useState<boolean>(false);
   const [countdownDuration, setCountdownDuration] = useState<number | null>(
     expiryAt ? expiryAt : 0,
   );
@@ -51,6 +53,12 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
     owner?.followed || false,
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isClaimLoading, setIsClaimLoading] = useState<boolean>(false);
+  const [finishClaim, setFinishClaim] = useState<boolean>(false);
+  const [flipDepleted, setFlipDepleted] = useState<{
+    isDepleted: boolean;
+    msg: string;
+  }>({ isDepleted: false, msg: "" });
   const [signalType, setSignalType] = useState<string>("long");
   const [followerNum, setFollowerNum] = useState<number>(
     Number(owner?.followersCount) || 0,
@@ -90,11 +98,12 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
       try {
         setIsLoading(true);
         const res = await getSignalDetail(id);
-        console.log("typeee", res.data.type);
+        console.log("typeee", res);
         setIsFlipped(true);
         if (res.data.type === "luckydraw") {
           setCountdownDuration(res.data.expiryAt);
           setluckyCoin(res.data.luckyAmount);
+          setLuckyDrawId(res.data.id || id);
           if (res.data.expiryAt - Date.now() < 0) {
             setIsFlipped(false);
             setIsLuckyDraw(false);
@@ -103,7 +112,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
           }
           setIsLuckyDraw(true);
         } else {
-          setIsLuckyDraw(false);
+          setIsClaimLoading(false);
           console.log("backkkk", res);
           setCardDetail(res.data);
           setSignalType(res.data.type);
@@ -113,7 +122,8 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
         setIsFlipped(false);
         console.log(err);
         if (err.code === "ER15010") {
-          return throwToast(err.message, "warning");
+          // return throwToast(err.message, "warning");
+          setFlipDepleted({ isDepleted: true, msg: err.message });
         }
       } finally {
         setIsLoading(false);
@@ -141,22 +151,41 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
     }
   };
 
-  const onClaimLuckyTokenHandler = (id: string) => {
+  const onClaimLuckyTokenHandler = async (id: string) => {
     connectWallet();
     try {
+      setIsClaimLoading(true);
       console.log("id", id);
-      claimLuckyToken(id);
+      await claimLuckyToken(id);
+      setFinishClaim(true);
     } catch (err) {
       console.log(err);
       throwToast("Can't claim the lucky token", "error");
+    } finally {
+      setIsClaimLoading(false);
     }
   };
 
+  const handleCloseAlert = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation();
+    e?.preventDefault();
+    setFlipDepleted({ isDepleted: false, msg: "" });
+  };
   return (
     <div
       className={classNames(styles.signal, styles["signal--card"])}
       onClick={() => onFlipCardHandler(id)}
     >
+      {flipDepleted.isDepleted && (
+        <AlertModal
+          show={flipDepleted.isDepleted}
+          message={flipDepleted.msg}
+          title=""
+          type="alert"
+          handleClose={handleCloseAlert}
+          onProceed={handleCloseAlert}
+        />
+      )}
       <div
         className={`${isFlipped ? styles["is-flipped"] : ""} ${styles.card}`}
       >
@@ -224,14 +253,25 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                   )}
                 </div>
                 <button
-                  className={styles["claim-btn"]}
-                  onClick={() =>
-                    onClaimLuckyTokenHandler(
-                      id ? id : cardDetail ? cardDetail.id : "",
-                    )
+                  disabled={isClaimLoading || finishClaim ? true : false}
+                  className={
+                    isClaimLoading || finishClaim
+                      ? styles["claim-btn__disable"]
+                      : styles["claim-btn"]
                   }
+                  onClick={() => onClaimLuckyTokenHandler(luckyDrawId)}
                 >
-                  {tSignal("claim_now")}
+                  {isClaimLoading ? (
+                    <span
+                      className="spinner-border spinner-border-md"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : finishClaim ? (
+                    tSignal("claimed")
+                  ) : (
+                    tSignal("claim_now")
+                  )}
                 </button>
               </div>
             ) : (
@@ -264,7 +304,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center w-100 mt-3 fw-400 text-start">
+                <div className="d-flex justify-content-between align-items-center w-100 mt-3 fw-400 text-start position-relative">
                   <div className={styles["signal-price"]}>
                     <div
                       className={`${signalType === "long" ? styles["target-long"] : styles["target-short"]} d-flex gap-4`}
@@ -274,8 +314,14 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       </span>
                       <span className="fw-bold">
                         {target
-                          ? target.toLocaleString()
-                          : cardDetail?.target.toLocaleString()}
+                          ? parseFloat(
+                              target.toString().replace(/^0+/, ""),
+                            ).toLocaleString()
+                          : cardDetail?.target
+                            ? parseFloat(
+                                cardDetail.target.toString().replace(/^0+/, ""),
+                              ).toLocaleString()
+                            : ""}
                       </span>
                     </div>
                     <div
@@ -286,8 +332,16 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       </span>
                       <span className="fw-bold">
                         {entry
-                          ? entry.toLocaleString()
-                          : cardDetail?.entry.toLocaleString()}
+                          ? parseFloat(
+                              entry.toString().replace(/^0+/, ""),
+                            ).toLocaleString()
+                          : cardDetail?.entry
+                            ? parseFloat(
+                                cardDetail?.entry
+                                  ?.toString()
+                                  .replace(/^0+/, ""),
+                              ).toLocaleString()
+                            : ""}
                       </span>
                     </div>
                     <div
@@ -298,8 +352,14 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       </span>
                       <span className="fw-bold">
                         {stop
-                          ? stop.toLocaleString()
-                          : cardDetail?.stop.toLocaleString()}
+                          ? parseFloat(
+                              stop.toString().replace(/^0+/, ""),
+                            ).toLocaleString()
+                          : cardDetail?.stop
+                            ? parseFloat(
+                                cardDetail?.stop.toString().replace(/^0+/, ""),
+                              ).toLocaleString()
+                            : ""}
                       </span>
                     </div>
                     <div className={styles["signal-graph__vertical_line"]} />
@@ -309,6 +369,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                     width={122}
                     height={104}
                     alt="signal type"
+                    className={styles["signal-graph"]}
                   />
                 </div>
 
@@ -365,16 +426,29 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                           : tBase("follower")}
                       </div>
                     </div>
-                    <div className="mt-0 ms-2 text-center">
-                      <Ratings rating={avarageRating} size={12} />
-                      <span className="font-xssss fw-300">Rating: </span>
-                      <span className="font-xsss">
-                        {avarageRating.toFixed(1)}
-                      </span>
-                    </div>
+                    {readsCount && brokerId ? (
+                      <div className="mt-0 ms-2 text-center d-flex flex-wrap">
+                        <Image
+                          src="/assets/images/signal/signal_view.png"
+                          width={20}
+                          height={20}
+                          alt="views"
+                        />
+                        <span className="ms-1 font-xssss fw-300">{`${readsCount >= 1000 ? Math.round(readsCount / 1000).toFixed(1) : readsCount} ${readsCount >= 1000 ? "k" : ""} ${readsCount > 1 ? tBase("views") : tBase("view")}`}</span>
+                      </div>
+                    ) : (
+                      <div className="mt-0 ms-2 text-center">
+                        <Ratings rating={avarageRating} size={12} />
+                        <span className="font-xssss fw-300">Rating: </span>
+                        <span className="font-xsss">
+                          {avarageRating.toFixed(1)}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  {(brokerId !== owner?.userId ||
-                    brokerId !== cardDetail?.owner?.userId) && (
+                  {((brokerId !== owner?.userId &&
+                    brokerId !== cardDetail?.owner?.userId) ||
+                    curUserId !== brokerId) && (
                     <button
                       className={`${isFollowing ? styles["follow-broker"] : styles["follow-btn"]} main-btn mt-2 mb-0 border-0 px-3 py-1 z-index-1 rounded-4 text-white font-xssss cursor-pointer fw-700 ls-1`}
                       onClick={(e) =>

@@ -224,6 +224,7 @@ const CreatePost = (props: {
             width={30}
             height={30}
             className="shadow-sm rounded-circle w30"
+            style={{ objectFit: "cover" }}
           />
         </figure>
         <textarea

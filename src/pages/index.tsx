@@ -20,6 +20,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CreateSignal from "@/components/newsfeed/CreateSignal";
 import GetSignalNewFeed from "@/components/newsfeed/GetSignalNewFeed";
 import Friends from "@/components/Friends";
+import Link from "next/link";
 
 const TAKE = 10;
 

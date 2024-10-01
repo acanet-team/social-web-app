@@ -46,6 +46,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   const tProfile = useTranslations("MyProfile");
   const [groupInfo, setgroupInfo] = useState<ICommunity>({} as ICommunity);
   const { showLoading, hideLoading } = useLoading();
+  const [isCreatingGroup, setIsCreatingGroup] = useState<boolean>(false);
   const [uploadedCoverImage, setUploadedCoverImage] = useState<File | null>(
     null,
   );
@@ -147,77 +148,12 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
       }
       if (values.hasFee && values.feeNum) {
         if (!account) {
-          connectWallet();
-          handleClose();
-          return;
+          return connectWallet();
         }
       }
       try {
-        // // Calling api to edit/create a community
-        // if (isEditing) {
-        //   const editedCommunity = await editCommunity(communityData);
-        //   setCommunities &&
-        //     setCommunities(
-        //       (prev: ICommunity[]) =>
-        //         prev.map((group: ICommunity) =>
-        //           group.id === editedCommunity.data.id
-        //             ? editedCommunity.data
-        //             : group
-        //         ) as ICommunity[]
-        //     );
-        //   setCommunity && setCommunity(editedCommunity.data);
-        // } else {
-        //   // Create group with fee on smart contract
-        //   const groupId = uuidV4();
-        //   communityData.append("id", groupId);
-        //   if (values.hasFee && values.feeNum) {
-        //     console.log(communityContract);
-        //     console.log('feeeee', values.feeNum);
-        //     console.log("group", groupId);
-        //     console.log("broker", brokerId);
-        //     console.log(
-        //       "fee",
-        //       ethers.utils.parseEther(values.feeNum.toString())
-        //     );
-        //     const newGroupContract = await communityContract.createGroup(
-        //       groupId.toString(),
-        //       brokerId?.toString(),
-        //       ethers.utils.parseEther(values.feeNum.toString()).toString(),
-        //       {
-        //         from: account?.address,
-        //       }
-        //     );
-        //     console.log("new group", newGroupContract);
-        //     const communityHash = newGroupContract.hash;
-        //     console.log('hash', communityHash);
-        //     if (communityHash && connectedChain) {
-        //       // console.log('connectedChain', connectedChain);
-        //       communityData.append("hashTransaction", communityHash);
-        //       communityData.append(
-        //         "network",
-        //         connectedChain.id === "0x780c" ? "30732" : "97"
-        //       );
-        //     }
-        //     // const awaits = await newGroupContract.wait();
-        //     // console.log(awaits);
-        //   }
-        //   // Create group on DB
-        //   // console.log('to send', communityData);
-        //   const newCommunity = await createCommunity(communityData);
-
-        //   if (!values.hasFee) {
-        //     throwToast("Community created", "success");
-        //     setCommunities &&
-        //       setCommunities(
-        //         (prev) => [newCommunity.data, ...prev] as ICommunity[]
-        //       );
-        //   } else {
-        //     throwToast("Your community is in review", "success");
-        //   }
-        // }
-        // handleClose();
-
         // Editing community
+        setIsCreatingGroup(true);
         if (isEditing) {
           if (values.hasFee && values.feeNum) {
             communityContract.createGroup(
@@ -290,6 +226,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
         console.log(err);
         throwToast(t("community_created_fail"), "error");
       } finally {
+        setIsCreatingGroup(false);
       }
     },
   });
@@ -592,9 +529,18 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           <Modal.Footer className={styles["modal-footer"]}>
             <button
               type="submit"
-              className="main-btn bg-current text-center text-white fw-600 rounded-3 p-3 w150 border-0 my-3 ms-auto"
+              disabled={isCreatingGroup ? true : false}
+              className={`${isCreatingGroup ? "btn-loading" : "bg-current"} main-btn text-center text-white fw-600 rounded-3 p-3 w150 border-0 my-3 ms-auto`}
             >
-              Save
+              {isCreatingGroup ? (
+                <span
+                  className="spinner-border spinner-border-md"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              ) : (
+                t("save")
+              )}
             </button>
           </Modal.Footer>
         </form>

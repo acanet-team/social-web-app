@@ -20,6 +20,7 @@ import { cleanPath } from "@/utils/Helpers";
 import { useSession } from "next-auth/react";
 import DonateModal from "../profile/DonateModal";
 import type { User } from "@/api/profile/model";
+import { useWeb3 } from "@/context/wallet.context";
 
 function PostModal(props: {
   groupOwnerId: number | "";
@@ -76,6 +77,7 @@ function PostModal(props: {
   const tPost = useTranslations("Post");
   const { data: session } = useSession() as any;
   const [userId, setUserId] = useState<number | undefined>(undefined);
+  const { account, connectWallet } = useWeb3();
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -214,6 +216,13 @@ function PostModal(props: {
       }
     };
   }, []);
+
+  const onDonateHandler = () => {
+    if (!account) {
+      return connectWallet();
+    }
+    setOpenDonate(true);
+  };
 
   return (
     <Modal
@@ -398,7 +407,7 @@ function PostModal(props: {
               {userId !== postAuthor.userId && (
                 <div
                   className="d-flex align-items-center cursor-pointer"
-                  onClick={() => setOpenDonate(true)}
+                  onClick={onDonateHandler}
                 >
                   <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
                   <span className="d-none-xs">{tPost("donate")}</span>

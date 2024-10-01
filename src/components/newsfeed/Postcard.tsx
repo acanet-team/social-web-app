@@ -18,6 +18,7 @@ import { cleanPath } from "@/utils/Helpers";
 import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 import DonateModal from "../profile/DonateModal";
 import type { User } from "@/api/profile/model";
+import { useWeb3 } from "@/context/wallet.context";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -61,6 +62,7 @@ export default function PostCard(props: {
   const [userId, setUserId] = useState<number | undefined>(undefined);
   const tBase = useTranslations("Base");
   const tPost = useTranslations("Post");
+  const { account, connectWallet } = useWeb3();
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -69,7 +71,7 @@ export default function PostCard(props: {
   const [take, setTake] = useState<number>(20);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Props
+  // Propsx
   const groupAvatar = community?.avatar?.path || "";
   const groupId = community?.communityId || "";
   const groupName = community?.name || "";
@@ -206,6 +208,13 @@ export default function PostCard(props: {
       setCommentNum((prevState: number) => prevState - 1);
     }
   }, []);
+
+  const onDonateHandler = () => {
+    if (!account) {
+      return connectWallet();
+    }
+    setOpenDonate(true);
+  };
 
   return (
     <div
@@ -416,7 +425,7 @@ export default function PostCard(props: {
           {userId !== postAuthor.userId && (
             <div
               className="d-flex align-items-center cursor-pointer"
-              onClick={() => setOpenDonate(true)}
+              onClick={onDonateHandler}
             >
               <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
               <span className="d-none-xs">{tPost("donate")}</span>

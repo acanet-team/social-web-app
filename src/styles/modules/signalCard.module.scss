@@ -126,6 +126,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 1000;
 }
 
 .signal-price__title {
@@ -186,6 +187,12 @@
   order: 1;
 }
 
+.signal-graph {
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
+
 .signal-graph__vertical_line {
   position: absolute;
   top: 5px;
@@ -216,7 +223,7 @@
   background: linear-gradient(183.26deg, #923b4d 2.6%, #6a82fb 97.31%);
 }
 
-.claim-btn {
+.claim-btn, .claim-btn__disable {
   background: #f2bc57;
   color: black;
   font-weight: 500;
@@ -230,6 +237,10 @@
   bottom: -20px;
   left: 50%;
   transform: translate(-50%, 0);
+}
+
+.claim-btn__disable {
+  background: #b8b8b8 !important;
 }
 
 .lucky-icon {

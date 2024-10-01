@@ -6,13 +6,12 @@ import { joinCommunity } from "@/api/community";
 import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/communities.module.scss";
 import { useSession } from "next-auth/react";
-import { getMe } from "@/api/auth";
-import WalletConnectionModal from "../wallets/WalletConnectionModal";
 import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
 import "dotenv/config";
 import { joinPaidCommunity } from "@/api/wallet";
 import { useRouter } from "next/router";
+import { throwToast } from "@/utils/throw-toast";
 
 export default function CommunityCard(props: {
   ownerId: number;
@@ -97,6 +96,18 @@ export default function CommunityCard(props: {
     }
   };
 
+  const onAccessCommunityHandler = (groupId: string) => {
+    if (communityType === "popular") {
+      return throwToast(t("error_access_community"), "error");
+    }
+    console.log("group id", groupId);
+    router.push(
+      `/${locale}/communities/detail/${groupId}`,
+      `/communities/detail/${groupId}`,
+      { locale: locale },
+    );
+  };
+
   return (
     <div className="card d-block border-0 shadow-md h-100 rounded-3 overflow-hidden">
       <div className="position-relative">
@@ -179,12 +190,13 @@ export default function CommunityCard(props: {
       </div>
       <div className="card-body h-100 mt-2 pb-4 cursor-pointer">
         <div className="d-flex align-items-center mb-2">
-          <Link
-            href={`${locale}/communities/detail/${groupId}`}
-            as={`/communities/detail/${groupId}`}
+          <div
+            // href={`${locale}/communities/detail/${groupId}`}
+            // as={`/communities/detail/${groupId}`}
+            onClick={() => onAccessCommunityHandler(groupId)}
           >
             <h3 className="fw-bold fs-3 m-0">{name}</h3>
-          </Link>
+          </div>
           {isBroker && curUser === ownerId && (
             <i
               className={`${styles["edit-group__btn"]} bi bi-pencil ms-2 cursor-pointer`}
@@ -194,12 +206,6 @@ export default function CommunityCard(props: {
         </div>
         <p>{description}</p>
       </div>
-      {/* {openWalletConnection && (
-        <WalletConnectionModal
-          handleClose={handleClose}
-          show={openWalletConnection}
-        />
-      )} */}
     </div>
   );
 }
