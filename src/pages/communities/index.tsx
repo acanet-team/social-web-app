@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import type {
   InferGetServerSidePropsType,
   NextPage,
@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import CommunitySection from "@/components/communities/CommunitySection";
 import { useSession } from "next-auth/react";
 import { getCommunities } from "@/api/community";
-import { removePropertiesEmpty } from "@/utils/Helpers";
+import { useSearchParams } from "next/navigation";
 
 const TAKE = 10;
 
@@ -23,12 +23,26 @@ const Communities: NextPage = ({
   const [isBroker, setIsBroker] = useState<boolean>(false);
   const t = useTranslations("Community");
   const { data: session } = useSession();
+  const params = useSearchParams();
+  const currentTab = params?.get("tab") || "popular";
 
   useEffect(() => {
     if (session) {
       setIsBroker(session.user.isBroker);
     }
   }, [session, isBroker]);
+
+  // Map which tab to show based on search params
+  useEffect(() => {
+    if (currentTab === "following") {
+      setCurTab("following");
+    } else if (currentTab === "owned") {
+      setCurTab("owned");
+    } else {
+      setCurTab("popular");
+    }
+  }, [currentTab]);
+  // <Link href='communities?tab=owned'>Go to owned tab</Link>
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;

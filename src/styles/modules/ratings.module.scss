@@ -24,3 +24,9 @@
 .rating .empty {
   color: lightgray !important;
 }
+
+:global(.theme-dark) {
+  .rating .filled {
+    color: gold !important;
+  }
+}

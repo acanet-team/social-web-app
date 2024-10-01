@@ -20,7 +20,7 @@ export default bundleAnalyzer(
         {
           source: "/api/v1/:path*",
           destination: "https://api-dev.acanet.io/api/v1/:path*",
-          // destination: "http://192.168.100.188:3001/api/v1/:path*",
+          // destination: "http://192.168.100.136:3001/api/v1/:path*",
         },
       ];
     },

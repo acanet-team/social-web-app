@@ -308,12 +308,11 @@ export default function MemberTable(props: {
         <table className="table align-middle pb-4 mt-2 table-hover">
           <thead>
             <tr className="d-flex">
-              <th className={`${styles["name-col"]} col-2`}>
+              <th className={`${styles["name-col"]} col-4`}>
                 {t("table_name")}
               </th>
               <th className="col-2">{t("table_joined")}</th>
-              <th className="col-3">{t("table_phone")}</th>
-              <th className={`${styles["email-col"]} col-4`}>
+              <th className={`${styles["email-col"]} col-5`}>
                 {t("table_email")}
               </th>
               <th className={`${styles["action-col"]} col-1 px-0`}>
@@ -332,7 +331,7 @@ export default function MemberTable(props: {
                 return (
                   <tr key={m.id} className="d-flex">
                     <td
-                      className={`${styles["name-col"]} col-2 d-flex align-items-center`}
+                      className={`${styles["name-col"]} col-4 d-flex align-items-center`}
                     >
                       <Image
                         src={m.user?.photo?.path || `/assets/images/user.png`}
@@ -351,17 +350,20 @@ export default function MemberTable(props: {
                         </span>
                       </Link>
                     </td>
-                    <td className="col-2">
+                    <td className="col-2 d-flex align-items-center">
                       {new Date(m.createdAt).toLocaleString("en-US", {
                         year: "numeric",
                         month: "short",
                       })}
                     </td>
-                    <td className="col-3">{m.user.phone}</td>
-                    <td className={`${styles["email-col"]} col-4`}>
+                    <td
+                      className={`${styles["email-col"]} col-5 d-flex align-items-center`}
+                    >
                       {m.user.gmail}
                     </td>
-                    <td className={`${styles["action-col"]} col-1 px-0`}>
+                    <td
+                      className={`${styles["action-col"]} col-1 px-0 d-flex align-items-center`}
+                    >
                       {curUser !== m.user.userId && curUser === ownerId ? (
                         tab === "members" ? (
                           <i

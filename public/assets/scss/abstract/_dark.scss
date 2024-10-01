@@ -64,9 +64,10 @@
   }
 
   .dropdown-menu-settings:after {
-    border-color: transparent transparent var(--theme-dark-color-bg-darker) transparent;
+    border-color: transparent transparent var(--theme-dark-color-bg-darker)
+      transparent;
   }
-  
+
   .bg-transparent-card {
     background: transparent !important;
   }
@@ -184,7 +185,9 @@
     }
   }
 
-  button:hover, button:focus, button:active {
+  button:hover,
+  button:focus,
+  button:active {
     background-color: var(--theme-color-shade) !important;
     border-color: var(--theme-color-shade) !important;
     color: #fff !important;
@@ -192,6 +195,10 @@
 
   button:disabled {
     color: #fff !important;
+  }
+
+  .create-signal button:disabled {
+    color: red !important;
   }
 
   .MuiInputBase-input {
@@ -202,6 +209,10 @@
     &:focus {
       background-color: var(--theme-color) !important;
     }
+  }
+
+  .MuiSelect-icon {
+    color: #fff;
   }
 }
 

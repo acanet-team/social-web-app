@@ -6,6 +6,7 @@ import styles from "@/styles/modules/signal.module.scss";
 import { SignalStationEnum } from "@/types";
 import { useTranslations } from "next-intl";
 import type { getSignalCardResponse } from "@/api/signal/model";
+import { useSession } from "next-auth/react";
 
 export default function SignalSection(props: {
   cards: any[];
@@ -18,10 +19,18 @@ export default function SignalSection(props: {
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<Boolean>(props.hasNextPage);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [curUser, setCurUser] = useState<number>();
   const existedSignalIdsRef = useRef<any[]>(props.existedSignalIds);
   const [hasFetchedInitialData, setHasFetchedInitialData] =
     useState<boolean>(false);
   const tSignal = useTranslations("Signal");
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      setCurUser(session.user?.id);
+    }
+  }, [session]);
 
   const fetchCards = async (page: number) => {
     setIsLoading(true);
@@ -38,6 +47,7 @@ export default function SignalSection(props: {
             : "",
       });
       setCards((prev) => [...prev, ...res.data.docs]);
+      console.log("client res", res);
       console.log("client cards", cards);
       setHasNextPage(res.data?.meta?.hasNextPage);
       if (props.tab === SignalStationEnum.discover) {
@@ -139,6 +149,8 @@ export default function SignalSection(props: {
                 owner={card.owner}
                 expiryAt={card.expiryAt}
                 createdAt={card.readAt}
+                curUserId={curUser}
+                readsCount={card.readsCount}
               />
             </div>
           ))}

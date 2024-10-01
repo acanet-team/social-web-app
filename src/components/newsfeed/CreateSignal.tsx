@@ -7,8 +7,8 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { debounce, FormHelperText, TextField } from "@mui/material";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import { FormHelperText, TextField } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
@@ -18,6 +18,8 @@ import { getSignalPairs } from "@/api/signal";
 import _debounce from "lodash/debounce";
 import styles from "@/styles/modules/signal.module.scss";
 import DotWaveLoader from "../DotWaveLoader";
+import { blue } from "@mui/material/colors";
+import { root } from "postcss";
 export interface OptionType {
   description: string;
   exchange: string;
@@ -29,6 +31,7 @@ export default function CreateSignal() {
   const tSignal = useTranslations("CreateSignal");
   const [options, setOptions] = useState<OptionType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [finishCreateSignal, setFinishCreateSignal] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState("");
 
   const removeHtmlTags = (str: string) => {
@@ -58,9 +61,7 @@ export default function CreateSignal() {
   const fetchCurrencyPairs = async (inputValue: string) => {
     try {
       setIsLoading(true);
-      console.log("search term", inputValue);
       const res: any = await getSignalPairs(inputValue);
-      console.log("create", res);
       setOptions(res.data);
     } catch (error) {
       console.error("Error fetching options:", error);
@@ -117,7 +118,16 @@ export default function CreateSignal() {
     expiry: Yup.date()
       .required(tSignal("error_missing_expiry"))
       .test("is-future-date", tSignal("error_invalid_expiry"), (value) => {
-        return value && new Date(value) >= new Date();
+        if (!value) return false;
+
+        const selectedDate = new Date(value);
+        const currentDate = new Date();
+
+        // Set the time part to 00:00:00 to compare only the date part
+        selectedDate.setHours(0, 0, 0, 0);
+        currentDate.setHours(0, 0, 0, 0);
+
+        return selectedDate >= currentDate;
       }),
     entry: Yup.number()
       .transform((value) => (isNaN(value) ? 0 : Number(value)))
@@ -188,7 +198,8 @@ export default function CreateSignal() {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log("values", values);
+        // console.log("values", values);
+        setFinishCreateSignal(true);
         if (values.expiry) {
           const expiryAt = new Date(values.expiry).getTime();
           await donateBroker({
@@ -206,6 +217,8 @@ export default function CreateSignal() {
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setFinishCreateSignal(false);
       }
     },
   });
@@ -224,6 +237,7 @@ export default function CreateSignal() {
           borderRadius: "10px",
           marginTop: "20px",
         }}
+        className="create-signal"
       >
         {/* Signal pairs */}
         <div className="d-flex justify-content-between gap-3 mt-2 flex-xl-row flex-column">
@@ -241,7 +255,6 @@ export default function CreateSignal() {
               }
               loading={isLoading}
               filterOptions={(options: OptionType[], params) => {
-                console.log("before", options);
                 const { inputValue } = params;
                 if (inputValue === "") {
                   return options;
@@ -261,7 +274,6 @@ export default function CreateSignal() {
                     type: "",
                   });
                 }
-                console.log("after", options);
                 return options;
               }}
               // filterOptions={filterOptions}
@@ -365,10 +377,7 @@ export default function CreateSignal() {
             </FormControl>
 
             {/* Date picker */}
-            <FormControl
-              // variant="standard"
-              sx={{ minWidth: "170px", width: "100%" }}
-            >
+            <FormControl sx={{ minWidth: "170px", width: "100%" }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   disablePast
@@ -563,10 +572,21 @@ export default function CreateSignal() {
       </div>
       <button
         id="submit"
-        className="main-btn border-0 font-xsss ms-auto w175 fw-600 text-white card-body px-4 py-2 mt-4 d-flex align-items-center justify-content-center cursor-pointer"
+        disabled={finishCreateSignal ? true : false}
+        className={`${finishCreateSignal ? "btn-loading" : ""} main-btn border-0 font-xsss ms-auto w175 fw-600 text-white card-body px-4 py-2 mt-4 d-flex align-items-center justify-content-center cursor-pointer`}
       >
-        <i className="rounded-3 font-xs me-1 text-white bi bi-graph-up"></i>
-        {tSignal("create_signal")}
+        {finishCreateSignal ? (
+          <span
+            className="spinner-border spinner-border-md"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        ) : (
+          <div>
+            <i className="rounded-3 font-xs me-1 text-white bi bi-graph-up"></i>
+            {tSignal("create_signal")}
+          </div>
+        )}
       </button>
     </form>
   );

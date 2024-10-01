@@ -21,9 +21,11 @@ export default function TabRating(props: { brokerData: User }) {
   const { showLoading, hideLoading } = useLoading();
   const { data: session } = useSession();
   const [raterNickname, setRaterNickname] = useState<string>("");
+  const [raterId, setRaterId] = useState<number>();
   const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSendingReview, setIsSendingReview] = useState<boolean>(false);
   const [curPage, setCurPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const tRating = useTranslations("Rating");
@@ -50,6 +52,7 @@ export default function TabRating(props: { brokerData: User }) {
   useEffect(() => {
     if (session) {
       setRaterNickname(session?.user?.userProfile?.nickName);
+      setRaterId(session.user.id);
     }
   }, [session]);
 
@@ -97,6 +100,7 @@ export default function TabRating(props: { brokerData: User }) {
         return connectWallet();
       }
       try {
+        setIsSendingReview(true);
         showLoading();
         console.log("contract", rateContract);
         const res = await rateContract.createRating(
@@ -118,6 +122,7 @@ export default function TabRating(props: { brokerData: User }) {
         console.error(error);
       } finally {
         hideLoading();
+        setIsSendingReview(false);
         resetForm({ rating: 0, review: "" } as any);
       }
     },
@@ -125,90 +130,100 @@ export default function TabRating(props: { brokerData: User }) {
 
   return (
     <div style={{ marginBottom: "100px" }}>
-      <div
-        className={`${styles["tab-rating__container"]} d-flex flex-column align-items-center shadow-xss my-5`}
-      >
-        <div className="mb-3 text-current text-center">
-          {tRating("review_input_title")}&nbsp;
-          {brokerData.firstName + " " + brokerData.lastName}
-        </div>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="w-100 d-flex flex-column align-items-center"
+      {raterId !== brokerId && (
+        <div
+          className={`${styles["tab-rating__container"]} d-flex flex-column align-items-center shadow-xss my-5`}
         >
-          {reviewSubmitted && <div>{tRating("review_submitted")}</div>}
-          <Box className="d-flex align-items-center mb-3">
-            <Rating
-              name="rating"
-              onChange={(event, newValue) => {
-                formik.setFieldValue("rating", newValue);
-              }}
-              value={formik.values.rating}
+          <div className="mb-3 text-current text-center">
+            {tRating("review_input_title")}&nbsp;
+            {brokerData.firstName + " " + brokerData.lastName}
+          </div>
+          <form
+            onSubmit={formik.handleSubmit}
+            className="w-100 d-flex flex-column align-items-center"
+          >
+            {reviewSubmitted && <div>{tRating("review_submitted")}</div>}
+            <Box className="d-flex align-items-center mb-3">
+              <Rating
+                name="rating"
+                onChange={(event, newValue) => {
+                  formik.setFieldValue("rating", newValue);
+                }}
+                value={formik.values.rating}
+                sx={{
+                  lineHeight: "0",
+                  width: "100%",
+                  fontSize: "40px",
+                  color: "#ffd700",
+                }}
+              />
+            </Box>
+            <Box
+              component="form"
               sx={{
-                lineHeight: "0",
+                "& .MuiTextField-root": { m: 1, width: "100%" },
                 width: "100%",
-                fontSize: "40px",
-                color: "#ffd700",
               }}
-            />
-          </Box>
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "100%" },
-              width: "100%",
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="review"
-              value={formik.values.review}
-              placeholder={tRating("write_review")}
-              multiline
-              rows={4}
-              name={"review"}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                formik.setFieldValue("review", event.target.value);
-              }}
-              sx={{
-                border: "none",
-                "& fieldset": { border: "1px solid #ced4da" },
-                borderRadius: "10px",
-              }}
-            />
-          </Box>
-          {formik.touched.rating && (
-            <FormHelperText sx={{ color: "error.main", marginLeft: "0" }}>
-              {formik.errors.rating}
-            </FormHelperText>
-          )}
-          <button
-            type="submit"
-            className={`${reviewSubmitted ? styles["submit-btn_disable"] : ""} main-btn border-0 mt-3`}
-            disabled={reviewSubmitted ? true : false}
-          >
-            {reviewSubmitted
-              ? tRating("review_submitted")
-              : tRating("submit_review")}
-          </button>
-          {reviewSubmitted && (
-            <div className="text-grey-600 mt-3 text-center">
-              You have submited a review for{" "}
-              {brokerData.firstName + " " + brokerData.lastName} on{" "}
-              {new Date().toLocaleString("en-GB", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}{" "}
-              and it cannot be altered
-            </div>
-          )}
-        </form>
-      </div>
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="review"
+                value={formik.values.review}
+                placeholder={tRating("write_review")}
+                multiline
+                rows={4}
+                name={"review"}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  formik.setFieldValue("review", event.target.value);
+                }}
+                sx={{
+                  border: "none",
+                  "& fieldset": { border: "1px solid #ced4da" },
+                  borderRadius: "10px",
+                }}
+              />
+            </Box>
+            {formik.touched.rating && (
+              <FormHelperText sx={{ color: "error.main", marginLeft: "0" }}>
+                {formik.errors.rating}
+              </FormHelperText>
+            )}
+            <button
+              type="submit"
+              className={`${reviewSubmitted || isSendingReview ? styles["submit-btn_disable"] : ""} main-btn border-0 mt-3`}
+              disabled={reviewSubmitted || isSendingReview ? true : false}
+            >
+              {isSendingReview ? (
+                <span
+                  className="spinner-border spinner-border-md"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              ) : reviewSubmitted ? (
+                tRating("review_submitted")
+              ) : (
+                tRating("submit_review")
+              )}
+            </button>
+            {reviewSubmitted && (
+              <div className="text-grey-600 mt-3 text-center">
+                You have submited a review for{" "}
+                {brokerData.firstName + " " + brokerData.lastName} on{" "}
+                {new Date().toLocaleString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}{" "}
+                and it cannot be altered
+              </div>
+            )}
+          </form>
+        </div>
+      )}
       {/* Review list section */}
       <div
         className={`${styles["tab-rating-list__container"]} d-flex flex-column shadow-xss align-items-center`}
