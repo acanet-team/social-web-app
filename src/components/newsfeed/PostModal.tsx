@@ -20,6 +20,7 @@ import { cleanPath } from "@/utils/Helpers";
 import { useSession } from "next-auth/react";
 import DonateModal from "../profile/DonateModal";
 import type { User } from "@/api/profile/model";
+import { useWeb3 } from "@/context/wallet.context";
 
 function PostModal(props: {
   groupOwnerId: number | "";
@@ -70,11 +71,13 @@ function PostModal(props: {
   const [commentNum, setCommentNum] = useState<number>(comment || 0);
   const [expandPost, setExpandPost] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
-  const tComment = useTranslations("Comment");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const tComment = useTranslations("Comment");
   const tBase = useTranslations("Base");
+  const tPost = useTranslations("Post");
   const { data: session } = useSession() as any;
   const [userId, setUserId] = useState<number | undefined>(undefined);
+  const { account, connectWallet } = useWeb3();
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -213,6 +216,13 @@ function PostModal(props: {
       }
     };
   }, []);
+
+  const onDonateHandler = () => {
+    if (!account) {
+      return connectWallet();
+    }
+    setOpenDonate(true);
+  };
 
   return (
     <Modal
@@ -394,18 +404,18 @@ function PostModal(props: {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {userId !== postAuthor.userId && postAuthor.walletAddress && (
+              {userId !== postAuthor.userId && (
                 <div
                   className="d-flex align-items-center cursor-pointer"
-                  onClick={() => setOpenDonate(true)}
+                  onClick={onDonateHandler}
                 >
                   <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
-                  <span className="d-none-xs">Donate</span>
+                  <span className="d-none-xs">{tPost("donate")}</span>
                 </div>
               )}
               <div className="d-flex align-items-center cursor-pointer">
                 <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
-                <span className="d-none-xs">Share</span>
+                <span className="d-none-xs">{tPost("share")}</span>
               </div>
             </div>
           </div>

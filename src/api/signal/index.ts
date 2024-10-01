@@ -33,3 +33,10 @@ export const getSignalsNewFeed = () => {
 export const getSignalPairs = (search: string) => {
   return httpClient.get(`/v1/signal/symbols?search=${search}`);
 };
+
+export const claimLuckyToken = (id: string) => {
+  return httpClient.post<{ id: string }, BaseResponse<any>>(
+    `/v1/signal/claim/${id}`,
+    {},
+  );
+};

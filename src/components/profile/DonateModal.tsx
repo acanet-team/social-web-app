@@ -20,16 +20,18 @@ function DonateModal(props: {
 }) {
   const { show, handleClose, brokerData } = props;
   const t = useTranslations("MyProfile");
+  const tDonate = useTranslations("Donate");
   const tWallet = useTranslations("Wallet");
-  const defaultDonateOptions = [5, 10, 15];
+  const [donateUser, setDonateUser] = useState<string>("");
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [fullscreen, setFullscreen] = useState(
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
   const [isDonateInputSelected, setIsDonateInputSelected] = useState(false);
+  const [isDonating, setIsDonating] = useState(false);
   const { donateContract, connectWallet, account } = useWeb3();
   const { data: session } = useSession();
-  const [donateUser, setDonateUser] = useState<string>("");
+  const defaultDonateOptions = [5, 10, 15];
 
   useEffect(() => {
     if (session) {
@@ -63,13 +65,13 @@ function DonateModal(props: {
     amount: Yup.lazy((value, { parent }) =>
       !parent.option
         ? Yup.number()
-            .required(t("donate_amount_missing"))
+            .required(tDonate("donate_amount_missing"))
             .transform((originalValue, transformedValue) => {
               // Convert string to number before validation
               const numValue = Number(originalValue);
               return isNaN(numValue) ? 0 : numValue;
             })
-            .min(0.0000000001, t("donate_amount_missing"))
+            .min(0.0000000001, tDonate("donate_amount_missing"))
         : Yup.mixed().notRequired(),
     ),
   });
@@ -81,10 +83,15 @@ function DonateModal(props: {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        setIsDonating(true);
         console.log("amount", values.amount);
         if (!account) {
           connectWallet();
           throwToast(tWallet("connect_wallet_error"), "error");
+          return handleClose();
+        }
+        if (!brokerData.walletAddress) {
+          throwToast(tDonate("broker_missing_wallet"), "error");
           return handleClose();
         }
         if (brokerData.walletAddress && donateUser) {
@@ -106,6 +113,8 @@ function DonateModal(props: {
         console.log(err);
         throwToast(tWallet("donate_fail"), "error");
         handleClose();
+      } finally {
+        setIsDonating(false);
       }
     },
   });
@@ -131,7 +140,7 @@ function DonateModal(props: {
             ></i>
           )}
           <i className="bi bi-wallet-fill h3 m-0 me-2"></i>
-          <span className="fs-3 fw-bold">{t("donate_amount")}</span>
+          <span className="fs-3 fw-bold">{tDonate("donate_amount")}</span>
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
           <form onSubmit={formik.handleSubmit}>
@@ -218,9 +227,18 @@ function DonateModal(props: {
             <Modal.Footer className={styles["modal-footer"]}>
               <button
                 type="submit"
-                className="main-btn bg-current text-center text-white fw-600 rounded-3 p-3 w150 border-0 my-3 ms-auto"
+                disabled={isDonating ? true : false}
+                className={`${isDonating ? "btn-loading" : "bg-current"} main-btn text-center text-white fw-600 rounded-3 p-3 w150 border-0 my-3 ms-auto`}
               >
-                Save
+                {isDonating ? (
+                  <span
+                    className="spinner-border spinner-border-md"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  tDonate("confirm")
+                )}
               </button>
             </Modal.Footer>
           </form>

@@ -104,8 +104,9 @@ export default function ProfileSignal(props: {
                 type={card.type}
                 owner={card.owner}
                 createdAt={card.readAt}
-                brokerId={props.brokerId}
+                brokerId={props.brokerId} // for signal section in profile only (this id means the current broker profile)
                 curUserId={props.userId}
+                readsCount={card.readsCount}
               />
             </div>
           ))}

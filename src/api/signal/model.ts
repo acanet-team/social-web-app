@@ -29,6 +29,7 @@ export interface getSignalCardResponse {
   expiryAt: number;
   createdAt: number;
   luckyAmount?: number | undefined;
+  readsCount: number | null;
   // These 2 are props
   brokerId?: number;
   curUserId?: number | undefined;

@@ -14,7 +14,11 @@
     "join": "",
     "hour": "Giờ",
     "min": "Phút",
-    "sec": "Giây"
+    "sec": "Giây",
+    "view": "Lượt xem",
+    "views": "Lượt xem",
+    "seconds": "giây",
+    "second": "giây"
   },
   "Error": {
     "not_found": "Trang bạn đang tìm kiếm không tồn tại"
@@ -163,7 +167,9 @@
   },
   "Post": {
     "Explore_More": "Khám phá",
-    "No_Posts_Found": "Không tìm thấy bài viết"
+    "No_Posts_Found": "Không tìm thấy bài viết",
+    "donate": "Ủng hộ",
+    "share": "Chia sẻ"
   },
   "CreateProfile": {
     "create_profile_title": "Chi tiết tài khoản",
@@ -271,9 +277,6 @@
     "True": "Đúng",
     "False": "Sai",
     "following": "Đang theo dõi",
-    "donate_amount": "Số tiền ủng hộ",
-    "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.00001",
-    "donate_input": "Vui lòng sử dụng dấu phẩy làm dấu phân cách thập phân",
     "Connect": "Kết nối",
     "connect": "kết nối",
     "connects": "kết nối",
@@ -317,7 +320,9 @@
     "invite_user": "Thêm thành viên mới",
     "found_no_members": "Không có thành viên",
     "community_created_success": "Cộng đồng của bạn đang được tạo",
-    "community_created_fail": "Không thể tạo cộng đồng."
+    "community_created_fail": "Không thể tạo cộng đồng.",
+    "save": "Lưu",
+    "error_access_community": "Bạn chưa tham gia cộng đồng này"
   },
   "FeedTabs": {
     "for_you": "Dành cho bạn",
@@ -336,10 +341,12 @@
     "modal_member_reject": "Xác nhận từ chối thành viên?",
     "modal_yes": "Tiếp tục",
     "modal_no": "Không",
+    "modal_ok": "Ok",
     "modal_delete": "Xoá",
     "delete_title": "Xoá bình luận?",
     "delete_member": "Xoá thành viên?",
-    "reject_member": "Từ chối thành viên"
+    "reject_member": "Từ chối thành viên",
+    "close_after": "Đóng sau"
   },
   "Form": {
     "search": "Tìm kiếm",
@@ -389,7 +396,8 @@
     "flip_turn_depleted": "Bạn đã dùng hết lượt lật",
     "reveal_card": "Ấn để lật",
     "luck_draw": "Lá bài may mắn",
-    "claim_now": "Nhận ngay"
+    "claim_now": "Nhận ngay",
+    "claimed": "Đã nhận"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",
@@ -410,5 +418,11 @@
     "you": "Bạn",
     "confirm": "Đồng ý",
     "delete": "Huỷ"
+  },
+  "Donate": {
+    "confirm": "Xác nhận",
+    "donate_amount": "Số tiền ủng hộ",
+    "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.00001",
+    "broker_missing_wallet": "Nhà mối giới này chưa liên kết ví"
   }
 }

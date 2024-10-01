@@ -47,7 +47,7 @@
   .text-current {
     color: #fff !important;
   }
-  
+
   button {
     color: var(--theme-color-shade) !important;
     background-color: #fff;
@@ -66,7 +66,7 @@
     box-shadow: 0px 0px 2px 2px var(--theme-color-shade) !important;
     color: #fff !important;
   }
-  
+
   // Page title
   .page-title {
     color: #fff !important;
@@ -79,6 +79,39 @@
   .main-btn {
     background-color: var(--theme-color-shade) !important;
   }
+
+  /* Change autocomplete styles in WebKit */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff;
+  }
+}
+
+/* Change autocomplete styles in WebKit */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid transparent;
+  -webkit-text-fill-color: #111;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.btn-loading {
+  background-color: #555 !important;
 }
 
 .main-btn {
@@ -125,17 +158,17 @@
   background-color: #cd201f !important;
 }
 .bg-black {
-  background-color: #000 !important;;
+  background-color: #000 !important;
 }
 .bg-blue-button {
-  background: #0A66C2 !important;;
+  background: #0a66c2 !important;
 }
 .bg-white {
-  background: #ffffff !important;;
+  background: #ffffff !important;
 }
 
 .text-blue-button {
-  color: #0A66C2 !important;;
+  color: #0a66c2 !important;
 }
 .text-facebook {
   color: #0d66ff !important;
@@ -159,7 +192,7 @@
   color: #e4405f !important;
 }
 .text-white {
-  color: #ffffff !important;;
+  color: #ffffff !important;
 }
 .text-current {
   color: var(--theme-color-main) !important;
@@ -183,16 +216,16 @@
   color: #2a66f4 !important;
 }
 .text-gray {
-  color: #ADB5BD !important;;
+  color: #adb5bd !important;
 }
 .text-gray-follow {
-  color: #8b8d8d !important;;
+  color: #8b8d8d !important;
 }
 .text-green {
-  color: #05B706 !important;
+  color: #05b706 !important;
 }
 .text-red {
-  color: #E50202 !important;
+  color: #e50202 !important;
 }
 
 .bg-black-08 {
@@ -225,10 +258,20 @@
   background: linear-gradient(to right, #0575e6, #021b79) !important;
 }
 .bg-green-gradient {
-  background: linear-gradient(180deg, #004B49 0%, #006C67 50%, #00A9A5 100%) !important;
+  background: linear-gradient(
+    180deg,
+    #004b49 0%,
+    #006c67 50%,
+    #00a9a5 100%
+  ) !important;
 }
 .bg-red-gradiant {
-  background: linear-gradient(180deg, #241734 0%, #4C1E4F 50%, #B42F62 100%) !important;
+  background: linear-gradient(
+    180deg,
+    #241734 0%,
+    #4c1e4f 50%,
+    #b42f62 100%
+  ) !important;
 }
 
 .bg-grey {

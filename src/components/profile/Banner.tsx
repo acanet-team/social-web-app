@@ -43,7 +43,7 @@ const Banner: React.FC<TabBannerProps> = ({
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
-  const { rateContract, connectWallet } = useWeb3();
+  const { rateContract, connectWallet, account } = useWeb3();
   // console.log("ádaijf", dataUser.role.name ==="guest")
   const formatNumber = (number: number): string => {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -94,6 +94,8 @@ const Banner: React.FC<TabBannerProps> = ({
       const res = await rateContract.getAverageRating(dataUser.id.toString());
       const avgRating =
         res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
+      console.log("res", res);
+      console.log("avg", avgRating);
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -246,6 +248,13 @@ const Banner: React.FC<TabBannerProps> = ({
   const handleClose = useCallback(() => {
     setOpenDonate(false);
   }, []);
+
+  const onDonateHandler = () => {
+    if (!account) {
+      return connectWallet();
+    }
+    setOpenDonate(true);
+  };
 
   return (
     <div style={{ paddingRight: "16px", paddingLeft: "16px" }}>
@@ -533,7 +542,7 @@ const Banner: React.FC<TabBannerProps> = ({
               {/* <i className="bi bi-patch-check h1 m-0"></i> */}
               <Ratings rating={avarageRating} size={18} />
               <div className={`fw-bold ${styles["profile-rating__average"]}`}>
-                Rating: {avarageRating}
+                Rating: {avarageRating.toFixed(1)}
               </div>
               <div
                 style={{ fontSize: "13px" }}

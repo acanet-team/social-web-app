@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -8,7 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FormHelperText, TextField } from "@mui/material";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
@@ -17,6 +17,9 @@ import { throwToast } from "@/utils/throw-toast";
 import { getSignalPairs } from "@/api/signal";
 import _debounce from "lodash/debounce";
 import styles from "@/styles/modules/signal.module.scss";
+import DotWaveLoader from "../DotWaveLoader";
+import { blue } from "@mui/material/colors";
+import { root } from "postcss";
 export interface OptionType {
   description: string;
   exchange: string;
@@ -27,7 +30,9 @@ export interface OptionType {
 export default function CreateSignal() {
   const tSignal = useTranslations("CreateSignal");
   const [options, setOptions] = useState<OptionType[]>([]);
-  const filter = createFilterOptions<OptionType>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [finishCreateSignal, setFinishCreateSignal] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState("");
 
   const removeHtmlTags = (str: string) => {
     return str.replace(/<\/?[^>]+(>|$)/g, "");
@@ -38,23 +43,62 @@ export default function CreateSignal() {
     _debounce(async (inputValue: string) => {
       if (inputValue) {
         try {
+          setIsLoading(true);
           const res: any = await getSignalPairs(inputValue);
+          console.log("create", res);
           setOptions(res.data);
         } catch (error) {
           console.error("Error fetching options:", error);
+        } finally {
+          setIsLoading(false);
         }
       }
     }, 500),
     [],
   );
 
+  // Fetch signal pairs
+  const fetchCurrencyPairs = async (inputValue: string) => {
+    try {
+      setIsLoading(true);
+      const res: any = await getSignalPairs(inputValue);
+      setOptions(res.data);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrencyPairs("");
+  }, []);
+
+  // // Debounced fetch function
+  // const debouncedFetchOptions = useCallback(
+  //   _debounce(fetchCurrencyPairs, 500),
+  //   []
+  // );
+
+  // // Immediate fetch function
+  // const fetchOptions = useCallback(
+  //   async (inputValue: string) => {
+  //     if (inputValue) {
+  //       debouncedFetchOptions(inputValue);
+  //     } else {
+  //       fetchCurrencyPairs(inputValue);
+  //     }
+  //   },
+  //   [debouncedFetchOptions]
+  // );
+
   const renderOption = (
     props: React.HTMLAttributes<HTMLLIElement>,
     option: OptionType,
   ): React.ReactNode => {
     return (
-      <li {...props}>
-        <div className="d-flex gap-sm-5 gap-2">
+      <li {...props} key={option.description}>
+        <div className="d-flex gap-md-4 gap-2">
           <div className={styles["create-signal__symbol"]}>
             {removeHtmlTags(option.symbol)}
           </div>
@@ -66,13 +110,24 @@ export default function CreateSignal() {
     );
   };
 
+  // const filterOptions = (options: OptionType[]): OptionType[] => options;
+
   const validationSchema = Yup.object({
     pairs: Yup.string().required(tSignal("error_missing_currency_pairs")),
     type: Yup.string().required(tSignal("error_missing_type")),
     expiry: Yup.date()
       .required(tSignal("error_missing_expiry"))
       .test("is-future-date", tSignal("error_invalid_expiry"), (value) => {
-        return value && new Date(value) > new Date();
+        if (!value) return false;
+
+        const selectedDate = new Date(value);
+        const currentDate = new Date();
+
+        // Set the time part to 00:00:00 to compare only the date part
+        selectedDate.setHours(0, 0, 0, 0);
+        currentDate.setHours(0, 0, 0, 0);
+
+        return selectedDate >= currentDate;
       }),
     entry: Yup.number()
       .transform((value) => (isNaN(value) ? 0 : Number(value)))
@@ -143,7 +198,8 @@ export default function CreateSignal() {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log("values", values);
+        // console.log("values", values);
+        setFinishCreateSignal(true);
         if (values.expiry) {
           const expiryAt = new Date(values.expiry).getTime();
           await donateBroker({
@@ -157,9 +213,12 @@ export default function CreateSignal() {
           });
           throwToast("Signal created!", "success");
           resetForm();
+          setInputValue("");
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setFinishCreateSignal(false);
       }
     },
   });
@@ -178,40 +237,44 @@ export default function CreateSignal() {
           borderRadius: "10px",
           marginTop: "20px",
         }}
+        className="create-signal"
       >
         {/* Signal pairs */}
-        <div className="d-flex justify-content-between gap-2 mt-2 flex-xl-row flex-column">
+        <div className="d-flex justify-content-between gap-3 mt-2 flex-xl-row flex-column">
           <FormControl
             sx={{ width: "100%", minWidth: "160px", marginTop: "1rem" }}
           >
-            <Autocomplete<OptionType>
+            <Autocomplete
+              freeSolo
               id="pairs"
               options={options}
               getOptionLabel={(option) =>
-                removeHtmlTags(option.symbol).toUpperCase()
+                typeof option === "string"
+                  ? option
+                  : removeHtmlTags(option.symbol).toUpperCase()
               }
+              loading={isLoading}
               filterOptions={(options: OptionType[], params) => {
-                const filtered = filter(options, params);
                 const { inputValue } = params;
+                if (inputValue === "") {
+                  return options;
+                }
                 // Suggest the creation of a new value
                 const isExisting = options.some((option) => {
                   return (
-                    inputValue.toUpperCase() ===
+                    inputValue?.toUpperCase() ===
                     removeHtmlTags(option.symbol).toUpperCase()
                   );
                 });
                 if (inputValue !== "" && !isExisting) {
-                  filtered.push({
+                  options.push({
                     description: "",
                     exchange: "",
                     symbol: inputValue.toUpperCase(),
                     type: "",
                   });
                 }
-                if (inputValue === "") {
-                  return [];
-                }
-                return filtered;
+                return options;
               }}
               // filterOptions={filterOptions}
               value={
@@ -224,16 +287,24 @@ export default function CreateSignal() {
               onChange={(
                 event: React.SyntheticEvent<Element, Event>,
                 value: OptionType | null,
-              ) =>
+              ) => {
+                setInputValue(
+                  value ? removeHtmlTags(value.symbol).toUpperCase() : "",
+                );
                 formik.setFieldValue(
                   "pairs",
                   value ? removeHtmlTags(value.symbol).toUpperCase() : "",
-                )
-              }
-              onInputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                fetchOptions(e?.target?.value)
-              }
-              onBlur={formik.handleBlur}
+                );
+              }}
+              onInputChange={(
+                e: React.ChangeEvent<HTMLInputElement>,
+                value: string,
+              ) => {
+                setInputValue(e?.target?.value || value);
+                fetchOptions(e?.target?.value);
+              }}
+              inputValue={inputValue}
+              // onBlur={formik.handleBlur}
               sx={{
                 "& fieldset": {
                   minWidth: "160px",
@@ -242,7 +313,8 @@ export default function CreateSignal() {
                   borderRadius: "0",
                 },
                 "& .MuiOutlinedInput-root": {
-                  padding: 0,
+                  // padding: 0,
+                  padding: "0 7.5px",
                 },
                 "& .MuiInputBase-input": {
                   fontSize: "16px",
@@ -267,7 +339,7 @@ export default function CreateSignal() {
             )}
           </FormControl>
 
-          <div className="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-0 mt-md-3">
+          <div className="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-0 mt-md-3">
             {/* Long short type */}
             <FormControl
               // variant="standard"
@@ -305,12 +377,10 @@ export default function CreateSignal() {
             </FormControl>
 
             {/* Date picker */}
-            <FormControl
-              // variant="standard"
-              sx={{ minWidth: "170px", width: "100%" }}
-            >
+            <FormControl sx={{ minWidth: "170px", width: "100%" }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                  disablePast
                   label={tSignal("expirary_date")}
                   value={formik.values.expiry}
                   onChange={(date) => {
@@ -342,7 +412,7 @@ export default function CreateSignal() {
         </div>
 
         {/* Entry */}
-        <div className="d-flex justify-content-between flex-sm-row flex-column mt-2 mt-md-3 gap-2">
+        <div className="d-flex justify-content-between flex-sm-row flex-column mt-3 mt-md-3 gap-3">
           <FormControl
             variant="standard"
             sx={{ minWidth: "100px", width: "100%" }}
@@ -482,7 +552,7 @@ export default function CreateSignal() {
           name="description"
           label={tSignal("description")}
           multiline
-          rows={1}
+          rows={2}
           inputProps={{
             maxLength: 100,
           }}
@@ -502,10 +572,21 @@ export default function CreateSignal() {
       </div>
       <button
         id="submit"
-        className="main-btn border-0 font-xsss ms-auto w175 fw-600 text-white card-body px-4 py-2 mt-4 d-flex align-items-center justify-content-center cursor-pointer"
+        disabled={finishCreateSignal ? true : false}
+        className={`${finishCreateSignal ? "btn-loading" : ""} main-btn border-0 font-xsss ms-auto w175 fw-600 text-white card-body px-4 py-2 mt-4 d-flex align-items-center justify-content-center cursor-pointer`}
       >
-        <i className="rounded-3 font-xs me-1 text-white bi bi-graph-up"></i>
-        {tSignal("create_signal")}
+        {finishCreateSignal ? (
+          <span
+            className="spinner-border spinner-border-md"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        ) : (
+          <div>
+            <i className="rounded-3 font-xs me-1 text-white bi bi-graph-up"></i>
+            {tSignal("create_signal")}
+          </div>
+        )}
       </button>
     </form>
   );

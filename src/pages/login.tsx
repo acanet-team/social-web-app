@@ -165,7 +165,7 @@ const LoginPage: NextPageWithLayout = () => {
 export default LoginPage;
 
 LoginPage.getLayout = function getLayout(page: any) {
-  return <div>{page}</div>;
+  return <>{page}</>;
 };
 
 export async function getServerSideProps(context: NextPageContext) {
