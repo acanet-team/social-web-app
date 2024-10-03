@@ -187,7 +187,7 @@
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",
-    "newsfeed": "Tin tức",
+    "newsfeed": "Bảng tin",
     "brokers": "Nhà môi giới",
     "courses": "Khoá học",
     "community": "Cộng đồng",
@@ -424,5 +424,13 @@
     "donate_amount": "Số tiền ủng hộ",
     "donate_amount_missing": "Số tiền ủng hộ phải lớn hơn 0.00001",
     "broker_missing_wallet": "Nhà mối giới này chưa liên kết ví"
+  },
+  "Search": {
+    "all_tab": "Tất cả",
+    "community_tab": "Cộng đồng",
+    "people_tab": "Người dùng",
+    "posts_tab": "Bài viết",
+    "search_placeholer": "Gõ để tìm kiếm...",
+    "search_result_title": "Kết quả tìm kiếm cho"
   }
 }

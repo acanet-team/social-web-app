@@ -65,7 +65,7 @@ export default function CommunityCard(props: {
     }
   }, [session]);
 
-  const onJoinCommunityHandler = async (e: any, groupId: string) => {
+  const onJoinCommunityHandler = async (groupId: string) => {
     try {
       if (fee > 0) {
         connectWallet();
@@ -160,7 +160,7 @@ export default function CommunityCard(props: {
                     : false
                 }
                 className={`${joiningStatus === CommunityJoiningStatus.joined ? "btn-secondary" : joiningStatus === CommunityJoiningStatus.pending ? "btn-dark" : "btn-primary"} group-status btn text-white px-3 rounded-3 py-1 mb-2`}
-                onClick={(e) => onJoinCommunityHandler(e, groupId)}
+                onClick={() => onJoinCommunityHandler(groupId)}
               >
                 {joiningStatus === CommunityJoiningStatus.joined
                   ? t("joined")

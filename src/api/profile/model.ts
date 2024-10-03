@@ -17,6 +17,7 @@ export interface User {
     category: string;
     post_id: string;
   };
+
   profileCoverPhoto: {
     id: string;
     path: string;

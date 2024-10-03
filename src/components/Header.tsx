@@ -10,32 +10,36 @@ import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/header.module.scss";
 import { useWebSocket } from "@/context/websocketProvider";
 import Notifications from "./Notification";
-import type { Notification } from "@/api/notification/model";
-import { getNotifications } from "@/api/notification";
 import { useRouter } from "next/router";
+import QuickSearchCard from "./search/QuickSearchCard";
+import type { IQuickSearchResponse } from "@/api/search/model";
 
 export default function Header(props: { isOnboarding: boolean }) {
+  const t = useTranslations("NavBar");
+  const tSearch = useTranslations("Search");
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-light");
   const [openSettings, setOpenSettings] = useState(false);
-  const logout = useAuthStore((state) => state.logout);
+  const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
   const [photo, setPhoto] = useState<string>("");
-  const { data: session } = useSession() as any;
   const modalRef = useRef<HTMLDivElement>(null);
   const notiRef = useRef<HTMLDivElement>(null);
   const iconNotiRef = useRef<HTMLDivElement>(null);
   const iconNotiMiniRef = useRef<HTMLDivElement>(null);
-  const { notifications } = useWebSocket();
   const avatarRef = useRef<HTMLImageElement>(null);
-  const t = useTranslations("NavBar");
   const [nickName, setNickName] = useState<string>("");
   const [role, setRole] = useState<string>("");
+  const { data: session } = useSession() as any;
+  const { notifications } = useWebSocket();
   const userId = session?.user?.id;
-  const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
   const router = useRouter();
   const { locale } = router;
+  const logout = useAuthStore((state) => state.logout);
+  const [quickSearch, setQuickSearch] = useState<string>("");
+  const [searchResults, setQuickSearchResults] =
+    useState<IQuickSearchResponse>();
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
   // useEffect(() => {
@@ -45,7 +49,6 @@ export default function Header(props: { isOnboarding: boolean }) {
 
   useEffect(() => {
     if (session) {
-      // console.log("session", session)
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
       setNickName(session?.user?.userProfile?.nickName);
       setRole(session?.user?.role?.name);
@@ -103,6 +106,29 @@ export default function Header(props: { isOnboarding: boolean }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const onSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerms = e.target.value;
+    console.log("search", searchTerms);
+    setQuickSearch(e.target.value);
+    try {
+      // Call api to search
+      // Set search results
+      // setQuickSearchResults()
+    } catch (err) {
+    } finally {
+    }
+  };
+
+  const onEnterSearchHandler = (e: any) => {
+    // if (e.key === "Enter" && e.shiftKey == false) {
+    //   e.preventDefault();
+    //   const keyword = e.target.value;
+    //   console.log("enter", keyword);
+    //   if (!keyword) return;
+    //   router.push(`/search/${keyword}`);
+    // }
+  };
 
   return (
     <div className="nav-header shadow-xs border-0 nunito-font">
@@ -176,16 +202,88 @@ export default function Header(props: { isOnboarding: boolean }) {
           ></button>
         )}
       </div>
-      <form action="#" className="float-left header-search ms-3">
-        <div className="form-group mb-0 icon-input">
-          <i className="feather-search font-sm text-grey-400"></i>
-          <input
-            type="text"
-            placeholder="Start typing to search.."
-            className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w400"
-          />
+
+      <div className="position-relative">
+        {/* Mobile quick search */}
+        <div className={`app-header-search ${searchClass}`}>
+          <form className="search-form h-100">
+            <div className="form-group searchbox h-100 mb-0 border-0 p-1">
+              <input
+                type="text"
+                className="form-control h-100 border-0"
+                placeholder={tSearch("search_placeholer")}
+                value={quickSearch}
+                onChange={onSearchHandler}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                  onEnterSearchHandler(e)
+                }
+              />
+              <span className="ms-1 mt-1 d-inline-block close searchbox-close">
+                <i
+                  className="bi bi-x-lg font-xs text-dark"
+                  onClick={() => toggleActive(false)}
+                ></i>
+              </span>
+            </div>
+          </form>
         </div>
-      </form>
+
+        {/* Desktop quick search */}
+        <form action="#" className="float-left header-search ms-3">
+          <div className="form-group mb-0 icon-input">
+            <i className="feather-search font-sm text-grey-400"></i>
+            <input
+              type="text"
+              placeholder={tSearch("search_placeholer")}
+              className={`${styles["quick-search"]} bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xsss fw-500 rounded-xl`}
+              value={quickSearch}
+              onChange={onSearchHandler}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                onEnterSearchHandler(e)
+              }
+            />
+          </div>
+        </form>
+
+        {/* Quick search result */}
+        {isActive &&
+          searchResults &&
+          (searchResults.users.length > 0 ||
+            searchResults.communities.length > 0) && (
+            <div className={styles["quick-search__results"]}>
+              <div className={styles["quick-search__results-content"]}>
+                {searchResults.users.map((user) => (
+                  <div key={user.userId}>
+                    <QuickSearchCard
+                      type="user"
+                      isFullSearch={false}
+                      data={user}
+                    />
+                  </div>
+                ))}
+                {searchResults.communities.map((community) => (
+                  <div key={community.id}>
+                    <QuickSearchCard
+                      type="community"
+                      isFullSearch={false}
+                      data={community}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className={styles["quick-search__results-footer"]}>
+                <div>1.535 results</div>
+                <div className="text-dark fw-600 cursor-pointer">
+                  <span className="text-decoration-underline">
+                    Show me more results
+                  </span>
+                  <i className="bi bi-arrow-right ms-1 h5"></i>
+                </div>
+              </div>
+            </div>
+          )}
+      </div>
+
       <span
         className={`p-2 pointer text-center ms-auto menu-icon cursor-pointer ${notiClass}`}
         onClick={() => toggleisNoti((prevState) => !prevState)}
