@@ -423,5 +423,13 @@
     "donate_amount": "Donate amount",
     "donate_amount_missing": "Donate amount must be greater than 0",
     "broker_missing_wallet": "This broker hasn't connected the wallet"
+  },
+  "Search": {
+    "all_tab": "All",
+    "community_tab": "Community",
+    "people_tab": "People",
+    "posts_tab": "Posts",
+    "search_placeholer": "Type to search...",
+    "search_result_title": "Search result for"
   }
 }

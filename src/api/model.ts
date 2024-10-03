@@ -23,18 +23,6 @@ export type ApiRequestParams = {
   config: RequestConfig;
 };
 
-// export type GetRequestParams = {
-//   url: string;
-//   params?: unknown;
-//   config?: RequestConfig;
-// };
-
-// export type PostRequestParams = {
-//   url: string;
-//   body?: unknown;
-//   options?: RequestConfig;
-// };
-
 export type GetRequestParams<T> = {
   url: string;
   params?: T;

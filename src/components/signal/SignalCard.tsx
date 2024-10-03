@@ -38,7 +38,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const tSignal = useTranslations("Signal");
   const { rateContract, connectWallet } = useWeb3();
   const [cardDetail, setCardDetail] = useState<getSignalCardResponse>();
-  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const [isFlipped, setIsFlipped] = useState<boolean>(readAt ? true : false);
   const [isLuckyDraw, setIsLuckyDraw] = useState<boolean>(
     type ? type === "luckydraw" : false,
   );
