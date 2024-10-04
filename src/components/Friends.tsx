@@ -116,7 +116,7 @@ const Friends = () => {
       </div>
       {isLoading && <CircleLoader />}
       <div className="row">
-        {listConnects?.length > 0 ? (
+        {listConnects?.length > 0 && !isLoading ? (
           listConnects.map((value, index) => (
             <div className={`pt-0 pb-0 ps-0 pe-0`} key={index}>
               <div

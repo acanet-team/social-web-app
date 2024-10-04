@@ -285,7 +285,7 @@
     "link": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/ranking-scheme-vi.pdf",
     "titlePostProfileInvestor": "Hãy kết nối để theo dõi được bài viết của người này.",
     "titleGroupProfile": "Không tìm thấy cộng đồng.",
-    "No posts found": "Khôgn tìm thấy bài viết",
+    "No posts found": "Không tìm thấy bài viết",
     "confirm": "Đồng ý",
     "delete": "Huỷ",
     "Respond": "Phản hồi",
@@ -405,7 +405,8 @@
     "reveal_card": "Ấn để lật",
     "luck_draw": "Lá bài may mắn",
     "claim_now": "Nhận ngay",
-    "claimed": "Đã nhận"
+    "claimed": "Đã nhận",
+    "see_more": "Xem thêm"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",
