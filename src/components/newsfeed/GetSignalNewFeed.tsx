@@ -8,15 +8,13 @@ import CircleLoader from "../CircleLoader";
 import dayjs from "dayjs";
 import type { ISignalDaily } from "@/api/signal/model";
 import { getSignalsNewFeed } from "@/api/signal";
+import { useTranslations } from "next-intl";
 
 const GetSignalNewFeed = () => {
+  const t = useTranslations("Signal");
   const [curTheme, setCurTheme] = useState("theme-light");
   const [isLoading, setIsLoading] = useState(false);
   const [signalNewFeed, setSignalNewFeed] = useState<ISignalDaily[]>([]);
-
-  // useEffect(() => {
-  //   setTypeSignal("LONG");
-  // }, []);
 
   const signalsettingsilder = {
     arrows: false,
@@ -130,7 +128,7 @@ const GetSignalNewFeed = () => {
             href="/signal"
             className="mt-4 cursor-pointer bg-primary text-white py-1 px-2 rounded-12 font-xsss"
           >
-            See more
+            {t("see_more")}
             <span>
               <i className="bi bi-arrow-up-right ps-1"></i>
             </span>

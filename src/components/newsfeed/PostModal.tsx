@@ -409,7 +409,7 @@ function PostModal(props: {
                   className="d-flex align-items-center cursor-pointer"
                   onClick={onDonateHandler}
                 >
-                  <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
+                  <i className="bi bi-cash-coin me-1 text-grey-700 font-lg text-light-gray"></i>
                   <span className="d-none-xs">{tPost("donate")}</span>
                 </div>
               )}

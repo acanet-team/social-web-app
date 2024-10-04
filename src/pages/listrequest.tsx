@@ -165,6 +165,7 @@ const ListRequest = ({
         </div>
         <div className={`px-3 ${styles["list-connect"]}`}>
           {listConnects?.length > 0 &&
+            !isLoading &&
             listConnects.map((value, index) => (
               <div
                 key={index}

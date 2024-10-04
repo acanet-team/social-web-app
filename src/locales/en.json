@@ -405,7 +405,8 @@
     "reveal_card": "Click to reveal",
     "luck_draw": "Lucky Draw",
     "claim_now": "Claim Now",
-    "claimed": "Claimed"
+    "claimed": "Claimed",
+    "see_more": "See More"
   },
   "Notification": {
     "has_requested_to_join_your": "has requested to join your",
