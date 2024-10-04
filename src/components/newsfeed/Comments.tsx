@@ -270,6 +270,7 @@ const Comments = forwardRef(
             height={35}
             className="rounded-circle"
             alt={""}
+            style={{ objectFit: "cover" }}
           />
           <div
             className={`${styles["comment-input"]} d-flex align-items-center w-100 rounded-3 bg-light`}

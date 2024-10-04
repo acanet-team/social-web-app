@@ -413,7 +413,8 @@
 
 @media (max-width: 992px) {
   .header-navbar__margin {
-    margin-top: 81px !important;
+    margin-top: 0 !important;
+    z-index: 999999;
   }
 }
 
@@ -486,12 +487,24 @@
     top: -50%;
     right: 0;
     width: 100%;
-    z-index: 1001;
+    z-index: 99999;
     transition: 0.2s all ease-in-out;
     &.show {
         top: env(safe-area-inset-top);
         transition: 0.3s all;
     }
+}
+
+@media (max-width: 992px) {
+  .app-header-search {
+    height: 82px;
+  }
+}
+
+@media (max-width: 435px) {
+  .app-header-search {
+    height: 63px;
+  }
 }
 
 .live-stream {

@@ -57,6 +57,7 @@ const Home = ({
       setCurTab("suggestion");
     }
   };
+
   return (
     // <RootLayout>
     <div className="" id={styles.home}>

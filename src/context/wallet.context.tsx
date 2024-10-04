@@ -167,7 +167,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
       setProvider(new ethers.providers.Web3Provider(wallet.provider, "any"));
       (document.querySelector("onboard-v2") as any).shadowRoot.append(
         Object.assign(document.createElement("STYLE"), {
-          innerText: `.powered-by-container {display:none; z-index: 100000 !important }`,
+          innerText: `.powered-by-container {display:none; z-index: 10000000 !important}`,
         }),
       );
     }
@@ -181,7 +181,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     setTimeout(() => {
       (document.querySelector("onboard-v2") as any).shadowRoot.append(
         Object.assign(document.createElement("STYLE"), {
-          innerText: `.sidebar div:not([class]) {display:none !important; z-index: 100000 !important }`,
+          innerText: `.sidebar div:not([class]) {display:none !important; z-index: 10000000 !important}`,
         }),
       );
     });
