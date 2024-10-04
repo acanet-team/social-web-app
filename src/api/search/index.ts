@@ -8,8 +8,11 @@ export const quickSearch = (text: string, countPerSection: number) => {
   );
 };
 
-export const fullSearchByType = (text: string, type: "user" | "community") => {
+export const fullSearchByType = (
+  text: string,
+  type: "users" | "communities",
+) => {
   return httpClient.get<BaseArrayResponsVersionDocs<FullSearchItem>>(
-    `/v1/full-search?text=${text}&type=${type}`,
+    `/v1/search/full?text=${text}&type=${type}`,
   );
 };

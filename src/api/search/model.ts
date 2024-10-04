@@ -18,7 +18,7 @@ export interface ISearchUserResponse {
     | "not_connected"
     | null;
   connectionRequestId: string;
-  type?: "user" | "community";
+  type?: "users" | "communities";
 }
 
 export interface ISearchCommunityResponse {
@@ -29,7 +29,7 @@ export interface ISearchCommunityResponse {
   fee: number;
   membersCount: number;
   communityStatus: string;
-  type?: "user" | "community";
+  type?: "users" | "communities";
 }
 
 export interface IQuickSearchResponse {
