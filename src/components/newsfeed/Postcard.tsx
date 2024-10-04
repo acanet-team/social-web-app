@@ -427,12 +427,12 @@ export default function PostCard(props: {
               className="d-flex align-items-center cursor-pointer"
               onClick={onDonateHandler}
             >
-              <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
+              <i className="bi bi-cash-coin me-1 text-grey-700 font-md text-dark"></i>
               <span className="d-none-xs">{tPost("donate")}</span>
             </div>
           )}
           <div className="d-flex align-items-center cursor-pointer">
-            <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
+            <i className="bi bi-share me-1 text-grey-700 text-dark font-sm"></i>
             <span className="d-none-xs">{tPost("share")}</span>
           </div>
         </div>

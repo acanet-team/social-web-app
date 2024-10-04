@@ -13,6 +13,8 @@ import Notifications from "./Notification";
 import { useRouter } from "next/router";
 import QuickSearchCard from "./search/QuickSearchCard";
 import type { IQuickSearchResponse } from "@/api/search/model";
+import { quickSearch } from "@/api/search";
+import { useMediaQuery } from "react-responsive";
 
 export default function Header(props: { isOnboarding: boolean }) {
   const t = useTranslations("NavBar");
@@ -37,9 +39,13 @@ export default function Header(props: { isOnboarding: boolean }) {
   const router = useRouter();
   const { locale } = router;
   const logout = useAuthStore((state) => state.logout);
-  const [quickSearch, setQuickSearch] = useState<string>("");
-  const [searchResults, setQuickSearchResults] =
-    useState<IQuickSearchResponse>();
+  const [quickSearchTerm, setQuickSearchTerm] = useState<string>("");
+  const [searchResults, setQuickSearchResults] = useState<IQuickSearchResponse>(
+    { communities: [], users: [] },
+  );
+  const showMobileSearchInput = useMediaQuery({ query: "(max-width: 992px)" });
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchResultRef = useRef<HTMLDivElement>(null);
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
   // useEffect(() => {
@@ -57,7 +63,7 @@ export default function Header(props: { isOnboarding: boolean }) {
 
   const navClass = `${isOpen ? " nav-active" : ""}`;
   const buttonClass = `${isOpen ? " active" : ""}`;
-  const searchClass = `${isActive ? " show" : ""}`;
+  const searchClass = `${isActive && showMobileSearchInput ? " show" : ""}`;
   const notiClass = `${isNoti ? " show" : ""}`;
 
   useEffect(() => {
@@ -98,6 +104,12 @@ export default function Header(props: { isOnboarding: boolean }) {
     ) {
       toggleisNoti(false);
     }
+    if (
+      !searchInputRef?.current?.contains(event.target as Node) &&
+      !searchResultRef?.current?.contains(event.target as Node)
+    ) {
+      resetSearchInput();
+    }
   };
 
   useEffect(() => {
@@ -107,27 +119,44 @@ export default function Header(props: { isOnboarding: boolean }) {
     };
   }, []);
 
-  const onSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const resetSearchInput = () => {
+    setQuickSearchTerm("");
+    toggleActive(false);
+    setQuickSearchResults({ communities: [], users: [] });
+  };
+
+  const onSearchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerms = e.target.value;
     console.log("search", searchTerms);
-    setQuickSearch(e.target.value);
+    setQuickSearchTerm(e.target.value);
+    if (!searchTerms) {
+      return toggleActive(false);
+    }
+    toggleActive(true);
     try {
-      // Call api to search
-      // Set search results
-      // setQuickSearchResults()
+      const res = await quickSearch(searchTerms, 4);
+      console.log("quick search", res.data);
+      setQuickSearchResults(res.data);
     } catch (err) {
+      console.log(err);
     } finally {
     }
   };
 
   const onEnterSearchHandler = (e: any) => {
-    // if (e.key === "Enter" && e.shiftKey == false) {
-    //   e.preventDefault();
-    //   const keyword = e.target.value;
-    //   console.log("enter", keyword);
-    //   if (!keyword) return;
-    //   router.push(`/search/${keyword}`);
-    // }
+    if (e.key === "Enter" && e.shiftKey == false) {
+      e.preventDefault();
+      const keyword = e.target.value;
+      console.log("kkkk", keyword);
+      if (!keyword) return;
+      router.push(`/search/${keyword}`);
+      resetSearchInput();
+    }
+  };
+
+  const onFullSearchHandler = () => {
+    router.push(`/search/${quickSearchTerm}`);
+    resetSearchInput();
   };
 
   return (
@@ -212,11 +241,12 @@ export default function Header(props: { isOnboarding: boolean }) {
                 type="text"
                 className="form-control h-100 border-0"
                 placeholder={tSearch("search_placeholer")}
-                value={quickSearch}
+                value={quickSearchTerm}
                 onChange={onSearchHandler}
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
                   onEnterSearchHandler(e)
                 }
+                ref={searchInputRef}
               />
               <span className="ms-1 mt-1 d-inline-block close searchbox-close">
                 <i
@@ -229,18 +259,19 @@ export default function Header(props: { isOnboarding: boolean }) {
         </div>
 
         {/* Desktop quick search */}
-        <form action="#" className="float-left header-search ms-3">
+        <form action="#" className={`float-left header-search ms-3`}>
           <div className="form-group mb-0 icon-input">
             <i className="feather-search font-sm text-grey-400"></i>
             <input
               type="text"
               placeholder={tSearch("search_placeholer")}
               className={`${styles["quick-search"]} bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xsss fw-500 rounded-xl`}
-              value={quickSearch}
+              value={quickSearchTerm}
               onChange={onSearchHandler}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
                 onEnterSearchHandler(e)
               }
+              ref={searchInputRef}
             />
           </div>
         </form>
@@ -250,7 +281,10 @@ export default function Header(props: { isOnboarding: boolean }) {
           searchResults &&
           (searchResults.users.length > 0 ||
             searchResults.communities.length > 0) && (
-            <div className={styles["quick-search__results"]}>
+            <div
+              className={styles["quick-search__results"]}
+              ref={searchResultRef}
+            >
               <div className={styles["quick-search__results-content"]}>
                 {searchResults.users.map((user) => (
                   <div key={user.userId}>
@@ -272,9 +306,12 @@ export default function Header(props: { isOnboarding: boolean }) {
                 ))}
               </div>
               <div className={styles["quick-search__results-footer"]}>
-                <div>1.535 results</div>
-                <div className="text-dark fw-600 cursor-pointer">
-                  <span className="text-decoration-underline">
+                {/* <div>1.535 results</div> */}
+                <div className="text-dark fw-600 ms-auto cursor-pointer">
+                  <span
+                    className="text-decoration-underline"
+                    onClick={onFullSearchHandler}
+                  >
                     Show me more results
                   </span>
                   <i className="bi bi-arrow-right ms-1 h5"></i>

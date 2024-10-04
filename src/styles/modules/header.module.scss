@@ -58,16 +58,16 @@
 }
 
 .quick-search__results-content {
-  padding: 30px 30px 10px 30px;
+  padding: 30px 30px 0 30px;
   border-bottom: 1px solid #eee;
+}
+
+.quick-search__card {
+  margin-bottom: 22px;
 }
 
 .quick-search__card button {
   border-radius: 10px;
-}
-
-.quick-search__card:last-child {
-  margin-bottom: 0 !important;
 }
 
 .quick-search__results-footer {
@@ -87,8 +87,8 @@
 
 .quick-search_numbers {
   color: rgb(131, 129, 129);
-  margin-top: -7px;
-  font-size: 12px;
+  margin-top: -5px;
+  font-size: 14px;
   font-weight: 400;
 }
 
@@ -153,7 +153,6 @@
 .follow-broker {
   background-color: var(--theme-color-text-secondary) !important;
   color: var(--light) !important;
-  font-weight: 800;
 }
 
 .connect-response_modal {

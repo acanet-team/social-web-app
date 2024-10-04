@@ -10,8 +10,8 @@ export interface ISearchUserResponse {
   photo: Photo;
   role: string;
   followersCount: number;
-  follow_status: "followed" | "not_follow" | null;
-  connection_status:
+  followStatus: "followed" | "not_follow" | null;
+  connectionStatus:
     | "connected"
     | "request_send"
     | "request_received"

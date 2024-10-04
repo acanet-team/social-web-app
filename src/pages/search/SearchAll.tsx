@@ -13,7 +13,9 @@ export default function (props: {
   return (
     <div className="mt-5">
       <div className="mb-5">
-        <div className="mb-3 fw-bold">People</div>
+        {searchData?.users?.length > 0 && (
+          <div className="mb-3 fw-bold">People</div>
+        )}
         {searchData?.users?.length > 0 &&
           searchData?.users?.map((user) => (
             <div key={user.userId}>
@@ -30,7 +32,9 @@ export default function (props: {
         )}
       </div>
       <div className="mb-5">
-        <div className="my-3 fw-bold">Communities</div>
+        {searchData?.communities?.length > 0 && (
+          <div className="my-3 fw-bold">Communities</div>
+        )}
         {searchData?.communities?.length > 0 &&
           searchData?.communities?.map((community) => (
             <div key={community.id}>
@@ -50,12 +54,12 @@ export default function (props: {
           </button>
         )}
       </div>
-      <div className="mb-5">
+      {/* <div className="mb-5">
         <div className="mt-3 fw-bold">Posts</div>
         <button className={`${styles["search_see-all"]} w-100 mt-2 font-xsss`}>
           See all
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }
