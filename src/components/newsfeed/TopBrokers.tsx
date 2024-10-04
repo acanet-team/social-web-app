@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/topBrokers.module.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,6 +14,7 @@ export const TopBrokers = (props: {
   lastName: string;
   followersCount: number;
   brokerId: number;
+  rank: string;
 }) => {
   const tBase = useTranslations("Base");
   const { photoUrl, firstName, lastName, followersCount, brokerId } = props;
@@ -24,6 +25,7 @@ export const TopBrokers = (props: {
   const firstNameArr = firstName.split(" ");
   const lastNameArr = lastName.split(" ");
   const displayName = `${firstNameArr[firstNameArr.length - 1]} ${lastNameArr[0]}`;
+  const [colorRank, setColorRank] = useState<string>("");
 
   const onFollowBrokerHandler = (e: any, brokerId: number) => {
     try {
@@ -44,6 +46,35 @@ export const TopBrokers = (props: {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    switch (props.rank) {
+      case "Verified":
+        setColorRank(
+          "linear-gradient(180deg, #206d5d 0%, #3ca859 50%, #34a375 100%)",
+        );
+        break;
+      case "Pro":
+        setColorRank(
+          "linear-gradient(180deg, #050383 0%, #3b3efd 50%, #727496 100%)",
+        );
+        break;
+      case "Expert":
+        setColorRank(
+          "linear-gradient(180deg, #333534 0%, #606361 50%, #ced4d2 100%)",
+        );
+        break;
+      case "Master":
+        setColorRank(
+          "linear-gradient(180deg, #916b03 0%, #ccb011 50%, #dad9a4 100%)",
+        );
+        break;
+      default:
+        setColorRank("white");
+        break;
+    }
+  }, [props.rank]);
+
   return (
     <div
       className={styles["image-slider-container"]}
@@ -58,8 +89,8 @@ export const TopBrokers = (props: {
                 alt="avatar"
                 width={75}
                 height={75}
-                className="float-right p-1 bg-white rounded-circle object-fit-cover"
-                style={{ objectFit: "cover" }}
+                className={`${styles["broker-ava__effect"]} rounded-circle`}
+                style={{ background: colorRank }}
               />
             </figure>
             <div className="clearfix"></div>

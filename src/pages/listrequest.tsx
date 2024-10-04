@@ -1,4 +1,3 @@
-import { friendList } from "@/components/Friends";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -53,7 +52,7 @@ const ListRequest = ({
     try {
       const response = await getAllConnect(
         page,
-        1,
+        8,
         "addressee",
         "pending_request",
       );
@@ -95,7 +94,11 @@ const ListRequest = ({
     if (document.documentElement) {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
+      if (
+        scrollTop + clientHeight >= scrollHeight - 100 &&
+        !isLoading &&
+        page < totalPage
+      ) {
         setPages((prevPage) => prevPage + 1);
       }
     }
@@ -145,7 +148,7 @@ const ListRequest = ({
   return (
     <div
       ref={listConnectRef}
-      className="card border-0 rounder-3 h_100 pb-5 nunito-font"
+      className="card border-0 rounder-3 h_100 pb-5 font-system"
       style={{ minHeight: "100vh" }}
     >
       <div

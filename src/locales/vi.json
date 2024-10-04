@@ -281,7 +281,15 @@
     "connect": "kết nối",
     "connects": "kết nối",
     "connecting": "Đang kết nối",
-    "waiting": "Đang chờ"
+    "waiting": "Đang chờ",
+    "link": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/ranking-scheme-vi.pdf",
+    "titlePostProfileInvestor": "Hãy kết nối để theo dõi được bài viết của người này.",
+    "titleGroupProfile": "Không tìm thấy cộng đồng.",
+    "No posts found": "Khôgn tìm thấy bài viết",
+    "confirm": "Đồng ý",
+    "delete": "Huỷ",
+    "Respond": "Phản hồi",
+    "View ranking scheme": "Xem cơ chế xếp hạng"
   },
   "Community": {
     "community": "Cộng đồng",

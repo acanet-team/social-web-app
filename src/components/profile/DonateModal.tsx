@@ -126,7 +126,7 @@ function DonateModal(props: {
       onHide={handleClose}
       centered
       maxWidth="500px"
-      className={`${styles["customModal"]} nunito-font`}
+      className={`${styles["customModal"]} font-system`}
     >
       <div className={isMobile ? styles["donate-content__mobile"] : ""}>
         <Modal.Header

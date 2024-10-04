@@ -36,16 +36,17 @@ export default function Header(props: { isOnboarding: boolean }) {
   const userId = session?.user?.id;
   const router = useRouter();
   const { locale } = router;
+  const [countNotis, setCountNotis] = useState<number>(0);
   const logout = useAuthStore((state) => state.logout);
   const [quickSearch, setQuickSearch] = useState<string>("");
   const [searchResults, setQuickSearchResults] =
     useState<IQuickSearchResponse>();
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
-  // useEffect(() => {
-  //   console.log("notifications-yy", notifications);
-  // }, [notifications]);
-  // console.log("soket", notiSocket);
+  useEffect(() => {
+    console.log("notifications-yy", notifications);
+    console.log("ahdfh", countNotis);
+  }, [notifications]);
 
   useEffect(() => {
     if (session) {
@@ -131,7 +132,7 @@ export default function Header(props: { isOnboarding: boolean }) {
   };
 
   return (
-    <div className="nav-header shadow-xs border-0 nunito-font">
+    <div className="nav-header shadow-xs border-0 font-system">
       <div className="nav-top">
         <Link
           href="/"
@@ -166,17 +167,15 @@ export default function Header(props: { isOnboarding: boolean }) {
           onClick={() => toggleisNoti((prevState) => !prevState)}
           ref={iconNotiMiniRef}
         >
-          {
-            // (notiSocket?.length > 0 ||
-            !reatAllNotis && (
-              // )
-              <span
-                className={`dot-count ${styles["dot-count"]} bg-warning mob-menu top-0 right-0`}
+          {reatAllNotis === false && (
+            <span className={` ${styles["dot-count"]} bg-pinterest`}>
+              <p
+                className={` ${styles["dot-count-text"]} font-xssss text-white`}
               >
-                .
-              </span>
-            )
-          }
+                {countNotis}
+              </p>
+            </span>
+          )}
           <i className="feather-bell text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </span>
         <span
@@ -289,15 +288,13 @@ export default function Header(props: { isOnboarding: boolean }) {
         onClick={() => toggleisNoti((prevState) => !prevState)}
         ref={iconNotiRef}
       >
-        {
-          // (notiSocket?.length > 0 ||
-          !reatAllNotis && (
-            // )
-            <span
-              className={`dot-count ${styles["dot-count"]} bg-warning`}
-            ></span>
-          )
-        }
+        {reatAllNotis === false && (
+          <span className={`${styles["dot-count-max-width"]} bg-pinterest`}>
+            <p className={`${styles["dot-count-text"]} font-xssss text-white`}>
+              {countNotis}
+            </p>
+          </span>
+        )}
 
         <i className="feather-bell font-xl text-current"></i>
       </span>
@@ -310,7 +307,8 @@ export default function Header(props: { isOnboarding: boolean }) {
           toggleisNoti={toggleisNoti}
           setReadAllNotis={setReadAllNotis}
           isNoti={isNoti}
-          // setNotiSocket={setNotiSocket}
+          setCountNotis={setCountNotis}
+          countNotis={countNotis}
         />
       </div>
 
@@ -347,29 +345,27 @@ export default function Header(props: { isOnboarding: boolean }) {
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block"></li>
                   <li>
-                    <Link
-                      href={nickName ? `/${locale}/profile/${nickName}` : "#"}
-                      as={nickName ? `/profile/${nickName}` : "#"}
-                      className="nav-content-bttn open-font"
-                    >
-                      <i className="feather-user btn-round-md bg-youtube me-3"></i>
-
-                      <span>{t("my profile")}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/" className="nav-content-bttn open-font">
+                    <Link href="/" className="nav-content-bttn">
                       <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
 
                       <span>{t("newsfeed")}</span>
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href={nickName ? `/${locale}/profile/${nickName}` : "#"}
+                      as={nickName ? `/profile/${nickName}` : "#"}
+                      className="nav-content-bttn"
+                    >
+                      <i className="bi bi-person-bounding-box btn-round-md bg-youtube me-3"></i>
+
+                      <span>{t("my profile")}</span>
+                    </Link>
+                  </li>
+
                   {!(role === "broker") && (
                     <li>
-                      <Link
-                        href="/listrequest"
-                        className="nav-content-bttn open-font "
-                      >
+                      <Link href="/listrequest" className="nav-content-bttn">
                         <div className=" btn-round-md bg-instagram me-3">
                           <Image
                             src="/assets/images/iconListRequest.svg"
@@ -386,34 +382,26 @@ export default function Header(props: { isOnboarding: boolean }) {
                     </li>
                   )}
                   <li>
-                    <Link
-                      href="/brokers"
-                      className="nav-content-bttn open-font"
-                    >
-                      <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
-                      <span>{t("brokers")}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/signal" className="nav-content-bttn open-font">
-                      <i className="feather-trending-up btn-round-md bg-red-gradiant me-3"></i>
+                    <Link href="/signal" className="nav-content-bttn">
+                      <i className="feather-trending-up btn-round-md bg-pink-gradiant me-3"></i>
                       <span>{t("signal")}</span>
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/communities"
-                      className="nav-content-bttn open-font"
-                    >
+                    <Link href="/brokers" className="nav-content-bttn">
+                      <i className="bi bi-person-check btn-round-md bg-red-gradiant me-3"></i>
+                      <span>{t("brokers")}</span>
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link href="/communities" className="nav-content-bttn">
                       <i className="feather-globe btn-round-md bg-mini-gradiant me-3"></i>
                       <span>{t("community")}</span>
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/defaultstorie"
-                      className="nav-content-bttn open-font"
-                    >
+                    <Link href="/defaultstorie" className="nav-content-bttn">
                       <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
                       <span>{t("courses")}</span>
                     </Link>
@@ -439,7 +427,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="/defaultsettings"
-                      className="nav-content-bttn open-font h-auto"
+                      className="nav-content-bttn h-auto"
                     >
                       <i className="font-xl text-current feather-settings me-3"></i>
                       <span>{t("settings")}</span>
@@ -448,7 +436,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="/defaultmessage"
-                      className="nav-content-bttn open-font h-auto"
+                      className="nav-content-bttn h-auto"
                     >
                       <i className="font-xl text-current feather-message-square me-3"></i>
                       <span>{t("chat")}</span>
@@ -458,7 +446,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="#"
-                      className="nav-content-bttn open-font h-auto"
+                      className="nav-content-bttn h-auto"
                       onClick={onLogOutHandler}
                     >
                       <i className="font-xl text-current bi bi-box-arrow-right me-3"></i>

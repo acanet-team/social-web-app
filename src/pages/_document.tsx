@@ -5,7 +5,7 @@ export default function Document({
   messages,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <Html lang="vi" className="color-theme-blue nunito-font loaded">
+    <Html lang="vi" className="color-theme-blue font-system loaded">
       <Head>
         {/* <meta
           name="viewport"

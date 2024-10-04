@@ -320,7 +320,15 @@
     "connects": "connects",
     "Connect": "Connect",
     "connecting": "Connecting",
-    "waiting": "Waiting"
+    "waiting": "Waiting",
+    "link": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/ranking-scheme-en.pdf",
+    "titlePostProfileInvestor": "Please connect to see this person's posts.",
+    "titleGroupProfile": "No community found.",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "Respond": "Respond",
+    "View ranking scheme": "View ranking scheme",
+    "No posts found": "No posts found."
   },
   "FeedTabs": {
     "for_you": "For you",

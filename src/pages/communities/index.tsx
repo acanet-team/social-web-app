@@ -56,7 +56,7 @@ const Communities: NextPage = ({
   };
 
   return (
-    <div id={styles.community} className="nunito-font">
+    <div id={styles.community} className="font-system">
       <h1 className="fs-2 fw-bolder mb-3 mt-1">{t("community")}</h1>
       <div className="card shadow-xss w-100 border-0">
         <div className={`${styles["community-tabs"]} card-body`}>

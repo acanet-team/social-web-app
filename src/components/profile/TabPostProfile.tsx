@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useTransition } from "react";
 import PostCard from "../newsfeed/Postcard";
 import DotWaveLoader from "../DotWaveLoader";
 import type { IPost } from "@/api/newsfeed/model";
@@ -7,6 +7,7 @@ import { combineUniqueById } from "@/utils/combine-arrs";
 import { cleanPath } from "@/utils/Helpers";
 import { id } from "ethers/lib/utils";
 import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
+import { useTranslations } from "next-intl";
 
 const TabPostProfile = (props: {
   take: number;
@@ -17,6 +18,7 @@ const TabPostProfile = (props: {
   isConnected: boolean;
   isBroker: boolean;
 }) => {
+  const t = useTranslations("MyProfile");
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [take, setTake] = useState<number>(props.take);
   const [page, setPage] = useState<number>(1);
@@ -97,6 +99,7 @@ const TabPostProfile = (props: {
 
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
+      {isLoading && <DotWaveLoader />}
       {props.isConnected || props.isBroker || props.role ? (
         myPosts && myPosts.length > 0 ? (
           myPosts.map((myPost, index) => (
@@ -120,14 +123,11 @@ const TabPostProfile = (props: {
             </div>
           ))
         ) : (
-          <div className="mt-5 text-center">No posts found.</div>
+          <div className="mt-5 text-center">{t("No posts found")}</div>
         )
       ) : (
-        <div className="mt-5 text-center">
-          Please connect to see this person&apos;s posts.
-        </div>
+        <div className="mt-5 text-center">{t("titlePostProfileInvestor")}</div>
       )}
-      {isLoading && <DotWaveLoader />}
     </div>
   );
 };

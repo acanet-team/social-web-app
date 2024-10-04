@@ -84,7 +84,7 @@ export default function ProfileSignal(props: {
   }, []);
 
   return (
-    <div className={`card shadow-xss w-100 border-0 mt-4 mb-5 nunito-font`}>
+    <div className={`card shadow-xss w-100 border-0 mt-4 mb-5 font-system`}>
       {!isLoading && cards?.length === 0 && (
         <div className="mt-5 text-center">{tSignal("no_signal_found")}</div>
       )}

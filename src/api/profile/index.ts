@@ -14,13 +14,14 @@ import type {
   topicParam,
 } from "../model";
 import type { IPost, ResponseDto } from "../newsfeed/model";
-import type {
-  GetCommunitiesParams,
-  GetCommunityResponse,
-  ICommunity,
-} from "../community/model";
+import type { GetCommunityResponse, ICommunity } from "../community/model";
 import { removePropertiesEmpty } from "@/utils/Helpers";
-import type { FormDtCompany, FormDtLicense, FormDtSchool } from "./model";
+import type {
+  FormDtCompany,
+  FormDtLicense,
+  FormDtSchool,
+  GetCommunitiesParams,
+} from "./model";
 
 export const getProfile = (id: string) => {
   return httpClient.get<AllProfileResponse>(`/v1/user-profile/user/${id}`);
@@ -125,13 +126,14 @@ export const getMyPosts = (
   );
 };
 
-export const getMyGroups = ({
+export const getGroups = ({
   page,
   take,
   type,
   brokerId,
   search,
   feeType,
+  investorId,
 }: GetCommunitiesParams) => {
   const data = removePropertiesEmpty({
     page,
@@ -140,6 +142,7 @@ export const getMyGroups = ({
     brokerId,
     search,
     feeType,
+    investorId,
   });
   return httpClient.get<GetCommunityResponse<ICommunity>>(`/v1/community`, {
     query: data,

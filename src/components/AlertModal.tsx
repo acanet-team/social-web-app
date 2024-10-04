@@ -60,7 +60,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
       onHide={handleClose}
       centered
       size={type === "alert" ? "sm" : "lg"}
-      className={`${styles["customModal"]} nunito-font`}
+      className={`${styles["customModal"]} font-system`}
       onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
     >
       <Modal.Header closeButton={true} className={styles["modal-header"]}>
