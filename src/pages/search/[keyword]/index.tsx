@@ -39,25 +39,25 @@ export default function Search({
             {/* Tabs */}
             <div className={styles["search-tabs"]}>
               <div
-                className={`${styles["button-tab"]} ${curTab === SearchPageTabs.all ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                className={`${styles["button-tab"]} ${styles["text-dark-mode"]} ${curTab === SearchPageTabs.all ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                 onClick={(e) => onSelectTabHandler(e)}
               >
                 {tSearch("all_tab")}
               </div>
               <div
-                className={`${styles["button-tab"]} ${curTab === SearchPageTabs.people ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                className={`${styles["button-tab"]} ${styles["text-dark-mode"]} ${curTab === SearchPageTabs.people ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                 onClick={(e) => onSelectTabHandler(e)}
               >
                 {tSearch("people_tab")}
               </div>
               <div
-                className={`${styles["button-tab"]} ${curTab === SearchPageTabs.community ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                className={`${styles["button-tab"]} ${styles["text-dark-mode"]} ${curTab === SearchPageTabs.community ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                 onClick={(e) => onSelectTabHandler(e)}
               >
                 {tSearch("community_tab")}
               </div>
               <div
-                className={`${styles["button-tab"]} ${curTab === SearchPageTabs.posts ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+                className={`${styles["button-tab"]} ${styles["text-dark-mode"]} ${curTab === SearchPageTabs.posts ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
                 onClick={(e) => onSelectTabHandler(e)}
               >
                 {tSearch("posts_tab")}

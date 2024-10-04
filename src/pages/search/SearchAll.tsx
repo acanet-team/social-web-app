@@ -2,6 +2,7 @@ import QuickSearchCard from "@/components/search/QuickSearchCard";
 import React from "react";
 import styles from "@/styles/modules/search.module.scss";
 import type { IQuickSearchResponse } from "@/api/search/model";
+import { useTranslations } from "next-intl";
 
 /* eslint-disable react/display-name */
 export default function (props: {
@@ -9,28 +10,43 @@ export default function (props: {
   switchTab: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { searchData, switchTab } = props;
+  const tSearch = useTranslations("Search");
 
   return (
     <div className="mt-5">
+      {searchData?.users?.length === 0 &&
+        searchData?.communities?.length === 0 && (
+          <div className={`${styles["text-dark-mode"]} mt-5 text-center`}>
+            {tSearch("search_no_result")}
+          </div>
+        )}
       <div className="mb-5">
-        <div className="mb-3 fw-bold">People</div>
+        {searchData?.users?.length > 0 && (
+          <div className={`${styles["text-dark-mode"]} mb-3 fw-bold`}>
+            {tSearch("people_tab")}
+          </div>
+        )}
         {searchData?.users?.length > 0 &&
           searchData?.users?.map((user) => (
             <div key={user.userId}>
               <QuickSearchCard type="user" isFullSearch={false} data={user} />
             </div>
           ))}
-        {searchData?.users?.length > 4 && (
+        {searchData?.users?.length !== 0 && (
           <button
-            className={`${styles["search_see-all"]} w-100 mt-2 font-xsss`}
+            className={`${styles["search_see-all"]} ${styles["text-dark-mode"]} w-100 mt-2 font-xsss`}
             onClick={() => switchTab("people")}
           >
-            See all
+            {tSearch("see_all")}
           </button>
         )}
       </div>
       <div className="mb-5">
-        <div className="my-3 fw-bold">Communities</div>
+        {searchData?.communities?.length > 0 && (
+          <div className={`${styles["text-dark-mode"]} my-3 fw-bold`}>
+            {tSearch("communities")}
+          </div>
+        )}
         {searchData?.communities?.length > 0 &&
           searchData?.communities?.map((community) => (
             <div key={community.id}>
@@ -41,21 +57,21 @@ export default function (props: {
               />
             </div>
           ))}
-        {searchData?.communities?.length > 4 && (
+        {searchData?.communities?.length !== 0 && (
           <button
-            className={`${styles["search_see-all"]} w-100 mt-2 font-xsss`}
+            className={`${styles["search_see-all"]} ${styles["text-dark-mode"]} w-100 mt-2 font-xsss`}
             onClick={() => switchTab("community")}
           >
-            See all
+            {tSearch("see_all")}
           </button>
         )}
       </div>
-      <div className="mb-5">
-        <div className="mt-3 fw-bold">Posts</div>
+      {/* <div className="mb-5">
+        <div className="mt-3 fw-bold">{tSearch('posts_tab')}</div>
         <button className={`${styles["search_see-all"]} w-100 mt-2 font-xsss`}>
-          See all
+           {tSearch('see_all')}
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

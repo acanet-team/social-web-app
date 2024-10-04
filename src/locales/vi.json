@@ -395,7 +395,11 @@
     "confirm": "Đồng ý",
     "delete": "Huỷ",
     "see_all": "Xem tất cả",
-    "no_friend_request": "Không có yêu cầu kết bạn nào"
+    "no_friend_request": "Không có yêu cầu kết bạn nào",
+    "connected": "Đã kết nối",
+    "request_send": "Đã gửi kết nối",
+    "response": "Phản hồi",
+    "connect": "Kết nối"
   },
   "Signal": {
     "discover_tab": "Khám phá",
@@ -441,6 +445,19 @@
     "people_tab": "Người dùng",
     "posts_tab": "Bài viết",
     "search_placeholer": "Gõ để tìm kiếm...",
-    "search_result_title": "Kết quả tìm kiếm cho"
+    "search_result_title": "Kết quả tìm kiếm cho",
+    "see_more_results": "Xem thêm kết quả"
+  },
+  "NFT": {
+    "nft_tab_title": "Hồ sơ NFT",
+    "no_nft_found": "Không tìm thấy NFT nào",
+    "sell_nft": "Bán",
+    "buy_nft": "Mua",
+    "sell_content": "Nội dung",
+    "sell_price": "Giá",
+    "sell_confirm": "Xác nhận",
+    "error_content_missing": "Hãy nhập nội dung cho bài bán NFT của bạn.",
+    "error_price_missing": "Hãy nhập giá bán.",
+    "sell_nft_success": "NFT của bạn đã được đăng bán thành công."
   }
 }

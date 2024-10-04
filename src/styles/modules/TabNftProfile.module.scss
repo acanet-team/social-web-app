@@ -1,7 +1,7 @@
 .nft-card_container {
   display: grid;
   grid-template-columns: repeat(auto-fit, 320px);
-  grid-template-rows: repeat(auto-fit, 420px);
+  grid-template-rows: repeat(auto-fit, 450px);
   gap: 3rem;
   justify-content: center;
   justify-items: center;
@@ -14,12 +14,37 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
   border-radius: 10px;
 }
+.nft-card button {
+ padding: 7px 0;
+ font-weight: 600;
+}
+
+.nft-card button:hover {
+  font-weight: 800;
+ }
 
 .ntf-image {
   width: 288px;
   height: 288px;
   object-fit: cover;
   border-radius: 10px;
+}
+
+.nft-card_body button {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+:global(.theme-dark) {
+  .nft-card_body {
+    background-color: #212529 !important;
+    border-radius: 10px;
+  }
+
+  .nft-card_body button {
+    background-color: var(--theme-color-shade) !important;
+    color: var(--light) !important;
+  }
 }
 
 // MEDIA QUERIES

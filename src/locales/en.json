@@ -394,7 +394,11 @@
     "confirm": "Confirm",
     "delete": "Delete",
     "see_all": "See All",
-    "no_friend_request": "No friend request"
+    "no_friend_request": "No friend request",
+    "connected": "Connected",
+    "request_send": "Request sent",
+    "response": "Response",
+    "connect": "Connect"
   },
   "Signal": {
     "discover_tab": "Discover",
@@ -439,7 +443,23 @@
     "community_tab": "Community",
     "people_tab": "People",
     "posts_tab": "Posts",
+    "communities": "Communities",
     "search_placeholer": "Type to search...",
-    "search_result_title": "Search result for"
+    "search_result_title": "Search result for",
+    "search_no_result": "No results found.",
+    "see_all": "See all",
+    "see_more_results": "Show me more results"
+  },
+  "NFT": {
+    "nft_tab_title": "NFT Profile",
+    "no_nft_found": "No NFTs found",
+    "sell_nft": "Sell",
+    "buy_nft": "Buy",
+    "sell_content": "Content",
+    "sell_price": "Price",
+    "sell_confirm": "Confirm",
+    "error_content_missing": "Please enter the content for your sell post.",
+    "error_price_missing": "Please enter the price",
+    "sell_nft_success": "Your NFT has been successfully listed for sale"
   }
 }

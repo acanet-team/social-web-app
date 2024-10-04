@@ -8,15 +8,21 @@ import httpClient from "@/api";
 import axios from "axios";
 import { Agent } from "http";
 import styles from "@/styles/modules/TabNftProfile.module.scss";
+import { useTranslations } from "next-intl";
+import SellNFTModal from "../nft/SellNFTModal";
 
 const TabNftProfile = (props: { user: User; idParam: string }) => {
+  const tNFT = useTranslations("NFT");
   const { user, idParam } = props;
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
   const [role, setRole] = useState(false);
-  const [isLoading, setLoading] = useState<Boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [nftData, setNftData] = useState<any[]>([]);
+  const [nftToSell, setNftToSell] = useState<any>();
   const { nftContract, connectWallet, account } = useWeb3();
+
   useEffect(() => {
     setLoading(true);
     if (session) {
@@ -57,6 +63,12 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
     }
   }, [user, user.walletAddress]);
 
+  const onSellNFTHandler = (nft: any) => {
+    console.log("dede", nft);
+
+    setNftToSell(nft);
+    setOpenModal(true);
+  };
   return (
     <>
       <div className="row">
@@ -65,13 +77,13 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
             <div className="card-body d-block w-100 overflow-hidden p-0">
               <div className="ps-0 d-flex">
                 <h4 className="fw-700 font-xss text-grey-900 mb-0 p-4">
-                  NFT Profile
+                  {tNFT("nft_tab_title")}
                 </h4>
               </div>
               {isLoading && <DotWaveLoader />}
               {!isLoading && nftData?.length === 0 && (
                 <div className="text-grey-600 mt-3 mb-5 text-center">
-                  No NFTs found
+                  {tNFT("no_nft_found")}
                 </div>
               )}
               {!isLoading && nftData?.length > 0 && (
@@ -80,14 +92,19 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
                     {nftData.map((nft, index) => (
                       <div
                         className={`${styles["nft-card"]} col-lg-4 col-md-4 col-6`}
-                        key={nftData[0].image_url}
+                        key={nft.image_url}
                       >
-                        <div className="card p-0 border-0 h-100">
-                          <div className="card-body p-3">
+                        <div
+                          className="card p-0 border-0 h-100"
+                          style={{ borderRadius: "10px" }}
+                        >
+                          <div
+                            className={`${styles["nft-card_body"]} card-body p-3 position-relative`}
+                          >
                             <div className="card-image col-12 p-0">
                               <Image
-                                src={nftData[0].image_url}
-                                alt={nftData[0].name ?? "NFT"}
+                                src={nft.image_url}
+                                alt={nft.name ?? "NFT"}
                                 width={200}
                                 height={200}
                                 className={styles["ntf-image"]}
@@ -95,13 +112,19 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
                               />
                             </div>
                             <h5 className="fw-700 font-xss text-grey-900 mb-2 mt-3">
-                              {nftData[0].name ?? "NFT"}
+                              {nft.name ?? "NFT"}
                             </h5>
                             <p className="fw-500 font-xsss text-grey-500 m-0">
-                              {nftData[0].description.length > 50
-                                ? `${nftData[0].description.substring(0, 80)}...`
-                                : nftData[0].description}
+                              {nft.description.length > 50
+                                ? `${nft.description.substring(0, 80)}...`
+                                : nft.description}
                             </p>
+                            <button
+                              className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
+                              onClick={() => onSellNFTHandler(nft)}
+                            >
+                              {tNFT("sell_nft")}
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -112,6 +135,14 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
             </div>
           </div>
         </div>
+        {openModal && (
+          <SellNFTModal
+            show={openModal}
+            handleShow={() => setOpenModal(true)}
+            handleClose={() => setOpenModal(false)}
+            nft={nftToSell}
+          />
+        )}
       </div>
     </>
   );
