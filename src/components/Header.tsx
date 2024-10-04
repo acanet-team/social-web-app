@@ -147,7 +147,6 @@ export default function Header(props: { isOnboarding: boolean }) {
     if (e.key === "Enter" && e.shiftKey == false) {
       e.preventDefault();
       const keyword = e.target.value;
-      console.log("kkkk", keyword);
       if (!keyword) return;
       router.push(`/search/${keyword}`);
       resetSearchInput();
