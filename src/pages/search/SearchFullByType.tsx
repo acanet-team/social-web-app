@@ -19,13 +19,13 @@ export default function SearchFullByType(props: {
 
   const fullSearch = async (keyword: string) => {
     try {
-      // setIsLoading(true);
-      // const res = await fullSearchByType(
-      //   keyword,
-      //   tab === "people" ? "user" : "community"
-      // );
-      // setSearchResults(res.data.docs);
-      // setTotalPage(res.data.meta.totalPage);
+      setIsLoading(true);
+      const res = await fullSearchByType(
+        keyword,
+        tab === "people" ? "users" : "communities",
+      );
+      setSearchResults(res.data.docs);
+      setTotalPage(res.data.meta.totalPage);
     } catch (err) {
       console.log(err);
     } finally {

@@ -63,7 +63,10 @@ const Home = ({
     <div className="" id={styles.home}>
       <div className="middle-sidebar-left">
         <div className="row feed-body">
-          <div className={`col-xl-8 col-xxl-9 col-lg-8}`}>
+          <div
+            className={`col-xl-8 col-xxl-9 col-lg-8}`}
+            style={{ marginBottom: "100px" }}
+          >
             <FetchBrokers brokers={topBrokers} />
 
             {/* Tabs */}
