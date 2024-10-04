@@ -12,6 +12,7 @@ import TabAbout from "@/components/profile/TabAbout";
 import Banner from "@/components/profile/Banner";
 import TabRating from "@/components/profile/TabRating";
 import ProfileSignal from "@/components/signal/ProfileSignal";
+import TabNftProfile from "@/components/profile/TabNftProfile";
 
 const TAKE = 10;
 
@@ -118,6 +119,8 @@ export default function Profile({
       setCurTab("about");
     } else if (chosenTab === t("Signal")) {
       setCurTab("signal");
+    } else if (chosenTab === t("Nft")) {
+      setCurTab("nft");
     } else {
       setCurTab("rating");
     }
@@ -195,6 +198,14 @@ export default function Profile({
               <p>{t("Signal")}</p>
             </div>
           )}
+          {
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>{t("Nft")}</p>
+            </div>
+          }
         </div>
       </div>
       {curTab === TabPnum.About && (
@@ -225,6 +236,9 @@ export default function Profile({
           take={TAKE}
           id={Number(idUser)}
         />
+      )}
+      {curTab === TabPnum.Nft && (
+        <TabNftProfile user={dtUser} idParam={String(idUser)} />
       )}
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
         <TabRating brokerData={dataUser} />
