@@ -568,11 +568,6 @@ const Notifications: React.FC<NotificationProps> = ({
     try {
       const response: BaseArrayResponseNotis<Notification> =
         await getNotifications(page, take);
-      // if (countNotis > 0 ){
-      //   setReadAllNotis(false);
-      // } else {
-      //   setReadAllNotis(true);
-      // }
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           prevNotis,
@@ -591,7 +586,6 @@ const Notifications: React.FC<NotificationProps> = ({
   };
   useEffect(() => {
     if (isNoti === true) {
-      // fetchNotifications(1);
       patchReadAll();
       setReadAllNotis(true);
     }
@@ -621,6 +615,7 @@ const Notifications: React.FC<NotificationProps> = ({
           // console.log("socccccc", response);
           setNotis(response.data.docs);
           setCountNotis(response?.data?.newNotificationsCount);
+          setPage(1);
           if (countNotis > 0) {
             setReadAllNotis(false);
           } else {
@@ -756,13 +751,13 @@ const Notifications: React.FC<NotificationProps> = ({
               <div
                 key={notification?.id}
                 style={{
-                  height:
-                    notification.type === "connection_request"
-                      ? // && !notification.read_at
-                        "105px"
-                      : notification.type === "community_creation_failed"
-                        ? "95px"
-                        : "70px",
+                  // height:
+                  //   notification.type === "connection_request"
+                  //     ? // && !notification.read_at
+                  //       "105px"
+                  //     : notification.type === "community_creation_failed"
+                  //       ? "95px"
+                  //       : "70px",
                   padding: "4px",
                 }}
                 className={`card w-100 border-0 mb-1 cursor-pointer  

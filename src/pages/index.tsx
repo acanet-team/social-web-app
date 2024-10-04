@@ -152,7 +152,7 @@ const Home = ({
           </div>
 
           <div className={"col-xl-4 col-xxl-3 col-lg-4 ps-lg-0"}>
-            {!isTablet && <Friends />}
+            {!isBroker && !isTablet && <Friends />}
           </div>
         </div>
       </div>
