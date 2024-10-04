@@ -78,7 +78,7 @@ export default function Leftnav() {
               <li>
                 <Link
                   href="/defaultsettings"
-                  className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                  className="nav-content-bttn h-auto pt-2 pb-2"
                 >
                   <i className="font-sm feather-settings me-3 text-grey-500"></i>
                   <span>{t("settings")}</span>
@@ -87,7 +87,7 @@ export default function Leftnav() {
               <li>
                 <Link
                   href="/defaultanalytics"
-                  className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                  className="nav-content-bttn h-auto pt-2 pb-2"
                 >
                   <i className="font-sm feather-pie-chart me-3 text-grey-500"></i>
                   <span>Analytics</span>
@@ -96,7 +96,7 @@ export default function Leftnav() {
               <li>
                 <Link
                   href="/defaultmessage"
-                  className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                  className="nav-content-bttn h-auto pt-2 pb-2"
                 >
                   <i className="font-sm feather-message-square me-3 text-grey-500"></i>
                   <span>{t("chat")}</span>

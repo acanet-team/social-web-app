@@ -17,3 +17,10 @@
   color: var(--light) !important;
   font-weight: 800;
 }
+.broker-ava__effect {
+  display: inline-block;
+  padding: 6px;
+  border: none;
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 4px;
+  object-fit: cover;
+}

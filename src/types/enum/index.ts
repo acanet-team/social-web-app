@@ -51,3 +51,10 @@ export enum ConnectionStatus {
   pending = "pending_request",
   accepted = "accepted",
 }
+
+export enum SearchPageTabs {
+  all = "all",
+  people = "people",
+  community = "community",
+  posts = "posts",
+}

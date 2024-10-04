@@ -9,6 +9,7 @@ import {
 import { useSession } from "next-auth/react";
 import CommunityFeed from "@/components/communities/CommunityFeed";
 import MemberTable from "@/components/communities/MemberTable";
+import { useRouter } from "next/navigation";
 
 const TAKE = 10;
 export default function CommunityView({
@@ -23,7 +24,6 @@ export default function CommunityView({
   const { data: session } = useSession() as any;
   const [pendingRequests, setPendingRequests] =
     useState<number>(pendingRequestNum);
-
   return (
     <Fragment>
       <div className="pe-0" style={{ paddingBottom: "40px" }}>

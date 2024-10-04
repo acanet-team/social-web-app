@@ -1,10 +1,12 @@
 import Appfooter from "@/components/Appfooter";
 import Header from "@/components/Header";
-import Leftnav from "@/components/Leftnav";
 import Popupchat from "@/components/Popupchat";
+import ToastNoti from "@/components/ToastNoti";
 import Head from "next/head";
+import { useMediaQuery } from "react-responsive";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  const isQuery = useMediaQuery({ query: "(max-width: 650px" });
   return (
     <>
       <Head>
@@ -19,6 +21,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <div className="main-content right-chat-active">
         <div className="middle-sidebar-bottom">{props.children}</div>
       </div>
+      {!isQuery && <ToastNoti />}
       <Popupchat />
       <Appfooter />
     </>

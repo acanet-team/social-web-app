@@ -10,42 +10,46 @@ import { useTranslations } from "next-intl";
 import styles from "@/styles/modules/header.module.scss";
 import { useWebSocket } from "@/context/websocketProvider";
 import Notifications from "./Notification";
-import type { Notification } from "@/api/notification/model";
-import { getNotifications } from "@/api/notification";
 import { useRouter } from "next/router";
+import QuickSearchCard from "./search/QuickSearchCard";
+import type { IQuickSearchResponse } from "@/api/search/model";
 
 export default function Header(props: { isOnboarding: boolean }) {
+  const t = useTranslations("NavBar");
+  const tSearch = useTranslations("Search");
   const [isOpen, toggleOpen] = useState(false);
   const [isActive, toggleActive] = useState(false);
   const [isNoti, toggleisNoti] = useState(false);
   const [curTheme, setCurTheme] = useState("theme-light");
   const [openSettings, setOpenSettings] = useState(false);
-  const logout = useAuthStore((state) => state.logout);
+  const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
   const [photo, setPhoto] = useState<string>("");
-  const { data: session } = useSession() as any;
   const modalRef = useRef<HTMLDivElement>(null);
   const notiRef = useRef<HTMLDivElement>(null);
   const iconNotiRef = useRef<HTMLDivElement>(null);
   const iconNotiMiniRef = useRef<HTMLDivElement>(null);
-  const { notifications } = useWebSocket();
   const avatarRef = useRef<HTMLImageElement>(null);
-  const t = useTranslations("NavBar");
   const [nickName, setNickName] = useState<string>("");
   const [role, setRole] = useState<string>("");
+  const { data: session } = useSession() as any;
+  const { notifications } = useWebSocket();
   const userId = session?.user?.id;
-  const [reatAllNotis, setReadAllNotis] = useState<boolean>(true);
   const router = useRouter();
   const { locale } = router;
+  const [countNotis, setCountNotis] = useState<number>(0);
+  const logout = useAuthStore((state) => state.logout);
+  const [quickSearch, setQuickSearch] = useState<string>("");
+  const [searchResults, setQuickSearchResults] =
+    useState<IQuickSearchResponse>();
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
-  // useEffect(() => {
-  //   console.log("notifications-yy", notifications);
-  // }, [notifications]);
-  // console.log("soket", notiSocket);
+  useEffect(() => {
+    console.log("notifications-yy", notifications);
+    console.log("ahdfh", countNotis);
+  }, [notifications]);
 
   useEffect(() => {
     if (session) {
-      // console.log("session", session)
       setPhoto(session?.user?.photo?.path || "/assets/images/user.png");
       setNickName(session?.user?.userProfile?.nickName);
       setRole(session?.user?.role?.name);
@@ -104,8 +108,31 @@ export default function Header(props: { isOnboarding: boolean }) {
     };
   }, []);
 
+  const onSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerms = e.target.value;
+    console.log("search", searchTerms);
+    setQuickSearch(e.target.value);
+    try {
+      // Call api to search
+      // Set search results
+      // setQuickSearchResults()
+    } catch (err) {
+    } finally {
+    }
+  };
+
+  const onEnterSearchHandler = (e: any) => {
+    // if (e.key === "Enter" && e.shiftKey == false) {
+    //   e.preventDefault();
+    //   const keyword = e.target.value;
+    //   console.log("enter", keyword);
+    //   if (!keyword) return;
+    //   router.push(`/search/${keyword}`);
+    // }
+  };
+
   return (
-    <div className="nav-header shadow-xs border-0 nunito-font">
+    <div className="nav-header shadow-xs border-0 font-system">
       <div className="nav-top">
         <Link
           href="/"
@@ -140,17 +167,15 @@ export default function Header(props: { isOnboarding: boolean }) {
           onClick={() => toggleisNoti((prevState) => !prevState)}
           ref={iconNotiMiniRef}
         >
-          {
-            // (notiSocket?.length > 0 ||
-            !reatAllNotis && (
-              // )
-              <span
-                className={`dot-count ${styles["dot-count"]} bg-warning mob-menu top-0 right-0`}
+          {reatAllNotis === false && (
+            <span className={` ${styles["dot-count"]} bg-pinterest`}>
+              <p
+                className={` ${styles["dot-count-text"]} font-xssss text-white`}
               >
-                .
-              </span>
-            )
-          }
+                {countNotis}
+              </p>
+            </span>
+          )}
           <i className="feather-bell text-grey-900 font-md btn-round-sm bg-greylight"></i>
         </span>
         <span
@@ -176,30 +201,100 @@ export default function Header(props: { isOnboarding: boolean }) {
           ></button>
         )}
       </div>
-      <form action="#" className="float-left header-search ms-3">
-        <div className="form-group mb-0 icon-input">
-          <i className="feather-search font-sm text-grey-400"></i>
-          <input
-            type="text"
-            placeholder="Start typing to search.."
-            className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w400"
-          />
+
+      <div className="position-relative">
+        {/* Mobile quick search */}
+        <div className={`app-header-search ${searchClass}`}>
+          <form className="search-form h-100">
+            <div className="form-group searchbox h-100 mb-0 border-0 p-1">
+              <input
+                type="text"
+                className="form-control h-100 border-0"
+                placeholder={tSearch("search_placeholer")}
+                value={quickSearch}
+                onChange={onSearchHandler}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                  onEnterSearchHandler(e)
+                }
+              />
+              <span className="ms-1 mt-1 d-inline-block close searchbox-close">
+                <i
+                  className="bi bi-x-lg font-xs text-dark"
+                  onClick={() => toggleActive(false)}
+                ></i>
+              </span>
+            </div>
+          </form>
         </div>
-      </form>
+
+        {/* Desktop quick search */}
+        <form action="#" className="float-left header-search ms-3">
+          <div className="form-group mb-0 icon-input">
+            <i className="feather-search font-sm text-grey-400"></i>
+            <input
+              type="text"
+              placeholder={tSearch("search_placeholer")}
+              className={`${styles["quick-search"]} bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xsss fw-500 rounded-xl`}
+              value={quickSearch}
+              onChange={onSearchHandler}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                onEnterSearchHandler(e)
+              }
+            />
+          </div>
+        </form>
+
+        {/* Quick search result */}
+        {isActive &&
+          searchResults &&
+          (searchResults.users.length > 0 ||
+            searchResults.communities.length > 0) && (
+            <div className={styles["quick-search__results"]}>
+              <div className={styles["quick-search__results-content"]}>
+                {searchResults.users.map((user) => (
+                  <div key={user.userId}>
+                    <QuickSearchCard
+                      type="user"
+                      isFullSearch={false}
+                      data={user}
+                    />
+                  </div>
+                ))}
+                {searchResults.communities.map((community) => (
+                  <div key={community.id}>
+                    <QuickSearchCard
+                      type="community"
+                      isFullSearch={false}
+                      data={community}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className={styles["quick-search__results-footer"]}>
+                <div>1.535 results</div>
+                <div className="text-dark fw-600 cursor-pointer">
+                  <span className="text-decoration-underline">
+                    Show me more results
+                  </span>
+                  <i className="bi bi-arrow-right ms-1 h5"></i>
+                </div>
+              </div>
+            </div>
+          )}
+      </div>
+
       <span
         className={`p-2 pointer text-center ms-auto menu-icon cursor-pointer ${notiClass}`}
         onClick={() => toggleisNoti((prevState) => !prevState)}
         ref={iconNotiRef}
       >
-        {
-          // (notiSocket?.length > 0 ||
-          !reatAllNotis && (
-            // )
-            <span
-              className={`dot-count ${styles["dot-count"]} bg-warning`}
-            ></span>
-          )
-        }
+        {reatAllNotis === false && (
+          <span className={`${styles["dot-count-max-width"]} bg-pinterest`}>
+            <p className={`${styles["dot-count-text"]} font-xssss text-white`}>
+              {countNotis}
+            </p>
+          </span>
+        )}
 
         <i className="feather-bell font-xl text-current"></i>
       </span>
@@ -212,7 +307,8 @@ export default function Header(props: { isOnboarding: boolean }) {
           toggleisNoti={toggleisNoti}
           setReadAllNotis={setReadAllNotis}
           isNoti={isNoti}
-          // setNotiSocket={setNotiSocket}
+          setCountNotis={setCountNotis}
+          countNotis={countNotis}
         />
       </div>
 
@@ -249,29 +345,27 @@ export default function Header(props: { isOnboarding: boolean }) {
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block"></li>
                   <li>
-                    <Link
-                      href={nickName ? `/${locale}/profile/${nickName}` : "#"}
-                      as={nickName ? `/profile/${nickName}` : "#"}
-                      className="nav-content-bttn open-font"
-                    >
-                      <i className="feather-user btn-round-md bg-youtube me-3"></i>
-
-                      <span>{t("my profile")}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/" className="nav-content-bttn open-font">
+                    <Link href="/" className="nav-content-bttn">
                       <i className="feather-home btn-round-md bg-blue-gradiant me-3"></i>
 
                       <span>{t("newsfeed")}</span>
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href={nickName ? `/${locale}/profile/${nickName}` : "#"}
+                      as={nickName ? `/profile/${nickName}` : "#"}
+                      className="nav-content-bttn"
+                    >
+                      <i className="bi bi-person-bounding-box btn-round-md bg-youtube me-3"></i>
+
+                      <span>{t("my profile")}</span>
+                    </Link>
+                  </li>
+
                   {!(role === "broker") && (
                     <li>
-                      <Link
-                        href="/listrequest"
-                        className="nav-content-bttn open-font "
-                      >
+                      <Link href="/listrequest" className="nav-content-bttn">
                         <div className=" btn-round-md bg-instagram me-3">
                           <Image
                             src="/assets/images/iconListRequest.svg"
@@ -288,34 +382,26 @@ export default function Header(props: { isOnboarding: boolean }) {
                     </li>
                   )}
                   <li>
-                    <Link
-                      href="/brokers"
-                      className="nav-content-bttn open-font"
-                    >
-                      <i className="feather-user btn-round-md bg-red-gradiant me-3"></i>
-                      <span>{t("brokers")}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/signal" className="nav-content-bttn open-font">
-                      <i className="feather-trending-up btn-round-md bg-red-gradiant me-3"></i>
+                    <Link href="/signal" className="nav-content-bttn">
+                      <i className="feather-trending-up btn-round-md bg-pink-gradiant me-3"></i>
                       <span>{t("signal")}</span>
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/communities"
-                      className="nav-content-bttn open-font"
-                    >
+                    <Link href="/brokers" className="nav-content-bttn">
+                      <i className="bi bi-person-check btn-round-md bg-red-gradiant me-3"></i>
+                      <span>{t("brokers")}</span>
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link href="/communities" className="nav-content-bttn">
                       <i className="feather-globe btn-round-md bg-mini-gradiant me-3"></i>
                       <span>{t("community")}</span>
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/defaultstorie"
-                      className="nav-content-bttn open-font"
-                    >
+                    <Link href="/defaultstorie" className="nav-content-bttn">
                       <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
                       <span>{t("courses")}</span>
                     </Link>
@@ -341,7 +427,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="/defaultsettings"
-                      className="nav-content-bttn open-font h-auto"
+                      className="nav-content-bttn h-auto"
                     >
                       <i className="font-xl text-current feather-settings me-3"></i>
                       <span>{t("settings")}</span>
@@ -350,7 +436,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="/defaultmessage"
-                      className="nav-content-bttn open-font h-auto"
+                      className="nav-content-bttn h-auto"
                     >
                       <i className="font-xl text-current feather-message-square me-3"></i>
                       <span>{t("chat")}</span>
@@ -360,7 +446,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="#"
-                      className="nav-content-bttn open-font h-auto"
+                      className="nav-content-bttn h-auto"
                       onClick={onLogOutHandler}
                     >
                       <i className="font-xl text-current bi bi-box-arrow-right me-3"></i>

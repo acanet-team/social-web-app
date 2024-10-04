@@ -210,7 +210,7 @@ const CreatePost = (props: {
 
   return (
     <div
-      className="card w-100 border-0 py-3 mb-3 nunito-font"
+      className="card w-100 border-0 py-3 mb-3 font-system"
       id={style["create-post"]}
     >
       <div

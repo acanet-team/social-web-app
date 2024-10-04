@@ -7,6 +7,7 @@ import { CommunityViewEnum } from "@/types";
 import styles from "@/styles/modules/memberTable.module.scss";
 import CommunityForm from "./CommunityForm";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function CommunityHeader(props: {
   community: ICommunity;
@@ -25,6 +26,19 @@ export default function CommunityHeader(props: {
   const tBase = useTranslations("Base");
   const tCommunity = useTranslations("Community");
   const { data: session } = useSession();
+
+  const params = useSearchParams();
+  const currentTab = params?.get("tab") || "posts";
+
+  useEffect(() => {
+    if (currentTab === "posts") {
+      setCurTab("posts");
+    } else if (currentTab === "members") {
+      setCurTab("members");
+    } else {
+      setCurTab("requests");
+    }
+  }, [currentTab]);
 
   useEffect(() => {
     if (session) {

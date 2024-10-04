@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import styles from "@/styles/modules/profile.module.scss";
 import { TabPnum } from "@/types/enum";
-import { getMyGroups, getMyPosts, getProfile } from "@/api/profile";
+import { getMyPosts, getProfile } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { createGetAllTopicsRequest } from "@/api/onboard";
@@ -27,6 +27,8 @@ export default function Profile({
   followed,
   connectionCount,
   connectionStatus,
+  logoRank,
+  connectionRequestId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
@@ -43,6 +45,8 @@ export default function Profile({
   const [switchTab, setSwitchTab] = useState<boolean>(false);
   const [curTab, setCurTab] = useState<string>("about");
   const [connectStatus, setConnectStatus] = useState(connectionStatus);
+  const [logoRanks, setLogoRanks] = useState(logoRank);
+  const [connectRequestId, setConnectRequestId] = useState(connectionRequestId);
 
   useEffect(() => {
     if (session) {
@@ -98,6 +102,8 @@ export default function Profile({
       setFolowed(dtProfileRes.data?.followed);
       setConnectCount(dtProfileRes?.data?.connectionsCount);
       setConnectStatus(dtProfileRes?.data?.connectionStatus);
+      setLogoRanks(dtProfileRes?.data?.brokerProfile?.rank?.logo);
+      setConnectRequestId(dtProfileRes?.data?.connectionRequestId);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -150,6 +156,8 @@ export default function Profile({
           followed={fllowed}
           connectionCount={connectCount}
           connectStatus={connectStatus}
+          logoRank={logoRanks}
+          connectRequestId={connectRequestId}
         />
         <div className={`${styles["group-tabs"]} ${tabClass}`}>
           <div
@@ -245,11 +253,12 @@ export async function getServerSideProps(context: NextPageContext) {
   const { key } = context.query;
   if (!key) {
     return {
-      notFound: true, // This triggers the 404 page
+      notFound: true,
     };
   }
   const profileRes = await getProfile(key as string);
-  console.log("profileRes", profileRes.data.user.role);
+  console.log("profileRes", profileRes?.data);
+  // console.log("profileRes", profileRes?.data?.brokerProfile?.rank?.logo);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   return {
@@ -266,6 +275,8 @@ export async function getServerSideProps(context: NextPageContext) {
       idUser: idUser,
       interestTopic: interestTopic?.data.docs || [],
       userUsername: key || "",
+      logoRank: profileRes?.data?.brokerProfile?.rank?.logo || null,
+      connectionRequestId: profileRes?.data?.connectionRequestId || null,
     },
   };
 }

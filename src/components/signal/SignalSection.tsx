@@ -129,7 +129,7 @@ export default function SignalSection(props: {
 
   return (
     <div
-      className={`card shadow-xss w-100 border-0 mb-5 nunito-font`}
+      className={`card shadow-xss w-100 border-0 mb-5 font-system`}
       style={{ marginTop: "40px" }}
     >
       <div className={styles["card_container"]}>

@@ -23,18 +23,6 @@ export type ApiRequestParams = {
   config: RequestConfig;
 };
 
-// export type GetRequestParams = {
-//   url: string;
-//   params?: unknown;
-//   config?: RequestConfig;
-// };
-
-// export type PostRequestParams = {
-//   url: string;
-//   body?: unknown;
-//   options?: RequestConfig;
-// };
-
 export type GetRequestParams<T> = {
   url: string;
   params?: T;
@@ -79,6 +67,17 @@ export type BaseArrayResponsVersionDocs<T> = {
   data: {
     docs: T[];
     meta: Meta;
+  };
+};
+
+export type BaseArrayResponseNotis<T> = {
+  status: number;
+  success?: boolean;
+  message: string;
+  data: {
+    docs: T[];
+    meta: Meta;
+    newNotificationsCount: number;
   };
 };
 
@@ -132,6 +131,7 @@ export type AllProfileResponse = {
     followed: boolean;
     connectionsCount: number;
     connectionStatus: string;
+    connectionRequestId: string;
   };
 };
 
