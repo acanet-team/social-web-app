@@ -22,6 +22,12 @@ export default bundleAnalyzer(
           destination: "https://api-dev.acanet.io/api/v1/:path*",
           // destination: "http://192.168.100.136:3001/api/v1/:path*",
         },
+        {
+          source: "/s3/:path*",
+          destination:
+            "https://acanet-v1-public-test.s3.ap-southeast-1.amazonaws.com/:path*",
+          // destination: "http://192.168.100.136:3001/api/v1/:path*",
+        },
       ];
     },
     async headers() {
