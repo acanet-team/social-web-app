@@ -70,6 +70,17 @@ export type BaseArrayResponsVersionDocs<T> = {
   };
 };
 
+export type BaseArrayResponseNotis<T> = {
+  status: number;
+  success?: boolean;
+  message: string;
+  data: {
+    docs: T[];
+    meta: Meta;
+    newNotificationsCount: number;
+  };
+};
+
 export type BaseApiResponse<T> = Promise<T>;
 
 export type AllBrokersResponse<T> = {
@@ -120,6 +131,7 @@ export type AllProfileResponse = {
     followed: boolean;
     connectionsCount: number;
     connectionStatus: string;
+    connectionRequestId: string;
   };
 };
 

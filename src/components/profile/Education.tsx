@@ -37,7 +37,6 @@ const Education = ({
   const [school, setSchool] = useState<School[]>([]);
   useEffect(() => {
     setSchool(dataBrokerProfile?.school);
-    console.log("setSchool", dataBrokerProfile?.school);
   }, [dataBrokerProfile]);
   const educationToShow = showAllEducation ? school : school?.slice(0, 2);
 

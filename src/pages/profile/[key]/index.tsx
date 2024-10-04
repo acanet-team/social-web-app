@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import styles from "@/styles/modules/profile.module.scss";
 import { TabPnum } from "@/types/enum";
-import { getMyGroups, getMyPosts, getProfile } from "@/api/profile";
+import { getMyPosts, getProfile } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { createGetAllTopicsRequest } from "@/api/onboard";
@@ -12,6 +12,7 @@ import TabAbout from "@/components/profile/TabAbout";
 import Banner from "@/components/profile/Banner";
 import TabRating from "@/components/profile/TabRating";
 import ProfileSignal from "@/components/signal/ProfileSignal";
+import TabNftProfile from "@/components/profile/TabNftProfile";
 
 const TAKE = 10;
 
@@ -26,6 +27,8 @@ export default function Profile({
   followed,
   connectionCount,
   connectionStatus,
+  logoRank,
+  connectionRequestId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
@@ -42,6 +45,8 @@ export default function Profile({
   const [switchTab, setSwitchTab] = useState<boolean>(false);
   const [curTab, setCurTab] = useState<string>("about");
   const [connectStatus, setConnectStatus] = useState(connectionStatus);
+  const [logoRanks, setLogoRanks] = useState(logoRank);
+  const [connectRequestId, setConnectRequestId] = useState(connectionRequestId);
 
   useEffect(() => {
     if (session) {
@@ -97,6 +102,8 @@ export default function Profile({
       setFolowed(dtProfileRes.data?.followed);
       setConnectCount(dtProfileRes?.data?.connectionsCount);
       setConnectStatus(dtProfileRes?.data?.connectionStatus);
+      setLogoRanks(dtProfileRes?.data?.brokerProfile?.rank?.logo);
+      setConnectRequestId(dtProfileRes?.data?.connectionRequestId);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -112,6 +119,8 @@ export default function Profile({
       setCurTab("about");
     } else if (chosenTab === t("Signal")) {
       setCurTab("signal");
+    } else if (chosenTab === t("Nft")) {
+      setCurTab("nft");
     } else {
       setCurTab("rating");
     }
@@ -147,6 +156,8 @@ export default function Profile({
           followed={fllowed}
           connectionCount={connectCount}
           connectStatus={connectStatus}
+          logoRank={logoRanks}
+          connectRequestId={connectRequestId}
         />
         <div className={`${styles["group-tabs"]} ${tabClass}`}>
           <div
@@ -187,6 +198,14 @@ export default function Profile({
               <p>{t("Signal")}</p>
             </div>
           )}
+          {
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>{t("Nft")}</p>
+            </div>
+          }
         </div>
       </div>
       {curTab === TabPnum.About && (
@@ -218,6 +237,9 @@ export default function Profile({
           id={Number(idUser)}
         />
       )}
+      {curTab === TabPnum.Nft && (
+        <TabNftProfile user={dtUser} idParam={String(idUser)} />
+      )}
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
         <TabRating brokerData={dataUser} />
       )}
@@ -231,11 +253,12 @@ export async function getServerSideProps(context: NextPageContext) {
   const { key } = context.query;
   if (!key) {
     return {
-      notFound: true, // This triggers the 404 page
+      notFound: true,
     };
   }
   const profileRes = await getProfile(key as string);
-  console.log("profileRes", profileRes.data.user.role);
+  console.log("profileRes", profileRes?.data);
+  // console.log("profileRes", profileRes?.data?.brokerProfile?.rank?.logo);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
   return {
@@ -252,6 +275,8 @@ export async function getServerSideProps(context: NextPageContext) {
       idUser: idUser,
       interestTopic: interestTopic?.data.docs || [],
       userUsername: key || "",
+      logoRank: profileRes?.data?.brokerProfile?.rank?.logo || null,
+      connectionRequestId: profileRes?.data?.connectionRequestId || null,
     },
   };
 }

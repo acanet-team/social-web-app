@@ -76,6 +76,7 @@ export interface BrokerProfile {
   rank: {
     id: string;
     name: string;
+    logo: string;
   };
   licenses: License[];
   company: Company[];
@@ -193,4 +194,14 @@ export interface FormDtLicense {
   licenseStatus: string;
   licenseExpirationDate: string | Date;
   credentialID: string;
+}
+
+export interface GetCommunitiesParams {
+  page: number;
+  take: number;
+  type: string | "";
+  brokerId: number | "";
+  search: string | "";
+  feeType: string | "";
+  investorId: number | "";
 }

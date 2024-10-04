@@ -86,7 +86,7 @@ const Home = ({
             {curTab === "for_you" && (
               <>
                 <div
-                  className="card w-100 shadow-xss border-0 mb-3 nunito-font"
+                  className="card w-100 shadow-xss border-0 mb-3 font-system"
                   style={{ padding: "1.5rem" }}
                 >
                   {isBroker && (
@@ -132,7 +132,7 @@ const Home = ({
                   )}
                 </div>
                 <div
-                  className=" w-100 border-0 mb-3 nunito-font"
+                  className=" w-100 border-0 mb-3 font-system"
                   style={{ padding: "1.5rem" }}
                 >
                   <GetSignalNewFeed />
@@ -166,6 +166,7 @@ export default React.memo(Home);
 export async function getServerSideProps(context: NextPageContext) {
   const postRes = await getPosts(1, TAKE, "suggestion");
   const brokerRes = await getTopBrokers(1, 20);
+  // console.log("Brokers: ", brokerRes?.data.docs);
   // const response = await getNotifications(1, 5);
   return {
     props: {

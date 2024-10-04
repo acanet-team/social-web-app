@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/header.module.scss";
 import Image from "next/image";
 import type {
@@ -23,6 +23,9 @@ export default function QuickSearchCard(props: {
 }) {
   const { type, isFullSearch, data } = props;
   const tBase = useTranslations("Base");
+  const t = useTranslations("MyProfile");
+  const tInvestor = useTranslations("Connect_investor");
+  const tCommunity = useTranslations("Community");
   const { connectWallet, communityContract, account, connectedChain } =
     useWeb3();
   const [curUser, setCurUser] = useState<number>();
@@ -45,6 +48,8 @@ export default function QuickSearchCard(props: {
   const [openConnectionResponse, setOpenConnectionResponse] =
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const buttonRespondRef = useRef<HTMLButtonElement>(null);
+  const groupRespondRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (session) {
@@ -165,6 +170,22 @@ export default function QuickSearchCard(props: {
     }
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      !buttonRespondRef?.current?.contains(event.target as Node) &&
+      !groupRespondRef?.current?.contains(event.target as Node)
+    ) {
+      setOpenConnectionResponse(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div
       className={`${styles["quick-search__card"]} d-flex justify-content-between align-items-center`}
@@ -186,7 +207,7 @@ export default function QuickSearchCard(props: {
         />
 
         <div className="d-flex flex-column gap-0">
-          <div className="fw-bold font-xss">
+          <div className={`fw-bold font-xss ${styles["text-dark-mode"]}`}>
             {type === "user"
               ? `${(data as ISearchUserResponse).firstName} ${(data as ISearchUserResponse).lastName}`
               : (data as ISearchCommunityResponse).name}
@@ -203,8 +224,8 @@ export default function QuickSearchCard(props: {
             <div className={styles["quick-search_numbers"]}>
               <span className="me-1">
                 {(data as ISearchCommunityResponse).fee === 0
-                  ? "Free Community"
-                  : "Paid Community"}
+                  ? tCommunity("free")
+                  : tCommunity("paid")}
               </span>
               |
               <span className="ms-1">
@@ -243,44 +264,50 @@ export default function QuickSearchCard(props: {
               onClick={(e) =>
                 onConnectInvestor(e, (data as ISearchUserResponse).userId)
               }
+              ref={buttonRespondRef}
             >
               {isLoading
                 ? loadingSpinner
                 : isConnecting === "connected"
-                  ? "Connected"
+                  ? tInvestor("connected")
                   : isConnecting === "request_send"
-                    ? "Request sent"
+                    ? tInvestor("request_send")
                     : isConnecting === "request_received"
-                      ? "Response"
-                      : "Connect"}
-              {openConnectionResponse && (
-                <div
-                  className={`${styles["connect-response_modal"]} border-0 py-2 px-3 py-1 rounded-3`}
-                >
+                      ? tInvestor("response")
+                      : tInvestor("connect")}
+              {openConnectionResponse &&
+                isConnecting === "request_received" && (
                   <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                      connectResponse(
-                        (data as ISearchUserResponse).connectionRequestId,
-                        "accept",
-                      )
-                    }
+                    ref={groupRespondRef}
+                    className={`card ${styles["group-buttons-banner-response"]}`}
+                    style={{
+                      display: openConnectionResponse ? "block" : "none",
+                    }}
                   >
-                    Confirm
+                    <button
+                      className={`px-3 ${styles["button-banner-response"]}`}
+                      onClick={() =>
+                        connectResponse(
+                          (data as ISearchUserResponse).connectionRequestId,
+                          "accept",
+                        )
+                      }
+                    >
+                      <p className={`font-xss fw-600 m-0`}>{t("confirm")}</p>
+                    </button>
+                    <button
+                      className={`px-3 ${styles["button-banner-response"]}`}
+                      onClick={() =>
+                        connectResponse(
+                          (data as ISearchUserResponse).connectionRequestId,
+                          "reject",
+                        )
+                      }
+                    >
+                      <p className="font-xss fw-600 m-0">{t("delete")}</p>
+                    </button>
                   </div>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                      connectResponse(
-                        (data as ISearchUserResponse).connectionRequestId,
-                        "reject",
-                      )
-                    }
-                  >
-                    Reject
-                  </div>
-                </div>
-              )}
+                )}
             </button>
           )}
         {type === "community" && (
@@ -297,10 +324,10 @@ export default function QuickSearchCard(props: {
             {isLoading
               ? loadingSpinner
               : isJoinedCommunity === "joined"
-                ? "Joined"
+                ? tCommunity("joined")
                 : isJoinedCommunity === "pending_request"
-                  ? "Pending"
-                  : "Join"}
+                  ? tCommunity("pending")
+                  : tCommunity("join")}
           </button>
         )}
         {type === "community" && (data as ISearchCommunityResponse).fee > 0 && (

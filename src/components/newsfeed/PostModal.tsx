@@ -231,7 +231,7 @@ function PostModal(props: {
       onHide={handleClose}
       centered
       size="lg"
-      className={`${styles["customModal"]} nunito-font`}
+      className={`${styles["customModal"]} font-system`}
     >
       <Modal.Header
         closeButton={fullscreen === "sm-down" ? false : true}
@@ -404,15 +404,16 @@ function PostModal(props: {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {userId !== postAuthor.userId && (
-                <div
-                  className="d-flex align-items-center cursor-pointer"
-                  onClick={onDonateHandler}
-                >
-                  <i className="bi bi-piggy-bank me-1 text-grey-700 font-lg text-dark"></i>
-                  <span className="d-none-xs">{tPost("donate")}</span>
-                </div>
-              )}
+              {userId !== postAuthor.userId &&
+                postAuthor.role.name === "broker" && (
+                  <div
+                    className="d-flex align-items-center cursor-pointer"
+                    onClick={onDonateHandler}
+                  >
+                    <i className="bi bi-cash-coin me-1 text-grey-700 font-lg text-dark"></i>
+                    <span className="d-none-xs">{tPost("donate")}</span>
+                  </div>
+                )}
               <div className="d-flex align-items-center cursor-pointer">
                 <i className="bi bi-share me-1 text-grey-700 text-dark font-md"></i>
                 <span className="d-none-xs">{tPost("share")}</span>

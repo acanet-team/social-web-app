@@ -9,6 +9,7 @@ export enum TabPnum {
   About = "about",
   Rating = "rating",
   Signal = "signal",
+  Nft = "nft",
 }
 export enum CommunityEnum {
   popular = "popular",

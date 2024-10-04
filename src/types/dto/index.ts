@@ -137,4 +137,6 @@ export type Post = {
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
+  postType?: string;
+  additionalData?: Object;
 };

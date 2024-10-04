@@ -4,12 +4,14 @@ import DotWaveLoader from "@/components/DotWaveLoader";
 import QuickSearchCard from "@/components/search/QuickSearchCard";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/header.module.scss";
+import { useTranslations } from "next-intl";
 
 export default function SearchFullByType(props: {
   tab: string;
   keyword: string;
 }) {
   const { tab, keyword } = props;
+  const tSearch = useTranslations("Search");
   const [searchResults, setSearchResults] = useState<IFullSearchResponse>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -69,9 +71,9 @@ export default function SearchFullByType(props: {
 
   return (
     <div className="mt-5">
-      {/* {!isLoading && searchResults.length === 0 && (
-        <div className="mt-5 text-center">No posts found.</div>
-      )} */}
+      {!isLoading && searchResults.length === 0 && (
+        <div className="mt-5 text-center">{tSearch("search_no_result")}</div>
+      )}
       {isLoading && <DotWaveLoader />}
       {searchResults?.length > 0 &&
         searchResults?.map((data, index) => (
