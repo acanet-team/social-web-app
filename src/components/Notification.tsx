@@ -1,14 +1,11 @@
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Notification, NotificationType } from "@/api/notification/model";
 import type { UUID } from "crypto";
-import type { BaseArrayResponsVersionDocs } from "@/api/model";
+import type {
+  BaseArrayResponseNotis,
+  BaseArrayResponsVersionDocs,
+} from "@/api/model";
 import { getNotifications, patchReadAll, readNoti } from "@/api/notification";
 import styles from "@/styles/modules/header.module.scss";
 import { combineUniqueById } from "@/utils/combine-arrs";
@@ -24,7 +21,9 @@ interface NotificationProps {
   notificationsSocket: Notification[];
   toggleisNoti: React.Dispatch<React.SetStateAction<boolean>>;
   setReadAllNotis: React.Dispatch<React.SetStateAction<boolean>>;
+  setCountNotis: React.Dispatch<React.SetStateAction<number>>;
   isNoti: boolean;
+  countNotis: number;
 }
 
 const Notifications: React.FC<NotificationProps> = ({
@@ -32,6 +31,8 @@ const Notifications: React.FC<NotificationProps> = ({
   toggleisNoti,
   setReadAllNotis,
   isNoti,
+  setCountNotis,
+  countNotis,
 }) => {
   const t = useTranslations("Notification");
   const router = useRouter();
@@ -43,9 +44,11 @@ const Notifications: React.FC<NotificationProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openPostModal, setOpenPostModal] = useState<string>("");
   const notisListRef = useRef<HTMLDivElement>(null);
+  // const [newNotificationsCount, setNewNotificationsCount] = useState(0);
+
   const getTimeDifference = (createdAt: number) => {
     const now = Date.now();
-    const diffInMs = now - createdAt;
+    const diffInMs = now - createdAt + 1;
 
     const seconds = Math.floor(diffInMs / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -135,12 +138,12 @@ const Notifications: React.FC<NotificationProps> = ({
               width={40}
               height={40}
               alt="user"
-              className="w40 rounded-xl"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -188,12 +191,12 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -246,7 +249,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -255,21 +258,23 @@ const Notifications: React.FC<NotificationProps> = ({
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
                   {t("has_requested_to_join_your")}{" "}
-                  <span className="fw-700 text-grey-900">
-                    {community?.name} {t("Group")}
+                  <span
+                    className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                  >
+                    {community?.name}{" "}
+                  </span>
+                  <span
+                    className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                  >
+                    {t("Group")}
                   </span>
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
               {/* <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? TimeSinceDate(notiAt) : ""}
-              </p> */}
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? TimeSinceDate(notiAt) : ""}
+                </p> */}
             </div>
           </>
         );
@@ -285,19 +290,24 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
                   {t("you_are_now_a_member_of")}{" "}
                 </span>
-                {community?.name} {t("Group")}
+                {community?.name}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("Group")}
+                </span>
               </h5>
               <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
@@ -324,12 +334,12 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {t("your_request_to_join")}{" "}
                 <span
@@ -364,12 +374,12 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -405,12 +415,12 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
@@ -451,7 +461,7 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
@@ -485,12 +495,12 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
               onError={() => `/assets/images/default-ava-not-bg.jpg`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -556,8 +566,13 @@ const Notifications: React.FC<NotificationProps> = ({
   const fetchNotifications = async (page: number) => {
     setIsLoading(true);
     try {
-      const response: BaseArrayResponsVersionDocs<Notification> =
+      const response: BaseArrayResponseNotis<Notification> =
         await getNotifications(page, take);
+      // if (countNotis > 0 ){
+      //   setReadAllNotis(false);
+      // } else {
+      //   setReadAllNotis(true);
+      // }
       setNotis((prevNotis: Notification[]) => {
         const newNotis: Notification[] = combineUniqueById(
           prevNotis,
@@ -565,8 +580,8 @@ const Notifications: React.FC<NotificationProps> = ({
         ) as Notification[];
         return newNotis;
       });
-      // console.log("notiApiiiiiii", response.data.docs);
-      // console.log("notiApiiiiiiiNotis", notis);
+      setCountNotis(response?.data?.newNotificationsCount);
+      // console.log("llllll", response?.data?.newNotificationsCount);
       setTotalPages(response?.data?.meta?.totalPage);
     } catch (err) {
       console.error(err);
@@ -576,8 +591,9 @@ const Notifications: React.FC<NotificationProps> = ({
   };
   useEffect(() => {
     if (isNoti === true) {
-      fetchNotifications(1);
-      readAll();
+      // fetchNotifications(1);
+      patchReadAll();
+      setReadAllNotis(true);
     }
   }, [isNoti]);
 
@@ -589,7 +605,35 @@ const Notifications: React.FC<NotificationProps> = ({
 
   useEffect(() => {
     fetchNotifications(1);
-  }, []);
+    if (countNotis > 0) {
+      setReadAllNotis(false);
+    } else {
+      setReadAllNotis(true);
+    }
+  }, [countNotis]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (notificationsSocket.length > 0) {
+        try {
+          const response: BaseArrayResponseNotis<Notification> =
+            await getNotifications(1, take);
+          // console.log("socccccc", response);
+          setNotis(response.data.docs);
+          setCountNotis(response?.data?.newNotificationsCount);
+          if (countNotis > 0) {
+            setReadAllNotis(false);
+          } else {
+            setReadAllNotis(true);
+          }
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      }
+    };
+    fetchNotifications();
+    // console.log("socc", notificationsSocket);
+  }, [notificationsSocket]);
 
   const onScrollHandlerNoti = () => {
     if (notisListRef.current) {
@@ -612,23 +656,6 @@ const Notifications: React.FC<NotificationProps> = ({
       }
     };
   }, [page, totalPages]);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      if (notificationsSocket.length > 0) {
-        try {
-          const response: BaseArrayResponsVersionDocs<Notification> =
-            await getNotifications(1, take);
-          setNotis(response.data.docs);
-          console.log("eee");
-        } catch (error) {
-          console.error("Error fetching notifications:", error);
-        }
-      }
-    };
-    fetchNotifications();
-    setReadAllNotis(true);
-  }, [notificationsSocket]);
 
   // useEffect(() => {
   //   if (notificationsSocket.length > 0) {
@@ -684,11 +711,11 @@ const Notifications: React.FC<NotificationProps> = ({
     ) {
       setOpenPostModal(idDetail);
       toggleisNoti(false);
-    } else if (
-      notificationType === "community_join_request" ||
-      notificationType === "community_join_accept"
-    ) {
+    } else if (notificationType === "community_join_accept") {
       router.push(`/communities/detail/${idDetail}`);
+      toggleisNoti(false);
+    } else if (notificationType === "community_join_request") {
+      router.push(`/communities/detail/${idDetail}?tab=requests`);
       toggleisNoti(false);
     } else if (notificationType === "follow") {
       router.push(`/profile/${idDetail}`);
@@ -707,30 +734,6 @@ const Notifications: React.FC<NotificationProps> = ({
       console.log("");
     }
   };
-  // const checkReadAllNotis = () => {
-  //   const allRead = notis.every(
-  //     (notification) => notification.read_at !== null,
-  //   );
-  //   if (allRead) {
-  //     console.log("All notifications are read, updating state.");
-  //     setReadAllNotis(true);
-  //   } else {
-  //     setReadAllNotis(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   checkReadAllNotis();
-  // }, [notis]);
-
-  const readAll = async () => {
-    patchReadAll();
-    setReadAllNotis(false);
-    // toggleisNoti(false);
-  };
-
-  useEffect(() => {
-    console.log("notissoc", notificationsSocket);
-  }, [notificationsSocket]);
 
   return (
     <div ref={notisListRef} className={`${styles["height-dropdown-menu"]}`}>
@@ -741,9 +744,6 @@ const Notifications: React.FC<NotificationProps> = ({
         <h4 className={`fw-700 mb-4 ${styles["title-dropdown-menu"]}`}>
           Notification
         </h4>
-        {/* <div className="font-xsss" onClick={() => readAll()}>
-          Read All
-        </div> */}
       </div>
       <div>
         {notis?.length === 0 ? (
@@ -829,6 +829,7 @@ const Notifications: React.FC<NotificationProps> = ({
                       display: "flex",
                       flexDirection: "row",
                       gap: "8px",
+                      alignItems: "center",
                     }}
                   >
                     {renderNotificationMessage(
@@ -862,6 +863,7 @@ const Notifications: React.FC<NotificationProps> = ({
           </div>
         )}
         {isLoading && page > 1 && <WaveLoader />}
+
         {openPostModal && (
           <PostNotiDetail id={openPostModal} resetPostId={resetPostId} />
         )}

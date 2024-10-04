@@ -62,7 +62,7 @@ function WalletConnectionModal(props: {
       onHide={handleClose}
       centered
       size="lg"
-      className={`${styles["customModal"]} nunito-font`}
+      className={`${styles["customModal"]} font-system`}
     >
       <Modal.Header
         closeButton={fullscreen === "sm-down" ? false : true}

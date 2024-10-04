@@ -28,7 +28,7 @@ const Signal = ({
     }
   };
   return (
-    <div id={styles["signal-station"]} className="nunito-font">
+    <div id={styles["signal-station"]} className="font-system">
       <h1 className="fs-2 fw-bolder mb-3 mt-1">
         {tSignal("signal_station_title")}
       </h1>

@@ -17,32 +17,35 @@ const NotificationToast = () => {
   const t = useTranslations("Notification");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const isQuery = useMediaQuery({ query: "(max-width: 650px" });
-
+  const isQuery = useMediaQuery({ query: "(max-width: 992px" });
   useEffect(() => {
     if (notifications.length > 0) {
-      const newNoti = notifications[notifications.length - 1];
+      const newNoti = notifications[0];
       setLatestNoti((prev) => [...prev, newNoti]);
-
-      const timerDelete = setTimeout(() => {
-        setLatestNoti((prev) => prev.slice(1));
-      }, 3000);
-
+      // console.log("latestNoti", latestNoti);
       setShow(true);
-      const timer = setTimeout(() => {
-        setShow(false);
-      }, 3000);
-
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(timerDelete);
-      };
     }
-
-    return () => {};
+    // console.log("socc", notifications);
   }, [notifications]);
 
-  if (!latestNoti) return null;
+  useEffect(() => {
+    if (latestNoti.length > 0) {
+      const interval = setInterval(() => {
+        setLatestNoti((prev) => {
+          const updatedNoti = prev.slice(1);
+
+          if (updatedNoti.length === 0) {
+            setShow(false);
+          }
+          return updatedNoti;
+        });
+      }, 2100);
+
+      return () => clearInterval(interval);
+    }
+    return () => {};
+  }, [latestNoti]);
+  if (latestNoti.length === 0) return null;
 
   const fetchConnectResponse = async (
     requestId: string,
@@ -210,7 +213,7 @@ const NotificationToast = () => {
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -219,8 +222,15 @@ const NotificationToast = () => {
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
                   {t("has_requested_to_join_your")}{" "}
-                  <span className="fw-700 text-grey-900">
-                    {community?.name} {t("Group")}
+                  <span
+                    className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                  >
+                    {community?.name}{" "}
+                  </span>
+                  <span
+                    className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                  >
+                    {t("Group")}
                   </span>
                 </span>
               </h5>
@@ -256,7 +266,12 @@ const NotificationToast = () => {
                 >
                   {t("you_are_now_a_member_of")}{" "}
                 </span>
-                {community?.name} {t("Group")}
+                {community?.name}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("Group")}
+                </span>
               </h5>
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
@@ -523,7 +538,10 @@ const NotificationToast = () => {
         <div
           key={notification?.id}
           className={`position-fixed start-0 p-3`}
-          style={{ zIndex: 99, bottom: `${index * 155}px` }}
+          style={{
+            zIndex: 99,
+            bottom: isQuery ? `${index * 155 + 56}px` : `${index * 155}px`,
+          }}
         >
           <div
             // className={`toast show  bg-white`}

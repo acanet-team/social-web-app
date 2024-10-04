@@ -20,28 +20,17 @@ export default function CommunityView({
   groupId,
   pendingRequestNum,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
   const [curTab, setCurTab] = useState<string>("posts");
   const { data: session } = useSession() as any;
   const [pendingRequests, setPendingRequests] =
     useState<number>(pendingRequestNum);
-
-  const handleTabChange = (newTab: string) => {
-    setCurTab(newTab);
-    if (newTab === "posts") {
-      router.push(`/vi/communities/detail/${groupId}`);
-    } else {
-      router.push(`/vi/communities/detail/${groupId}/member`);
-    }
-  };
-
   return (
     <Fragment>
       <div className="pe-0" style={{ paddingBottom: "40px" }}>
         <div className="mb-3">
           <CommunityHeader
             community={communityMetaData}
-            setCurTab={handleTabChange}
+            setCurTab={setCurTab}
             curTab={curTab}
             pendingRequests={pendingRequests}
             groupId={groupId}

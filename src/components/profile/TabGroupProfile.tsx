@@ -5,6 +5,7 @@ import DotWaveLoader from "../DotWaveLoader";
 import { combineUniqueById } from "@/utils/combine-arrs";
 import CommunityForm from "../communities/CommunityForm";
 import { getGroups } from "@/api/profile";
+import { useTranslations } from "next-intl";
 
 const TabGroupProfile = (props: {
   isBroker: boolean;
@@ -15,6 +16,7 @@ const TabGroupProfile = (props: {
   take: number;
   id: number;
 }) => {
+  const t = useTranslations("MyProfile");
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [communityArr, setCommunityArr] = useState<ICommunity[]>([]);
   const [take, setTake] = useState<number>(props.take);
@@ -105,7 +107,7 @@ const TabGroupProfile = (props: {
   return (
     <div style={{ marginTop: "40px", paddingBottom: "100px" }}>
       {!isLoading && communityArr?.length === 0 && (
-        <div className="text-center mt-5">No community found.</div>
+        <div className="text-center mt-5">{t("titleGroupProfile")}</div>
       )}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {communityArr?.length > 0 &&

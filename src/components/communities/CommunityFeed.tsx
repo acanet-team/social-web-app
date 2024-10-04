@@ -259,7 +259,7 @@ export default function CommunityFeed(props: {
       </div>
       <div className="col-xl-9 col-xxl-9 col-lg-8">
         <div>
-          <div className="card w-100 shadow-xss border-0 px-4 py-3 mb-3 nunito-font">
+          <div className="card w-100 shadow-xss border-0 px-4 py-3 mb-3 font-system">
             <CreatePost
               userSession={props.userSession}
               groupId={props.groupId}

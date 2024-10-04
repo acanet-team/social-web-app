@@ -75,6 +75,7 @@ export interface BrokerProfile {
   rank: {
     id: string;
     name: string;
+    logo: string;
   };
   licenses: License[];
   company: Company[];
@@ -85,7 +86,6 @@ export interface BrokerProfile {
   location: string | null;
   about: string;
   interestTopics: InterestTopics[];
-  logo: string;
 }
 
 export interface School {

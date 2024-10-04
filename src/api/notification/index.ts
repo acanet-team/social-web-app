@@ -1,10 +1,10 @@
 import httpClient from "..";
 import type { Notification } from "./model";
-import type { BaseArrayResponsVersionDocs } from "../model";
+import type { BaseArrayResponseNotis } from "../model";
 import type { IPost, ResponseDto, ResponseGetOneDto } from "../newsfeed/model";
 
 export const getNotifications = (page: number, take: number) => {
-  return httpClient.get<BaseArrayResponsVersionDocs<Notification>>(
+  return httpClient.get<BaseArrayResponseNotis<Notification>>(
     `/v1/notification?page=${page}&take=${take}`,
   );
 };
@@ -18,6 +18,6 @@ export const getDetailPost = (id: string) => {
 };
 
 export const patchReadAll = () => {
-  httpClient.patch(`/v1/signal/readAll`, {});
+  httpClient.patch(`/v1/notification/readAll`, {});
   return;
 };

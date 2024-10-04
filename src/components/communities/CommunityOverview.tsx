@@ -6,7 +6,7 @@ export default function CommunityOverview(props: { groupData: ICommunity }) {
   const { groupData } = props;
   const t = useTranslations("Community");
   return (
-    <div className="card w-100 shadow-xss nunito-font rounded-3 border-0 mb-3">
+    <div className="card w-100 shadow-xss font-system rounded-3 border-0 mb-3">
       <div className="card-body d-block p-4">
         <h4 className="fw-700 mb-3 font-xss text-grey-900">{t("about")}</h4>
         <p className="fw-500 text-grey-500 lh-24 font-xss mb-0">

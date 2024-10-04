@@ -143,6 +143,7 @@ export type AllProfileResponse = {
     followed: boolean;
     connectionsCount: number;
     connectionStatus: string;
+    connectionRequestId: string;
   };
 };
 

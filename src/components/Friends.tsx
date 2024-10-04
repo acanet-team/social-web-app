@@ -1,45 +1,3 @@
-export const friendList = [
-  {
-    imageUrl: "user.png",
-    name: "Anthony Daugloi",
-    friend: "12",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Mohannad Zitoun",
-    friend: "18",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Hurin Seary",
-    friend: "28",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Nguyen Thi Thanh Phuong",
-    friend: "28",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Anthony Daugloi",
-    friend: "12",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Mohannad Zitoun",
-    friend: "18",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Hurin Seary",
-    friend: "28",
-  },
-  {
-    imageUrl: "user.png",
-    name: "Nguyen Thi Thanh Phuong",
-    friend: "28",
-  },
-];
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -55,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useWebSocket } from "@/context/websocketProvider";
 import { throwToast } from "@/utils/throw-toast";
-import DotLoad from "./WaveLoader";
+import CircleLoader from "./CircleLoader";
 
 const TAKE = 9;
 const Friends = () => {
@@ -144,7 +102,7 @@ const Friends = () => {
   }, [notifications]);
 
   return (
-    <div className="card px-2 w-100 shadow-xss rounded-3 border-0 mb-sm-3 mb-5 nunito-font">
+    <div className="card px-2 w-100 shadow-xss rounded-3 border-0 mb-sm-3 mb-5 ">
       <div className="card-body d-flex align-items-center">
         <h4 className="fw-700 mb-0 font-xsss text-grey-900">
           {t("friend_request")}
@@ -156,6 +114,7 @@ const Friends = () => {
           {t("see_all")}
         </Link>
       </div>
+      {isLoading && <CircleLoader />}
       <div className="row">
         {listConnects?.length > 0 ? (
           listConnects.map((value, index) => (
@@ -177,7 +136,7 @@ const Friends = () => {
                 </figure>
 
                 <div className={` ${styles["list-info-friend-newfeed"]} `}>
-                  <Link href="">
+                  <Link href={`/profile/${value?.requester?.nickName}`}>
                     <h4
                       className="cursor-pointer fw-700 text-grey-900 font-xssss mt-1"
                       style={{ height: "35px" }}
@@ -234,7 +193,6 @@ const Friends = () => {
         ) : (
           <div className="text-center py-5">{t("no_friend_request")}</div>
         )}
-        {isLoading && <DotLoad />}
       </div>
     </div>
   );
