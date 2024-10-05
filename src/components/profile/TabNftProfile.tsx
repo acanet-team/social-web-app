@@ -137,6 +137,7 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
         </div>
         {openModal && (
           <SellNFTModal
+            title={tNFT("sell_nft_title")}
             show={openModal}
             handleShow={() => setOpenModal(true)}
             handleClose={() => setOpenModal(false)}

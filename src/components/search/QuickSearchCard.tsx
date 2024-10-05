@@ -15,13 +15,16 @@ import { joinCommunity } from "@/api/community";
 import { joinPaidCommunity } from "@/api/wallet";
 import { ethers } from "ethers";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function QuickSearchCard(props: {
   type: "community" | "user";
   isFullSearch: boolean;
   data: FullSearchItem;
+  clearSearch?: React.Dispatch<React.SetStateAction<void>>;
 }) {
-  const { type, isFullSearch, data } = props;
+  const { type, isFullSearch, data, clearSearch } = props;
+  const router = useRouter();
   const tBase = useTranslations("Base");
   const t = useTranslations("MyProfile");
   const tInvestor = useTranslations("Connect_investor");
@@ -186,10 +189,22 @@ export default function QuickSearchCard(props: {
     };
   }, []);
 
+  const onClickCardHandler = (id: number | string) => {
+    if (type === "community" && id === "") {
+      return throwToast(tCommunity("error_access_community"), "info");
+    }
+    if (type === "user") {
+      router.push(`/profile/${id}`);
+    } else if (type === "community") {
+      router.push(`/communities/detail/${id}`);
+    }
+    if (clearSearch) clearSearch();
+  };
   return (
     <div
       className={`${styles["quick-search__card"]} d-flex justify-content-between align-items-center`}
     >
+      {/* Avatar + Name */}
       <div className="d-flex gap-3 align-items-center">
         <Image
           src={
@@ -205,9 +220,20 @@ export default function QuickSearchCard(props: {
           className={type === "user" ? "rounded-circle" : "rounded-3"}
           style={{ objectFit: "cover" }}
         />
-
         <div className="d-flex flex-column gap-0">
-          <div className={`fw-bold font-xss ${styles["text-dark-mode"]}`}>
+          <div
+            className={`fw-bold font-xss cursor-pointer ${styles["text-dark-mode"]}`}
+            onClick={() =>
+              onClickCardHandler(
+                type === "user"
+                  ? (data as ISearchUserResponse).userId
+                  : (data as ISearchCommunityResponse).communityStatus ===
+                      "joined"
+                    ? (data as ISearchCommunityResponse).id
+                    : "",
+              )
+            }
+          >
             {type === "user"
               ? `${(data as ISearchUserResponse).firstName} ${(data as ISearchUserResponse).lastName}`
               : (data as ISearchCommunityResponse).name}
@@ -236,7 +262,7 @@ export default function QuickSearchCard(props: {
               </span>
               {type === "community" && isFullSearch && (
                 <div>
-                  {(data as ISearchCommunityResponse).description.substring(
+                  {(data as ISearchCommunityResponse).description?.substring(
                     0,
                     90,
                   ) + "..."}
@@ -246,6 +272,7 @@ export default function QuickSearchCard(props: {
           )}
         </div>
       </div>
+      {/* Following */}
       <div className="d-flex flex-column">
         {type === "user" && (data as ISearchUserResponse).role === "broker" && (
           <button

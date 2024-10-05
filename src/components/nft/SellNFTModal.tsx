@@ -2,7 +2,7 @@ import { FormHelperText, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { ImageCropModal } from "../ImageCropModal";
 import Modal from "react-bootstrap/Modal";
-import styles from "@/styles/modules/communityForm.module.scss";
+import styles from "@/styles/modules/sellNFTModal.module.scss";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
@@ -11,6 +11,7 @@ import { onSellNFT } from "@/api/nft";
 import { throwToast } from "@/utils/throw-toast";
 
 interface SellNFTModalProps {
+  title: string;
   show: boolean;
   handleClose: () => void;
   handleShow?: () => void;
@@ -18,6 +19,7 @@ interface SellNFTModalProps {
 }
 
 const SellNFTModal: React.FC<SellNFTModalProps> = ({
+  title,
   show,
   handleClose,
   handleShow,
@@ -48,10 +50,7 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
     enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
-      console.log("aaa", values);
       try {
-        console.log("fff", nft);
-
         await onSellNFT({
           content: values.content,
           nftContract: nftContract.address,
@@ -88,6 +87,9 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
             onClick={handleClose}
           />
         )}
+        <div className="w-100 d-flex justify-content-center">
+          <h2 className="p-0 m-0 fs-4 fw-bold">{title}</h2>
+        </div>
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
         <form onSubmit={formik.handleSubmit}>
@@ -99,8 +101,8 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
             className={`${formik.touched.content && formik.errors.content ? " border-danger" : ""} w-100 rounded-3 text-dark border-light-md fw-400 theme-dark-bg d-flex`}
             name="content"
             id="content"
-            rows={4}
-            maxLength={250}
+            rows={5}
+            maxLength={500}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.content}

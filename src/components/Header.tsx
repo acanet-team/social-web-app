@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Darkbutton from "./Darkbutton";
@@ -15,6 +15,7 @@ import QuickSearchCard from "./search/QuickSearchCard";
 import type { IQuickSearchResponse } from "@/api/search/model";
 import { quickSearch } from "@/api/search";
 import { useMediaQuery } from "react-responsive";
+import DotWaveLoader from "./DotWaveLoader";
 
 export default function Header(props: { isOnboarding: boolean }) {
   const t = useTranslations("NavBar");
@@ -45,13 +46,15 @@ export default function Header(props: { isOnboarding: boolean }) {
     { communities: [], users: [] },
   );
   const showMobileSearchInput = useMediaQuery({ query: "(max-width: 992px)" });
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchInputDesktopRef = useRef<HTMLInputElement>(null);
+  const searchInputMobileRef = useRef<HTMLInputElement>(null);
   const searchResultRef = useRef<HTMLDivElement>(null);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
   useEffect(() => {
-    console.log("notifications-yy", notifications);
-    console.log("ahdfh", countNotis);
+    // console.log("notifications-yy", notifications);
+    // console.log("ahdfh", countNotis);
   }, [notifications]);
 
   useEffect(() => {
@@ -106,7 +109,8 @@ export default function Header(props: { isOnboarding: boolean }) {
       toggleisNoti(false);
     }
     if (
-      !searchInputRef?.current?.contains(event.target as Node) &&
+      !searchInputMobileRef?.current?.contains(event.target as Node) &&
+      !searchInputDesktopRef?.current?.contains(event.target as Node) &&
       !searchResultRef?.current?.contains(event.target as Node)
     ) {
       resetSearchInput();
@@ -122,25 +126,26 @@ export default function Header(props: { isOnboarding: boolean }) {
 
   const resetSearchInput = () => {
     setQuickSearchTerm("");
-    toggleActive(false);
     setQuickSearchResults({ communities: [], users: [] });
+    toggleActive(false);
   };
 
   const onSearchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerms = e.target.value;
-    console.log("search", searchTerms);
     setQuickSearchTerm(e.target.value);
     if (!searchTerms) {
-      return toggleActive(false);
+      return setQuickSearchTerm("");
     }
     toggleActive(true);
     try {
+      setIsSearching(true);
       const res = await quickSearch(searchTerms, 4);
-      console.log("quick search", res.data);
+      // console.log("quick search", res.data);
       setQuickSearchResults(res.data);
     } catch (err) {
       console.log(err);
     } finally {
+      setIsSearching(false);
     }
   };
 
@@ -149,7 +154,7 @@ export default function Header(props: { isOnboarding: boolean }) {
       e.preventDefault();
       const keyword = e.target.value;
       if (!keyword) return;
-      router.push(`/search/${keyword}`);
+      router.push(`/search/${keyword}?tab=all`);
       resetSearchInput();
     }
   };
@@ -244,7 +249,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
                   onEnterSearchHandler(e)
                 }
-                ref={searchInputRef}
+                ref={searchInputMobileRef}
               />
               <span className="ms-1 mt-1 d-inline-block close searchbox-close">
                 <i
@@ -269,13 +274,15 @@ export default function Header(props: { isOnboarding: boolean }) {
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
                 onEnterSearchHandler(e)
               }
-              ref={searchInputRef}
+              ref={searchInputDesktopRef}
             />
           </div>
         </form>
 
         {/* Quick search result */}
         {isActive &&
+          (searchInputMobileRef?.current?.value ||
+            searchInputDesktopRef?.current?.value) &&
           searchResults &&
           searchResults.users.length === 0 &&
           searchResults.communities.length === 0 && (
@@ -283,16 +290,21 @@ export default function Header(props: { isOnboarding: boolean }) {
               className={styles["quick-search__results"]}
               ref={searchResultRef}
             >
-              <div className={styles["quick-search__results-content"]}>
-                <div
-                  className={`mb-4 text-center font-xsss ${styles["text-dark-mode"]}`}
-                >
-                  {tSearch("search_no_result")}
+              {isSearching && <DotWaveLoader />}
+              {!isSearching && (
+                <div className={styles["quick-search__results-content"]}>
+                  <div
+                    className={`mb-4 text-center font-xsss ${styles["text-dark-mode"]}`}
+                  >
+                    {tSearch("search_no_result")}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         {isActive &&
+          (searchInputMobileRef?.current?.value ||
+            searchInputDesktopRef?.current?.value) &&
           searchResults &&
           (searchResults.users.length > 0 ||
             searchResults.communities.length > 0) && (
@@ -300,42 +312,48 @@ export default function Header(props: { isOnboarding: boolean }) {
               className={styles["quick-search__results"]}
               ref={searchResultRef}
             >
-              <div className={styles["quick-search__results-content"]}>
-                {searchResults.users.map((user) => (
-                  <div key={user.userId}>
-                    <QuickSearchCard
-                      type="user"
-                      isFullSearch={false}
-                      data={user}
-                    />
-                  </div>
-                ))}
-                {searchResults.communities.map((community) => (
-                  <div key={community.id}>
-                    <QuickSearchCard
-                      type="community"
-                      isFullSearch={false}
-                      data={community}
-                    />
-                  </div>
-                ))}
-                <div className={styles["quick-search__results-line"]}></div>
-              </div>
-              {(searchResults.users.length > 0 ||
-                searchResults.communities.length > 0) && (
-                <div className={styles["quick-search__results-footer"]}>
-                  {/* <div>1.535 results</div> */}
-                  <div className="text-dark fw-600 ms-auto cursor-pointer">
-                    <span
-                      className={`text-decoration-underline ${styles["text-dark-mode"]}`}
-                      onClick={onFullSearchHandler}
-                    >
-                      {tSearch("see_more_results")}
-                    </span>
-                    <i className="bi bi-arrow-right ms-1 h5"></i>
-                  </div>
+              {isSearching && <DotWaveLoader />}
+              {!isSearching && (
+                <div className={styles["quick-search__results-content"]}>
+                  {searchResults.users.map((user) => (
+                    <div key={user.userId}>
+                      <QuickSearchCard
+                        type="user"
+                        isFullSearch={false}
+                        data={user}
+                        clearSearch={resetSearchInput}
+                      />
+                    </div>
+                  ))}
+                  {searchResults.communities.map((community) => (
+                    <div key={community.id}>
+                      <QuickSearchCard
+                        type="community"
+                        isFullSearch={false}
+                        data={community}
+                        clearSearch={resetSearchInput}
+                      />
+                    </div>
+                  ))}
+                  <div className={styles["quick-search__results-line"]}></div>
                 </div>
               )}
+              {!isSearching &&
+                (searchResults.users.length > 0 ||
+                  searchResults.communities.length > 0) && (
+                  <div className={styles["quick-search__results-footer"]}>
+                    {/* <div>1.535 results</div> */}
+                    <div className="text-dark fw-600 ms-auto cursor-pointer">
+                      <span
+                        className={`text-decoration-underline ${styles["text-dark-mode"]}`}
+                        onClick={onFullSearchHandler}
+                      >
+                        {tSearch("see_more_results")}
+                      </span>
+                      <i className="bi bi-arrow-right ms-1 h5"></i>
+                    </div>
+                  </div>
+                )}
             </div>
           )}
       </div>

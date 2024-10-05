@@ -16,15 +16,19 @@ export default function SearchFullByType(props: {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [firstRender, setFirstRender] = useState<boolean>(false);
+  const TAKE = 15;
 
-  const fullSearch = async (keyword: string) => {
+  const fullSearch = async (page: number, keyword: string) => {
     try {
       setIsLoading(true);
       const res = await fullSearchByType(
         keyword,
         tab === "people" ? "users" : "communities",
+        TAKE,
+        page,
       );
-      setSearchResults(res.data.docs);
+      setSearchResults((prev) => [...prev, ...res.data.docs]);
       setTotalPage(res.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -34,9 +38,17 @@ export default function SearchFullByType(props: {
   };
 
   useEffect(() => {
-    // Call api & send keyword to fetch search results
-    fullSearch(keyword);
+    if (firstRender) {
+      setSearchResults([]);
+      fullSearch(page, keyword);
+    }
   }, [tab, keyword]);
+
+  useEffect(() => {
+    if (firstRender) {
+      fullSearch(1, keyword);
+    }
+  }, [firstRender]);
 
   const onScrollHandler = () => {
     if (document.documentElement) {
@@ -54,7 +66,7 @@ export default function SearchFullByType(props: {
 
   useEffect(() => {
     if (page > 1) {
-      fullSearch(keyword);
+      fullSearch(page, keyword);
     }
   }, [page]);
 
@@ -69,6 +81,13 @@ export default function SearchFullByType(props: {
     };
   }, [page, totalPage, isLoading]);
 
+  // Avoid fetching data on initial render
+  useEffect(() => {
+    if (!firstRender) {
+      setFirstRender(true);
+    }
+  }, []);
+
   return (
     <div className="mt-5">
       {!isLoading && searchResults.length === 0 && (
@@ -79,7 +98,7 @@ export default function SearchFullByType(props: {
         searchResults?.map((data, index) => (
           <div key={index}>
             <QuickSearchCard
-              type="user"
+              type={tab === "community" ? "community" : "user"}
               isFullSearch={tab === "community" ? true : false}
               data={data}
             />

@@ -236,7 +236,7 @@
     "community_created_success": "Your community is being created",
     "community_created_fail": "Can't create community",
     "save": "Save",
-    "error_access_community": "You are not a member of this group"
+    "error_access_community": "You are not a member of this community"
   },
   "MyProfile": {
     "follow": "Follow",
@@ -460,6 +460,7 @@
     "sell_confirm": "Confirm",
     "error_content_missing": "Please enter the content for your sell post.",
     "error_price_missing": "Please enter the price",
-    "sell_nft_success": "Your NFT has been successfully listed for sale"
+    "sell_nft_success": "Your NFT has been successfully listed for sale",
+    "sell_nft_title": "Create a post to sell your NFT"
   }
 }
