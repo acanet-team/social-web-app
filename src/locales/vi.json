@@ -458,6 +458,7 @@
     "sell_confirm": "Xác nhận",
     "error_content_missing": "Hãy nhập nội dung cho bài bán NFT của bạn.",
     "error_price_missing": "Hãy nhập giá bán.",
-    "sell_nft_success": "NFT của bạn đã được đăng bán thành công."
+    "sell_nft_success": "NFT của bạn đã được đăng bán thành công.",
+    "sell_nft_title": "Tạo một bài viết để bán NFT"
   }
 }

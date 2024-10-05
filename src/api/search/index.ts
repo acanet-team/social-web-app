@@ -11,8 +11,10 @@ export const quickSearch = (text: string, countPerSection: number) => {
 export const fullSearchByType = (
   text: string,
   type: "users" | "communities",
+  take: number,
+  page: number,
 ) => {
   return httpClient.get<BaseArrayResponsVersionDocs<FullSearchItem>>(
-    `/v1/search/full?text=${text}&type=${type}`,
+    `/v1/search/full?text=${text}&type=${type}&take=${take}&page=${page}`,
   );
 };
