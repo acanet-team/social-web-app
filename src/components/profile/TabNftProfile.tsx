@@ -10,6 +10,7 @@ import { Agent } from "http";
 import styles from "@/styles/modules/TabNftProfile.module.scss";
 import { useTranslations } from "next-intl";
 import SellNFTModal from "../nft/SellNFTModal";
+import { test } from "vitest";
 
 const TabNftProfile = (props: { user: User; idParam: string }) => {
   const tNFT = useTranslations("NFT");
@@ -50,7 +51,6 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
       });
       const nftDataArray = await Promise.all(nftDataPromises);
       setNftData(nftDataArray);
-      console.log(nftDataArray);
     } catch (err) {
       console.log(err);
     }

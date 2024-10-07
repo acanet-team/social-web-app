@@ -3,6 +3,7 @@ interface Contracts {
   Community: { [key: string]: string };
   Donate: { [key: string]: string };
   Nft: { [key: string]: string };
+  NftMarket: { [key: string]: string };
 }
 
 //0x780c move
@@ -23,6 +24,10 @@ const contracts: Contracts = {
   Nft: {
     "0x780c": "0xbEE253C88CC59fAf26470aE320504D4d9D436d9b",
     "0x61": "0xf55064D3026F2D9991cc470044c3e68788DE3556",
+  },
+  NftMarket: {
+    "0x780c": "0x34638DeAFC70d6F9274fd4Bc310C98033c83fAaB",
+    "0x61": "0xE36855F853c44EcC7f9374c353eB2d9C73284cC5",
   },
 };
 
