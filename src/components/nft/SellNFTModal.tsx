@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { useWeb3 } from "@/context/wallet.context";
 import { onSellNFT } from "@/api/nft";
 import { throwToast } from "@/utils/throw-toast";
+import { ethers } from "ethers";
 
 interface SellNFTModalProps {
   title: string;
@@ -29,13 +30,19 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
     window.innerWidth <= 768 ? "sm-down" : undefined,
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const tNFT = useTranslations("NFT");
-  const { nftContract, connectWallet, account, connectedChain } = useWeb3();
+  const t = useTranslations("NFT");
+  const {
+    nftMarketContract,
+    nftContract,
+    connectWallet,
+    account,
+    connectedChain,
+  } = useWeb3();
 
   const validationSchema = Yup.object({
-    content: Yup.string().required(tNFT("error_content_missing")),
+    content: Yup.string().required(t("error_content_missing")),
     price: Yup.number()
-      .required(tNFT("error_price_missing"))
+      .required(t("error_price_missing"))
       .transform((originalValue, transformedValue) => {
         const numValue = Number(originalValue);
         return isNaN(numValue) ? 0 : numValue;
@@ -51,19 +58,28 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
     validationSchema,
     onSubmit: async (values) => {
       try {
+        setIsLoading(true);
+        const sellNft = await nftMarketContract.listNFTForSale(
+          nft.token_id,
+          ethers.utils.parseEther(values.price).toString(),
+        );
+        sellNft.wait();
         await onSellNFT({
           content: values.content,
-          nftContract: nftContract.address,
+          nftContract: nftMarketContract.address,
           nftTokenId: connectedChain?.id === "0x780c" ? "MOVE" : "BSC",
           price: +values.price,
           currency: "string",
           quantity: "1",
           asset: nft.image_url,
         });
+
         handleClose();
-        throwToast(tNFT("sell_nft_success"), "success");
+        throwToast(t("sell_nft_success"), "success");
       } catch (error) {
         console.log(error);
+        throwToast(t("sell_nft_error"), "error");
+        setIsLoading(false);
       }
     },
   });
@@ -95,7 +111,7 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
         <form onSubmit={formik.handleSubmit}>
           {/* Content */}
           <label className="fw-600 mt-3 mb-1" htmlFor="content">
-            {tNFT("sell_content")}
+            {t("sell_content")}
           </label>
           <textarea
             className={`${formik.touched.content && formik.errors.content ? " border-danger" : ""} w-100 rounded-3 text-dark border-light-md fw-400 theme-dark-bg d-flex`}
@@ -116,7 +132,7 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
 
           {/* Price */}
           <div className="d-flex flex-column g-0">
-            <label className="fw-600 mt-3 mb-1">{tNFT("sell_price")}</label>
+            <label className="fw-600 mt-3 mb-1">{t("sell_price")}</label>
             <TextField
               type="string"
               name="price"
@@ -156,7 +172,7 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
                   aria-hidden="true"
                 ></span>
               ) : (
-                tNFT("sell_confirm")
+                t("sell_confirm")
               )}
             </button>
           </Modal.Footer>
