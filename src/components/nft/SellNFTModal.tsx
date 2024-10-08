@@ -67,10 +67,10 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
         await onSellNFT({
           content: values.content,
           nftContract: nftMarketContract.address,
-          nftTokenId: connectedChain?.id === "0x780c" ? "MOVE" : "BSC",
+          nftTokenId: nft.token_id,
           price: +values.price,
-          currency: "string",
-          quantity: "1",
+          currency: connectedChain?.id === "0x780c" ? "MOVE" : "BSC",
+          quantity: 1,
           asset: nft.image_url,
         });
 

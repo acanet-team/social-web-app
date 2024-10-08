@@ -22,7 +22,7 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [nftData, setNftData] = useState<any[]>([]);
   const [nftToSell, setNftToSell] = useState<any>();
-  const { nftContract, connectWallet, account } = useWeb3();
+  const { nftContract, connectWallet, account, nftMarketContract } = useWeb3();
 
   useEffect(() => {
     setLoading(true);
@@ -66,6 +66,11 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
   const onSellNFTHandler = (nft: any) => {
     setNftToSell(nft);
     setOpenModal(true);
+  };
+  const onCancelSellNFTHandler = async (tokenId: number) => {
+    const cancelSellNFT = await nftMarketContract.cancelListing(tokenId);
+    cancelSellNFT.wait();
+    console.log(cancelSellNFT);
   };
   return (
     <>
