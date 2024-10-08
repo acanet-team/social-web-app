@@ -19,8 +19,8 @@ import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 import DonateModal from "../profile/DonateModal";
 import type { User } from "@/api/profile/model";
 import { useWeb3 } from "@/context/wallet.context";
-import type { IPost } from "@/api/newsfeed/model";
 import { ethers } from "ethers";
+import { onCancelSellNFT } from "@/api/nft";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -70,7 +70,8 @@ export default function PostCard(props: {
   const tPost = useTranslations("Post");
   const tAction = useTranslations("Action");
   const tNFT = useTranslations("NFT");
-  const { account, connectWallet, nftMarketContract } = useWeb3();
+  const { account, connectWallet, nftMarketContract, connectedChain } =
+    useWeb3();
   const [isBuyingNFT, setIsBuyingNFT] = useState<boolean>(false);
 
   // Comment states
@@ -225,6 +226,12 @@ export default function PostCard(props: {
         gasLimit: 2000000,
         value: ethers.utils.parseEther(additionalData.price.toString()),
       });
+      res.wait();
+      onCancelSellNFT(
+        connectedChain?.id === "0x780c" ? "MOVE" : "BSC",
+        additionalData.nftTokenId,
+      );
+
       return throwToast(tNFT("buy_nft_success"), "success");
     } catch (error) {
       console.log(error);
