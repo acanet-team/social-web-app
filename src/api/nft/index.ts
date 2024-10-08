@@ -9,3 +9,10 @@ export const onSellNFT = (values: sellNFTParams) => {
     values,
   );
 };
+
+export const onCancelSellNFT = (currency: string, nftTokenId: number) => {
+  return httpClient.post<any, ResponseDto<string>>(
+    `/v1/post/update-nft/${currency}/${nftTokenId}`,
+    {},
+  );
+};
