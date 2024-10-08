@@ -59,6 +59,11 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
+        const approve = await nftContract.approve(
+          nftMarketContract.address,
+          nft.token_id,
+        );
+        approve.wait();
         const sellNft = await nftMarketContract.listNFTForSale(
           nft.token_id,
           ethers.utils.parseEther(values.price).toString(),
