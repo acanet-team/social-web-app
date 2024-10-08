@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import styles from "@/styles/modules/profile.module.scss";
 import { TabPnum } from "@/types/enum";
@@ -147,12 +147,25 @@ export default function Profile({
     dots: false,
     infinite: false,
     speed: 300,
-    slidesToShow: isQuery ? 3 : dataUser.role.name === "broker" ? 6 : 4,
+    slidesToShow: isQuery ? 2 : dataUser.role.name === "broker" ? 6 : 4,
     slidesToScroll: 1,
     centerMode: false,
     variableWidth: true,
     draggable: true,
     swipeToSlide: true,
+  };
+
+  let sliderRef = useRef<Slider | null>(null);
+  const next = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickNext();
+    }
+  };
+
+  const previous = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickPrev();
+    }
   };
 
   return (
@@ -177,71 +190,108 @@ export default function Profile({
           logoRank={logoRanks}
           connectRequestId={connectRequestId}
         />
-
-        <Slider {...settingsilder}>
-          <div
-            className={`${curTab === TabPnum.Posts ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
-            style={{
-              width: dataUser.role.name === "broker" ? "16.66%" : "25%",
-            }}
-            onClick={(e) => onSelectTabHandler(e)}
-          >
-            <p>{t("Posts")}</p>
-          </div>
-          {(dataUser.role.name === "broker" ||
-            dataUser.role.name === "guest" ||
-            dataUser.role.name === "investor") && (
+        <div className="position-relative">
+          <Slider ref={sliderRef} {...settingsilder}>
             <div
-              className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+              className={`${curTab === TabPnum.Posts ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
                 width: dataUser.role.name === "broker" ? "16.66%" : "25%",
               }}
-              onClick={(e) => onSelectTabHandler(e)}
             >
-              <p>{t("About")}</p>
+              <p
+                className="cursor-pointer"
+                onClick={(e) => onSelectTabHandler(e)}
+              >
+                {t("Posts")}
+              </p>
             </div>
-          )}
-          <div
-            className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
-            style={{
-              width: dataUser.role.name === "broker" ? "16.66%" : "25%",
-            }}
-            onClick={(e) => onSelectTabHandler(e)}
-          >
-            <p>{t("Communities")}</p>
-          </div>
-          {dataUser.role.name === "broker" && (
+            {(dataUser.role.name === "broker" ||
+              dataUser.role.name === "guest" ||
+              dataUser.role.name === "investor") && (
+              <div
+                className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+                style={{
+                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                }}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  {t("About")}
+                </p>
+              </div>
+            )}
             <div
-              className={`${curTab === TabPnum.Rating ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+              className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
                 width: dataUser.role.name === "broker" ? "16.66%" : "25%",
               }}
-              onClick={(e) => onSelectTabHandler(e)}
             >
-              <p>{t("Rating")}</p>
+              <p
+                className="cursor-pointer"
+                onClick={(e) => onSelectTabHandler(e)}
+              >
+                {t("Communities")}
+              </p>
             </div>
-          )}
-          {dataUser.role.name === "broker" && (
+            {dataUser.role.name === "broker" && (
+              <div
+                className={`${curTab === TabPnum.Rating ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+                style={{
+                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                }}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  {t("Rating")}
+                </p>
+              </div>
+            )}
+            {dataUser.role.name === "broker" && (
+              <div
+                className={` ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+                style={{
+                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                }}
+              >
+                <p
+                  className="cursor-pointer"
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  {t("Signal")}
+                </p>
+              </div>
+            )}
             <div
-              className={` ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
                 width: dataUser.role.name === "broker" ? "16.66%" : "25%",
               }}
-              onClick={(e) => onSelectTabHandler(e)}
             >
-              <p>{t("Signal")}</p>
+              <p
+                className="cursor-pointer"
+                onClick={(e) => onSelectTabHandler(e)}
+              >
+                {t("Nft")}
+              </p>
             </div>
+          </Slider>
+          {isQuery && (
+            <i
+              className={`bi bi-caret-left position-absolute cursor-pointer ${styles["slick-next"]}`}
+              onClick={previous}
+            ></i>
           )}
-          <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
-            style={{
-              width: dataUser.role.name === "broker" ? "16.66%" : "25%",
-            }}
-            onClick={(e) => onSelectTabHandler(e)}
-          >
-            <p>{t("Nft")}</p>
-          </div>
-        </Slider>
+          {isQuery && (
+            <i
+              className={`bi bi-caret-right position-absolute cursor-pointer ${styles["slick-prev"]}`}
+              onClick={next}
+            ></i>
+          )}
+        </div>
       </div>
       {curTab === TabPnum.About && (
         <TabAbout
