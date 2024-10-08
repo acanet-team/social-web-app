@@ -107,8 +107,6 @@ const Banner: React.FC<TabBannerProps> = ({
       const res = await rateContract.getAverageRating(dataUser.id.toString());
       const avgRating =
         res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
-      console.log("res", res);
-      console.log("avg", avgRating);
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);

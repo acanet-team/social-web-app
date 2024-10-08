@@ -118,8 +118,10 @@ export default function CommunityFeed(props: {
                 community={p.community as IPostCommunityInfo}
                 postAuthor={p.user as IUserInfo}
                 postId={p.id}
+                postType={p.postType}
                 content={p.content}
                 assets={p?.assets}
+                additionalData={p.additionalData}
                 createdAt={p.createdAt}
                 like={p.favoriteCount}
                 comment={p.commentCount}

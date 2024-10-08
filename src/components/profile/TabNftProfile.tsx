@@ -64,8 +64,6 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
   }, [user, user.walletAddress]);
 
   const onSellNFTHandler = (nft: any) => {
-    console.log("dede", nft);
-
     setNftToSell(nft);
     setOpenModal(true);
   };

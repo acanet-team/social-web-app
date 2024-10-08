@@ -19,6 +19,8 @@ import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 import DonateModal from "../profile/DonateModal";
 import type { User } from "@/api/profile/model";
 import { useWeb3 } from "@/context/wallet.context";
+import type { IPost } from "@/api/newsfeed/model";
+import { ethers } from "ethers";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -32,6 +34,8 @@ export default function PostCard(props: {
   comment: number;
   columnsCount: number;
   liked: boolean;
+  postType: string;
+  additionalData?: any | null;
   setPostHandler: React.Dispatch<React.SetStateAction<{ id: string }[]>>;
 }) {
   const {
@@ -46,6 +50,8 @@ export default function PostCard(props: {
     comment,
     columnsCount,
     liked,
+    postType,
+    additionalData,
     setPostHandler,
   } = props;
   const [expandPost, setExpandPost] = useState<boolean>(false);
@@ -62,7 +68,7 @@ export default function PostCard(props: {
   const [userId, setUserId] = useState<number | undefined>(undefined);
   const tBase = useTranslations("Base");
   const tPost = useTranslations("Post");
-  const { account, connectWallet } = useWeb3();
+  const { account, connectWallet, nftMarketContract } = useWeb3();
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -71,7 +77,7 @@ export default function PostCard(props: {
   const [take, setTake] = useState<number>(20);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Propsx
+  // Props
   const groupAvatar = community?.avatar?.path || "";
   const groupId = community?.communityId || "";
   const groupName = community?.name || "";
@@ -133,18 +139,6 @@ export default function PostCard(props: {
     } else {
       setOpenComments((open) => !open);
     }
-    // const updatedSearchParams = new URLSearchParams(searchParams ?? "");
-    // if (id) {
-    //   updatedSearchParams.set("comments", id);
-    // } else {
-    //   updatedSearchParams.delete("comments");
-    // }
-
-    // startTransition(() => {
-    //   router.replace(`${pathname}?${updatedSearchParams.toString()}`, {
-    //     scroll: false,
-    //   });
-    // });
   };
 
   const handleClose = useCallback(() => {
@@ -216,6 +210,23 @@ export default function PostCard(props: {
     setOpenDonate(true);
   };
 
+  const onBuyNFTHandler = async () => {
+    try {
+      if (!account) {
+        return connectWallet();
+      }
+      const res = await nftMarketContract.buyNFT(
+        Number(additionalData.nftTokenId),
+        {
+          value: ethers.utils.parseEther(additionalData.price.toString()),
+        },
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
   return (
     <div
       className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-sm-4 p-3 mb-3`}
@@ -389,31 +400,44 @@ export default function PostCard(props: {
 
       <div className="card-body d-flex p-0 mt-4">
         {/* Like & comment */}
-        <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
-          {/* <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss"></i>{' '} */}
-          <i
-            className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
-            onClick={(e) => onClickLikeHandler(e, postId, like)}
-          ></i>
-          <span className="like-number">
-            {likeNum >= 1000 ? Math.round(likeNum / 1000).toFixed(1) : likeNum}
-          </span>
-          <span className="like-thousand">{likeNum >= 1000 ? "k" : ""}</span>
-        </div>
-        <div
-          className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
-          // onClick={() => onShowCommentHandler(postId.toString())}
-          onClick={() => onShowCommentHandler(postId.toString())}
-        >
-          <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
-          <span className="d-none-xss">
-            <RoundedNumber
-              num={commentNum}
-              unitSingular={tBase("comment")}
-              unitPlural={tBase("comments")}
-            />
-          </span>
-        </div>
+        {userId !== authorId && postType === "nft" ? (
+          <button
+            className="main-btn py-1 px-3 border-0 rounded-xxl"
+            onClick={onBuyNFTHandler}
+          >
+            Buy NFT
+          </button>
+        ) : (
+          <div className="d-flex">
+            <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
+              <i
+                className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
+                onClick={(e) => onClickLikeHandler(e, postId, like)}
+              ></i>
+              <span className="like-number">
+                {likeNum >= 1000
+                  ? Math.round(likeNum / 1000).toFixed(1)
+                  : likeNum}
+              </span>
+              <span className="like-thousand">
+                {likeNum >= 1000 ? "k" : ""}
+              </span>
+            </div>
+            <div
+              className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
+              onClick={() => onShowCommentHandler(postId.toString())}
+            >
+              <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
+              <span className="d-none-xss">
+                <RoundedNumber
+                  num={commentNum}
+                  unitSingular={tBase("comment")}
+                  unitPlural={tBase("comments")}
+                />
+              </span>
+            </div>
+          </div>
+        )}
         {/* Donate & Share */}
         <div
           className="pointer ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss gap-3"

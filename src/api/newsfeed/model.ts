@@ -81,8 +81,17 @@ export interface IPost {
   comments: Comment[];
   liked: boolean;
   user: IUserInfo;
+  postType: string;
   createdAt: string;
   updatedAt: string;
+  additionalData?: {
+    currency: string;
+    nft: boolean;
+    nftContract: string;
+    nftTokenId: number;
+    price: number;
+    quantity: number;
+  };
 }
 
 export interface GetTopicsResponse {
