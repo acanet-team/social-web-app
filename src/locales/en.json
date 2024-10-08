@@ -17,6 +17,10 @@
     "seconds": "seconds",
     "second": "second"
   },
+  "Action": {
+    "delete": "Delete",
+    "see_more": "See More"
+  },
   "Error": {
     "not_found": "The page you are looking for isn't available"
   },
@@ -454,7 +458,7 @@
     "nft_tab_title": "NFT Profile",
     "no_nft_found": "No NFTs found",
     "sell_nft": "Sell",
-    "buy_nft": "Buy",
+    "buy_nft": "Buy NFT",
     "sell_content": "Content",
     "sell_price": "Price",
     "sell_confirm": "Confirm",
@@ -462,6 +466,8 @@
     "error_price_missing": "Please enter the price",
     "sell_nft_success": "Your NFT has been successfully listed for sale",
     "sell_nft_title": "Create a post to sell your NFT",
-    "sell_nft_error": "Error listing NFT for sale"
+    "sell_nft_error": "Error listing NFT for sale",
+    "buy_nft_success": "Successfully bought NFT",
+    "buy_not_enough_token": "You don't have enough token to buy this NFT"
   }
 }

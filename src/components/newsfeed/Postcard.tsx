@@ -68,7 +68,10 @@ export default function PostCard(props: {
   const [userId, setUserId] = useState<number | undefined>(undefined);
   const tBase = useTranslations("Base");
   const tPost = useTranslations("Post");
+  const tAction = useTranslations("Action");
+  const tNFT = useTranslations("NFT");
   const { account, connectWallet, nftMarketContract } = useWeb3();
+  const [isBuyingNFT, setIsBuyingNFT] = useState<boolean>(false);
 
   // Comment states
   const [comments, setComments] = useState<any[]>([]);
@@ -215,18 +218,25 @@ export default function PostCard(props: {
       if (!account) {
         return connectWallet();
       }
-      const res = await nftMarketContract.buyNFT(
-        Number(additionalData.nftTokenId),
-        {
-          value: ethers.utils.parseEther(additionalData.price.toString()),
-        },
-      );
-      return res;
+      setIsBuyingNFT(true);
+      console.log("data", additionalData);
+      console.log("log", additionalData.nftTokenId);
+      const res = await nftMarketContract.buyNFT(additionalData.nftTokenId, {
+        gasLimit: 2000000,
+        value: ethers.utils.parseEther(additionalData.price.toString()),
+      });
+      return throwToast(tNFT("buy_nft_success"), "success");
     } catch (error) {
       console.log(error);
+      if (error?.data?.code === -32000) {
+        return throwToast(tNFT("buy_not_enough_token"), "error");
+      }
       return null;
+    } finally {
+      setIsBuyingNFT(false);
     }
   };
+
   return (
     <div
       className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-sm-4 p-3 mb-3`}
@@ -344,7 +354,7 @@ export default function PostCard(props: {
                 className={`${styles["delete-post__btn"]} font-xsss border-0 py-2 px-3 py-1 rounded-3 cursor-pointer`}
                 onClick={(e) => onDeletePost(e, postId)}
               >
-                Delete
+                {tAction("delete")}
               </div>
             )}
           </div>
@@ -369,7 +379,7 @@ export default function PostCard(props: {
                 className={styles["expand-btn"]}
                 onClick={() => setExpandPost((open) => !open)}
               >
-                See more
+                {tAction("see_more")}
               </span>
             ) : (
               ""
@@ -402,10 +412,19 @@ export default function PostCard(props: {
         {/* Like & comment */}
         {userId !== authorId && postType === "nft" ? (
           <button
-            className="main-btn py-1 px-3 border-0 rounded-xxl"
+            className={`${isBuyingNFT ? "btn-loading" : "bg-current"} main-btn py-1 w125 px-3 border-0 rounded-xxl`}
             onClick={onBuyNFTHandler}
+            disabled={isBuyingNFT ? true : false}
           >
-            Buy NFT
+            {isBuyingNFT ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              tNFT("buy_nft")
+            )}
           </button>
         ) : (
           <div className="d-flex">
