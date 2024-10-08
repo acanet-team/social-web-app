@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { InferGetServerSidePropsType, NextPageContext } from "next";
 import styles from "@/styles/modules/profile.module.scss";
 import { TabPnum } from "@/types/enum";
@@ -13,6 +13,10 @@ import Banner from "@/components/profile/Banner";
 import TabRating from "@/components/profile/TabRating";
 import ProfileSignal from "@/components/signal/ProfileSignal";
 import TabNftProfile from "@/components/profile/TabNftProfile";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useMediaQuery } from "react-responsive";
 
 const TAKE = 10;
 
@@ -47,6 +51,7 @@ export default function Profile({
   const [connectStatus, setConnectStatus] = useState(connectionStatus);
   const [logoRanks, setLogoRanks] = useState(logoRank);
   const [connectRequestId, setConnectRequestId] = useState(connectionRequestId);
+  const isQuery = useMediaQuery({ query: "(max-width: 768px" });
 
   useEffect(() => {
     if (session) {
@@ -137,6 +142,19 @@ export default function Profile({
   //   }
   // }, [dataUser.role.name]);
 
+  const settingsilder = {
+    arrows: false,
+    dots: false,
+    infinite: false,
+    speed: 300,
+    slidesToShow: isQuery ? 3 : dataUser.role.name === "broker" ? 6 : 4,
+    slidesToScroll: 1,
+    centerMode: false,
+    variableWidth: true,
+    draggable: true,
+    swipeToSlide: true,
+  };
+
   return (
     <div id={styles["user-profile"]}>
       <div
@@ -159,9 +177,13 @@ export default function Profile({
           logoRank={logoRanks}
           connectRequestId={connectRequestId}
         />
-        <div className={`${styles["group-tabs"]} ${tabClass}`}>
+
+        <Slider {...settingsilder}>
           <div
-            className={`${styles["button-tab"]} ${curTab === TabPnum.Posts ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            className={`${curTab === TabPnum.Posts ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+            style={{
+              width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+            }}
             onClick={(e) => onSelectTabHandler(e)}
           >
             <p>{t("Posts")}</p>
@@ -170,21 +192,30 @@ export default function Profile({
             dataUser.role.name === "guest" ||
             dataUser.role.name === "investor") && (
             <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.About ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+              style={{
+                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+              }}
               onClick={(e) => onSelectTabHandler(e)}
             >
               <p>{t("About")}</p>
             </div>
           )}
           <div
-            className={`${styles["button-tab"]} ${styles["button-tab__communities"]} ${curTab === TabPnum.Communities ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+            className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+            style={{
+              width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+            }}
             onClick={(e) => onSelectTabHandler(e)}
           >
             <p>{t("Communities")}</p>
           </div>
           {dataUser.role.name === "broker" && (
             <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Rating ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              className={`${curTab === TabPnum.Rating ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+              style={{
+                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+              }}
               onClick={(e) => onSelectTabHandler(e)}
             >
               <p>{t("Rating")}</p>
@@ -192,21 +223,25 @@ export default function Profile({
           )}
           {dataUser.role.name === "broker" && (
             <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              className={` ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+              style={{
+                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+              }}
               onClick={(e) => onSelectTabHandler(e)}
             >
               <p>{t("Signal")}</p>
             </div>
           )}
-          {
-            <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-              onClick={(e) => onSelectTabHandler(e)}
-            >
-              <p>{t("Nft")}</p>
-            </div>
-          }
-        </div>
+          <div
+            className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center cursor-pointer fw-700`}
+            style={{
+              width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+            }}
+            onClick={(e) => onSelectTabHandler(e)}
+          >
+            <p>{t("Nft")}</p>
+          </div>
+        </Slider>
       </div>
       {curTab === TabPnum.About && (
         <TabAbout

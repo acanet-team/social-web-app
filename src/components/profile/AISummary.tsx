@@ -35,7 +35,6 @@ const AiSummary = ({
   const [location, setLocation] = useState("");
   const [summary, setSummary] = useState<string | null>();
   const [text, setText] = useState<string | null>();
-  const [readyUpdate, setReadyUpdate] = useState(false);
   // console.log("setSummary", interestTopics)
   useEffect(() => {
     setInterestTopics(dataBrokerProfile?.interestTopics ?? []);
@@ -68,14 +67,9 @@ const AiSummary = ({
   const updateSummary = async () => {
     setIsLoading(true);
     try {
-      if (readyUpdate === false) {
-        await postUpdateSummary({});
-        setReadyUpdate(true);
-        setSummary(null);
-        throwToast("New report is coming soon", "success");
-      } else {
-        throwToast("Please wait. New report is coming soon.", "error");
-      }
+      await postUpdateSummary({});
+      // setSummary(null);
+      throwToast("New report is coming soon", "success");
     } catch (error) {
       throwToast("Error updating", "error");
     } finally {
@@ -84,29 +78,9 @@ const AiSummary = ({
   };
 
   return (
-    <div
-      className="card p-4 border-0 shadow-xss"
-      style={{
-        background: "#FFFFFF",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-        borderRadius: "5px",
-        marginTop: "40px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "2px",
-          }}
-        >
+    <div className="card border-0 shadow-xss bg-white rounded-3 p-4 mt_2">
+      <div className="d-flex justify-content-between algin-items-center">
+        <div className="d-flex ">
           <p className="m-0 fw-700 font-xss">{t("AI summary")}</p>
           <Image
             src="/assets/images/profile/icons8-lightning-96 1.png"
@@ -120,21 +94,14 @@ const AiSummary = ({
           />
         </div>
         {role && (
-          <Image
-            src="/assets/images/icons8-refresh-100.png"
-            width={16}
-            height={16}
-            alt=""
-            className=""
-            style={{
-              objectFit: "cover",
-            }}
+          <i
+            className={`bi bi-arrow-clockwise ${styles["icon-profile"]} text-black`}
             onClick={updateSummary}
-          />
+          ></i>
         )}
       </div>
       {text ? (
-        <>
+        <p className="m-0">
           {expandPost
             ? text
             : text.length > 100
@@ -150,13 +117,11 @@ const AiSummary = ({
           ) : (
             ""
           )}
-        </>
+        </p>
       ) : (
         <div
+          className="d-flex justify-content-center align-items-center"
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             height: "144px",
           }}
         >
@@ -172,38 +137,20 @@ const AiSummary = ({
           marginTop: "20px",
         }}
       />
+      {/* <hr className="border-none mt-3 border-top-md" /> */}
       <div className="mb-2">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <div className="d-flex justify-content-between align-items-center">
           <p className="m-0 fw-700 font-xsss">{t("contact")}</p>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "4px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {role === true && (
-              <>
-                <h4>
-                  <i
-                    className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
-                    onClick={() => {
-                      handleEdit();
-                    }}
-                  ></i>
-                </h4>
-              </>
-            )}
-          </div>
+          {role === true && (
+            <p>
+              <i
+                className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                onClick={() => {
+                  handleEdit();
+                }}
+              ></i>
+            </p>
+          )}
         </div>
         <p className="m-0 fw-500 font-xsss text-gray-follow">
           {dataUser?.email}

@@ -50,12 +50,32 @@ export default function Header(props: { isOnboarding: boolean }) {
   const searchInputMobileRef = useRef<HTMLInputElement>(null);
   const searchResultRef = useRef<HTMLDivElement>(null);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [styleCountNoti, setStyleCountNoti] = useState("");
+  const [isShowAddNoti, setIsShowAddNoti] = useState(false);
   // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
 
   useEffect(() => {
     // console.log("notifications-yy", notifications);
     // console.log("ahdfh", countNotis);
   }, [notifications]);
+
+  useEffect(() => {
+    const formatCountNoti = () => {
+      if (countNotis > 99) {
+        setCountNotis(99);
+        setIsShowAddNoti(true);
+        setStyleCountNoti("dot-count-three-numbers");
+      } else if (countNotis > 9) {
+        setStyleCountNoti("dot-count-two-numbers");
+        setIsShowAddNoti(false);
+      } else if (countNotis > 0 && countNotis <= 9) {
+        setStyleCountNoti("dot-count-text");
+        setIsShowAddNoti(false);
+      }
+    };
+
+    formatCountNoti();
+  }, [countNotis]);
 
   useEffect(() => {
     if (session) {
@@ -202,10 +222,11 @@ export default function Header(props: { isOnboarding: boolean }) {
         >
           {reatAllNotis === false && (
             <span className={` ${styles["dot-count"]} bg-pinterest`}>
-              <p
-                className={` ${styles["dot-count-text"]} font-xssss text-white`}
-              >
+              <p className={`${styles[styleCountNoti]} font-xsssss text-white`}>
                 {countNotis}
+                {isShowAddNoti && (
+                  <span className={`${styles["style-dot-add-noti"]}`}>+</span>
+                )}
               </p>
             </span>
           )}
@@ -365,8 +386,13 @@ export default function Header(props: { isOnboarding: boolean }) {
       >
         {reatAllNotis === false && (
           <span className={`${styles["dot-count-max-width"]} bg-pinterest`}>
-            <p className={`${styles["dot-count-text"]} font-xssss text-white`}>
+            <p className={`${styles[styleCountNoti]} font-xsssss text-white`}>
               {countNotis}
+              {isShowAddNoti && (
+                <span className={`${styles["style-dot-add-noti"]} font-xsssss`}>
+                  +
+                </span>
+              )}
             </p>
           </span>
         )}

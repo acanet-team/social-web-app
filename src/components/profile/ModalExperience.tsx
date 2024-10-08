@@ -331,9 +331,12 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   </MenuItem>
                   <MenuItem value="FULL_TIME">Full-Time</MenuItem>
                   <MenuItem value="PART_TIME">Part-Time</MenuItem>
-                  <MenuItem value="CASUAL">Casual</MenuItem>
                   <MenuItem value="CONTRACT">Contractor</MenuItem>
-                  <MenuItem value="SELF-EMPLOYED">Self-employed</MenuItem>
+                  <MenuItem value="INTERN">Intern</MenuItem>
+                  <MenuItem value="FREELANCE">Freelance</MenuItem>
+                  <MenuItem value="OTHER">Other</MenuItem>
+                  {/* <MenuItem value="CASUAL">Casual</MenuItem> */}
+                  {/* <MenuItem value="SELF-EMPLOYED">Self-employed</MenuItem> */}
                 </Select>
                 {errors.workingType && (
                   <p className="text-red font-xsss">{errors.workingType}</p>

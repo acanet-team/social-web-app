@@ -126,16 +126,13 @@ export const ModalSocialMedia: React.FC<ModalSocialProp> = ({
               {updatedSocials?.length > 0 &&
                 updatedSocials.map((item) => (
                   <div key={item.id} style={{ flexBasis: "calc(50% - 20px)" }}>
-                    <div style={{ width: "100%" }}>
+                    <div className="w_100">
                       <p className="m-0 py-1 fw-600 font-xss">
                         {item.name.toUpperCase()}
                       </p>
                       <input
-                        className="px-2"
+                        className="px-2 rounded-3 w__100 border-ddd"
                         style={{
-                          width: "100%",
-                          border: "1px solid #ddd",
-                          borderRadius: "4px",
                           height: "56px",
                         }}
                         name={item.name}

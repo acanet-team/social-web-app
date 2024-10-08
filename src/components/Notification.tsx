@@ -44,6 +44,7 @@ const Notifications: React.FC<NotificationProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openPostModal, setOpenPostModal] = useState<string>("");
   const notisListRef = useRef<HTMLDivElement>(null);
+
   // const [newNotificationsCount, setNewNotificationsCount] = useState(0);
 
   const getTimeDifference = (createdAt: number) => {
@@ -143,7 +144,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -249,7 +250,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 `}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -259,7 +260,7 @@ const Notifications: React.FC<NotificationProps> = ({
                 >
                   {t("has_requested_to_join_your")}{" "}
                   <span
-                    className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                    className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 `}
                   >
                     {community?.name}{" "}
                   </span>
@@ -295,7 +296,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 `}
               >
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
@@ -339,7 +340,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {t("your_request_to_join")}{" "}
                 <span
@@ -379,7 +380,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -420,7 +421,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
@@ -500,7 +501,7 @@ const Notifications: React.FC<NotificationProps> = ({
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
