@@ -119,5 +119,9 @@
     "interestTopic": "Sujet d'intérêt",
     "This broker has been verified by Acanet": "Ce courtier a été vérifié par Acanet",
     "Nft": "NFT"
+  },
+  "NFT": {
+    "sell_nft_error": "Erreur lors de la liste des NFT à vendre",
+    "sell_nft_success": "Votre NFT a été mis en vente avec succès"
   }
 }

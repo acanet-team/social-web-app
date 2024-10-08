@@ -14,6 +14,7 @@ import rateAbi from "@/web3/abi/rate.json";
 import communityAbi from "@/web3/abi/community.json";
 import donateAbi from "@/web3/abi/donate.json";
 import nftAbi from "@/web3/abi/nft.json";
+import nftMarketAbi from "@/web3/abi/nft-market.json";
 import { useSession } from "next-auth/react";
 import { updateWalletAddress } from "@/api/wallet";
 
@@ -36,6 +37,7 @@ interface WalletContextType {
   communityContract: any;
   donateContract: any;
   nftContract: any;
+  nftMarketContract: any;
 }
 
 export interface Account {
@@ -113,6 +115,14 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     ),
   );
 
+  const [nftMarketContract, setNftMarketContract] = useState<any>(
+    new ethers.Contract(
+      contracts.NftMarket["0x61"] as string,
+      nftMarketAbi as any,
+      provider,
+    ),
+  );
+
   const updateUserWalletAddress = (address: string) => {
     // Update address in DB
     updateWalletAddress(address);
@@ -154,6 +164,13 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         signer || provider,
       );
       setNftContract(nft);
+
+      const nftMarket = new ethers.Contract(
+        contracts.NftMarket[connectedChain?.id] as string,
+        nftMarketAbi as any,
+        signer || provider,
+      );
+      setNftMarketContract(nftMarket);
     }
   }, [provider, signer, connectedChain]);
 
@@ -234,6 +251,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         communityContract,
         donateContract,
         nftContract,
+        nftMarketContract,
       }}
     >
       {children}

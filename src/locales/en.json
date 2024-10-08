@@ -461,6 +461,7 @@
     "error_content_missing": "Please enter the content for your sell post.",
     "error_price_missing": "Please enter the price",
     "sell_nft_success": "Your NFT has been successfully listed for sale",
-    "sell_nft_title": "Create a post to sell your NFT"
+    "sell_nft_title": "Create a post to sell your NFT",
+    "sell_nft_error": "Error listing NFT for sale"
   }
 }
