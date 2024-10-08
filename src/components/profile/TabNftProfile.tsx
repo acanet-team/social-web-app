@@ -133,23 +133,25 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
                                 ? `${nft.description.substring(0, 80)}...`
                                 : nft.description}
                             </p>
-                            <button
-                              className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
-                              onClick={() => onSellNFTHandler(nft)}
-                            >
-                              {tNFT("sell_nft")}
-                            </button>
+
                             {nftTokenIdSell.length > 0 &&
-                              nftTokenIdSell.includes(+nft.token_id) && (
-                                <button
-                                  className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
-                                  onClick={() =>
-                                    onCancelSellNFTHandler(+nft.token_id)
-                                  }
-                                >
-                                  {tNFT("cancel_nft")}
-                                </button>
-                              )}
+                            nftTokenIdSell.includes(+nft.token_id) ? (
+                              <button
+                                className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
+                                onClick={() =>
+                                  onCancelSellNFTHandler(+nft.token_id)
+                                }
+                              >
+                                {tNFT("cancel_nft")}
+                              </button>
+                            ) : (
+                              <button
+                                className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
+                                onClick={() => onSellNFTHandler(nft)}
+                              >
+                                {tNFT("sell_nft")}
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
