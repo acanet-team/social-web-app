@@ -355,7 +355,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                     checked={formData.isGraduated === true}
                     onChange={handleRadioChange}
                   />
-                  <span className="m-2 py-1">{t("True")}</span>
+                  <span className="m-2 py-1">{t("False")}</span>
                 </div>
                 <div>
                   <input
@@ -367,7 +367,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                     checked={formData.isGraduated === false}
                     onChange={handleRadioChange}
                   />
-                  <span className="m-2">{t("False")}</span>
+                  <span className="m-2">{t("True")}</span>
                 </div>
               </div>
             </div>
@@ -407,7 +407,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   <p className="text-red font-xsss">{errors.startDate}</p>
                 )}
               </div>
-              {formData.isGraduated && (
+              {!formData.isGraduated && (
                 <div style={{ width: "48.5%" }}>
                   <p className="m-0 py-1 fw-600 font-xs">{t("end year")}</p>
                   <DatePicker

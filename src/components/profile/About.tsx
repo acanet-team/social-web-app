@@ -54,24 +54,8 @@ export const About = ({
   return (
     <>
       {!isLoading && (
-        <div
-          className="card p-4 border-0 shadow-xss"
-          style={{
-            background: "#FFFFFF",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            borderRadius: "5px",
-            marginTop: "40px",
-          }}
-        >
-          <div
-            className="mb-4"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
+        <div className="card border-0 shadow-xss bg-white rounded-3 p-4 mt_2">
+          <div className="mb-4 d-flex justify-content-between algin-items-center">
             <h2 className="m-0 fw-600">{t("About")}</h2>
             {role === true && (
               <h4>
@@ -107,7 +91,7 @@ export const About = ({
               <div>
                 <div style={{}}>
                   <textarea
-                    className="w-100 m-0 font-xss fw-400 lh-20 d-flex"
+                    className="w-100 m-0 font-xss fw-400 lh-20 d-flex border-ddd rounded-3"
                     onChange={(event) => {
                       setAboutText(event.target.value);
                     }}
@@ -116,26 +100,15 @@ export const About = ({
                     maxLength={5000}
                     style={{
                       resize: "none",
-                      border: "1px solid #ddd",
                       paddingTop: "5px",
                       paddingLeft: "5px",
-                      borderRadius: "10px",
                       paddingRight: "0px",
                     }}
                     placeholder="Please write your description"
                   />
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "8px",
-                  }}
-                >
-                  <button
-                    className="px-4 py-1 bg-blue-button text-white font-xss"
-                    style={{ marginRight: "0px", border: "none" }}
-                  >
+                <div className="d-flex justify-content-end mt-3">
+                  <button className="px-4 py-1 bg-blue-button text-white font-xss me-0 rounded-3 border-none">
                     <p className="m-0" onClick={() => submitAbout()}>
                       {t("save")}
                     </p>

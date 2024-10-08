@@ -1,31 +1,21 @@
-#user-profile .group-tabs {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-#user-profile .group-tabs .button-tab {
-  width: 100%;
-  flex: 1;
-  height: 50px;
-  opacity: 0.5;
-  font-weight: 700;
-  border: none !important;
-  position: relative;
-  float: inline-start;
-  text-align: center;
-}
-
-#user-profile .group-tabs .button-tab p {
-  width: 100%;
-}
-
 #user-profile .tab-active {
   opacity: 1 !important;
   font-weight: 700;
   border: none !important;
+  position: relative;
+  color: #000000 !important;
+}
+.slick-prev {
+  right: 10px;
+  top: 0;
+  opacity: 0.5;
 }
 
+.slick-next {
+  left: 0;
+  opacity: 0.5;
+  top: 0;
+}
 #user-profile .tab-active::before {
   content: "";
   width: 60%;
@@ -203,7 +193,10 @@
 }
 
 :global(.theme-dark) {
-  .tab-active::before {
+  .slick-prev,.slick-next {
+    color: white;
+  }
+  #user-profile .tab-active::before  {
     border: 2px solid #fff;
   }
 
@@ -308,6 +301,7 @@
   #user-profile .group-tabs .button-tab {
     flex-basis: 1 !important;
     height: 35px;
+    // min-width: 35;
   }
 
   #user-profile .button-tab__communities {

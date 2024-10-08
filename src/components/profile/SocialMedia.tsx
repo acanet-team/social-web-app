@@ -112,15 +112,7 @@ const SocialMedia = ({
         >
           <p className="m-0 mb-1 fw-700 font-xss">{t("socialMedia")}</p>
           {role && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "4px",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <div className="d-flex justify-content-center align-items-center">
               <h4>
                 <i
                   className={`bi bi-pencil-fill ${styles["icon-profile"]}`}
@@ -130,7 +122,7 @@ const SocialMedia = ({
             </div>
           )}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+        <div className="d-flex">
           {socials?.length > 0 ? (
             socials.map((item) =>
               item.mediaUrl ? (
@@ -139,7 +131,7 @@ const SocialMedia = ({
                   onClick={() => handleLinkClick(item.mediaUrl)}
                 >
                   <i
-                    className={`bi ${iconMap[item.name] || ""} text-black`}
+                    className={`bi ${styles["icon-profile"]} ${iconMap[item.name] || ""} text-black me-3`}
                   ></i>
                 </div>
               ) : null,
