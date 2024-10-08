@@ -139,7 +139,10 @@
 .border-black {border:2px #000 dashed !important;}
 
 .border-top-lg {border-top: 3px solid #000;}
+.border-top-md {border-top: 2px solid #dbd9d9 !important;}
 .border-top-xs {border-top: 1px solid #f1f1f1;}
+.border-ddd {border: 1px solid #ddd !important;}
+.border-none {border: none  !important;}
 
 // BG IMAGE
 .bg-image-cover {background-size: cover;}
@@ -219,6 +222,7 @@
 .right-15 {right: 15px;}
 .right-35 {right: 35px;}
 .right--10 {right: -10px !important;}
+.right--20 {right: -20px !important;}
 .bottom-15 {bottom: 15px;}
 .pt-7 {padding-top: 75px; }
 .pb-7 {padding-bottom: 75px; }
@@ -235,6 +239,7 @@
 
 .mt--1 {margin-top: -0.4rem !important;}
 .mt--2 {margin-top: -2.5rem !important;}
+.mt_2 {margin-top: 2.5rem !important;}
 .mt--6 {margin-top: -4.2rem !important;}
 .mb--2 {margin-bottom: 3.5rem !important;}
 

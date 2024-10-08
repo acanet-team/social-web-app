@@ -80,36 +80,15 @@ const Education = ({
 
   return (
     <>
-      <div
-        className="card p-4 border-0 shadow-xss"
-        style={{
-          background: "#FFFFFF",
-          borderRadius: "5px",
-          marginTop: "40px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+      <div className="card border-0 shadow-xss bg-white rounded-3 p-4 mt_2">
+        <div className="d-flex justify-content-between algin-items-center">
           <h2 className="m-0 fw-600 mb-4">{t("education")}</h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "4px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="d-flex justify-content-center align-items-center">
             {role === true && (
               <>
                 <h1>
                   <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]} cursor-pointer`}
+                    className={`bi bi-plus-lg me-1 ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
@@ -138,16 +117,8 @@ const Education = ({
         </div>
         {educationToShow?.length > 0 &&
           educationToShow.map((education, index) => (
-            <>
-              <div
-                key={education.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
+            <div key={education.id}>
+              <div className="d-flex justify-content-center align-items-center">
                 <Image
                   src={
                     education.logo ||
@@ -160,26 +131,14 @@ const Education = ({
                     objectFit: "cover",
                   }}
                 />
-                <div className="w-100">
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <div className="w-100 ms-3">
+                  <div className="d-flex justify-content-between">
                     <p className="m-0 fw-600 font-xs">{education.name}</p>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "4px",
-                      }}
-                    >
+                    <div className="d-flex ">
                       {iconEdit && (
                         <>
                           <i
-                            className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                            className={`bi bi-pencil-fill me-1 ${styles["icon-profile"]} cursor-pointer`}
                             onClick={() => handleEditModal(education)}
                           ></i>
                           <i
@@ -190,7 +149,7 @@ const Education = ({
                       )}
                     </div>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div className="d-flex">
                     <p className="m-0 font-xss lh-20">{education.degree}</p>
                     <p className="m-0 font-xss lh-20">,{education.major}</p>
                   </div>
@@ -206,6 +165,7 @@ const Education = ({
                 </div>
               </div>
               {index < educationToShow?.length - 1 && (
+                // <hr className="border-none mt-3 border-top-md" />
                 <hr
                   style={{
                     border: "none",
@@ -214,10 +174,11 @@ const Education = ({
                   }}
                 />
               )}
-            </>
+            </div>
           ))}
         {!showAllEducation && school?.length - educationToShow?.length > 0 && (
           <>
+            {/* <hr className="border-none mt-3 border-top-md" /> */}
             <hr
               style={{
                 border: "none",
@@ -227,18 +188,9 @@ const Education = ({
             />
             <button
               onClick={() => setshowAllEducation(!showAllEducation)}
-              style={{
-                border: "none",
-                cursor: "pointer",
-                backgroundColor: "transparent",
-                display: "flex",
-                flexDirection: "row",
-                gap: "4px",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              className="border-none d-flex justify-content-center align-items-center bg-none cursor-pointer"
             >
-              <p className="m-0 font-xss fw-600">
+              <p className="m-0 font-xss fw-600 me-1">
                 {t("Show all")} {school?.length - educationToShow?.length}{" "}
                 {t("educations")}
               </p>

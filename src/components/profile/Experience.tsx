@@ -114,36 +114,15 @@ export const Experience = ({
 
   return (
     <>
-      <div
-        className="card p-4 border-0 shadow-xss"
-        style={{
-          background: "#FFFFFF",
-          borderRadius: "5px",
-          marginTop: "40px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+      <div className="card border-0 shadow-xss bg-white rounded-3 p-4 mt_2">
+        <div className="d-flex justify-content-between algin-items-center">
           <h2 className="m-0 fw-600 mb-4">{t("experience")}</h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "4px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="d-flex justify-content-center align-items-center">
             {role === true && (
               <>
                 <h1>
                   <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]} cursor-pointer`}
+                    className={`bi bi-plus-lg me-1 ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
@@ -152,7 +131,7 @@ export const Experience = ({
                     {iconBack ? (
                       <h4>
                         <i
-                          className={`bi bi-arrow-left ${styles["icon-profile"]} cursor-pointer`}
+                          className={`bi bi-arrow-left me-1 ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleCloseEdit()}
                         ></i>
                       </h4>
@@ -172,16 +151,8 @@ export const Experience = ({
         </div>
         {experiencesToShow?.length > 0 &&
           experiencesToShow?.map((experience, index) => (
-            <>
-              <div
-                key={experience.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
+            <div key={experience.id}>
+              <div className="d-flex justify-content-center align-items-center">
                 <Image
                   src={
                     experience.logo ||
@@ -194,15 +165,8 @@ export const Experience = ({
                     objectFit: "cover",
                   }}
                 />
-                <div className="w-100">
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <div className="w-100 ms-3">
+                  <div className="d-flex justify-content-between">
                     <p className="m-0 fw-600 font-xs">
                       {expandPost
                         ? experience.name
@@ -212,15 +176,9 @@ export const Experience = ({
                     </p>
 
                     {iconEdit && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          gap: "4px",
-                        }}
-                      >
+                      <div className="d-flex ">
                         <i
-                          className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                          className={`bi bi-pencil-fill me-1 ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleEditModal(experience)}
                         ></i>
                         <i
@@ -230,14 +188,7 @@ export const Experience = ({
                       </div>
                     )}
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      // gap: "8px",
-                    }}
-                  >
+                  <div className="d-flex align-items-center">
                     <p className="m-0 font-xss lh-20">{experience.position}</p>
                     {experience.position && experience.workingType && (
                       <span
@@ -256,15 +207,8 @@ export const Experience = ({
                       {experience.workingType}
                     </p>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <p className="m-0 font-xss lh-20 text-gray-follow">
+                  <div className="d-flex align-items-center">
+                    <p className="m-0 font-xss lh-20 text-gray-follow me-2">
                       {dayjs(experience.startDate).format("MMM-YYYY")} -{" "}
                       {experience.isWorking
                         ? "Present"
@@ -285,7 +229,7 @@ export const Experience = ({
                         }}
                       ></span>
                     )}
-                    <p className="m-0 font-xss lh-20 text-gray-follow">
+                    <p className="m-0 font-xss lh-20 text-gray-follow ms-2">
                       {calculateDuration(
                         experience.startDate,
                         experience.endDate,
@@ -313,6 +257,7 @@ export const Experience = ({
                 </div>
               </div>
               {index < experiencesToShow?.length - 1 && (
+                //  <hr className="border-none mt-3 border-top-md" />
                 <hr
                   style={{
                     border: "none",
@@ -321,11 +266,12 @@ export const Experience = ({
                   }}
                 />
               )}
-            </>
+            </div>
           ))}
         {!showAllExperiences &&
           company?.length - experiencesToShow?.length > 0 && (
             <>
+              {/* <hr className="border-none mt-3 border-top-md" /> */}
               <hr
                 style={{
                   border: "none",
@@ -335,16 +281,7 @@ export const Experience = ({
               />
               <button
                 onClick={() => setshowAllExperiences(!showAllExperiences)}
-                style={{
-                  border: "none",
-                  cursor: "pointer",
-                  backgroundColor: "transparent",
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "4px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                className="border-none d-flex justify-content-center align-items-center bg-none cursor-pointer"
               >
                 <p className="m-0 font-xss fw-600">
                   {t("Show all")} {company?.length - experiencesToShow?.length}{" "}
