@@ -20,6 +20,10 @@
     "seconds": "giây",
     "second": "giây"
   },
+  "Action": {
+    "delete": "Xoá",
+    "see_more": "Xem thêm"
+  },
   "Error": {
     "not_found": "Trang bạn đang tìm kiếm không tồn tại"
   },
