@@ -10,8 +10,8 @@ interface Contracts {
 //0x61 bsc
 const contracts: Contracts = {
   Rate: {
-    "0x780c": "0x8B97B03BFe1C42dffe12FCA4F30685474c3Ae2e4",
-    "0x61": "0xb746AeD23EEF40df58FfA54673453661BE04B36D",
+    "0x780c": "0x22ffF292f0c806bc0b33B7F2149AA5E1Dedc7622",
+    "0x61": "0xf3262da7eA7B1B78bbfd25A3545d5555c857a693",
   },
   Community: {
     "0x780c": "0x551EcD9ae36926B9b1A4216a0E46f7DCd0b0D461",
