@@ -1,19 +1,15 @@
 import "dotenv/config";
-
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-
 import httpClient from "@/api";
 import { getMe, guestLogin, refreshToken } from "@/api/auth";
 import { removePropertiesEmpty } from "@/utils/Helpers";
-import type { NextAuthOptions, User } from "next-auth";
-import { setCookie } from "nookies";
-import { trigger } from "@spotlightjs/spotlight";
-import { useGuestToken } from "@/context/guestToken";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { randomUUID } from "crypto";
-import { truncate } from "fs/promises";
+import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
+import console from "console";
 
 const options: NextAuthOptions = {
   providers: [
@@ -31,6 +27,34 @@ const options: NextAuthOptions = {
           name: unique_uuid,
           image: "",
         };
+      },
+    }),
+    CredentialsProvider({
+      id: "telegram-login",
+      name: "Telegram Login",
+      credentials: {},
+      async authorize(credentials, req) {
+        const validator = new AuthDataValidator({
+          botToken: `${process.env.NEXT_PUBLIC_BOT_TOKEN}`,
+        });
+        console.log("credentials", validator);
+
+        const data = objectToAuthDataMap(req.query || {});
+        console.log("data", data);
+
+        const user = await validator.validate(data);
+        console.log("user", user);
+
+        if (user.id && user.first_name) {
+          const returned = {
+            id: user.id.toString(),
+            email: user.id.toString(),
+            name: [user.first_name, user.last_name || ""].join(" "),
+            image: user.photo_url,
+          };
+          return returned;
+        }
+        return null;
       },
     }),
     GoogleProvider({

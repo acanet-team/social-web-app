@@ -9,8 +9,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { NextPageWithLayout } from "./_app";
-import { guestLogin } from "@/api/auth";
 import { useGuestToken } from "@/context/guestToken";
+import { LoginButton } from "@telegram-auth/react";
 
 const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -146,6 +146,40 @@ const LoginPage: NextPageWithLayout = () => {
                     />{" "}
                     {t("sign_in_with_facebook")}
                   </button>
+                </div>
+                <div className="form-group mb-1">
+                  {/* <button
+                    type="button"
+                    aria-label="Sign in with Telegram"
+                    title="Sign in with Telegram"
+                    className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
+                    onClick={() => {
+                      showLoading();
+                      signIn("telegram-login", { callbackUrl: "/" }, {});
+                    }}
+                  >
+                    <Image
+                      width={40}
+                      height={40}
+                      src="/assets/images/icon-1.png"
+                      alt="icon"
+                      className="w40 mb-1 me-5 ms-2"
+                    />{" "}
+                    {t("sign_in_with_telegram")}
+                  </button>
+                   */}
+                  <LoginButton
+                    botUsername={"pi_mob_bot"}
+                    showAvatar={false}
+                    requestAccess={null}
+                    onAuthCallback={(data) => {
+                      signIn(
+                        "telegram-login",
+                        { callbackUrl: "/" },
+                        data as any,
+                      );
+                    }}
+                  />
                 </div>
               </div>
               <div
