@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { ONBOARDING_STEP } from "./api/auth/auth.model";
 
 export async function middleware(request: NextRequest) {
+  console.log("loggg", request);
   const token = (await getToken({
     req: request,
     // secret: process.env.NEXT_AUTH_SECRET,

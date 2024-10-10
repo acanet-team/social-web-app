@@ -426,7 +426,9 @@
     "expiring": "Hết hạn vào",
     "accuracy": "Chính xác",
     "track_signal": "Theo dõi",
-    "tracking_signal": "Theo dõi"
+    "tracking_signal": "Theo dõi",
+    "track_sucess": "Thêm signal vào danh sách theo dõi",
+    "untrack_sucess": "Bỏ signal khỏi danh sách theo dõi"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",

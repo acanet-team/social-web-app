@@ -42,7 +42,7 @@ export const claimLuckyToken = (id: string) => {
   );
 };
 
-export const trackSignal = (id: string, type: string) => {
+export const trackSignal = (id: string, type: "track" | "unTrack") => {
   return httpClient.post<{ id: string }, BaseResponse<any>>(
     `/v1/signal/tracking`,
     { signalId: id, type: type },

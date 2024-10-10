@@ -47,6 +47,7 @@
 
 .post :global(.bi-heart-fill::before) {
   color: #fa5252 !important;
+  transition: all 0.15s ease-in;
 }
 
 :global(.theme-dark) {

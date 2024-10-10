@@ -425,7 +425,9 @@
     "expiring": "expiring on",
     "accuracy": "Accuracy",
     "track_signal": "Track",
-    "tracking_signal": "Tracking"
+    "tracking_signal": "Tracking",
+    "track_sucess": "Added signal to the tracking list",
+    "untrack_sucess": "Remove signal from the tracking list"
   },
   "Notification": {
     "has_requested_to_join_your": "has requested to join your",
