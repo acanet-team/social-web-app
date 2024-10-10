@@ -137,7 +137,7 @@ export interface IBrokers {
   rank: { id: string; name: string; path: string };
   rating: number;
   role: string;
-  signalAccuracy: string | typeof NaN;
+  signalAccuracy: string | null;
   summary: string;
   email: string;
   skills: { interestTopicId: string; topicName: string };

@@ -62,7 +62,7 @@ export default function BrokerList(props: {
                 followersCount={b.followersCount}
                 coursesEnrolledCount={b.coursesEnrolledCount}
                 email={b.email}
-                signalAccuracy={b.accuracy}
+                signalAccuracy={b.signalAccuracy}
                 summary={b.summary}
                 rank={b.rank}
               />

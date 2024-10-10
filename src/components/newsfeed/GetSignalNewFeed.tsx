@@ -48,6 +48,7 @@ const GetSignalNewFeed = () => {
     try {
       const response = await getSignalsNewFeed();
       setSignalNewFeed(response.data);
+      console.log("aaaaa", response.data);
     } catch (err) {
       console.log(err);
     } finally {
@@ -88,8 +89,10 @@ const GetSignalNewFeed = () => {
                   className={`${Number(signal?.signalAccuracy) > 75 ? styles["signal-green"] : Number(signal?.signalAccuracy) > 50 ? styles["signal-yellow"] : styles["signal-red"]} fw-700 text-align font-xssss`}
                 >
                   {!Number.isNaN(signal?.signalAccuracy) &&
-                  signal?.signalAccuracy !== undefined
-                    ? signal?.signalAccuracy + "% " + t("accuracy")
+                  signal?.signalAccuracy
+                    ? +signal?.signalAccuracy % 1 !== 0
+                      ? (+signal?.signalAccuracy).toFixed(2) + "% "
+                      : +signal?.signalAccuracy + "%" + t("accuracy")
                     : ""}
                 </div>
               </div>

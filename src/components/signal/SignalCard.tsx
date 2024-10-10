@@ -228,11 +228,15 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
         >
           <div className={styles["card-accuracy"]}>
             {tSignal("accuracy") + ": "}
-            {!Number.isNaN(signalAccuracy) && signalAccuracy !== undefined
-              ? signalAccuracy + "%"
+            {!Number.isNaN(signalAccuracy) && signalAccuracy
+              ? +signalAccuracy % 1 !== 0
+                ? (+signalAccuracy).toFixed(2) + "%"
+                : +signalAccuracy + "%"
               : !Number.isNaN(cardDetail?.signalAccuracy) &&
-                  cardDetail?.signalAccuracy !== undefined
-                ? cardDetail.signalAccuracy + "%"
+                  cardDetail?.signalAccuracy
+                ? +cardDetail.signalAccuracy % 1 !== 0
+                  ? (+cardDetail.signalAccuracy).toFixed(2) + "%"
+                  : +cardDetail.signalAccuracy + "%"
                 : "N/A"}
           </div>
           <span className={styles["view-card__cta"]}>
@@ -510,8 +514,8 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                                       fontWeight: "700",
                                     }}
                                   >
-                                    {authorName.length > 10
-                                      ? authorName.substring(0, 10) + "..."
+                                    {authorName.length > 20
+                                      ? authorName.substring(0, 20) + "..."
                                       : authorName}
                                   </IconButton>
                                 </Tooltip>
@@ -550,12 +554,16 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                             </Tooltip>
                           </div>
                           <div className={styles["signal-stats__numbers"]}>
-                            {!Number.isNaN(signalAccuracy) &&
-                            signalAccuracy !== undefined
-                              ? signalAccuracy + "%"
+                            {!Number.isNaN(signalAccuracy) && signalAccuracy
+                              ? +signalAccuracy % 1 !== 0
+                                ? (+signalAccuracy).toFixed(2) + "%"
+                                : +signalAccuracy + "%"
                               : !Number.isNaN(cardDetail?.signalAccuracy) &&
-                                  cardDetail?.signalAccuracy !== undefined
-                                ? cardDetail.signalAccuracy + "%"
+                                  cardDetail?.signalAccuracy
+                                ? +cardDetail?.signalAccuracy % 1 !== 0
+                                  ? (+cardDetail?.signalAccuracy).toFixed(2) +
+                                    "%"
+                                  : +cardDetail?.signalAccuracy + "%"
                                 : "N/A"}
                           </div>
                         </div>

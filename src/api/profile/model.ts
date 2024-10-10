@@ -62,7 +62,7 @@ export interface UserProfile {
   gender: string;
   location: string;
   shortDesc: string;
-  signalAccuracy: string | typeof NaN;
+  signalAccuracy: string | null;
   additionalData: {};
   brokerProfile: BrokerProfile | null;
 }

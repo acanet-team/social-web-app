@@ -31,7 +31,7 @@ export interface getSignalCardResponse {
   isTracking: boolean;
   luckyAmount?: number | undefined;
   readsCount: number | null;
-  signalAccuracy: string | typeof NaN;
+  signalAccuracy: string | null;
   // These 2 are props
   brokerId?: number;
   curUserId?: number | undefined;
@@ -42,7 +42,7 @@ export interface ISignalDaily {
   signalPair: string;
   type: string;
   expiryAt: number;
-  signalAccuracy: string | typeof NaN;
+  signalAccuracy: string | null;
   owner: {
     uerId: number;
     firstName: string;
