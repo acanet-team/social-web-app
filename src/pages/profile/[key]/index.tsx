@@ -291,6 +291,22 @@ export default function Profile({
               onClick={next}
             ></i>
           )}
+          {dataUser.role.name === "broker" && (
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>{t("Signal")}</p>
+            </div>
+          )}
+          {id === dataUser.id && (
+            <div
+              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
+              onClick={(e) => onSelectTabHandler(e)}
+            >
+              <p>{t("Nft")}</p>
+            </div>
+          )}
         </div>
       </div>
       {curTab === TabPnum.About && (
@@ -322,7 +338,7 @@ export default function Profile({
           id={Number(idUser)}
         />
       )}
-      {curTab === TabPnum.Nft && (
+      {id === dataUser.id && curTab === TabPnum.Nft && (
         <TabNftProfile user={dtUser} idParam={String(idUser)} />
       )}
       {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (

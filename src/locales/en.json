@@ -7,6 +7,7 @@
     "likes": "Likes",
     "comment": "Comment",
     "comments": "Comments",
+    "follower_title": "Followers",
     "follower": "follower",
     "followers": "followers",
     "hour": "Hour",
@@ -15,7 +16,8 @@
     "view": "view",
     "views": "views",
     "seconds": "seconds",
-    "second": "second"
+    "second": "second",
+    "ratings": "Ratings"
   },
   "Action": {
     "delete": "Delete",
@@ -114,7 +116,9 @@
   },
   "BrokerList": {
     "broker_title": "Broker List",
-    "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully"
+    "signal_accuracy": "Signal Accuracy",
+    "signal_accuracy_tooltip": "The accuracy percentage is calculated based on the signals that reached the take-profit point of this broker in the past",
+    "no_AI_summary": "AI summary comming soon."
   },
   "Interest": {
     "interest_title": "What are you interested in?",
@@ -383,7 +387,7 @@
     "error_missing_rating": "Please rate the broker",
     "review_success": "Review sent",
     "reivew_fail": "Can't sent review",
-    "no_rating_found": "No rating found. Be the first to rate this broker!",
+    "no_rating_found": "No rating found",
     "connect_wallet_error": "Please connect your wallet to Acanet"
   },
   "Wallet": {
@@ -414,7 +418,14 @@
     "luck_draw": "Lucky Draw",
     "claim_now": "Claim Now",
     "claimed": "Claimed",
-    "see_more": "See More"
+    "see_more": "See More",
+    "target": "Target",
+    "entry": "Entry",
+    "stop": "Stop",
+    "expiring": "expiring on",
+    "accuracy": "Accuracy",
+    "track_signal": "Track",
+    "tracking_signal": "Tracking"
   },
   "Notification": {
     "has_requested_to_join_your": "has requested to join your",

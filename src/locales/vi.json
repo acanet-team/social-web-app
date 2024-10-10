@@ -7,8 +7,9 @@
     "likes": "Thích",
     "comment": "Bình luận",
     "comments": "Bình luận",
-    "follower": "theo dõi",
-    "followers": "theo dõi",
+    "follower_title": "Theo dõi",
+    "follower": "Theo dõi",
+    "followers": "Theo dõi",
     "joined": "",
     "pending": "",
     "join": "",
@@ -18,7 +19,8 @@
     "view": "Lượt xem",
     "views": "Lượt xem",
     "seconds": "giây",
-    "second": "giây"
+    "second": "giây",
+    "ratings": "Đánh giá"
   },
   "Action": {
     "delete": "Xoá",
@@ -90,8 +92,10 @@
     "description": "Mô tả"
   },
   "BrokerList": {
-    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận",
-    "broker_title": "Danh sách môi giới"
+    "broker_title": "Danh sách môi giới",
+    "signal_accuracy": "Độ chính xác",
+    "signal_accuracy_tooltip": "Độ chính xác được tính toán dựa trên các tín hiệu đã chạm điểm chốt lời của nhà môi giới này trong quá khứ",
+    "no_AI_summary": "Bản tóm tắt AI đang cập nhật."
   },
   "Interest": {
     "interest_title": "Bạn quan tâm đến điều gì?",
@@ -384,7 +388,7 @@
     "error_missing_rating": "Vui lòng điền điểm đánh giá",
     "review_success": "Đánh giá thành công",
     "reivew_fail": "Không thể gửi đánh giá",
-    "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!",
+    "no_rating_found": "Không có đánh giá",
     "connect_wallet_error": "Hãy kết nối ví của bạn với Acanet"
   },
   "Wallet": {
@@ -415,7 +419,14 @@
     "luck_draw": "Lá bài may mắn",
     "claim_now": "Nhận ngay",
     "claimed": "Đã nhận",
-    "see_more": "Xem thêm"
+    "see_more": "Xem thêm",
+    "target": "Chốt lời",
+    "entry": "Giá vào",
+    "stop": "Cắt lỗ",
+    "expiring": "Hết hạn vào",
+    "accuracy": "Chính xác",
+    "track_signal": "Theo dõi",
+    "tracking_signal": "Theo dõi"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",
