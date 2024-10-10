@@ -120,7 +120,7 @@ export interface IBrokers {
     id: string;
     path: string;
   };
-  rank: string;
+  rank: { id: string; name: string; path: string };
   rating: number;
   role: string;
   skills: { interestTopicId: string; topicName: string };

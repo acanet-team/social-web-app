@@ -6,7 +6,7 @@ import styles from "@/styles/modules/signal.module.scss";
 import SignalSection from "@/components/signal/SignalSection";
 import type { getSignalCardResponse } from "@/api/signal/model";
 import { getSignalCards } from "@/api/signal";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 
 const Signal = ({
   cards,
@@ -16,8 +16,18 @@ const Signal = ({
   const [curTab, setCurTab] = useState<string>("discover");
   const tSignal = useTranslations("Signal");
   const existedSignalIds = cards.map((c) => c.id);
+  const params = useSearchParams();
+  const currentTab = params?.get("tab") || "discover";
   // console.log("existed", existedSignalIds);
   console.log("server signals", cards);
+
+  useEffect(() => {
+    if (currentTab === "history") {
+      setCurTab("history");
+    } else {
+      setCurTab("discover");
+    }
+  }, [currentTab]);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;

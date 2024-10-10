@@ -17,6 +17,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useMediaQuery } from "react-responsive";
+import { useSearchParams } from "next/navigation";
 
 const TAKE = 10;
 
@@ -52,6 +53,8 @@ export default function Profile({
   const [logoRanks, setLogoRanks] = useState(logoRank);
   const [connectRequestId, setConnectRequestId] = useState(connectionRequestId);
   const isQuery = useMediaQuery({ query: "(max-width: 768px" });
+  const params = useSearchParams();
+  const currentTab = params?.get("tab") || "about";
 
   useEffect(() => {
     if (session) {
@@ -113,6 +116,22 @@ export default function Profile({
       console.error("Error fetching profile data:", error);
     }
   };
+
+  useEffect(() => {
+    if (currentTab === "signal" && dtUser.role.name === "broker") {
+      setCurTab("signal");
+    } else if (currentTab === "posts") {
+      setCurTab("posts");
+    } else if (currentTab === "communities") {
+      setCurTab("communities");
+    } else if (currentTab === "rating" && dtUser.role.name === "broker") {
+      setCurTab("rating");
+    } else if (currentTab === "nft") {
+      setCurTab("nft");
+    } else {
+      setCurTab("about");
+    }
+  }, [currentTab]);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -195,7 +214,7 @@ export default function Profile({
             <div
               className={`${curTab === TabPnum.Posts ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                width: dtUser.role.name === "broker" ? "16.66%" : "25%",
               }}
             >
               <p
@@ -205,13 +224,13 @@ export default function Profile({
                 {t("Posts")}
               </p>
             </div>
-            {(dataUser.role.name === "broker" ||
-              dataUser.role.name === "guest" ||
-              dataUser.role.name === "investor") && (
+            {(dtUser.role.name === "broker" ||
+              dtUser.role.name === "guest" ||
+              dtUser.role.name === "investor") && (
               <div
                 className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
                 }}
               >
                 <p
@@ -225,7 +244,7 @@ export default function Profile({
             <div
               className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                width: dtUser.role.name === "broker" ? "16.66%" : "25%",
               }}
             >
               <p
@@ -235,11 +254,11 @@ export default function Profile({
                 {t("Communities")}
               </p>
             </div>
-            {dataUser.role.name === "broker" && (
+            {dtUser.role.name === "broker" && (
               <div
                 className={`${curTab === TabPnum.Rating ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
                 }}
               >
                 <p
@@ -250,11 +269,11 @@ export default function Profile({
                 </p>
               </div>
             )}
-            {dataUser.role.name === "broker" && (
+            {dtUser.role.name === "broker" && (
               <div
                 className={` ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
                 }}
               >
                 <p
@@ -268,7 +287,7 @@ export default function Profile({
             <div
               className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                width: dtUser.role.name === "broker" ? "16.66%" : "25%",
               }}
             >
               <p
@@ -307,17 +326,15 @@ export default function Profile({
           id={String(idUser)}
           take={TAKE}
           isConnected={connectStatus === "connected"}
-          isBroker={dataUser.role.name === "broker"}
+          isBroker={dtUser.role.name === "broker"}
           role={role}
         />
       )}
       {curTab === TabPnum.Communities && (
         <TabGroupProfile
-          isBroker={dataUser.role.name === "broker"}
+          isBroker={dtUser.role.name === "broker"}
           // communities={dataMyGroups}
-          communityType={
-            dataUser.role.name === "broker" ? "owned" : "following"
-          }
+          communityType={dtUser.role.name === "broker" ? "owned" : "following"}
           take={TAKE}
           id={Number(idUser)}
         />
@@ -325,11 +342,11 @@ export default function Profile({
       {curTab === TabPnum.Nft && (
         <TabNftProfile user={dtUser} idParam={String(idUser)} />
       )}
-      {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
-        <TabRating brokerData={dataUser} />
+      {dtUser.role.name === "broker" && curTab === TabPnum.Rating && (
+        <TabRating brokerData={dtUser} />
       )}
-      {dataUser.role.name === "broker" && curTab === TabPnum.Signal && (
-        <ProfileSignal brokerId={dataUser.id} userId={id} />
+      {dtUser.role.name === "broker" && curTab === TabPnum.Signal && (
+        <ProfileSignal brokerId={dtUser.id} userId={id} />
       )}
     </div>
   );
