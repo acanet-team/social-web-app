@@ -130,8 +130,11 @@ export interface IBrokers {
   followersCount: number;
   followingsCount: number;
   lastName: string;
-  photo: Photo;
-  rank: string | Photo;
+  photo: {
+    id: string;
+    path: string;
+  };
+  rank: { id: string; name: string; path: string };
   rating: number;
   role: string;
   signalAccuracy: string | typeof NaN;

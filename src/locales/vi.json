@@ -191,7 +191,21 @@
     "error_missing_nickname": "Please fill out a valid nickname",
     "error_invalid_nickname": "Biệt danh phải có từ 8 đến 20 ký tự",
     "error_missing_email": "Vui lòng điền một email hợp lệ",
-    "error_invalid_email": "Địa chỉ email không hợp lệ"
+    "error_invalid_email": "Địa chỉ email không hợp lệ",
+    "error_note": "Vui lòng điền ghi chú hợp lệ",
+    "error_missing_phone": "Vui lòng điền số điện thoại hợp lệ",
+    "Phone_number_is_not_valid": "Số điện thoại phải là ký tự số",
+    "error_select_at_least_one": "Vui lòng chọn ít nhất một mạng xã hội",
+    "error_url_missing": "Vui lòng điền URL hợp lệ",
+    "error_url_type": "URL không đúng định dạng",
+    "Contact_Email": "Email liên hệ",
+    "Phone_number": "Số điện thoại",
+    "Select_your_group_platform": "Chọn nền tảng nhóm của bạn",
+    "Number_of_members": "Số thành viên",
+    "Your_company": "Công ty",
+    "Years_of_Experience": "Năm kinh nghiệm",
+    "Note": "Ghi chú",
+    "error_num_members": "Số lượng thành viên phải là số"
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",
@@ -446,7 +460,9 @@
     "sent_you_the_connection": "đã gửi cho bạn kết nối",
     "you": "Bạn",
     "confirm": "Đồng ý",
-    "delete": "Huỷ"
+    "delete": "Huỷ",
+    "verify_broker_accept": "Chúc mừng! Bạn đã hoàn thành quy trình xác minh và hiện là một nhà môi giới được chứng nhận trên Acanet.",
+    "verify_broker_reject": "Rất tiếc, bạn không vượt qua quy trình xác minh để trở thành nhà môi giới. Tuy nhiên, bạn vẫn có thể tận hưởng tất cả các tính năng của Acanet với tư cách là một nhà đầu tư."
   },
   "Donate": {
     "confirm": "Xác nhận",

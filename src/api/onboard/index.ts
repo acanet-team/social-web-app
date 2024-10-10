@@ -8,9 +8,10 @@ import {
   type Regions,
   type subcribeTopicsParam,
   type topicsResponse,
+  type BaseResponse,
 } from "../model";
 import type { IBrokers } from "../newsfeed/model";
-import type { IUser } from "./model";
+import type { InfoAdditionalBroker, IUser } from "./model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 export const createProfileRequest = (
@@ -22,6 +23,13 @@ export const createProfileRequest = (
     values,
     { headers },
   );
+};
+
+export const whiteListBrokerAdditionalData = (value: InfoAdditionalBroker) => {
+  return httpClient.post<
+    BaseResponse<InfoAdditionalBroker>,
+    InfoAdditionalBroker
+  >("/v1/user-profile/broker-onboard", value);
 };
 
 export const getRegionRequest = (

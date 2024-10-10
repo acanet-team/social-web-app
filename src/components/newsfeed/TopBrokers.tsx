@@ -14,7 +14,11 @@ export const TopBrokers = (props: {
   lastName: string;
   followersCount: number;
   brokerId: number;
-  rank: string;
+  rank: {
+    id: string;
+    name: string;
+    path: string;
+  };
 }) => {
   const tBase = useTranslations("Base");
   const { photoUrl, firstName, lastName, followersCount, brokerId } = props;
@@ -48,7 +52,7 @@ export const TopBrokers = (props: {
   };
 
   useEffect(() => {
-    switch (props.rank) {
+    switch (props?.rank?.name) {
       case "Verified":
         setColorRank(
           "linear-gradient(180deg, #206d5d 0%, #3ca859 50%, #34a375 100%)",
