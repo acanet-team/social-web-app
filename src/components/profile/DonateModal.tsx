@@ -187,19 +187,6 @@ function DonateModal(props: {
                   type="string"
                   name="amount"
                   value={formik.values.amount}
-                  // placeholder={t("donate_input")}
-                  // onBlur={(e) =>
-                  //   formik.setFieldValue(
-                  //     "amount",
-                  //     Number(Number(e.target.value).toFixed(2)),
-                  //   )
-                  // }
-                  // onBlur={(e) =>
-                  //   formik.setFieldValue(
-                  //     "amount",
-                  //     Number(Number(e.target.value))
-                  //   )
-                  // }
                   onBlur={formik.handleBlur}
                   onChange={(e) => {
                     const value = e.target.value.replace(/,/g, ".");

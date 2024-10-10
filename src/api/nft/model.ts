@@ -1,9 +1,9 @@
 export interface sellNFTParams {
   content: string;
   nftContract: string;
-  nftTokenId: string;
+  nftTokenId: number;
   price: number;
   currency: string;
-  quantity: string;
+  quantity: number;
   asset: string;
 }

@@ -45,6 +45,7 @@ const Banner: React.FC<TabBannerProps> = ({
   const t = useTranslations("MyProfile");
   const tRating = useTranslations("Rating");
   const tBase = useTranslations("Base");
+  const tBroker = useTranslations("BrokerList");
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
@@ -73,7 +74,6 @@ const Banner: React.FC<TabBannerProps> = ({
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
-  // const [brokers, setBrokers] = useState<any[]>([]);
   const [avarageRating, setAverageRating] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
@@ -107,8 +107,7 @@ const Banner: React.FC<TabBannerProps> = ({
       const res = await rateContract.getAverageRating(dataUser.id.toString());
       const avgRating =
         res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
-      console.log("res", res);
-      console.log("avg", avgRating);
+      console.log("rate", res);
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -217,7 +216,6 @@ const Banner: React.FC<TabBannerProps> = ({
       }
       const dataUpdate = await updateProfile(formDt);
       setShow(false);
-      console.log("ahsfa", dataUpdate);
       throwToast("About updated successfully", "success");
     } catch (error) {
       throwToast("Error updating", "error");
@@ -225,21 +223,6 @@ const Banner: React.FC<TabBannerProps> = ({
       setIsLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   async function getBrokers() {
-  //     try {
-  //       setIsLoading(true);
-  //       const res = await createGetBrokersRequest(page, 20);
-  //       setBrokers(res.data.docs ? res.data.docs : res.data.data || []);
-  //     } catch (err) {
-  //       console.log(err);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   getBrokers();
-  // }, []);
 
   const onFollowBrokerHandler = async (e: any, brokerId: number) => {
     setIsFollowing(!isFollowing);
@@ -691,7 +674,33 @@ const Banner: React.FC<TabBannerProps> = ({
                 </>
               )}
               {/* Rank image */}
-              {/* <i className="bi bi-patch-check h1 m-0"></i> */}
+              <div
+                className="font-xsss fw-600 m-0 ms-1 position-relative"
+                style={{ color: "rgb(107, 173, 97)" }}
+              >
+                {!isNaN(Number(dataUserProfile?.signalAccuracy)) &&
+                  dataUserProfile?.signalAccuracy && (
+                    <Tooltip title={tBroker("signal_accuracy_tooltip")}>
+                      <Image
+                        src="/assets/images/profile/verified-tooltip.svg"
+                        width={16}
+                        height={16}
+                        alt=""
+                        className="position-absolute top-0"
+                        style={{
+                          right: "-20px",
+                          top: "5px",
+                          borderRadius: "50%",
+                          color: "rgb(107, 173, 97)",
+                        }}
+                      />
+                    </Tooltip>
+                  )}
+                {!isNaN(Number(dataUserProfile?.signalAccuracy)) &&
+                  dataUserProfile?.signalAccuracy +
+                    "% " +
+                    tBroker("signal_accuracy")}
+              </div>
               <Ratings rating={avarageRating} size={18} />
               <div className={`fw-bold ${styles["profile-rating__average"]}`}>
                 Rating: {avarageRating.toFixed(1)}

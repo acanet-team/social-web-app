@@ -1,3 +1,4 @@
+import { removePropertiesEmpty } from "@/utils/Helpers";
 import httpClient from "../index";
 import {
   GetRequestParams,
@@ -37,9 +38,14 @@ export const getRegionRequest = (
   return httpClient.get<Regions>("/v1/master-data/regions", { headers });
 };
 
-export const createGetBrokersRequest = (page: number, take: number) => {
+export const createGetBrokersRequest = (
+  page: number,
+  take: number,
+  search: string,
+  interestTopicIds: string,
+) => {
   return httpClient.get<AllBrokersResponse<IBrokers>>(
-    `/v1/users?type=broker&page=${page}&take=${take}&sort={"orderBy":"followers_count","order":"DESC"}`,
+    `/v1/users?type=broker&page=${page}&take=${take}&sort={"orderBy":"followers_count","order":"DESC"}&search=${search}&interestTopicIds=${interestTopicIds}`,
   );
 };
 

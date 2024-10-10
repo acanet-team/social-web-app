@@ -20,6 +20,7 @@ const Signal = ({
   const currentTab = params?.get("tab") || "discover";
   // console.log("existed", existedSignalIds);
   console.log("server signals", cards);
+  console.log("next", hasNextPage);
 
   useEffect(() => {
     if (currentTab === "history") {
@@ -80,12 +81,13 @@ export async function getServerSideProps(context: NextPageContext) {
     brokerId: "",
     existedSignalIds: "",
   });
+  console.log("mmm", res);
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
       cards: res?.data?.docs || [],
       totalPage: res?.data?.meta?.totalPage || 1,
-      hasNextPage: res?.data?.meta?.hasNextPage || true,
+      hasNextPage: res?.data?.meta?.hasNextPage,
     },
   };
 }
