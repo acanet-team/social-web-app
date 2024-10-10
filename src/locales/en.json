@@ -472,6 +472,7 @@
     "buy_nft": "Buy NFT",
     "sell_content": "Content",
     "sell_price": "Price",
+    "cancel_nft": "Cancel NFT",
     "sell_confirm": "Confirm",
     "error_content_missing": "Please enter the content for your sell post.",
     "error_price_missing": "Please enter the price",

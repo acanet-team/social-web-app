@@ -4,13 +4,11 @@ import Image from "next/image";
 import DotWaveLoader from "../DotWaveLoader";
 import { useSession } from "next-auth/react";
 import { useWeb3 } from "@/context/wallet.context";
-import httpClient from "@/api";
 import axios from "axios";
-import { Agent } from "http";
 import styles from "@/styles/modules/TabNftProfile.module.scss";
 import { useTranslations } from "next-intl";
 import SellNFTModal from "../nft/SellNFTModal";
-import { test } from "vitest";
+import { onCancelSellNFT } from "@/api/nft";
 
 const TabNftProfile = (props: { user: User; idParam: string }) => {
   const tNFT = useTranslations("NFT");
@@ -22,7 +20,8 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [nftData, setNftData] = useState<any[]>([]);
   const [nftToSell, setNftToSell] = useState<any>();
-  const { nftContract, connectWallet, account } = useWeb3();
+  const [nftTokenIdSell, setNftTokenIdSell] = useState<any[]>([]);
+  const { nftContract, connectedChain, account, nftMarketContract } = useWeb3();
 
   useEffect(() => {
     setLoading(true);
@@ -56,16 +55,33 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
     }
     setLoading(false);
   };
+  const getAllListedNFTs = async () => {
+    setLoading(true);
+    try {
+      const res = await nftMarketContract.getAllListedNFTs();
+      const nftTokenIds = res.map((elm: any) => elm.tokenId.toNumber());
+      setNftTokenIdSell(nftTokenIds);
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (user.walletAddress) {
       getAllNFTs(user.walletAddress);
+      getAllListedNFTs();
     }
   }, [user, user.walletAddress]);
 
   const onSellNFTHandler = (nft: any) => {
     setNftToSell(nft);
     setOpenModal(true);
+  };
+  const onCancelSellNFTHandler = async (tokenId: number) => {
+    const cancelSellNFT = await nftMarketContract.cancelListing(tokenId);
+    cancelSellNFT.wait();
+    onCancelSellNFT(connectedChain?.id === "0x780c" ? "MOVE" : "BSC", tokenId);
   };
   return (
     <>
@@ -117,12 +133,25 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
                                 ? `${nft.description.substring(0, 80)}...`
                                 : nft.description}
                             </p>
-                            <button
-                              className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
-                              onClick={() => onSellNFTHandler(nft)}
-                            >
-                              {tNFT("sell_nft")}
-                            </button>
+
+                            {nftTokenIdSell.length > 0 &&
+                            nftTokenIdSell.includes(+nft.token_id) ? (
+                              <button
+                                className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
+                                onClick={() =>
+                                  onCancelSellNFTHandler(+nft.token_id)
+                                }
+                              >
+                                {tNFT("cancel_nft")}
+                              </button>
+                            ) : (
+                              <button
+                                className="w-100 border-0 text-grey-600 position-absolute left-0 bottom-0"
+                                onClick={() => onSellNFTHandler(nft)}
+                              >
+                                {tNFT("sell_nft")}
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

@@ -282,15 +282,8 @@ const Banner: React.FC<TabBannerProps> = ({
   }, []);
 
   return (
-    <div style={{ paddingRight: "16px", paddingLeft: "16px" }}>
-      <div
-        className=""
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "auto",
-        }}
-      >
+    <div className="px-3">
+      <div className="w__100 position-relative">
         <div className={`${styles["cover-profile"]}`}>
           <Image
             src={
@@ -401,14 +394,7 @@ const Banner: React.FC<TabBannerProps> = ({
                 style={{ minWidth: "220px" }}
               >
                 {dataUser.role.name === "broker" && (
-                  <div
-                    className="align-items-center position-relative"
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      gap: "2px",
-                    }}
-                  >
+                  <div className="align-items-center position-relative d-flex">
                     <Image
                       src="/assets/images/profile/check-mark.svg"
                       width={24}
@@ -429,11 +415,8 @@ const Banner: React.FC<TabBannerProps> = ({
                         width={16}
                         height={16}
                         alt=""
-                        className="position-absolute top-0"
+                        className="position-absolute top-0 rounded-circle right--20 top-5"
                         style={{
-                          right: "-20px",
-                          top: "5px",
-                          borderRadius: "50%",
                           color: "rgb(107, 173, 97)",
                         }}
                       />
@@ -456,7 +439,7 @@ const Banner: React.FC<TabBannerProps> = ({
                   : tBase("follower")
                 : (dataUser?.role?.name === "investor" ||
                     dataUser.role.name === "guest") &&
-                  (Number(connectCount) > 1 ? t("connect") : t("connects"))}
+                  (Number(connectCount) < 1 ? t("connect") : t("connects"))}
             </div>
             {!role && (
               <>
@@ -492,48 +475,49 @@ const Banner: React.FC<TabBannerProps> = ({
 
                   {(dataUser.role.name === "investor" ||
                     connectionStatus === "connected" ||
-                    dataUser.role.name === "guest") && (
-                    <>
-                      <button
-                        onClick={() =>
-                          fetchConnectRequest(
-                            Number(idParam),
-                            connectionStatus === "not_connected"
-                              ? "request"
-                              : connectionStatus === "request_send"
-                                ? "cancel_request"
-                                : "",
-                          )
-                        }
-                        className={`px-3 ${connectionStatus === "connected" ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
-                      >
-                        {connectionStatus === "connected" ? (
-                          <h4 className=" m-0">
-                            <i
-                              style={{ color: "white" }}
-                              className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
-                            ></i>
-                          </h4>
-                        ) : (
-                          <h4 className="text-white m-0">
-                            <i
-                              className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
-                            ></i>
-                          </h4>
-                        )}
+                    dataUser.role.name === "guest") &&
+                    connectionStatus !== "request_received" && (
+                      <>
+                        <button
+                          onClick={() =>
+                            fetchConnectRequest(
+                              Number(idParam),
+                              connectionStatus === "not_connected"
+                                ? "request"
+                                : connectionStatus === "request_send"
+                                  ? "cancel_request"
+                                  : "",
+                            )
+                          }
+                          className={`px-3 ${connectionStatus === "connected" ? styles["profile-following__btn"] : styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
+                        >
+                          {connectionStatus === "connected" ? (
+                            <h4 className=" m-0">
+                              <i
+                                style={{ color: "white" }}
+                                className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
+                              ></i>
+                            </h4>
+                          ) : (
+                            <h4 className="text-white m-0">
+                              <i
+                                className={`bi bi-plus ${styles["icon-profile"]} cursor-pointer`}
+                              ></i>
+                            </h4>
+                          )}
 
-                        <span className="font-xss fw-600">
-                          {connectionStatus === "connected"
-                            ? t("connecting")
-                            : connectionStatus === "not_connected"
-                              ? t("Connect")
-                              : connectionStatus === "request_send"
-                                ? t("waiting")
-                                : ""}
-                        </span>
-                      </button>
-                    </>
-                  )}
+                          <span className="font-xss fw-600">
+                            {connectionStatus === "connected"
+                              ? t("connecting")
+                              : connectionStatus === "not_connected"
+                                ? t("Connect")
+                                : connectionStatus === "request_send"
+                                  ? t("waiting")
+                                  : ""}
+                          </span>
+                        </button>
+                      </>
+                    )}
                   {!isMobile ? (
                     connectionStatus === "request_received" && (
                       <div style={{ position: "relative" }}>
@@ -655,8 +639,10 @@ const Banner: React.FC<TabBannerProps> = ({
                         className={`${styles["profile-donate__btn"]} ${styles["profile-banner__btn"]} btn`}
                         onClick={() => setOpenDonate(true)}
                       >
-                        <i className="bi bi-cash-coin text-success me-1"></i>
-                        <span>{t("donate")}</span>
+                        <h4 className="m-0">
+                          <i className="bi bi-cash-coin text-success me-1"></i>
+                          <span>{t("donate")}</span>
+                        </h4>
                       </button>
                     )}
                 </div>
@@ -671,7 +657,7 @@ const Banner: React.FC<TabBannerProps> = ({
                     width={84}
                     height={93}
                     alt="logo-rank"
-                    src={logoRank || `/assets/images/card.png`}
+                    src={logoRank}
                   />
                   <Link
                     href={t("link")}
@@ -688,7 +674,6 @@ const Banner: React.FC<TabBannerProps> = ({
                 </>
               )}
               {/* Rank image */}
-              {/* <i className="bi bi-patch-check h1 m-0"></i> */}
               <div
                 className="font-xsss fw-600 m-0 ms-1 position-relative"
                 style={{ color: "rgb(107, 173, 97)" }}
@@ -736,13 +721,7 @@ const Banner: React.FC<TabBannerProps> = ({
           )}
         </div>
       </div>
-      <hr
-        style={{
-          border: "none",
-          borderTop: "2px solid #d1d1d1",
-          marginTop: "20px",
-        }}
-      />
+      <hr className="border-none mt-3 border-top-md" />
       {openDonate && (
         <DonateModal
           handleClose={handleClose}

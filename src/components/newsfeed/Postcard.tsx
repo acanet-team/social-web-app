@@ -19,8 +19,8 @@ import type { IPostCommunityInfo, IUserInfo } from "@/api/community/model";
 import DonateModal from "../profile/DonateModal";
 import type { User } from "@/api/profile/model";
 import { useWeb3 } from "@/context/wallet.context";
-import type { IPost } from "@/api/newsfeed/model";
 import { ethers } from "ethers";
+import { onCancelSellNFT } from "@/api/nft";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -70,7 +70,8 @@ export default function PostCard(props: {
   const tPost = useTranslations("Post");
   const tAction = useTranslations("Action");
   const tNFT = useTranslations("NFT");
-  const { account, connectWallet, nftMarketContract } = useWeb3();
+  const { account, connectWallet, nftMarketContract, connectedChain } =
+    useWeb3();
   const [isBuyingNFT, setIsBuyingNFT] = useState<boolean>(false);
 
   // Comment states
@@ -223,6 +224,12 @@ export default function PostCard(props: {
         gasLimit: 2000000,
         value: ethers.utils.parseEther(additionalData.price.toString()),
       });
+      res.wait();
+      onCancelSellNFT(
+        connectedChain?.id === "0x780c" ? "MOVE" : "BSC",
+        additionalData.nftTokenId,
+      );
+
       return throwToast(tNFT("buy_nft_success"), "success");
     } catch (error) {
       console.log(error);
@@ -234,7 +241,71 @@ export default function PostCard(props: {
       setIsBuyingNFT(false);
     }
   };
+  const onCancelSellNFTHandler = async () => {
+    const cancelSellNFT = await nftMarketContract.cancelListing(
+      additionalData.nftTokenId,
+    );
+    cancelSellNFT.wait();
+    onCancelSellNFT(
+      connectedChain?.id === "0x780c" ? "MOVE" : "BSC",
+      additionalData.nftTokenId,
+    );
+  };
+  const renderNFTButton = () => {
+    const buttonClass = `${isBuyingNFT ? "btn-loading" : "bg-current"} main-btn py-1 w125 px-3 border-0 rounded-xxl`;
+    const spinner = (
+      <span
+        className="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+    );
 
+    return userId !== authorId ? (
+      <button
+        className={buttonClass}
+        onClick={onBuyNFTHandler}
+        disabled={isBuyingNFT ? true : false}
+      >
+        {isBuyingNFT ? spinner : tNFT("buy_nft")}
+      </button>
+    ) : (
+      <button
+        className={buttonClass}
+        onClick={onCancelSellNFTHandler}
+        disabled={isBuyingNFT ? true : false}
+      >
+        {isBuyingNFT ? spinner : tNFT("cancel_nft")}
+      </button>
+    );
+  };
+  const renderLikeAndCommentSection = () => (
+    <div className="d-flex">
+      <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
+        <i
+          className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
+          onClick={(e) => onClickLikeHandler(e, postId, like)}
+        ></i>
+        <span className="like-number">
+          {likeNum >= 1000 ? Math.round(likeNum / 1000).toFixed(1) : likeNum}
+        </span>
+        <span className="like-thousand">{likeNum >= 1000 ? "k" : ""}</span>
+      </div>
+      <div
+        className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
+        onClick={() => onShowCommentHandler(postId.toString())}
+      >
+        <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
+        <span className="d-none-xss">
+          <RoundedNumber
+            num={commentNum}
+            unitSingular={tBase("comment")}
+            unitPlural={tBase("comments")}
+          />
+        </span>
+      </div>
+    </div>
+  );
   return (
     <div
       className={`${styles.post} post-card card w-100 shadow-xss rounded-3 border-0 p-sm-4 p-3 mb-3`}
@@ -387,7 +458,7 @@ export default function PostCard(props: {
             {assets?.slice(0, 5).map(({ path, id }) =>
               path ? (
                 <div key={id}>
-                  <img
+                  {/* <img
                     srcSet={`${path}?w=162&auto=format&dpr=2 2x`}
                     src={`${path}?w=162&auto=format`}
                     alt={id}
@@ -398,6 +469,22 @@ export default function PostCard(props: {
                       display: "block",
                       width: "100%",
                     }}
+                  /> */}
+
+                  <Image
+                    src={path}
+                    alt={id}
+                    width={162}
+                    height={162}
+                    layout="responsive"
+                    objectFit="cover"
+                    style={{
+                      borderBottomLeftRadius: 4,
+                      borderBottomRightRadius: 4,
+                      display: "block",
+                      width: "100%",
+                    }}
+                    loading="lazy"
                   />
                 </div>
               ) : null,
@@ -408,53 +495,7 @@ export default function PostCard(props: {
 
       <div className="card-body d-flex p-0 mt-4">
         {/* Like & comment */}
-        {userId !== authorId && postType === "nft" ? (
-          <button
-            className={`${isBuyingNFT ? "btn-loading" : "bg-current"} main-btn py-1 w125 px-3 border-0 rounded-xxl`}
-            onClick={onBuyNFTHandler}
-            disabled={isBuyingNFT ? true : false}
-          >
-            {isBuyingNFT ? (
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            ) : (
-              tNFT("buy_nft")
-            )}
-          </button>
-        ) : (
-          <div className="d-flex">
-            <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
-              <i
-                className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
-                onClick={(e) => onClickLikeHandler(e, postId, like)}
-              ></i>
-              <span className="like-number">
-                {likeNum >= 1000
-                  ? Math.round(likeNum / 1000).toFixed(1)
-                  : likeNum}
-              </span>
-              <span className="like-thousand">
-                {likeNum >= 1000 ? "k" : ""}
-              </span>
-            </div>
-            <div
-              className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
-              onClick={() => onShowCommentHandler(postId.toString())}
-            >
-              <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
-              <span className="d-none-xss">
-                <RoundedNumber
-                  num={commentNum}
-                  unitSingular={tBase("comment")}
-                  unitPlural={tBase("comments")}
-                />
-              </span>
-            </div>
-          </div>
-        )}
+        {postType === "nft" ? renderNFTButton() : renderLikeAndCommentSection()}
         {/* Donate & Share */}
         <div
           className="pointer ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss gap-3"

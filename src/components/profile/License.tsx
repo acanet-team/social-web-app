@@ -86,37 +86,15 @@ const License = ({
 
   return (
     <>
-      <div
-        className="card p-4 border-0 shadow-xss"
-        style={{
-          background: "#FFFFFF",
-          borderRadius: "5px",
-          marginTop: "40px",
-          marginBottom: "100px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+      <div className="card border-0 shadow-xss bg-white rounded-3 p-4 mt_2">
+        <div className="d-flex justify-content-between algin-items-center">
           <h2 className="m-0 fw-600 mb-4">{t("license&certifications")}</h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "4px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="d-flex justify-content-center align-items-center">
             {role === true && (
               <>
                 <h1>
                   <i
-                    className={`bi bi-plus-lg ${styles["icon-profile"]} cursor-pointer`}
+                    className={`bi bi-plus-lg me-1 ${styles["icon-profile"]} cursor-pointer`}
                     onClick={() => handleAddModal()}
                   ></i>
                 </h1>
@@ -125,7 +103,7 @@ const License = ({
                     {iconBack ? (
                       <h4>
                         <i
-                          className={`bi bi-arrow-left ${styles["icon-profile"]} cursor-pointer`}
+                          className={`bi bi-arrow-left me-1 ${styles["icon-profile"]} cursor-pointer`}
                           onClick={() => handleCloseEdit()}
                         ></i>
                       </h4>
@@ -145,16 +123,8 @@ const License = ({
         </div>
         {licenseToShow?.length > 0 &&
           licenseToShow.map((license, index) => (
-            <>
-              <div
-                key={license.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "12px",
-                  alignItems: "center",
-                }}
-              >
+            <div key={license.id}>
+              <div className="d-flex justify-content-center align-items-center">
                 <Image
                   src={
                     license.logo ||
@@ -167,29 +137,16 @@ const License = ({
                     objectFit: "cover",
                   }}
                 />
-                <div className="w-100">
+                <div className="w-100 ms-3">
                   <div>
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
+                    <div className="w-100 d-flex justify-content-between">
                       <p className="m-0 fw-600 font-xs">
                         {license.licenseType}
                       </p>
                       {iconEdit && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: "4px",
-                          }}
-                        >
+                        <div className="d-flex">
                           <i
-                            className={`bi bi-pencil-fill ${styles["icon-profile"]} cursor-pointer`}
+                            className={`bi bi-pencil-fill me-1 ${styles["icon-profile"]} cursor-pointer`}
                             onClick={() => handleEditModal(license)}
                           ></i>
                           <i
@@ -214,6 +171,7 @@ const License = ({
                 </div>
               </div>
               {index < licenseToShow.length - 1 && (
+                // <hr className="border-none mt-3 border-top-md" />
                 <hr
                   style={{
                     border: "none",
@@ -222,10 +180,11 @@ const License = ({
                   }}
                 />
               )}
-            </>
+            </div>
           ))}
         {!showAllLicense && licenses?.length - licenseToShow?.length > 0 && (
           <>
+            {/* <hr className="border-none mt-3 border-top-md" /> */}\
             <hr
               style={{
                 border: "none",
