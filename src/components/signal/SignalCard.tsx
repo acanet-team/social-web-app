@@ -4,7 +4,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import { followABroker } from "@/api/onboard";
 import Ratings from "../Ratings";
-import { claimLuckyToken, getSignalDetail } from "@/api/signal";
+import { claimLuckyToken, getSignalDetail, trackSignal } from "@/api/signal";
 import type { getSignalCardResponse } from "@/api/signal/model";
 import convertDate from "@/utils/convert-date";
 import CircleLoader from "../CircleLoader";
@@ -14,9 +14,9 @@ import CountdownTimer from "./CountdownTimer";
 import LuckyDrawEffect from "./LuckyDrawEffect";
 import Link from "next/link";
 import { throwToast } from "@/utils/throw-toast";
-import { setConstantValue } from "typescript";
-import { id } from "ethers/lib/utils";
 import AlertModal from "../AlertModal";
+import { Button, Grid, IconButton, Tooltip } from "@mui/material";
+import signal from "@/pages/signal";
 
 const SignalCard: React.FC<getSignalCardResponse> = ({
   id,
@@ -32,10 +32,13 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   brokerId,
   curUserId,
   luckyAmount,
+  isTracking,
   readsCount,
+  signalAccuracy,
 }) => {
   const tBase = useTranslations("Base");
   const tSignal = useTranslations("Signal");
+  const tBroker = useTranslations("BrokerList");
   const { rateContract, connectWallet } = useWeb3();
   const [cardDetail, setCardDetail] = useState<getSignalCardResponse>();
   const [isFlipped, setIsFlipped] = useState<boolean>(readAt ? true : false);
@@ -63,7 +66,13 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
   const [followerNum, setFollowerNum] = useState<number>(
     Number(owner?.followersCount) || 0,
   );
+  const [authorName, setAuthorName] = useState<string>(
+    owner?.nickName ? owner?.nickName : cardDetail?.owner?.nickName || "",
+  );
   const [avarageRating, setAverageRating] = useState<number>(0);
+  const [isTrackingSignal, sedtIsTrackingSignal] = useState<boolean>(
+    isTracking || false,
+  );
 
   useEffect(() => {
     if (readAt || (brokerId && curUserId === brokerId)) {
@@ -121,7 +130,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
       } catch (err) {
         setIsFlipped(false);
         console.log(err);
-        if (err.code === "ER15010") {
+        if (err.code === "ER15013") {
           // return throwToast(err.message, "warning");
           setFlipDepleted({ isDepleted: true, msg: err.message });
         }
@@ -171,6 +180,20 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
     e?.preventDefault();
     setFlipDepleted({ isDepleted: false, msg: "" });
   };
+
+  const onTrackSignalHandler = (cardId: string, type: string) => {
+    try {
+      console.log("cardid", cardId);
+      console.log("type", type);
+      if (cardId) {
+        trackSignal(cardId, type);
+        sedtIsTrackingSignal((prev) => !prev);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div
       className={classNames(styles.signal, styles["signal--card"])}
@@ -196,6 +219,15 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
             styles["card__face--front"],
           )}
         >
+          <div className={styles["card-accuracy"]}>
+            {tSignal("accuracy") + ": "}
+            {!Number.isNaN(signalAccuracy) && signalAccuracy !== undefined
+              ? signalAccuracy + "%"
+              : !Number.isNaN(cardDetail?.signalAccuracy) &&
+                  cardDetail?.signalAccuracy !== undefined
+                ? cardDetail.signalAccuracy + "%"
+                : "N/A"}
+          </div>
           <span className={styles["view-card__cta"]}>
             {tSignal("reveal_card")}
           </span>
@@ -230,7 +262,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
             } ${styles["card__face"]} ${styles["card__face--back"]}`}
           >
             {isLuckyDraw ? (
-              <div>
+              <div className="position-relative">
                 <LuckyDrawEffect />
                 <Image
                   src="/assets/images/signal/lucky-icon.svg"
@@ -286,7 +318,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                     >
                       <i className="bi bi-clock-fill me-1"></i>
                       <span>
-                        expiring on{" "}
+                        {tSignal("expiring")}{" "}
                         {expiryAt
                           ? convertDate(expiryAt)
                           : cardDetail?.expiryAt
@@ -310,17 +342,29 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       className={`${signalType === "long" ? styles["target-long"] : styles["target-short"]} d-flex gap-4`}
                     >
                       <span className={styles["signal-price__title"]}>
-                        Target
+                        {tSignal("target")}
                       </span>
                       <span className="fw-bold">
                         {target
                           ? parseFloat(
                               target.toString().replace(/^0+/, ""),
-                            ).toLocaleString()
+                            ).toLocaleString(undefined, {
+                              minimumFractionDigits:
+                                target?.toString().split(".")[1]?.length || 0,
+                              maximumFractionDigits:
+                                target?.toString().split(".")[1]?.length || 10,
+                            })
                           : cardDetail?.target
                             ? parseFloat(
                                 cardDetail.target.toString().replace(/^0+/, ""),
-                              ).toLocaleString()
+                              ).toLocaleString(undefined, {
+                                minimumFractionDigits:
+                                  cardDetail.target.toString().split(".")[1]
+                                    ?.length || 0,
+                                maximumFractionDigits:
+                                  cardDetail.target.toString().split(".")[1]
+                                    ?.length || 10,
+                              })
                             : ""}
                       </span>
                     </div>
@@ -328,19 +372,31 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       className={`${signalType === "long" ? styles["entry-long"] : styles["entry-short"]} d-flex gap-4`}
                     >
                       <span className={styles["signal-price__title"]}>
-                        Entry
+                        {tSignal("entry")}
                       </span>
                       <span className="fw-bold">
                         {entry
                           ? parseFloat(
                               entry.toString().replace(/^0+/, ""),
-                            ).toLocaleString()
+                            ).toLocaleString(undefined, {
+                              minimumFractionDigits:
+                                entry.toString().split(".")[1]?.length || 0,
+                              maximumFractionDigits:
+                                entry.toString().split(".")[1]?.length || 10,
+                            })
                           : cardDetail?.entry
                             ? parseFloat(
                                 cardDetail?.entry
                                   ?.toString()
                                   .replace(/^0+/, ""),
-                              ).toLocaleString()
+                              ).toLocaleString(undefined, {
+                                minimumFractionDigits:
+                                  cardDetail?.entry?.toString().split(".")[1]
+                                    ?.length || 0,
+                                maximumFractionDigits:
+                                  cardDetail?.entry?.toString().split(".")[1]
+                                    ?.length || 10,
+                              })
                             : ""}
                       </span>
                     </div>
@@ -348,17 +404,29 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       className={`${signalType === "long" ? styles["stop-long"] : styles["stop-short"]} d-flex gap-4`}
                     >
                       <span className={styles["signal-price__title"]}>
-                        Stop
+                        {tSignal("stop")}
                       </span>
                       <span className="fw-bold">
                         {stop
                           ? parseFloat(
                               stop.toString().replace(/^0+/, ""),
-                            ).toLocaleString()
+                            ).toLocaleString(undefined, {
+                              minimumFractionDigits:
+                                stop.toString().split(".")[1]?.length || 0,
+                              maximumFractionDigits:
+                                stop.toString().split(".")[1]?.length || 10,
+                            })
                           : cardDetail?.stop
                             ? parseFloat(
                                 cardDetail?.stop.toString().replace(/^0+/, ""),
-                              ).toLocaleString()
+                              ).toLocaleString(undefined, {
+                                minimumFractionDigits:
+                                  cardDetail?.stop.toString().split(".")[1]
+                                    ?.length || 0,
+                                maximumFractionDigits:
+                                  cardDetail?.stop.toString().split(".")[1]
+                                    ?.length || 10,
+                              })
                             : ""}
                       </span>
                     </div>
@@ -373,7 +441,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                   />
                 </div>
 
-                <div className="w-100 mt-3 fw-400 text-start">
+                <div className="w-100 mt-3 font-xsss fw-400 text-start">
                   {description
                     ? description
                     : cardDetail?.description && cardDetail.description}
@@ -381,52 +449,58 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
 
                 <div className={styles["signal-author"]}>
                   <div className={`${styles["signal-author__details"]} d-flex`}>
-                    <Link
-                      href={`/profile/${
-                        owner?.nickName
-                          ? owner?.nickName
-                          : cardDetail?.owner?.nickName
-                      }`}
-                    >
-                      <Image
-                        src={
-                          owner?.photo?.path
-                            ? owner?.photo?.path
-                            : cardDetail?.owner?.photo?.path ||
-                              "/assets/images/user.png"
-                        }
-                        width={50}
-                        height={50}
-                        alt="broker avatar"
-                        className={styles["signal-broker__avatar"]}
-                      />
-                    </Link>
-                    <div className="d-flex flex-column justify-content-center">
-                      <Link
-                        href={`/profile/${
-                          owner?.nickName
-                            ? owner?.nickName
-                            : cardDetail?.owner?.nickName
-                        }`}
+                    <div className="d-flex gap-2">
+                      <div
+                        className="d-flex flex-column position-relative"
+                        style={{ marginBottom: "20px" }}
                       >
-                        <h2 className="text-white font-xss fw-800 m-0">
-                          {owner?.nickName
-                            ? owner?.nickName
-                            : cardDetail?.owner?.nickName}
-                        </h2>
-                      </Link>
-                      <div className="font-xssss fw-300">
-                        {" "}
-                        {followerNum >= 1000
-                          ? (followerNum / 1000).toFixed(1)
-                          : followerNum}{" "}
-                        {followerNum >= 1000 ? "k" : ""}{" "}
-                        {followerNum > 1
-                          ? tBase("followers")
-                          : tBase("follower")}
+                        <Link
+                          href={`/profile/${
+                            owner?.nickName
+                              ? owner?.nickName
+                              : cardDetail?.owner?.nickName
+                          }`}
+                        >
+                          <Image
+                            src={
+                              owner?.photo?.path
+                                ? owner?.photo?.path
+                                : cardDetail?.owner?.photo?.path ||
+                                  "/assets/images/user.png"
+                            }
+                            width={50}
+                            height={50}
+                            alt="broker avatar"
+                            className={styles["signal-broker__avatar"]}
+                          />
+
+                          <div
+                            className="d-flex flex-column mt-2 justify-content-center position-absolute"
+                            style={{ bottom: "-24px", left: "-3px" }}
+                          >
+                            <h2 className="text-white fw-700 m-0">
+                              {authorName.length > 5 && (
+                                <Tooltip title={authorName}>
+                                  <IconButton
+                                    sx={{
+                                      fontSize: "12px",
+                                      color: "#fff",
+                                      padding: "0",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {authorName.length > 10
+                                      ? authorName.substring(0, 10) + "..."
+                                      : authorName}
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </h2>
+                          </div>
+                        </Link>
                       </div>
                     </div>
-                    {readsCount && brokerId ? (
+                    {readsCount !== null && brokerId ? (
                       <div className="mt-0 ms-2 text-center d-flex flex-wrap">
                         <Image
                           src="/assets/images/signal/signal_view.png"
@@ -437,12 +511,56 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                         <span className="ms-1 font-xssss fw-300">{`${readsCount >= 1000 ? Math.round(readsCount / 1000).toFixed(1) : readsCount} ${readsCount >= 1000 ? "k" : ""} ${readsCount > 1 ? tBase("views") : tBase("view")}`}</span>
                       </div>
                     ) : (
-                      <div className="mt-0 ms-2 text-center">
-                        <Ratings rating={avarageRating} size={12} />
-                        <span className="font-xssss fw-300">Rating: </span>
-                        <span className="font-xsss">
-                          {avarageRating.toFixed(1)}
-                        </span>
+                      <div className="d-flex" style={{ gap: "15px" }}>
+                        <div
+                          className={`${styles["signal-stats"]} d-flex flex-column font-xssss text-align`}
+                        >
+                          <div className="fw-400 position-relative">
+                            {tSignal("accuracy")}
+                            <Tooltip title={tBroker("signal_accuracy_tooltip")}>
+                              <i
+                                className="bi bi-info-circle position-absolute"
+                                style={{
+                                  top: "-8px",
+                                  right: "-12px",
+                                  fontSize: "12px",
+                                }}
+                              ></i>
+                            </Tooltip>
+                          </div>
+                          <div className={styles["signal-stats__numbers"]}>
+                            {!Number.isNaN(signalAccuracy) &&
+                            signalAccuracy !== undefined
+                              ? signalAccuracy + "%"
+                              : !Number.isNaN(cardDetail?.signalAccuracy) &&
+                                  cardDetail?.signalAccuracy !== undefined
+                                ? cardDetail.signalAccuracy + "%"
+                                : "N/A"}
+                          </div>
+                        </div>
+                        <div
+                          className={`${styles["signal-stats"]} d-flex flex-column font-xssss text-align`}
+                        >
+                          <div className="fw-400">
+                            {tBase("follower_title")}
+                          </div>
+                          <div className={styles["signal-stats__numbers"]}>
+                            {followerNum >= 1000
+                              ? (followerNum / 1000).toFixed(1)
+                              : followerNum}{" "}
+                            {followerNum >= 1000 ? "k" : ""}
+                          </div>
+                        </div>
+                        <div
+                          className={`${styles["signal-stats"]} d-flex flex-column font-xssss text-align`}
+                        >
+                          <div className="fw-400">{tBase("ratings")}</div>
+                          <div className={styles["signal-stats__numbers"]}>
+                            {avarageRating > 0
+                              ? avarageRating.toFixed(1)
+                              : avarageRating}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -450,7 +568,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                     brokerId !== cardDetail?.owner?.userId) ||
                     curUserId !== brokerId) && (
                     <button
-                      className={`${isFollowing ? styles["follow-broker"] : styles["follow-btn"]} main-btn mt-2 mb-0 border-0 px-3 py-1 z-index-1 rounded-4 text-white font-xssss cursor-pointer fw-700 ls-1`}
+                      className={`${isFollowing ? styles["follow-broker"] : styles["follow-btn"]} main-btn mt-2 mb-0 border-0 px-3 z-index-1 text-white cursor-pointer fw-500 ls-1`}
                       onClick={(e) =>
                         onFollowBrokerHandler(
                           e,
@@ -466,6 +584,25 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                 </div>
               </div>
             )}
+            <div
+              className={`${isTrackingSignal ? styles["signal-tracking"] : styles["signal-track"]} ${styles["track-btn"]}`}
+              onClick={() =>
+                onTrackSignalHandler(
+                  id ? id : (cardDetail?.id as string),
+                  isTrackingSignal ? "untrack" : "track",
+                )
+              }
+            >
+              {isTrackingSignal
+                ? tSignal("tracking_signal")
+                : tSignal("track_signal")}
+              <Image
+                width={22}
+                height={22}
+                src="/assets/images/signal/signal-bell.svg"
+                alt="signal bell"
+              />
+            </div>
           </div>
         )}
       </div>

@@ -145,12 +145,14 @@ export default function SignalSection(props: {
                 description={card.description}
                 readAt={card.readAt && card.readAt}
                 type={card.type}
+                isTracking={card.isTracking}
                 luckyAmount={card.luckyAmount}
                 owner={card.owner}
                 expiryAt={card.expiryAt}
                 createdAt={card.readAt}
                 curUserId={curUser}
                 readsCount={card.readsCount}
+                signalAccuracy={card.signalAccuracy}
               />
             </div>
           ))}

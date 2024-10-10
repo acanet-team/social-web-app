@@ -219,8 +219,6 @@ export default function PostCard(props: {
         return connectWallet();
       }
       setIsBuyingNFT(true);
-      console.log("data", additionalData);
-      console.log("log", additionalData.nftTokenId);
       const res = await nftMarketContract.buyNFT(additionalData.nftTokenId, {
         gasLimit: 2000000,
         value: ethers.utils.parseEther(additionalData.price.toString()),

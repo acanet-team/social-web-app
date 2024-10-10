@@ -32,7 +32,7 @@ const FetchBrokers = (props: { brokers: IBrokers[] }) => {
               firstName={b.firstName}
               lastName={b.lastName}
               followersCount={b.followersCount}
-              rank={b.rank}
+              rank={b.rank as string}
             />
           ))}
       </Slider>
