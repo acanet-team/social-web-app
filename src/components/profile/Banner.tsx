@@ -29,7 +29,7 @@ interface TabBannerProps {
   connectStatus: string;
   logoRank: string | null;
   connectRequestId: string | null;
-  signalAccuracy: string | typeof NaN;
+  signalAccuracy: string | null;
 }
 const Banner: React.FC<TabBannerProps> = ({
   role,
@@ -695,9 +695,18 @@ const Banner: React.FC<TabBannerProps> = ({
                     }}
                   />
                 </Tooltip>
-                {tBroker("signal_accuracy") + ": "}
-                {!Number.isNaN(signalAccuracy) &&
-                signalAccuracy !== undefined ? (
+                <span
+                  className={
+                    Number(signalAccuracy) > 75
+                      ? styles["signal-green"]
+                      : Number(signalAccuracy) > 50
+                        ? styles["signal-yellow"]
+                        : styles["signal-red"]
+                  }
+                >
+                  {tBroker("signal_accuracy") + ": "}
+                </span>
+                {!Number.isNaN(signalAccuracy) && signalAccuracy ? (
                   <span
                     className={
                       Number(signalAccuracy) > 75
@@ -707,7 +716,9 @@ const Banner: React.FC<TabBannerProps> = ({
                           : styles["signal-red"]
                     }
                   >
-                    {signalAccuracy + "%"}
+                    {+signalAccuracy % 1 !== 0
+                      ? (+signalAccuracy).toFixed(2) + "%"
+                      : +signalAccuracy + "%"}
                   </span>
                 ) : (
                   <span>N/A</span>

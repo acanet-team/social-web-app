@@ -121,8 +121,10 @@ export default function BrokerProfile(props: {
             </div>
             <div className={`${styles["broker-stats"]} d-flex flex-column`}>
               <div className="fw-bold fs-2">
-                {!Number.isNaN(signalAccuracy) && signalAccuracy !== undefined
-                  ? signalAccuracy + "%"
+                {!Number.isNaN(signalAccuracy) && signalAccuracy
+                  ? +signalAccuracy % 1 !== 0
+                    ? (+signalAccuracy).toFixed(2) + "%"
+                    : +signalAccuracy + "%"
                   : "N/A"}
               </div>
               <div
