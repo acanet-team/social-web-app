@@ -443,21 +443,35 @@ export default function PostCard(props: {
             )}
           </button>
         ) : (
-          <button
-            className={`${isBuyingNFT ? "btn-loading" : "bg-current"} main-btn py-1 w125 px-3 border-0 rounded-xxl`}
-            onClick={onCancelSellNFTHandler}
-            disabled={isBuyingNFT ? true : false}
-          >
-            {isBuyingNFT ? (
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            ) : (
-              tNFT("cancel_nft")
-            )}
-          </button>
+          <div className="d-flex">
+            <div className="emoji-bttn pointer d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss me-3">
+              <i
+                className={`${isLiked ? "bi-heart-fill" : "bi-heart"} bi h2 m-0 me-2 d-flex align-items-center cursor-pointer`}
+                onClick={(e) => onClickLikeHandler(e, postId, like)}
+              ></i>
+              <span className="like-number">
+                {likeNum >= 1000
+                  ? Math.round(likeNum / 1000).toFixed(1)
+                  : likeNum}
+              </span>
+              <span className="like-thousand">
+                {likeNum >= 1000 ? "k" : ""}
+              </span>
+            </div>
+            <div
+              className={`${styles["post-comment"]} d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xsss`}
+              onClick={() => onShowCommentHandler(postId.toString())}
+            >
+              <i className="bi bi-chat h2 m-0 me-2 d-flex align-items-center"></i>
+              <span className="d-none-xss">
+                <RoundedNumber
+                  num={commentNum}
+                  unitSingular={tBase("comment")}
+                  unitPlural={tBase("comments")}
+                />
+              </span>
+            </div>
+          </div>
         )}
         {/* Donate & Share */}
         <div
