@@ -188,7 +188,21 @@
     "error_missing_nickname": "Please fill out a valid nickname",
     "error_invalid_nickname": "Nick name must be between 8 and 20 characters",
     "error_missing_email": "Please fill out a valid email",
-    "error_invalid_email": "Invalid email address"
+    "error_invalid_email": "Invalid email address",
+    "error_note": "Please fill out a valid note",
+    "error_missing_phone": "Please fill out a valid phone",
+    "Phone_number_is_not_valid": "Phone must be number characters",
+    "error_select_at_least_one": "Please select at least one social",
+    "error_url_missing": "Please fill out a valid url",
+    "error_url_type": "URL is not in the correct format",
+    "Contact_Email": "Contact Email",
+    "Phone_number": "Phone number",
+    "Select_your_group_platform": "Select your’s group platform",
+    "Number_of_members": "Number of members",
+    "Your_company": "Your company",
+    "Years_of_Experience": "Years of Experience",
+    "Note": "Note",
+    "error_num_members": "Number of members must be number characters"
   },
   "NavBar": {
     "newsfeed": "Newsfeed",
@@ -447,7 +461,9 @@
     "sent_you_the_connection": "sent you the connection",
     "you": "You",
     "confirm": "Confirm",
-    "delete": "Delete"
+    "delete": "Delete",
+    "verify_broker_accept": "Congratulations! You have successfully completed the verification process and are now a certified broker on Acanet.",
+    "verify_broker_reject": "Unfortunately, you didn’t pass the verification process to become a broker. However, you can still enjoy all the features of Acanet as an investor."
   },
   "Donate": {
     "confirm": "Confirm",

@@ -91,12 +91,12 @@ const Notifications: React.FC<NotificationProps> = ({
 
   const renderNotificationMessage = (
     type: NotificationType,
-    user: {
-      userId: number;
-      firstName: string;
-      lastName: string;
-      nickName: string;
-    },
+    // user: {
+    //   userId: number;
+    //   firstName: string;
+    //   lastName: string;
+    //   nickName: string;
+    // },
     sourceUser: {
       userId: number;
       firstName: string;
@@ -121,8 +121,9 @@ const Notifications: React.FC<NotificationProps> = ({
       community_id: string | UUID;
       notificationCount: number;
       connection_id: string;
+      signal_pair: string;
     } | null,
-    createdAt: number,
+    // createdAt: number,
     notiAt: number | null,
     read_at: number | null,
     id: string,
@@ -134,13 +135,13 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -186,14 +187,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -239,14 +240,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 community?.avatar?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -285,14 +286,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 community?.avatar?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -329,14 +330,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 community?.avatar?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -369,14 +370,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -410,14 +411,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -456,14 +457,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <span
@@ -490,14 +491,14 @@ const Notifications: React.FC<NotificationProps> = ({
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
               className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
@@ -556,6 +557,278 @@ const Notifications: React.FC<NotificationProps> = ({
                   {t("delete")}
                 </div>
               </div>
+            </div>
+          </>
+        );
+      case "tracking_signal_lose":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  The Signal
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  you opened has hit the stop-loss level.
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "tracking_signal_win":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  The Signal
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  you opened has successfully hit the take-profit target.
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? TimeSinceDate(notiAt) : ""}
+                </p> */}
+            </div>
+          </>
+        );
+      case "created_signal_lose":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  The Signal
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  you created has hit the stop-loss level. Your accuary rate has
+                  been adjusted accordingly.
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                    className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                  >
+                    {notiAt ? TimeSinceDate(notiAt) : ""}
+                  </p> */}
+            </div>
+          </>
+        );
+      case "created_signal_win":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  Congratulations, the Signal
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  you created has successfully hit the take-profit target on
+                  date-time. Your accuary rate has been enhanced.
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                    className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                  >
+                    {notiAt ? TimeSinceDate(notiAt) : ""}
+                  </p> */}
+            </div>
+          </>
+        );
+      case "signal_tracked":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {sourceUser?.nickName
+                  ? sourceUser?.nickName
+                  : sourceUser?.firstName + sourceUser?.lastName}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  has tracked
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  signal
+                </span>
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "verify_broker_accept":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {t("verify_broker_accept")}
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "verify_broker_reject":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {t("verify_broker_reject")}
+              </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
             </div>
           </>
         );
@@ -726,6 +999,24 @@ const Notifications: React.FC<NotificationProps> = ({
       router.push(`/communities`);
     } else if (notificationType === "community_creation_failed") {
       router.push(`/communities`);
+    } else if (
+      notificationType === "tracking_signal_lose" ||
+      notificationType === "tracking_signal_win"
+    ) {
+      router.push(`/signal?tab=history`);
+      toggleisNoti(false);
+    } else if (
+      notificationType === "created_signal_lose" ||
+      notificationType === "created_signal_win" ||
+      notificationType === "signal_tracked"
+    ) {
+      router.push(`/profile/${idDetail}?tab=signal`);
+      toggleisNoti(false);
+    } else if (
+      notificationType === "verify_broker_accept" ||
+      notificationType === "verify_broker_reject"
+    ) {
+      toggleisNoti(false);
     } else {
       console.log("");
     }
@@ -816,6 +1107,37 @@ const Notifications: React.FC<NotificationProps> = ({
                           notification?.type,
                           notification?.read_at,
                         );
+                      } else if (
+                        notification?.type === "tracking_signal_lose" ||
+                        notification?.type === "tracking_signal_win"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          "",
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "created_signal_lose" ||
+                        notification?.type === "created_signal_win" ||
+                        notification?.type === "signal_tracked"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          String(notification?.user?.nickName),
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "verify_broker_accept" ||
+                        notification?.type === "verify_broker_reject"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          String(notification?.user?.nickName),
+                          notification?.type,
+                          notification?.read_at,
+                        );
                       } else {
                         console.log("Notification type not found");
                       }
@@ -830,13 +1152,13 @@ const Notifications: React.FC<NotificationProps> = ({
                   >
                     {renderNotificationMessage(
                       notification?.type,
-                      notification?.user,
+                      // notification?.user,
                       notification?.sourceUser,
                       notification?.community,
                       notification?.additionalData,
                       notification?.createdAt,
                       notification?.notiAt,
-                      notification?.read_at,
+                      // notification?.read_at,
                       notification?.id,
                     )}
                   </div>

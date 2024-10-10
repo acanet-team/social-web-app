@@ -1,3 +1,4 @@
+import { Experience } from "./../../components/profile/Experience";
 export interface IMe {
   user: IUserInfo;
   userProfile?: UserProfile;
@@ -102,4 +103,13 @@ export interface IUserSession {
   user?: IUserInfo;
   expires: string;
   token: string;
+}
+
+export interface InfoAdditionalBroker {
+  email: string;
+  phone: string;
+  socialMedia: { name: string; mediaUrl: string; totalMembers: number }[];
+  note: string;
+  companyName: string;
+  experience: string;
 }
