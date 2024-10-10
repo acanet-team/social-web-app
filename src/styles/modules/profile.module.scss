@@ -259,6 +259,18 @@
   align-items: "center";
 }
 
+.signal-green {
+  color: #019734 !important;
+}
+
+.signal-yellow {
+  color: #E8A600;
+}
+
+.signal-red {
+  color: #D93805;
+}
+
 @media (max-width: 768px) {
   .modal-header {
     display: flex;

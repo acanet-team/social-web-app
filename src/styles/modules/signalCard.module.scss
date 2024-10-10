@@ -202,17 +202,18 @@
 
 .track-btn {
   position: absolute;
-  top: 20px;
-  right: 70px;
+  top: -3px;
+  left: -45px;
   display: flex;
   align-items: center;
-  justify-content: end;
-  width: 70px;
-  height: 27px;
+  justify-content: center;
+  border-radius: 50%;
   padding: 5px;
-  border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
+  background-color: #E52E2E;
+  box-shadow: rgba(160, 160, 160, 0.24) 0px 0px 4px 4px;
+
 }
 
 .track-btn:hover {
@@ -226,7 +227,6 @@
 
 .signal-tracking {
   background-color: #111;
-  width: 90px;
   transition: all 0.3s ease; 
 }
 

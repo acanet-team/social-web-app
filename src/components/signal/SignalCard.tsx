@@ -181,13 +181,20 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
     setFlipDepleted({ isDepleted: false, msg: "" });
   };
 
-  const onTrackSignalHandler = (cardId: string, type: string) => {
+  const onTrackSignalHandler = async (
+    cardId: string,
+    type: "track" | "unTrack",
+  ) => {
     try {
-      console.log("cardid", cardId);
-      console.log("type", type);
       if (cardId) {
-        trackSignal(cardId, type);
+        await trackSignal(cardId, type);
         sedtIsTrackingSignal((prev) => !prev);
+        throwToast(
+          type === "track"
+            ? tSignal("track_sucess")
+            : tSignal("untrack_sucess"),
+          "success",
+        );
       }
     } catch (err) {
       console.log(err);
@@ -328,11 +335,25 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                     </div>
                   </div>
                   <div
-                    className={
-                      signalType === "long" ? "text-success" : "text-danger"
-                    }
+                    className={`${signalType === "long" ? "text-success" : "text-danger"} position-relative`}
                   >
                     {signalType === "long" ? "Long" : "Short"}
+                    <div
+                      className={`${isTrackingSignal ? styles["signal-tracking"] : styles["signal-track"]} ${styles["track-btn"]}`}
+                      onClick={() =>
+                        onTrackSignalHandler(
+                          id ? id : (cardDetail?.id as string),
+                          isTrackingSignal ? "unTrack" : "track",
+                        )
+                      }
+                    >
+                      <Image
+                        width={22}
+                        height={22}
+                        src="/assets/images/signal/bell-ring.png"
+                        alt="signal bell"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -511,7 +532,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                         <span className="ms-1 font-xssss fw-300">{`${readsCount >= 1000 ? Math.round(readsCount / 1000).toFixed(1) : readsCount} ${readsCount >= 1000 ? "k" : ""} ${readsCount > 1 ? tBase("views") : tBase("view")}`}</span>
                       </div>
                     ) : (
-                      <div className="d-flex" style={{ gap: "15px" }}>
+                      <div className="d-flex" style={{ gap: "20px" }}>
                         <div
                           className={`${styles["signal-stats"]} d-flex flex-column font-xssss text-align`}
                         >
@@ -521,9 +542,9 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                               <i
                                 className="bi bi-info-circle position-absolute"
                                 style={{
-                                  top: "-8px",
-                                  right: "-12px",
-                                  fontSize: "12px",
+                                  top: "-2px",
+                                  right: "-10px",
+                                  fontSize: "10px",
                                 }}
                               ></i>
                             </Tooltip>
@@ -584,25 +605,6 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                 </div>
               </div>
             )}
-            <div
-              className={`${isTrackingSignal ? styles["signal-tracking"] : styles["signal-track"]} ${styles["track-btn"]}`}
-              onClick={() =>
-                onTrackSignalHandler(
-                  id ? id : (cardDetail?.id as string),
-                  isTrackingSignal ? "untrack" : "track",
-                )
-              }
-            >
-              {isTrackingSignal
-                ? tSignal("tracking_signal")
-                : tSignal("track_signal")}
-              <Image
-                width={22}
-                height={22}
-                src="/assets/images/signal/signal-bell.svg"
-                alt="signal bell"
-              />
-            </div>
           </div>
         )}
       </div>

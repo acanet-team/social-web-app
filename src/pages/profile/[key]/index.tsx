@@ -34,6 +34,7 @@ export default function Profile({
   connectionStatus,
   logoRank,
   connectionRequestId,
+  signalAccuracy,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
@@ -150,17 +151,6 @@ export default function Profile({
     }
   };
 
-  const [tabClass, setTabClass] = useState<string>("");
-
-  // useEffect(() => {
-  //   const totalTabs = dataUser.role.name === "broker" ? 3 : 2;
-  //   if (totalTabs === 2) {
-  //     setTabClass(styles["two-tabs"] || "");
-  //   } else if (totalTabs === 3) {
-  //     setTabClass(styles["three-tabs"] || "");
-  //   }
-  // }, [dataUser.role.name]);
-
   const settingsilder = {
     arrows: false,
     dots: false,
@@ -208,6 +198,7 @@ export default function Profile({
           connectStatus={connectStatus}
           logoRank={logoRanks}
           connectRequestId={connectRequestId}
+          signalAccuracy={signalAccuracy}
         />
         <div className="position-relative">
           <Slider ref={sliderRef} {...settingsilder}>
@@ -310,22 +301,6 @@ export default function Profile({
               onClick={next}
             ></i>
           )}
-          {dataUser.role.name === "broker" && (
-            <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-              onClick={(e) => onSelectTabHandler(e)}
-            >
-              <p>{t("Signal")}</p>
-            </div>
-          )}
-          {id === dataUser.id && (
-            <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} d-flex justify-content-center cursor-pointer`}
-              onClick={(e) => onSelectTabHandler(e)}
-            >
-              <p>{t("Nft")}</p>
-            </div>
-          )}
         </div>
       </div>
       {curTab === TabPnum.About && (
@@ -376,9 +351,9 @@ export async function getServerSideProps(context: NextPageContext) {
   }
   const profileRes = await getProfile(key as string);
   console.log("profileRes", profileRes?.data);
-  // console.log("profileRes", profileRes?.data?.brokerProfile?.rank?.logo);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
+  const signalAccuracy = profileRes?.data?.signalAccuracy;
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
@@ -395,6 +370,7 @@ export async function getServerSideProps(context: NextPageContext) {
       userUsername: key || "",
       logoRank: profileRes?.data?.brokerProfile?.rank?.logo || null,
       connectionRequestId: profileRes?.data?.connectionRequestId || null,
+      signalAccuracy: signalAccuracy,
     },
   };
 }

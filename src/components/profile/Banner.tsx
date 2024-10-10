@@ -29,6 +29,7 @@ interface TabBannerProps {
   connectStatus: string;
   logoRank: string | null;
   connectRequestId: string | null;
+  signalAccuracy: string | typeof NaN;
 }
 const Banner: React.FC<TabBannerProps> = ({
   role,
@@ -41,6 +42,7 @@ const Banner: React.FC<TabBannerProps> = ({
   connectStatus,
   logoRank,
   connectRequestId,
+  signalAccuracy,
 }) => {
   const t = useTranslations("MyProfile");
   const tRating = useTranslations("Rating");
@@ -675,31 +677,41 @@ const Banner: React.FC<TabBannerProps> = ({
               )}
               {/* Rank image */}
               <div
-                className="font-xsss fw-600 m-0 ms-1 position-relative"
+                className="font-xsss fw-600 m-0 ms-1 mt-1 position-relative"
                 style={{ color: "rgb(107, 173, 97)" }}
               >
-                {!isNaN(Number(dataUserProfile?.signalAccuracy)) &&
-                  dataUserProfile?.signalAccuracy && (
-                    <Tooltip title={tBroker("signal_accuracy_tooltip")}>
-                      <Image
-                        src="/assets/images/profile/verified-tooltip.svg"
-                        width={16}
-                        height={16}
-                        alt=""
-                        className="position-absolute top-0"
-                        style={{
-                          right: "-20px",
-                          top: "5px",
-                          borderRadius: "50%",
-                          color: "rgb(107, 173, 97)",
-                        }}
-                      />
-                    </Tooltip>
-                  )}
-                {!isNaN(Number(dataUserProfile?.signalAccuracy)) &&
-                  dataUserProfile?.signalAccuracy +
-                    "% " +
-                    tBroker("signal_accuracy")}
+                <Tooltip title={tBroker("signal_accuracy_tooltip")}>
+                  <Image
+                    src="/assets/images/profile/verified-tooltip.svg"
+                    width={16}
+                    height={16}
+                    alt=""
+                    className="position-absolute top-0"
+                    style={{
+                      right: "-20px",
+                      top: "5px",
+                      borderRadius: "50%",
+                      color: "rgb(107, 173, 97)",
+                    }}
+                  />
+                </Tooltip>
+                {tBroker("signal_accuracy") + ": "}
+                {!Number.isNaN(signalAccuracy) &&
+                signalAccuracy !== undefined ? (
+                  <span
+                    className={
+                      Number(signalAccuracy) > 75
+                        ? styles["signal-green"]
+                        : Number(signalAccuracy) > 50
+                          ? styles["signal-yellow"]
+                          : styles["signal-red"]
+                    }
+                  >
+                    {signalAccuracy + "%"}
+                  </span>
+                ) : (
+                  <span>N/A</span>
+                )}
               </div>
               <Ratings rating={avarageRating} size={18} />
               <div className={`fw-bold ${styles["profile-rating__average"]}`}>
@@ -710,12 +722,6 @@ const Banner: React.FC<TabBannerProps> = ({
                 className="text-grey-600 text-center"
               >
                 {tRating("rank_desc")}
-              </div>
-              <div
-                style={{ fontSize: "13px" }}
-                className="text-grey-600 text-center"
-              >
-                {tRating("rank_desc_guarantee")}
               </div>
             </div>
           )}
