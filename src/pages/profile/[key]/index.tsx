@@ -85,7 +85,7 @@ export default function Profile({
   // }, [curTab]);
 
   useEffect(() => {
-    if (dataUser.role.name === "broker") {
+    if (dataUser.role.name === "broker" || dataUser.role.name === "admin") {
       if (role !== true) {
         setWidthTab("20%");
         setNumSlideShow(5);
@@ -244,7 +244,7 @@ export default function Profile({
             <div
               className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: "20%",
+                width: widthTab,
               }}
             >
               <p

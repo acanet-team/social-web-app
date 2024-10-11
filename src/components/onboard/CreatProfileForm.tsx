@@ -38,7 +38,14 @@ export default function CreateProfileForm(props: {
   const tOnboard = useTranslations("Onboard");
   const [emailIsWhiteList, setEmailIsWhiteList] = useState<boolean>(true);
   const isQuery = useMediaQuery({ query: "(max-width: 650px" });
-  const groupPlatform = ["X", "Telegram", "Zalo", "Facebook"];
+  const groupPlatform = [
+    "X",
+    "Telegram",
+    "Zalo",
+    "Facebook",
+    "Tiktok",
+    "Youtube",
+  ];
   const [listGroupPlatform, setlistGroupPlatform] = React.useState<string[]>(
     [],
   );
@@ -64,7 +71,7 @@ export default function CreateProfileForm(props: {
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-  const urlFormat = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+  const urlFormat = /^((http|https):\/\/)?[^ "]+$/;
 
   const additionalForm = useFormik({
     initialValues: {
@@ -81,6 +88,10 @@ export default function CreateProfileForm(props: {
       numMembersZalo: "",
       urlFacebook: "",
       numMembersFacebook: "",
+      urlTiktok: "",
+      numMembersTiktok: "",
+      urlYoutube: "",
+      numMembersYoutube: "",
       listGroupPlatform: [],
     },
     enableReinitialize: true,
@@ -184,6 +195,50 @@ export default function CreateProfileForm(props: {
         },
       ),
       numMembersTele: Yup.number().typeError(t("error_num_members")),
+      urlTiktok: Yup.string().test(
+        "is-required-url",
+        "URL is required and must be valid",
+        function (value) {
+          const { listGroupPlatform } = this.parent;
+          if (listGroupPlatform && listGroupPlatform.includes("Tiktok")) {
+            if (!value) {
+              return this.createError({ message: t("error_url_missing") });
+            }
+            const isValidUrl = Yup.string().url().isValidSync(value);
+            const isFormatValid = urlFormat.test(value);
+
+            if (!isValidUrl || !isFormatValid) {
+              return this.createError({
+                message: t("error_url_type"),
+              });
+            }
+          }
+          return true;
+        },
+      ),
+      numMembersTiktok: Yup.number().typeError(t("error_num_members")),
+      urlYoutube: Yup.string().test(
+        "is-required-url",
+        "URL is required and must be valid",
+        function (value) {
+          const { listGroupPlatform } = this.parent;
+          if (listGroupPlatform && listGroupPlatform.includes("Youtube")) {
+            if (!value) {
+              return this.createError({ message: t("error_url_missing") });
+            }
+            const isValidUrl = Yup.string().url().isValidSync(value);
+            const isFormatValid = urlFormat.test(value);
+
+            if (!isValidUrl || !isFormatValid) {
+              return this.createError({
+                message: t("error_url_type"),
+              });
+            }
+          }
+          return true;
+        },
+      ),
+      numMembersYoutube: Yup.number().typeError(t("error_num_members")),
     }),
     onSubmit: async (values, { setFieldError }) => {
       const profileValues: InfoAdditionalBroker = {
@@ -224,6 +279,22 @@ export default function CreateProfileForm(props: {
           name: "Facebook",
           mediaUrl: values.urlFacebook,
           totalMembers: Number(values.numMembersFacebook),
+        });
+      }
+
+      if (values.urlTiktok.trim() !== "") {
+        profileValues.socialMedia.push({
+          name: "Tiktok",
+          mediaUrl: values.urlTiktok,
+          totalMembers: Number(values.numMembersTiktok),
+        });
+      }
+
+      if (values.urlYoutube.trim() !== "") {
+        profileValues.socialMedia.push({
+          name: "Youtube",
+          mediaUrl: values.urlYoutube,
+          totalMembers: Number(values.numMembersYoutube),
         });
       }
 
@@ -368,7 +439,36 @@ export default function CreateProfileForm(props: {
           />
         </div>
       );
+    } else if (social === "Tiktok") {
+      return (
+        <div
+          style={{ width: "16px", height: "16px", backgroundColor: "white" }}
+        >
+          <Image
+            className="mb-2"
+            src="/assets/images/4362958_tiktok_logo_social media_icon.svg"
+            width={16}
+            height={16}
+            alt=""
+          />
+        </div>
+      );
+    } else if (social === "Youtube") {
+      return (
+        <div
+          style={{ width: "16px", height: "16px", backgroundColor: "white" }}
+        >
+          <Image
+            className="mb-2"
+            src="/assets/images/317714_video_youtube_icon.svg"
+            width={16}
+            height={16}
+            alt=""
+          />
+        </div>
+      );
     }
+
     return null;
   };
 
@@ -380,7 +480,12 @@ export default function CreateProfileForm(props: {
     setlistGroupPlatform(selectedValues);
     additionalForm.setFieldValue("listGroupPlatform", selectedValues);
   };
-  console.log(`list`, additionalForm.errors);
+
+  const handleBack = () => {
+    setEmailIsWhiteList(true);
+    props.setCheckEmailIsWhiteList(true);
+  };
+  // console.log(`list`, additionalForm.errors);
 
   return (
     <>
@@ -410,6 +515,7 @@ export default function CreateProfileForm(props: {
           <form onSubmit={formik.handleSubmit} id={styles["create-profile"]}>
             <label className="fw-600 mb-1" htmlFor="nickName">
               Nickname
+              <span className="text-red">*</span>
             </label>
             <input
               className={`${formik.touched.nickName && formik.errors.nickName ? " border-danger" : ""} ${styles["form-control"]}`}
@@ -426,7 +532,10 @@ export default function CreateProfileForm(props: {
             ) : null}
 
             {/* eslint-disable-next-line */}
-            <label className="fw-600 mt-3 mb-1">{t("region")}</label>
+            <label className="fw-600 mt-3 mb-1">
+              {t("region")}
+              <span className="text-red">*</span>
+            </label>
             <FormControl
               fullWidth
               id="location"
@@ -480,7 +589,7 @@ export default function CreateProfileForm(props: {
 
             {/* eslint-disable-next-line */}
             <label className="fw-600 mt-3 mb-1" htmlFor="email">
-              Email
+              Email<span className="text-red">*</span>
             </label>
             <input
               type="email"
@@ -498,7 +607,10 @@ export default function CreateProfileForm(props: {
             ) : null}
 
             {/* eslint-disable-next-line */}
-            <label className="fw-600 mt-3 mb-3">{t("user_type")}</label>
+            <label className="fw-600 mt-3 mb-3">
+              {t("user_type")}
+              <span className="text-red">*</span>
+            </label>
             <div
               id={styles["profile-radio"]}
               className="profile-radio-btn mx-auto"
@@ -554,12 +666,13 @@ export default function CreateProfileForm(props: {
               id={styles["create-profile__not-whitelist"]}
             >
               <div className="d-flex justify-content-between">
-                <div style={{ width: "49%" }}>
+                <div style={{ width: isQuery ? "49%" : "70%" }}>
                   <label
                     className={`fw-600 mt-3  ${isQuery ? "font-xsss" : ""}`}
                     htmlFor="contactEmail"
                   >
                     {t("Contact_Email")}
+                    <span className="text-red">*</span>
                   </label>
                   <input
                     type="email"
@@ -577,12 +690,13 @@ export default function CreateProfileForm(props: {
                     </FormHelperText>
                   ) : null}
                 </div>
-                <div style={{ width: "49%" }}>
+                <div style={{ width: isQuery ? "49%" : "28%" }}>
                   <label
                     className={`fw-600 mt-3 ${isQuery ? "font-xsss" : ""}`}
                     htmlFor="phoneNumber"
                   >
                     {t("Phone_number")}
+                    <span className="text-red">*</span>
                   </label>
                   <input
                     className={`${additionalForm.touched.phoneNumber && additionalForm.errors.phoneNumber ? " border-danger" : ""} ${styles["form-control"]}`}
@@ -601,12 +715,13 @@ export default function CreateProfileForm(props: {
                 </div>
               </div>
 
-              <div style={{ width: isQuery ? "100%" : "49%" }}>
+              <div style={{ width: isQuery ? "100%" : "70%" }}>
                 <label
                   className={`fw-600 mt-3 ${isQuery ? "font-xsss" : ""}`}
                   htmlFor="phoneNumber"
                 >
                   {t("Select_your_group_platform")}
+                  <span className="text-red">*</span>
                 </label>
 
                 <FormGroup sx={{ m: 0, width: "100%", border: "none" }}>
@@ -658,7 +773,7 @@ export default function CreateProfileForm(props: {
                       className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
                       htmlFor=""
                     >
-                      Url X
+                      URL X<span className="text-red">*</span>
                     </label>
                     <input
                       className={`${additionalForm.touched.urlX && additionalForm.errors.urlX ? "border-danger" : ""} ${styles["form-control"]}`}
@@ -667,7 +782,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.urlX}
-                      placeholder="Url group platform"
+                      placeholder="X"
                     />
                     {additionalForm.touched.urlX &&
                     additionalForm.errors.urlX ? (
@@ -690,7 +805,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.numMembersX}
-                      placeholder="Number members"
+                      placeholder="X"
                     />
                     {additionalForm.touched.numMembersX &&
                     additionalForm.errors.numMembersX ? (
@@ -708,7 +823,8 @@ export default function CreateProfileForm(props: {
                       className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
                       htmlFor=""
                     >
-                      Url Zalo
+                      URL Zalo
+                      <span className="text-red">*</span>
                     </label>
                     <input
                       className={`${additionalForm.touched.urlZalo && additionalForm.errors.urlZalo ? "border-danger" : ""} ${styles["form-control"]}`}
@@ -717,7 +833,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.urlZalo}
-                      placeholder="Url group platform"
+                      placeholder="Zalo"
                     />
                     {additionalForm.touched.urlZalo &&
                     additionalForm.errors.urlZalo ? (
@@ -740,7 +856,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.numMembersZalo}
-                      placeholder="Number members"
+                      placeholder="Zalo"
                     />
                     {additionalForm.touched.numMembersZalo &&
                     additionalForm.errors.numMembersZalo ? (
@@ -758,7 +874,8 @@ export default function CreateProfileForm(props: {
                       className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
                       htmlFor=""
                     >
-                      Url Telegram
+                      URL Telegram
+                      <span className="text-red">*</span>
                     </label>
                     <input
                       className={`${additionalForm.touched.urlTele && additionalForm.errors.urlTele ? "border-danger" : ""} ${styles["form-control"]}`}
@@ -767,7 +884,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.urlTele}
-                      placeholder="Url group platform"
+                      placeholder="Telegram"
                     />
                     {additionalForm.touched.urlTele &&
                     additionalForm.errors.urlTele ? (
@@ -790,7 +907,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.numMembersTele}
-                      placeholder="Number members"
+                      placeholder="Telegram"
                     />
                     {additionalForm.touched.numMembersTele &&
                     additionalForm.errors.numMembersTele ? (
@@ -808,7 +925,8 @@ export default function CreateProfileForm(props: {
                       className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
                       htmlFor=""
                     >
-                      Url Facebook
+                      URL Facebook
+                      <span className="text-red">*</span>
                     </label>
                     <input
                       className={`${additionalForm.touched.urlFacebook && additionalForm.errors.urlFacebook ? "border-danger" : ""} ${styles["form-control"]}`}
@@ -817,7 +935,7 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.urlFacebook}
-                      placeholder=" Url group platform"
+                      placeholder="Facebook"
                     />
                     {additionalForm.touched.urlFacebook &&
                     additionalForm.errors.urlFacebook ? (
@@ -840,12 +958,112 @@ export default function CreateProfileForm(props: {
                       onChange={additionalForm.handleChange}
                       onBlur={additionalForm.handleBlur}
                       value={additionalForm.values.numMembersFacebook}
-                      placeholder="Number members"
+                      placeholder="Facebook"
                     />
                     {additionalForm.touched.numMembersFacebook &&
                     additionalForm.errors.numMembersFacebook ? (
                       <FormHelperText sx={{ color: "error.main" }}>
                         {additionalForm.errors.numMembersFacebook}
+                      </FormHelperText>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+              {listGroupPlatform.includes("Tiktok") && (
+                <div className="d-flex justify-content-between mt-3">
+                  <div style={{ width: isQuery ? "49%" : "70%" }}>
+                    <label
+                      className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
+                      htmlFor=""
+                    >
+                      URL Tiktok<span className="text-red">*</span>
+                    </label>
+                    <input
+                      className={`${additionalForm.touched.urlTiktok && additionalForm.errors.urlTiktok ? "border-danger" : ""} ${styles["form-control"]}`}
+                      name="urlTiktok"
+                      id="urlTiktok"
+                      onChange={additionalForm.handleChange}
+                      onBlur={additionalForm.handleBlur}
+                      value={additionalForm.values.urlTiktok}
+                      placeholder="Tiktok"
+                    />
+                    {additionalForm.touched.urlTiktok &&
+                    additionalForm.errors.urlTiktok ? (
+                      <FormHelperText sx={{ color: "error.main" }}>
+                        {additionalForm.errors.urlTiktok}
+                      </FormHelperText>
+                    ) : null}
+                  </div>
+                  <div style={{ width: isQuery ? "49%" : "28%" }}>
+                    <label
+                      className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
+                      htmlFor="phoneNumber"
+                    >
+                      {t("Number_of_members")}
+                    </label>
+                    <input
+                      className={`${additionalForm.touched.numMembersTiktok && additionalForm.errors.numMembersTiktok ? "border-danger" : ""} ${styles["form-control"]}`}
+                      name="numMembersTiktok"
+                      id="numMembersTiktok"
+                      onChange={additionalForm.handleChange}
+                      onBlur={additionalForm.handleBlur}
+                      value={additionalForm.values.numMembersTiktok}
+                      placeholder="Tiktok"
+                    />
+                    {additionalForm.touched.numMembersTiktok &&
+                    additionalForm.errors.numMembersTiktok ? (
+                      <FormHelperText sx={{ color: "error.main" }}>
+                        {additionalForm.errors.numMembersTiktok}
+                      </FormHelperText>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+              {listGroupPlatform.includes("Youtube") && (
+                <div className="d-flex justify-content-between mt-3">
+                  <div style={{ width: isQuery ? "49%" : "70%" }}>
+                    <label
+                      className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
+                      htmlFor=""
+                    >
+                      URL Youtube<span className="text-red">*</span>
+                    </label>
+                    <input
+                      className={`${additionalForm.touched.urlYoutube && additionalForm.errors.urlYoutube ? "border-danger" : ""} ${styles["form-control"]}`}
+                      name="urlYoutube"
+                      id="urlYoutube"
+                      onChange={additionalForm.handleChange}
+                      onBlur={additionalForm.handleBlur}
+                      value={additionalForm.values.urlYoutube}
+                      placeholder="Youtube"
+                    />
+                    {additionalForm.touched.urlYoutube &&
+                    additionalForm.errors.urlYoutube ? (
+                      <FormHelperText sx={{ color: "error.main" }}>
+                        {additionalForm.errors.urlYoutube}
+                      </FormHelperText>
+                    ) : null}
+                  </div>
+                  <div style={{ width: isQuery ? "49%" : "28%" }}>
+                    <label
+                      className={`fw-600 ${isQuery ? "font-xsss" : ""}`}
+                      htmlFor=""
+                    >
+                      {t("Number_of_members")}
+                    </label>
+                    <input
+                      className={`${additionalForm.touched.numMembersYoutube && additionalForm.errors.numMembersYoutube ? "border-danger" : ""} ${styles["form-control"]}`}
+                      name="numMembersYoutube"
+                      id="numMembersYoutube"
+                      onChange={additionalForm.handleChange}
+                      onBlur={additionalForm.handleBlur}
+                      value={additionalForm.values.numMembersYoutube}
+                      placeholder="Youtube"
+                    />
+                    {additionalForm.touched.numMembersYoutube &&
+                    additionalForm.errors.numMembersYoutube ? (
+                      <FormHelperText sx={{ color: "error.main" }}>
+                        {additionalForm.errors.numMembersYoutube}
                       </FormHelperText>
                     ) : null}
                   </div>
@@ -920,13 +1138,23 @@ export default function CreateProfileForm(props: {
                 </FormHelperText>
               ) : null}
 
-              <button
-                type="submit"
-                id={styles["profile-btn"]}
-                className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 d-inline-block mt-5"
-              >
-                {tOnboard("continue")}
-              </button>
+              <div className="d-flex justify-content-center mt-3">
+                <button
+                  onClick={() => handleBack()}
+                  type="button"
+                  id={styles["profile-btn"]}
+                  className="main-btn bg-tumblr text-center text-white  fw-600 p-3 w175 border-0 mt-5"
+                >
+                  {tOnboard("previous")}
+                </button>
+                <button
+                  type="submit"
+                  id={styles["profile-btn"]}
+                  className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 mt-5"
+                >
+                  {tOnboard("continue")}
+                </button>
+              </div>
             </form>
           </div>
         </>

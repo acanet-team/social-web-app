@@ -28,7 +28,8 @@
   },
   "Onboard": {
     "continue": "Continue",
-    "finish": "Finish"
+    "finish": "Finish",
+    "previous": "Previous"
   },
   "Time": {
     "now": "now",
@@ -186,6 +187,7 @@
     "error_location": "Please choose a location",
     "error_user_type": "Please choose the user type",
     "error_missing_nickname": "Please fill out a valid nickname",
+    "error_invalid_characters": "Nickname can only contain digits (0-9) and underscores (_).",
     "error_invalid_nickname": "Nick name must be between 8 and 20 characters",
     "error_missing_email": "Please fill out a valid email",
     "error_invalid_characters": "Nickname can only contain digits (0-9) and underscores (_).",
@@ -475,7 +477,8 @@
     "create_signal_lose": "you created has hit the stop-loss level. Your accuary rate has been adjusted accordingly",
     "create_signal_win": "you created has successfully hit the take-profit target on date-time. Your accuary rate has been enhanced.",
     "Congratulations": "Congratulations!",
-    "new_noti": "New Notification!"
+    "new_noti": "New Notification!",
+    "verify_broker_process": "We've received your information and will get back to you within 24 hours"
   },
   "Donate": {
     "confirm": "Confirm",
