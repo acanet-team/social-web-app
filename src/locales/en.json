@@ -206,7 +206,8 @@
     "Note": "Note",
     "error_num_members": "Number of members must be number characters",
     "create_profile_title_additional": "We need additional information about you.",
-    "create_profile_desc_additional": "All brokers must complete a thorough verification process by our team. Please provide your details below, and we will reach out within 24 hours."
+    "create_profile_desc_additional": "All brokers must complete a thorough verification process by our team. Please provide your details below, and we will reach out within 24 hours.",
+    "error_email_whitelist": "Please choose another email. This email is used by another broker"
   },
   "NavBar": {
     "newsfeed": "Newsfeed",

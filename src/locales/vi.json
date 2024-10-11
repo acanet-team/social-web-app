@@ -208,7 +208,8 @@
     "Note": "Ghi chú",
     "error_num_members": "Số lượng thành viên phải là số",
     "create_profile_title_additional": "Chúng tôi cần thêm thông tin từ bạn.",
-    "create_profile_desc_additional": "Tất cả các nhà môi giới phải hoàn thành quá trình xác minh bởi đội ngũ của Acanet. Vui lòng cung cấp thông tin của bạn bên dưới, chúng tôi sẽ liên hệ với bạn trong vòng 24 giờ tới."
+    "create_profile_desc_additional": "Tất cả các nhà môi giới phải hoàn thành quá trình xác minh bởi đội ngũ của Acanet. Vui lòng cung cấp thông tin của bạn bên dưới, chúng tôi sẽ liên hệ với bạn trong vòng 24 giờ tới.",
+    "error_email_whitelist": "Vui lòng chọn email khác. Email này đã được sử dụng."
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",
