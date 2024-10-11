@@ -85,7 +85,7 @@ export default function Profile({
   // }, [curTab]);
 
   useEffect(() => {
-    if (dataUser.role.name === "broker") {
+    if (dataUser.role.name === "broker" || dataUser.role.name === "admin") {
       if (role !== true) {
         setWidthTab("20%");
         setNumSlideShow(5);
