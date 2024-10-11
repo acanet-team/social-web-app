@@ -244,6 +244,10 @@ export default function PostCard(props: {
   const onCancelSellNFTHandler = async () => {
     const cancelSellNFT = await nftMarketContract.cancelListing(
       additionalData.nftTokenId,
+      {
+        from: account?.address,
+        gasLimit: 2000000,
+      },
     );
     cancelSellNFT.wait();
     onCancelSellNFT(
