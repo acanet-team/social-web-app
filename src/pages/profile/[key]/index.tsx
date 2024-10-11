@@ -247,7 +247,7 @@ export default function Profile({
               <div
                 className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: "20%",
+                  width: widthTab,
                 }}
               >
                 <p
