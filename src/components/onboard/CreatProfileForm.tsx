@@ -275,6 +275,8 @@ export default function CreateProfileForm(props: {
         .email(t("error_invalid_email")),
     }),
     onSubmit: async (values, { setFieldError }) => {
+      console.log("kkkkkkkkkkk");
+
       const profileValues = {
         nickName: values.nickName?.toLowerCase().trim(),
         location: values.location?.toLowerCase().trim(),
@@ -591,7 +593,7 @@ export default function CreateProfileForm(props: {
                     {t("Phone_number")}
                   </label>
                   <input
-                    className={`${additionalForm.touched.phoneNumber && additionalForm.errors.phoneNumber ? " border-danger" : ""} ${styles["form-control"]}`}
+                    className={`${additionalForm.touched.phoneNumber && additionalForm.errors.phoneNumber ? " border-danger" : ""} form-control`}
                     name="phoneNumber"
                     id="phoneNumber"
                     onChange={additionalForm.handleChange}

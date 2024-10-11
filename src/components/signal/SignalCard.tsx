@@ -183,7 +183,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
 
   const onTrackSignalHandler = async (
     cardId: string,
-    type: "track" | "unTrack",
+    type: "track" | "untrack",
   ) => {
     try {
       if (cardId) {
@@ -342,22 +342,25 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                     className={`${signalType === "long" ? "text-success" : "text-danger"} position-relative`}
                   >
                     {signalType === "long" ? "Long" : "Short"}
-                    <div
-                      className={`${isTrackingSignal ? styles["signal-tracking"] : styles["signal-track"]} ${styles["track-btn"]}`}
-                      onClick={() =>
-                        onTrackSignalHandler(
-                          id ? id : (cardDetail?.id as string),
-                          isTrackingSignal ? "unTrack" : "track",
-                        )
-                      }
-                    >
-                      <Image
-                        width={22}
-                        height={22}
-                        src="/assets/images/signal/bell-ring.png"
-                        alt="signal bell"
-                      />
-                    </div>
+                    {curUserId !== cardDetail?.owner.userId &&
+                      curUserId !== brokerId && (
+                        <div
+                          className={`${isTrackingSignal ? styles["signal-tracking"] : styles["signal-track"]} ${styles["track-btn"]}`}
+                          onClick={() =>
+                            onTrackSignalHandler(
+                              id ? id : (cardDetail?.id as string),
+                              isTrackingSignal ? "untrack" : "track",
+                            )
+                          }
+                        >
+                          <Image
+                            width={22}
+                            height={22}
+                            src="/assets/images/signal/bell-ring.png"
+                            alt="signal bell"
+                          />
+                        </div>
+                      )}
                   </div>
                 </div>
 

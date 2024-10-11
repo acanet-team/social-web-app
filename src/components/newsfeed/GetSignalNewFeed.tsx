@@ -86,7 +86,7 @@ const GetSignalNewFeed = () => {
                   {signal?.owner?.nickName}
                 </span>
                 <div
-                  className={`${Number(signal?.signalAccuracy) > 75 ? styles["signal-green"] : Number(signal?.signalAccuracy) > 50 ? styles["signal-yellow"] : styles["signal-red"]} fw-700 text-align font-xssss`}
+                  className={`${signal?.signalAccuracy === null ? styles["signal-none"] : Number(signal?.signalAccuracy) >= 75 ? styles["signal-green"] : Number(signal?.signalAccuracy) >= 50 ? styles["signal-yellow"] : styles["signal-red"]} fw-700 text-align font-xssss`}
                 >
                   {!Number.isNaN(signal?.signalAccuracy) &&
                   signal?.signalAccuracy
