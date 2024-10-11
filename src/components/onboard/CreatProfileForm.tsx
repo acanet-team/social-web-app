@@ -307,6 +307,9 @@ export default function CreateProfileForm(props: {
       } catch (err) {
         const errorCode = err.code || err.statusCode;
         const errorMsg = err.message || "Something goes wrong.";
+        if (errorCode === "ER1024") {
+          throwToast(t("error_email_whitelist"), "error");
+        }
         const field = errorFieldMap[errorCode];
         if (field) {
           setFieldError(field, errorMsg);
