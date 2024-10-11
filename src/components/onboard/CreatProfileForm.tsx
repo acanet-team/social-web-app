@@ -596,6 +596,7 @@ export default function CreateProfileForm(props: {
               className={`${formik.touched.email && formik.errors.email ? " border-danger" : ""} ${styles["form-control"]}`}
               name="email"
               id="email"
+              disabled
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}

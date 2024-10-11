@@ -21,6 +21,7 @@ import type { User } from "@/api/profile/model";
 import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
 import { onCancelSellNFT } from "@/api/nft";
+import { formatNumber } from "@/utils/format-number";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -269,7 +270,7 @@ export default function PostCard(props: {
       <div className="position-relative">
         <div className={`${styles["post-nft__price"]} text-current`}>
           {/* {additionalData.price + " " + additionalData.currency} */}
-          {additionalData.price + " MOVE"}
+          {formatNumber(additionalData.price) + " MOVE"}
         </div>
         <button
           className={buttonClass}
