@@ -12,6 +12,7 @@ import "dotenv/config";
 import { joinPaidCommunity } from "@/api/wallet";
 import { useRouter } from "next/router";
 import { throwToast } from "@/utils/throw-toast";
+import { formatNumber } from "@/utils/format-number";
 
 export default function CommunityCard(props: {
   ownerId: number;
@@ -181,7 +182,7 @@ export default function CommunityCard(props: {
                   alt="logo"
                 />
                 <span className="ms-2 fw-bolder text-dark">
-                  {fee?.toLocaleString("en-US")}
+                  {formatNumber(fee)}
                 </span>
               </div>
             )}
