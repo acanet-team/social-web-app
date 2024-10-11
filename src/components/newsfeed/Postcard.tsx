@@ -262,13 +262,19 @@ export default function PostCard(props: {
     );
 
     return userId !== authorId ? (
-      <button
-        className={buttonClass}
-        onClick={onBuyNFTHandler}
-        disabled={isBuyingNFT ? true : false}
-      >
-        {isBuyingNFT ? spinner : tNFT("buy_nft")}
-      </button>
+      <div className="position-relative">
+        <div className={`${styles["post-nft__price"]} text-current`}>
+          {/* {additionalData.price + " " + additionalData.currency} */}
+          {additionalData.price + " MOVE"}
+        </div>
+        <button
+          className={buttonClass}
+          onClick={onBuyNFTHandler}
+          disabled={isBuyingNFT ? true : false}
+        >
+          {isBuyingNFT ? spinner : tNFT("buy_nft")}
+        </button>
+      </div>
     ) : (
       <button
         className={buttonClass}
@@ -454,41 +460,62 @@ export default function PostCard(props: {
               ""
             )}
           </p>
-          <Masonry columns={columnsCount}>
-            {assets?.slice(0, 5).map(({ path, id }) =>
-              path ? (
-                <div key={id}>
-                  {/* <img
-                    srcSet={`${path}?w=162&auto=format&dpr=2 2x`}
-                    src={`${path}?w=162&auto=format`}
-                    alt={id}
-                    loading="lazy"
-                    style={{
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      display: "block",
-                      width: "100%",
-                    }}
-                  /> */}
-
-                  <Image
-                    src={path}
-                    alt={id}
-                    width={162}
-                    height={162}
-                    layout="responsive"
-                    objectFit="cover"
-                    style={{
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      display: "block",
-                      width: "100%",
-                    }}
-                    loading="lazy"
-                  />
+          {postType === "nft" && (
+            <div
+              className={`${styles["nft-card"]} d-flex justify-content-center`}
+            >
+              <div
+                className={`${styles["nft-card__container"]} card p-0 border-0 h-100`}
+                style={{ borderRadius: "10px" }}
+              >
+                <div
+                  className={`${styles["nft-card_body"]} card-body p-3 position-relative d-flex justify-content-center mb-2`}
+                >
+                  <div className="card-image p-0">
+                    <Image
+                      src={assets[0]?.path || ""}
+                      alt="NFT"
+                      width={200}
+                      height={200}
+                      className={`${styles["ntf-image"]}`}
+                      loading="lazy"
+                    />
+                  </div>
+                  {/* <h5 className="fw-700 font-xss text-grey-900 mb-2 mt-3">
+                    {nft.name ?? "NFT"}
+                  </h5> */}
+                  {/* <p className="fw-500 font-xsss text-grey-500 m-0">
+                    {nft.description.length > 50
+                      ? `${nft.description.substring(0, 80)}...`
+                      : nft.description}
+                  </p> */}
                 </div>
-              ) : null,
-            )}
+              </div>
+            </div>
+          )}
+          <Masonry columns={columnsCount}>
+            {postType !== "nft" &&
+              assets?.slice(0, 5).map(({ path, id }) =>
+                path ? (
+                  <div key={id}>
+                    <Image
+                      src={path}
+                      alt={id}
+                      width={162}
+                      height={162}
+                      layout="responsive"
+                      style={{
+                        borderBottomLeftRadius: 4,
+                        borderBottomRightRadius: 4,
+                        display: "block",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                      loading="lazy"
+                    />
+                  </div>
+                ) : null,
+              )}
           </Masonry>
         </Box>
       </div>

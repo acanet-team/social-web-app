@@ -67,12 +67,17 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
     Number(owner?.followersCount) || 0,
   );
   const [authorName, setAuthorName] = useState<string>(
-    owner?.nickName ? owner?.nickName : cardDetail?.owner?.nickName || "",
+    owner?.nickName || cardDetail?.owner?.nickName || "",
   );
+
   const [avarageRating, setAverageRating] = useState<number>(0);
   const [isTrackingSignal, sedtIsTrackingSignal] = useState<boolean>(
     isTracking || false,
   );
+
+  useEffect(() => {
+    setAuthorName(owner?.nickName || cardDetail?.owner?.nickName || "");
+  }, [owner?.nickName, cardDetail?.owner?.nickName]);
 
   useEffect(() => {
     if (readAt || (brokerId && curUserId === brokerId)) {
@@ -507,22 +512,20 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                             style={{ bottom: "-24px", left: "-3px" }}
                           >
                             <h2 className="text-white fw-700 m-0">
-                              {authorName.length > 5 && (
-                                <Tooltip title={authorName}>
-                                  <IconButton
-                                    sx={{
-                                      fontSize: "12px",
-                                      color: "#fff",
-                                      padding: "0",
-                                      fontWeight: "700",
-                                    }}
-                                  >
-                                    {authorName.length > 20
-                                      ? authorName.substring(0, 20) + "..."
-                                      : authorName}
-                                  </IconButton>
-                                </Tooltip>
-                              )}
+                              <Tooltip title={authorName}>
+                                <IconButton
+                                  sx={{
+                                    fontSize: "12px",
+                                    color: "#fff",
+                                    padding: "0",
+                                    fontWeight: "700",
+                                  }}
+                                >
+                                  {authorName.length > 20
+                                    ? authorName.substring(0, 20) + "..."
+                                    : authorName}
+                                </IconButton>
+                              </Tooltip>
                             </h2>
                           </div>
                         </Link>

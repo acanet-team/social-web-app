@@ -190,6 +190,7 @@
     "error_invalid_characters": "Nickname can only contain digits (0-9) and underscores (_).",
     "error_invalid_nickname": "Nick name must be between 8 and 20 characters",
     "error_missing_email": "Please fill out a valid email",
+    "error_invalid_characters": "Nickname can only contain digits (0-9) and underscores (_).",
     "error_invalid_email": "Invalid email address",
     "error_note": "Please fill out a valid note",
     "error_missing_phone": "Please fill out a valid phone",
