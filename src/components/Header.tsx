@@ -547,7 +547,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <li>
                     <Link
                       href="#"
-                      className="nav-content-bttn h-auto"
+                      className="nav-content-bttn h-auto ms-1"
                       onClick={onLogOutHandler}
                     >
                       <i className="font-xl text-current bi bi-box-arrow-right me-3"></i>
