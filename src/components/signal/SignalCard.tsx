@@ -183,7 +183,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
 
   const onTrackSignalHandler = async (
     cardId: string,
-    type: "track" | "unTrack",
+    type: "track" | "untrack",
   ) => {
     try {
       if (cardId) {
@@ -347,7 +347,7 @@ const SignalCard: React.FC<getSignalCardResponse> = ({
                       onClick={() =>
                         onTrackSignalHandler(
                           id ? id : (cardDetail?.id as string),
-                          isTrackingSignal ? "unTrack" : "track",
+                          isTrackingSignal ? "untrack" : "track",
                         )
                       }
                     >
