@@ -6,16 +6,13 @@ import styles from "@/styles/modules/profile.module.scss";
 import { connectAInvestor, updateProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import { ImageCropModal } from "@/components/ImageCropModal";
-import { createGetBrokersRequest, followABroker } from "@/api/onboard";
+import { followABroker } from "@/api/onboard";
 import Ratings from "@/components/Ratings";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
 import { postConnectRequest, postConnectResponse } from "@/api/connect";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 
 interface TabBannerProps {
@@ -681,27 +678,33 @@ const Banner: React.FC<TabBannerProps> = ({
                 style={{ color: "rgb(107, 173, 97)" }}
               >
                 <Tooltip title={tBroker("signal_accuracy_tooltip")}>
-                  <Image
-                    src="/assets/images/profile/verified-tooltip.svg"
-                    width={16}
-                    height={16}
-                    alt=""
-                    className="position-absolute top-0"
+                  <i
+                    className={`${
+                      signalAccuracy === null
+                        ? styles["signal-none"]
+                        : Number(signalAccuracy) >= 75
+                          ? styles["signal-green"]
+                          : Number(signalAccuracy) >= 50
+                            ? styles["signal-yellow"]
+                            : styles["signal-red"]
+                    } bi bi-info-circle position-absolute`}
                     style={{
-                      right: "-20px",
-                      top: "5px",
+                      right: "-15px",
+                      top: "-5px",
                       borderRadius: "50%",
-                      color: "rgb(107, 173, 97)",
+                      fontSize: "12px",
                     }}
-                  />
+                  ></i>
                 </Tooltip>
                 <span
                   className={
-                    Number(signalAccuracy) > 75
-                      ? styles["signal-green"]
-                      : Number(signalAccuracy) > 50
-                        ? styles["signal-yellow"]
-                        : styles["signal-red"]
+                    signalAccuracy === null
+                      ? styles["signal-none"]
+                      : Number(signalAccuracy) >= 75
+                        ? styles["signal-green"]
+                        : Number(signalAccuracy) >= 50
+                          ? styles["signal-yellow"]
+                          : styles["signal-red"]
                   }
                 >
                   {tBroker("signal_accuracy") + ": "}
@@ -709,11 +712,13 @@ const Banner: React.FC<TabBannerProps> = ({
                 {!Number.isNaN(signalAccuracy) && signalAccuracy ? (
                   <span
                     className={
-                      Number(signalAccuracy) > 75
-                        ? styles["signal-green"]
-                        : Number(signalAccuracy) > 50
-                          ? styles["signal-yellow"]
-                          : styles["signal-red"]
+                      signalAccuracy === null
+                        ? styles["signal-none"]
+                        : Number(signalAccuracy) >= 75
+                          ? styles["signal-green"]
+                          : Number(signalAccuracy) >= 50
+                            ? styles["signal-yellow"]
+                            : styles["signal-red"]
                     }
                   >
                     {+signalAccuracy % 1 !== 0
@@ -721,7 +726,19 @@ const Banner: React.FC<TabBannerProps> = ({
                       : +signalAccuracy + "%"}
                   </span>
                 ) : (
-                  <span>N/A</span>
+                  <span
+                    className={
+                      signalAccuracy === null
+                        ? styles["signal-none"]
+                        : Number(signalAccuracy) >= 75
+                          ? styles["signal-green"]
+                          : Number(signalAccuracy) >= 50
+                            ? styles["signal-yellow"]
+                            : styles["signal-red"]
+                    }
+                  >
+                    N/A
+                  </span>
                 )}
               </div>
               <Ratings rating={avarageRating} size={18} />

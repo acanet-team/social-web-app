@@ -275,19 +275,21 @@ export default function Profile({
                 </p>
               </div>
             )}
-            <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
-              style={{
-                width: dtUser.role.name === "broker" ? "16.66%" : "25%",
-              }}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={(e) => onSelectTabHandler(e)}
+            {id === dataUser.id && (
+              <div
+                className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+                style={{
+                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                }}
               >
-                {t("Nft")}
-              </p>
-            </div>
+                <p
+                  className="cursor-pointer"
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  {t("Nft")}
+                </p>
+              </div>
+            )}
           </Slider>
           {isQuery && (
             <i
