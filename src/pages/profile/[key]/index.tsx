@@ -241,23 +241,19 @@ export default function Profile({
                 {t("Posts")}
               </p>
             </div>
-            {(dtUser.role.name === "broker" ||
-              dtUser.role.name === "guest" ||
-              dtUser.role.name === "investor") && (
-              <div
-                className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
-                style={{
-                  width: "20%",
-                }}
+            <div
+              className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+              style={{
+                width: "20%",
+              }}
+            >
+              <p
+                className="cursor-pointer"
+                onClick={(e) => onSelectTabHandler(e)}
               >
-                <p
-                  className="cursor-pointer"
-                  onClick={(e) => onSelectTabHandler(e)}
-                >
-                  {t("About")}
-                </p>
-              </div>
-            )}
+                {t("About")}
+              </p>
+            </div>
             <div
               className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{

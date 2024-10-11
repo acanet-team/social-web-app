@@ -258,6 +258,7 @@ export default function CreateProfileForm(props: {
     validationSchema: Yup.object({
       nickName: Yup.string()
         .required(t("error_missing_nickname"))
+        .matches(/^[a-zA-Z0-9_]+$/, t("error_invalid_characters"))
         .min(8, () => t("error_invalid_nickname"))
         .max(20, () => t("error_invalid_nickname")),
       location: Yup.string().required(t("error_location")),

@@ -45,7 +45,7 @@ const Home = ({
 
   useEffect(() => {
     if (session) {
-      setIsBroker(session.user?.isBroker);
+      setIsBroker(session.user?.role?.name === "broker" ? true : false);
     }
   }, [session]);
 

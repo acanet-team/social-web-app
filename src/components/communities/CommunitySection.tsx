@@ -56,7 +56,7 @@ export default function CommunitySection(props: {
   const [switchTab, setSwitchTab] = useState<boolean>(false);
 
   useEffect(() => {
-    if (session && session.user?.isBroker) {
+    if (session && session.user?.role?.name === "broker") {
       setBrokerId(session.user.id);
     }
   }, [session]);
