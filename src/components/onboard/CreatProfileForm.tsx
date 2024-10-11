@@ -8,13 +8,9 @@ import styles from "@/styles/modules/createProfile.module.scss";
 import {
   Checkbox,
   FormControl,
-  FormControlLabel,
   FormGroup,
   FormHelperText,
-  InputLabel,
-  ListItemText,
   MenuItem,
-  OutlinedInput,
   Select,
   type SelectChangeEvent,
 } from "@mui/material";
@@ -46,6 +42,7 @@ export default function CreateProfileForm(props: {
   const [listGroupPlatform, setlistGroupPlatform] = React.useState<string[]>(
     [],
   );
+  const [createProfileInfo, setCreateProfileInfo] = useState<any>({});
 
   useEffect(() => {
     if (session) {
@@ -232,15 +229,10 @@ export default function CreateProfileForm(props: {
 
       try {
         showLoading();
-
-        // console.log("Profile", profileValues);
-        const res = await whiteListBrokerAdditionalData(profileValues);
-        if (res) {
-          localStorage.setItem("onboarding_step", "create_profile");
-          props.onNext();
-          const successMessage = "Your profile has been updated.";
-          throwToast(successMessage, "success");
-        }
+        await createProfileRequest(createProfileInfo);
+        await whiteListBrokerAdditionalData(profileValues);
+        localStorage.setItem("onboarding_step", "create_profile");
+        props.onNext();
       } catch (err) {
         const errorCode = err.code || err.statusCode;
         const errorMsg = err.message || "Something goes wrong.";
@@ -275,8 +267,6 @@ export default function CreateProfileForm(props: {
         .email(t("error_invalid_email")),
     }),
     onSubmit: async (values, { setFieldError }) => {
-      console.log("kkkkkkkkkkk");
-
       const profileValues = {
         nickName: values.nickName?.toLowerCase().trim(),
         location: values.location?.toLowerCase().trim(),
@@ -288,11 +278,9 @@ export default function CreateProfileForm(props: {
       try {
         showLoading();
         if (userInfo.isBroker === false && values.isBroker === true) {
-          const res = await createProfileRequest(profileValues);
-          if (res) {
-            setEmailIsWhiteList(false);
-            props.setCheckEmailIsWhiteList(false);
-          }
+          setCreateProfileInfo(profileValues);
+          setEmailIsWhiteList(false);
+          props.setCheckEmailIsWhiteList(false);
         } else {
           const res = await createProfileRequest(profileValues);
           if (res) {
@@ -418,7 +406,7 @@ export default function CreateProfileForm(props: {
             </div>
           </div>
 
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik.handleSubmit} id={styles["create-profile"]}>
             <label className="fw-600 mb-1" htmlFor="nickName">
               Nickname
             </label>
@@ -560,7 +548,10 @@ export default function CreateProfileForm(props: {
       ) : (
         <>
           <div className="card-body p-lg-5 p-4 w-100 border-0 ">
-            <form onSubmit={additionalForm.handleSubmit}>
+            <form
+              onSubmit={additionalForm.handleSubmit}
+              id={styles["create-profile__not-whitelist"]}
+            >
               <div className="d-flex justify-content-between">
                 <div style={{ width: "49%" }}>
                   <label
@@ -593,7 +584,7 @@ export default function CreateProfileForm(props: {
                     {t("Phone_number")}
                   </label>
                   <input
-                    className={`${additionalForm.touched.phoneNumber && additionalForm.errors.phoneNumber ? " border-danger" : ""} form-control`}
+                    className={`${additionalForm.touched.phoneNumber && additionalForm.errors.phoneNumber ? " border-danger" : ""} ${styles["form-control"]}`}
                     name="phoneNumber"
                     id="phoneNumber"
                     onChange={additionalForm.handleChange}

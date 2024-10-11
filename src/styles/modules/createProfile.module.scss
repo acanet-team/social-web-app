@@ -89,6 +89,10 @@
   #profile-radio input[type="radio"]:checked + label {
     box-shadow: 0 0 1px 2px var(--theme-color-shade);
   }
+
+  #create-profile input, #create-profile textarea, #create-profile__not-whitelist input, #create-profile__not-whitelist textarea {
+    background-color: var(--theme-dark-color-bg);
+    }
 }
 
 // MEDIA QUERIES
