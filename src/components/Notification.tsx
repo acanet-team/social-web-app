@@ -246,7 +246,7 @@ const Notifications: React.FC<NotificationProps> = ({
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
+              className={`w40 rounded-xl object-cover ${styles["img-noti"]}`}
               onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
@@ -272,6 +272,11 @@ const Notifications: React.FC<NotificationProps> = ({
                   </span>
                 </span>
               </h5>
+              <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p>
               {/* <p
                   className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
                 >
@@ -579,13 +584,13 @@ const Notifications: React.FC<NotificationProps> = ({
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  The Signal
+                  {t("The_Signal")}
                 </span>{" "}
                 {additionalData?.signal_pair}{" "}
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  you opened has hit the stop-loss level.
+                  {t("you_opened_has_hit_the_stoploss_level")}
                 </span>
               </h5>
               <p
@@ -620,13 +625,13 @@ const Notifications: React.FC<NotificationProps> = ({
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  The Signal
+                  {t("The_Signal")}
                 </span>{" "}
                 {additionalData?.signal_pair}{" "}
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  you opened has successfully hit the take-profit target.
+                  {t("you_opened_has_successfully_hit_the_takeprofit_target")}
                 </span>
               </h5>
               <p
@@ -661,14 +666,13 @@ const Notifications: React.FC<NotificationProps> = ({
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  The Signal
+                  {t("The_Signal")}
                 </span>{" "}
                 {additionalData?.signal_pair}{" "}
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  you created has hit the stop-loss level. Your accuary rate has
-                  been adjusted accordingly.
+                  {t("create_signal_lose")}
                 </span>
               </h5>
               <p
@@ -703,14 +707,13 @@ const Notifications: React.FC<NotificationProps> = ({
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  Congratulations, the Signal
+                  {t("Congratulations")} {t("The_Signal")}
                 </span>{" "}
                 {additionalData?.signal_pair}{" "}
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  you created has successfully hit the take-profit target on
-                  date-time. Your accuary rate has been enhanced.
+                  {t("create_signal_win")}
                 </span>
               </h5>
               <p
@@ -748,7 +751,19 @@ const Notifications: React.FC<NotificationProps> = ({
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
                 >
-                  has tracked
+                  {additionalData ? (
+                    Number(additionalData?.notificationCount) === 1 ? (
+                      t("had_tracked")
+                    ) : (
+                      <>
+                        {t("and")}{" "}
+                        {`${Number(additionalData?.notificationCount) - 1}`}{" "}
+                        {t("people_had_tracked")}
+                      </>
+                    )
+                  ) : (
+                    ""
+                  )}
                 </span>{" "}
                 {additionalData?.signal_pair}{" "}
                 <span
@@ -873,6 +888,7 @@ const Notifications: React.FC<NotificationProps> = ({
 
   useEffect(() => {
     fetchNotifications(1);
+    setPage(1);
     if (countNotis > 0) {
       setReadAllNotis(false);
     } else {

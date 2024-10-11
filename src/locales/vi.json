@@ -194,7 +194,7 @@
     "error_invalid_email": "Địa chỉ email không hợp lệ",
     "error_note": "Vui lòng điền ghi chú hợp lệ",
     "error_missing_phone": "Vui lòng điền số điện thoại hợp lệ",
-    "Phone_number_is_not_valid": "Số điện thoại phải là ký tự số",
+    "Phone_number_is_not_valid": "Định dạng đúng +84 912 345 678 hoặc 0912 345 678",
     "error_select_at_least_one": "Vui lòng chọn ít nhất một mạng xã hội",
     "error_url_missing": "Vui lòng điền URL hợp lệ",
     "error_url_type": "URL không đúng định dạng",
@@ -205,7 +205,9 @@
     "Your_company": "Công ty",
     "Years_of_Experience": "Năm kinh nghiệm",
     "Note": "Ghi chú",
-    "error_num_members": "Số lượng thành viên phải là số"
+    "error_num_members": "Số lượng thành viên phải là số",
+    "create_profile_title_additional": "Chúng tôi cần thêm thông tin từ bạn.",
+    "create_profile_desc_additional": "Tất cả các nhà môi giới phải hoàn thành quá trình xác minh bởi đội ngũ của Acanet. Vui lòng cung cấp thông tin của bạn bên dưới, chúng tôi sẽ liên hệ với bạn trong vòng 24 giờ tới."
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",
@@ -464,7 +466,16 @@
     "confirm": "Đồng ý",
     "delete": "Huỷ",
     "verify_broker_accept": "Chúc mừng! Bạn đã hoàn thành quy trình xác minh và hiện là một nhà môi giới được chứng nhận trên Acanet.",
-    "verify_broker_reject": "Rất tiếc, bạn không vượt qua quy trình xác minh để trở thành nhà môi giới. Tuy nhiên, bạn vẫn có thể tận hưởng tất cả các tính năng của Acanet với tư cách là một nhà đầu tư."
+    "verify_broker_reject": "Rất tiếc, bạn không vượt qua quy trình xác minh để trở thành nhà môi giới. Tuy nhiên, bạn vẫn có thể tận hưởng tất cả các tính năng của Acanet với tư cách là một nhà đầu tư.",
+    "had_tracked": "đã theo dõi",
+    "people_had_tracked": "người đã theo dõi",
+    "you_opened_has_hit_the_stoploss_level": "bạn mở đã chạm mốc cắt lỗ.",
+    "The_Signal": "Signal",
+    "you_opened_has_successfully_hit_the_takeprofit_target": "bạn mở đã chạm mốc chốt lãi.",
+    "create_signal_lose": "bạn tạo đã chạm mốc cắt lỗ. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
+    "create_signal_win": "bạn tạo đã chạm mốc chốt lãi. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
+    "Congratulations": "Chúc mừng",
+    "new_noti": "Thông báo mới"
   },
   "Donate": {
     "confirm": "Xác nhận",
