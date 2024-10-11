@@ -18,7 +18,8 @@ export type NotificationType =
   | "created_signal_win"
   | "signal_tracked"
   | "verify_broker_accept"
-  | "verify_broker_reject";
+  | "verify_broker_reject"
+  | "verify_broker_process";
 export type Notification = {
   id: string;
   type: NotificationType;

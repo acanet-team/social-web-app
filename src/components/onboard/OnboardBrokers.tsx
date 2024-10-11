@@ -45,6 +45,7 @@ export default function OnboardBrokers(props: { onNextHandler: () => void }) {
   }, [page, searchTerm, interestTopicIds]);
 
   const onFinish = async () => {
+    console.log("ahhaj");
     await update();
     localStorage.setItem("onboarding_step", "onboarding_complete");
     router.push("/");

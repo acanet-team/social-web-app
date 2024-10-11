@@ -815,6 +815,37 @@ const NotificationToast = () => {
             </div>
           </>
         );
+      case "verify_broker_process":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {t("verify_broker_process")}
+              </h5>
+              {/* <p
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? getTimeDifference(notiAt) : ""}
+                </p> */}
+              {/* <p
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? TimeSinceDate(notiAt) : ""}
+                </p> */}
+            </div>
+          </>
+        );
       default:
         return null;
     }
@@ -833,7 +864,8 @@ const NotificationToast = () => {
       notificationType === "like_post" ||
       notificationType === "comment_post" ||
       notificationType === "verify_broker_accept" ||
-      notificationType === "verify_broker_reject"
+      notificationType === "verify_broker_reject" ||
+      notificationType === "verify_broker_process"
     ) {
     } else if (notificationType === "community_join_accept") {
       router.push(`/communities/detail/${idDetail}`);
@@ -989,7 +1021,8 @@ const NotificationToast = () => {
                         );
                       } else if (
                         notification?.type === "verify_broker_accept" ||
-                        notification?.type === "verify_broker_reject"
+                        notification?.type === "verify_broker_reject" ||
+                        notification?.type === "verify_broker_process"
                       ) {
                         readNotis(
                           notification?.id,

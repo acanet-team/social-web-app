@@ -189,6 +189,7 @@
     "error_location": "Vui lòng chọn địa điểm.",
     "error_user_type": "VVui lòng chọn vai trò người dùng",
     "error_missing_nickname": "Please fill out a valid nickname",
+    "error_invalid_characters": "Biệt danh chỉ có thể chứa các chữ số (0-9) và dấu gạch dưới (_).",
     "error_invalid_nickname": "Biệt danh phải có từ 8 đến 20 ký tự",
     "error_missing_email": "Vui lòng điền một email hợp lệ",
     "error_invalid_email": "Địa chỉ email không hợp lệ",
@@ -475,7 +476,8 @@
     "create_signal_lose": "bạn tạo đã chạm mốc cắt lỗ. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
     "create_signal_win": "bạn tạo đã chạm mốc chốt lãi. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
     "Congratulations": "Chúc mừng",
-    "new_noti": "Thông báo mới"
+    "new_noti": "Thông báo mới",
+    "verify_broker_process": "Chúng tôi đã nhận được thông tin và sẽ xác nhận và trả lười trong vòng 24 giờ."
   },
   "Donate": {
     "confirm": "Xác nhận",
