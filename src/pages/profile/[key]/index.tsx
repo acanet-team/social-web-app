@@ -56,6 +56,8 @@ export default function Profile({
   const isQuery = useMediaQuery({ query: "(max-width: 768px" });
   const params = useSearchParams();
   const currentTab = params?.get("tab") || "about";
+  const [widthTab, setWidthTab] = useState("");
+  const [numSlideShow, setNumSlideShow] = useState(0);
 
   useEffect(() => {
     if (session) {
@@ -81,6 +83,30 @@ export default function Profile({
   //     fetchProfileData();
   //   }
   // }, [curTab]);
+
+  useEffect(() => {
+    if (dataUser.role.name === "broker") {
+      if (role !== true) {
+        setWidthTab("20%");
+        setNumSlideShow(5);
+      } else {
+        setWidthTab("16.66%");
+        setNumSlideShow(6);
+      }
+    } else if (
+      dataUser.role.name === "investor" ||
+      dataUser.role.name === "guest"
+    ) {
+      if (role !== true) {
+        setWidthTab("33.33%");
+        setNumSlideShow(3);
+      } else {
+        setWidthTab("25%");
+        setNumSlideShow(4);
+      }
+    }
+    console.log("test", widthTab, numSlideShow);
+  }, [dataUser, role]);
 
   useEffect(() => {
     if (!initialFetch) {
@@ -156,7 +182,7 @@ export default function Profile({
     dots: false,
     infinite: false,
     speed: 300,
-    slidesToShow: isQuery ? 2 : dataUser.role.name === "broker" ? 6 : 4,
+    slidesToShow: isQuery ? 2 : numSlideShow,
     slidesToScroll: 1,
     centerMode: false,
     variableWidth: true,
@@ -205,7 +231,7 @@ export default function Profile({
             <div
               className={`${curTab === TabPnum.Posts ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                width: widthTab,
               }}
             >
               <p
@@ -221,7 +247,7 @@ export default function Profile({
               <div
                 className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: "20%",
                 }}
               >
                 <p
@@ -235,7 +261,7 @@ export default function Profile({
             <div
               className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                width: widthTab,
               }}
             >
               <p
@@ -249,7 +275,7 @@ export default function Profile({
               <div
                 className={`${curTab === TabPnum.Rating ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: widthTab,
                 }}
               >
                 <p
@@ -264,7 +290,7 @@ export default function Profile({
               <div
                 className={` ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: widthTab,
                 }}
               >
                 <p
@@ -275,11 +301,11 @@ export default function Profile({
                 </p>
               </div>
             )}
-            {id === dataUser.id && (
+            {role === true && (
               <div
                 className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dtUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: widthTab,
                 }}
               >
                 <p

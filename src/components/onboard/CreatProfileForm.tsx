@@ -29,6 +29,7 @@ import { useMediaQuery } from "react-responsive";
 export default function CreateProfileForm(props: {
   regions: any[];
   onNext: () => void;
+  setCheckEmailIsWhiteList: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: session, update: updateSession } = useSession();
   const { showLoading, hideLoading } = useLoading();
@@ -228,9 +229,6 @@ export default function CreateProfileForm(props: {
 
       try {
         showLoading();
-        const successMessage = "Your profile has been updated.";
-        throwToast(successMessage, "success");
-        // console.log("Profile", profileValues);
         await createProfileRequest(createProfileInfo);
         await whiteListBrokerAdditionalData(profileValues);
         localStorage.setItem("onboarding_step", "create_profile");
@@ -280,12 +278,9 @@ export default function CreateProfileForm(props: {
       try {
         showLoading();
         if (userInfo.isBroker === false && values.isBroker === true) {
-          // const res = await createProfileRequest(profileValues);
-          // if (res) {
-          //   setEmailIsWhiteList(false);
-          // }
           setCreateProfileInfo(profileValues);
           setEmailIsWhiteList(false);
+          props.setCheckEmailIsWhiteList(false);
         } else {
           const res = await createProfileRequest(profileValues);
           if (res) {
