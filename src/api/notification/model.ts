@@ -11,7 +11,15 @@ export type NotificationType =
   | "connection_accept"
   | "community_creation_failed"
   | "connection_request"
-  | "connection_request";
+  | "connection_request"
+  | "tracking_signal_lose"
+  | "tracking_signal_win"
+  | "created_signal_lose"
+  | "created_signal_win"
+  | "signal_tracked"
+  | "verify_broker_accept"
+  | "verify_broker_reject"
+  | "verify_broker_process";
 export type Notification = {
   id: string;
   type: NotificationType;
@@ -47,6 +55,8 @@ export type Notification = {
     community_id: string | UUID;
     notificationCount: number;
     connection_id: string;
+    signal_id: string;
+    signal_pair: string;
   };
   createdAt: number;
 };

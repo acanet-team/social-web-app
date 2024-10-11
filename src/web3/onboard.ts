@@ -26,13 +26,13 @@ export const initWeb3Onboard = () =>
     wallets: modules,
     // An array of Chains that your app supports
     chains: [
-      {
-        id: 97,
-        token: "TBNB",
-        namespace: "evm",
-        label: "TBNB",
-        rpcUrl: BNB_TESTNET,
-      },
+      // {
+      //   id: 97,
+      //   token: "TBNB",
+      //   namespace: "evm",
+      //   label: "TBNB",
+      //   rpcUrl: BNB_TESTNET,
+      // },
       {
         id: 30732,
         token: "MOVE",
@@ -40,13 +40,13 @@ export const initWeb3Onboard = () =>
         label: "MEVM",
         rpcUrl: MOVE_RPC_URL,
       },
-      {
-        id: "0x1",
-        token: "ETH",
-        namespace: "evm",
-        label: "Ethereum Mainnet",
-        rpcUrl: ETH_MAINNET_RPC_URL,
-      },
+      // {
+      //   id: "0x1",
+      //   token: "ETH",
+      //   namespace: "evm",
+      //   label: "Ethereum Mainnet",
+      //   rpcUrl: ETH_MAINNET_RPC_URL,
+      // },
     ],
     appMetadata: {
       name: "Acanet", // change to your dApp name

@@ -1,37 +1,41 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/brokerProfile.module.scss";
-import { faSuitcase, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { followABroker } from "@/api/onboard";
 import { useWeb3 } from "@/context/wallet.context";
-import Ratings from "../Ratings";
+import Tooltip from "@mui/material/Tooltip";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function BrokerProfile(props: {
   brokerId: number;
   firstName: string;
   lastName: string;
-  topicName: string;
   followed: boolean;
   followersCount: number;
   coursesEnrolledCount: number;
-  rating: number;
+  email: string;
+  signalAccuracy: string;
+  summary: string;
   rank: string;
   photo: any;
+  nickName: string;
 }) {
   const {
     brokerId,
     firstName,
     lastName,
-    topicName,
     followed,
     followersCount = 0,
-    coursesEnrolledCount = 0,
-    rating = 0,
     rank,
+    email,
+    signalAccuracy,
+    summary,
     photo,
-  } = { ...props };
+    nickName,
+  } = props;
+  const tBroker = useTranslations("BrokerList");
+  const tBase = useTranslations("Base");
   const { rateContract } = useWeb3();
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
   const [avarageRating, setAverageRating] = useState<number>(0);
@@ -43,9 +47,9 @@ export default function BrokerProfile(props: {
   const fetchAverageRating = async (brokerId: number) => {
     try {
       const res = await rateContract.getAverageRating(brokerId.toString());
-      console.log("resss", res);
       const avgRating =
         res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
+      console.log("rrrr", avgRating);
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -71,70 +75,91 @@ export default function BrokerProfile(props: {
   };
 
   return (
-    <div className="col-xl-2 col-lg-4 col-sm-6 pe-2 ps-2">
-      <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
-        <div className={`${styles["broker-profile"]} card-body d-block w-100`}>
-          <figure className="overflow-hidden avatar ms-auto me-auto mb-0 position-relative z-index-1">
+    <div className="col-xl-2 col-lg-4 col-sm-6 w-100 h-100">
+      <div
+        className={`card d-block border-0 shadow-xss rounded-3 overflow-hidden h-100`}
+      >
+        <div className={`${styles["broker-profile"]} card-body w-100 h-100`}>
+          <figure
+            className="avatar ms-auto me-auto mb-0 position-relative z-index-1"
+            style={{ height: "100px" }}
+          >
             <Image
               src={
                 photo?.id
                   ? photo?.path
                   : "https://via.placeholder.com/300x300.png"
               }
-              width={211}
-              height={211}
+              width={100}
+              height={100}
               alt="avatar"
-              className={`${styles["broker-profile-img"]} shadow-sm rounded-3`}
+              className={`${styles["broker-profile-img"]} shadow-xss rounded-circle`}
             />
           </figure>
           <div className="ms-1">
-            <h4 className="fw-700 mt-3 mb-0">{firstName + " " + lastName}</h4>
-            <div className={`${styles["broker-skill"]} my-1`}>
-              <FontAwesomeIcon
-                icon={faSuitcase}
-                className={`${styles["broker-icon"]} fa-thin fa-suitcase me-2`}
-              ></FontAwesomeIcon>
-              {topicName}
+            <Link href={`/profile/${nickName}`}>
+              <h4 className="fw-700 fs-2 mt-3 mb-0 text-center">
+                {firstName + " " + lastName}
+              </h4>
+            </Link>
+            <div className={`${styles["broker-email"]} text-align`}>
+              {email}
             </div>
           </div>
           {/* Broker's data */}
-          <div className={styles["profile-data"]}>
-            <div className="row d-flex w-100 m-0">
-              <div className="col p-0">
-                <div>Followers</div>
-                <div className={styles["broker-stats"]}>
-                  {followersCount >= 1000
-                    ? (followersCount / 1000).toFixed(1)
-                    : followersCount}{" "}
-                  {followersCount >= 1000 ? "k" : ""}
-                </div>
+          <div className="d-flex mt-3 gap-3 w-100 justify-content-center">
+            <div className={`${styles["broker-stats"]} d-flex flex-column`}>
+              <div className="fw-bold fs-2">
+                {followersCount >= 1000
+                  ? (followersCount / 1000).toFixed(1)
+                  : followersCount}{" "}
+                {followersCount >= 1000 ? "k" : ""}
               </div>
-              <div className="col p-0">
-                <div>Enrolled</div>
-                <div className={styles["broker-stats"]}>
-                  {coursesEnrolledCount >= 1000
-                    ? (coursesEnrolledCount / 1000).toFixed(1)
-                    : coursesEnrolledCount}{" "}
-                  {coursesEnrolledCount >= 1000 ? "k" : ""}
-                </div>
+              <div className={`${styles["broker-stats__text"]} h-100`}>
+                {followersCount > 1 ? tBase("followers") : tBase("follower")}
               </div>
             </div>
-
-            <div className="row d-flex w-100 mt-2 m-0">
-              <div className="col p-0">
-                <div>Rating</div>
-                <Ratings rating={avarageRating} size={14} />
+            <div className={`${styles["broker-stats"]} d-flex flex-column`}>
+              <div className="fw-bold fs-2">
+                {!Number.isNaN(signalAccuracy) && signalAccuracy
+                  ? +signalAccuracy % 1 !== 0
+                    ? (+signalAccuracy).toFixed(2) + "%"
+                    : +signalAccuracy + "%"
+                  : "N/A"}
               </div>
-              <div className="col p-0">
-                <div>Ranking</div>
-                <div>{rank}</div>
+              <div
+                className={`${styles["broker-stats__text"]} h-100 position-relative`}
+              >
+                {tBroker("signal_accuracy")}
+                <Tooltip title={tBroker("signal_accuracy_tooltip")}>
+                  <i
+                    className="bi bi-info-circle position-absolute"
+                    style={{ top: "-1px", right: "-10px", fontSize: "12px" }}
+                  ></i>
+                </Tooltip>
               </div>
             </div>
+            <div className={`${styles["broker-stats"]} d-flex flex-column`}>
+              <div className="fw-bold fs-2">{avarageRating}</div>
+              <div className={`${styles["broker-stats__text"]} h-100`}>
+                {tBase("ratings")}
+              </div>
+            </div>
+          </div>
+          <div
+            className={`${styles["broker-summary"]} dark-theme-text mt-3 h-100 overflow-hidden`}
+          >
+            {summary === null && (
+              <div className="mt-5">{tBroker("no_AI_summary")}</div>
+            )}
+            {summary?.length > 370
+              ? summary.substring(0, 370) + "..."
+              : summary}
           </div>
 
           <button
             type="button"
-            className={`${styles["follow-btn"]} ${isFollowing ? styles["follow-broker"] : ""} main-btn bg-current text-center text-white fw-500 w-100 border-0 d-inline-block`}
+            className={`${styles["follow-btn"]} ${isFollowing ? styles["follow-broker"] : ""} main-btn bg-current text-center text-white fw-500 w125 border-0 d-inline-block rounded-xxl`}
             onClick={(e) => onFollowBrokerHandler(e, brokerId)}
           >
             {isFollowing ? "Following" : "+ Follow"}

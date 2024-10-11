@@ -4,6 +4,7 @@ import type {
   getSignalCardParams,
   getSignalCardResponse,
   ISignalDaily,
+  symbolEntryPriceResponse,
 } from "./model";
 import type {
   BaseArrayResponse,
@@ -38,5 +39,18 @@ export const claimLuckyToken = (id: string) => {
   return httpClient.post<{ id: string }, BaseResponse<any>>(
     `/v1/signal/claim/${id}`,
     {},
+  );
+};
+
+export const trackSignal = (id: string, type: "track" | "untrack") => {
+  return httpClient.post<{ id: string }, BaseResponse<any>>(
+    `/v1/signal/tracking`,
+    { signalId: id, type: type },
+  );
+};
+
+export const getEntryPrice = (symbol: string) => {
+  return httpClient.get<symbolEntryPriceResponse>(
+    `/v1/signal/symbol?symbol=${symbol}&type=spot`,
   );
 };

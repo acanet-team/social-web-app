@@ -501,12 +501,12 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <span>{t("community")}</span>
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link href="/defaultstorie" className="nav-content-bttn">
                       <i className="feather-shopping-bag btn-round-md bg-gold-gradiant me-3"></i>
                       <span>{t("courses")}</span>
                     </Link>
-                  </li>
+                  </li> */}
                   {/* <li>
                     <Link
                       href="/defaultgroup"
@@ -525,7 +525,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                 </div>
                 <ul className="mb-1">
                   <li className="logo d-none d-xl-block d-lg-block"></li>
-                  <li>
+                  {/* <li>
                     <Link
                       href="/defaultsettings"
                       className="nav-content-bttn h-auto"
@@ -533,8 +533,8 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <i className="font-xl text-current feather-settings me-3"></i>
                       <span>{t("settings")}</span>
                     </Link>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <Link
                       href="/defaultmessage"
                       className="nav-content-bttn h-auto"
@@ -543,11 +543,11 @@ export default function Header(props: { isOnboarding: boolean }) {
                       <span>{t("chat")}</span>
                       <span className="circle-count bg-warning mt-0">23</span>
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link
                       href="#"
-                      className="nav-content-bttn h-auto"
+                      className="nav-content-bttn h-auto ms-1"
                       onClick={onLogOutHandler}
                     >
                       <i className="font-xl text-current bi bi-box-arrow-right me-3"></i>

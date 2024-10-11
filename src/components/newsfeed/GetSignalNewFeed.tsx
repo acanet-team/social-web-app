@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import type { ISignalDaily } from "@/api/signal/model";
 import { getSignalsNewFeed } from "@/api/signal";
 import { useTranslations } from "next-intl";
+import styles from "@/styles/modules/home.module.scss";
 
 const GetSignalNewFeed = () => {
   const t = useTranslations("Signal");
@@ -46,8 +47,8 @@ const GetSignalNewFeed = () => {
     setIsLoading(true);
     try {
       const response = await getSignalsNewFeed();
-      console.log("signalNewFeed", response.data);
       setSignalNewFeed(response.data);
+      console.log("aaaaa", response.data);
     } catch (err) {
       console.log(err);
     } finally {
@@ -81,9 +82,19 @@ const GetSignalNewFeed = () => {
                     className="rounded-circle"
                   />
                 </div>
-                <span className="m-0 fw-700 font-xsssss">
+                <span className="m-0 fw-700 font-xssss">
                   {signal?.owner?.nickName}
                 </span>
+                <div
+                  className={`${signal?.signalAccuracy === null ? styles["signal-none"] : Number(signal?.signalAccuracy) >= 75 ? styles["signal-green"] : Number(signal?.signalAccuracy) >= 50 ? styles["signal-yellow"] : styles["signal-red"]} fw-700 text-align font-xssss`}
+                >
+                  {!Number.isNaN(signal?.signalAccuracy) &&
+                  signal?.signalAccuracy
+                    ? +signal?.signalAccuracy % 1 !== 0
+                      ? (+signal?.signalAccuracy).toFixed(2) + "% "
+                      : +signal?.signalAccuracy + "%" + t("accuracy")
+                    : ""}
+                </div>
               </div>
               <Image
                 src={

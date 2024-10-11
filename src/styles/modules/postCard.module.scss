@@ -47,11 +47,77 @@
 
 .post :global(.bi-heart-fill::before) {
   color: #fa5252 !important;
+  transition: all 0.15s ease-in;
+}
+
+// NFT display
+.post-nft__price {
+  font-size: 14px;
+  width: max-content;
+  font-weight: 600;
+  text-align: center;
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.post-nft__price:hover {
+  box-shadow: none;
+}
+
+.nft-card {
+  width: 320px;
+  height: auto;
+  border-radius: 10px;
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+  margin: 0 auto;
+}
+
+.nft-card__container {
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+}
+
+.nft-card_body {
+  height: auto;
+}
+
+.nft-card button {
+ padding: 7px 0;
+ font-weight: 600;
+}
+
+.nft-card button:hover {
+  font-weight: 800;
+ }
+
+.ntf-image {
+  width: 288px;
+  height: 288px;
+  object-fit: cover;
+  border-radius: 10px;
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+  // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.nft-card_body button {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 :global(.theme-dark) {
   .post .expand-btn {
     color: var(--theme-color-shade);
+  }
+
+  .nft-card_body {
+    background-color: #212529 !important;
+    border-radius: 10px;
+  }
+
+  .nft-card_body button {
+    background-color: var(--theme-color-shade) !important;
+    color: var(--light) !important;
   }
 }
 

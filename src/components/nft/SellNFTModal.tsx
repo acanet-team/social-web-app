@@ -62,11 +62,19 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
         const sellNft = await nftMarketContract.listNFTForSale(
           nft.token_id,
           ethers.utils.parseEther(values.price).toString(),
+          {
+            from: account?.address,
+            gasLimit: 2000000,
+          },
         );
         sellNft.wait();
         const approve = await nftContract.approve(
           nftMarketContract.address,
           nft.token_id,
+          {
+            from: account?.address,
+            gasLimit: 2000000,
+          },
         );
         approve.wait();
         await onSellNFT({

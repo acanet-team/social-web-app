@@ -58,6 +58,27 @@
   z-index: 103;
 }
 
+.card-accuracy {
+  position: absolute;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: linear-gradient(
+    96.39deg,
+    #1c1c1c -9.54%,
+    #ffffff 49.6%,
+    #303030 105.26%
+  );
+  line-height: 40px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
 .view-card__cta {
   position: absolute;
   font-size: 17px;
@@ -117,7 +138,7 @@
 }
 
 .signal-expiry {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 100;
   margin-top: -6px;
 }
@@ -131,7 +152,7 @@
 
 .signal-price__title {
   display: inline-block;
-  width: 50px;
+  width: 60px;
   font-weight: 200;
   position: relative;
 }
@@ -139,7 +160,7 @@
 .signal-author {
   position: absolute;
   width: 100%;
-  bottom: 20px;
+  bottom: 15px;
   left: 0;
   padding: 25px 25px 0 25px;
 }
@@ -149,15 +170,66 @@
   justify-content: space-between;
 }
 
+.signal-stats {
+  min-width: 60px;
+  text-align: center;
+}
+
+.signal-stats__numbers {
+  margin-top: -5px;
+  font-size: 14px;
+  text-align: center;
+}
+
 .follow-btn {
-  margin-left: -7px;
+  margin-left: -5px;
+  padding: 2px 0;
+  font-size: 12px;
+  height: 25px;
+  border-radius: 10px !important;
+  transition: all 0.3s ease; 
 }
 
 .follow-broker {
   background-color: var(--theme-color-text-secondary) !important;
   color: var(--light) !important;
   font-weight: 800;
-  margin-left: -13px !important;
+  height: 25px;
+  font-size: 12px;
+  margin-left: -10px !important;
+  padding: 2px 0;
+  border-radius: 10px !important;
+  transition: all 0.3s ease; 
+}
+
+.track-btn {
+  position: absolute;
+  top: -3px;
+  left: -45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  background-color: #E52E2E;
+  box-shadow: rgba(160, 160, 160, 0.24) 0px 0px 4px 4px;
+
+}
+
+.track-btn:hover {
+  box-shadow: rgba(160, 160, 160, 0.24) 0px 3px 8px;
+}
+
+.signal-track {
+  background-color: #E52E2E;
+  transition: all 0.3s ease; 
+}
+
+.signal-tracking {
+  background-color: #111;
+  transition: all 0.3s ease; 
 }
 
 // Graph
@@ -196,7 +268,7 @@
 .signal-graph__vertical_line {
   position: absolute;
   top: 5px;
-  left: 55px;
+  left: 60px;
   width: 0.5px;
   height: 92%;
   background-color: var(--border-color-lighter);
@@ -208,7 +280,7 @@
   height: 0.5px;
   position: absolute;
   top: 12px;
-  left: 55.5px;
+  left: 60.6px;
   background-color: var(--border-color-lighter);
 }
 
@@ -223,7 +295,8 @@
   background: linear-gradient(183.26deg, #923b4d 2.6%, #6a82fb 97.31%);
 }
 
-.claim-btn, .claim-btn__disable {
+.claim-btn,
+.claim-btn__disable {
   background: #f2bc57;
   color: black;
   font-weight: 500;

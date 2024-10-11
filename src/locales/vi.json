@@ -7,8 +7,9 @@
     "likes": "Thích",
     "comment": "Bình luận",
     "comments": "Bình luận",
-    "follower": "theo dõi",
-    "followers": "theo dõi",
+    "follower_title": "Theo dõi",
+    "follower": "Theo dõi",
+    "followers": "Theo dõi",
     "joined": "",
     "pending": "",
     "join": "",
@@ -18,7 +19,8 @@
     "view": "Lượt xem",
     "views": "Lượt xem",
     "seconds": "giây",
-    "second": "giây"
+    "second": "giây",
+    "ratings": "Đánh giá"
   },
   "Action": {
     "delete": "Xoá",
@@ -90,8 +92,10 @@
     "description": "Mô tả"
   },
   "BrokerList": {
-    "broker_description": "Mọi ID yêu cầu đều được ghi lại tỉ mỉ trong nhật ký này. \nĐể biết thêm chi tiết, xin vui lòng xem xét chúng một cách cẩn thận",
-    "broker_title": "Danh sách môi giới"
+    "broker_title": "Danh sách môi giới",
+    "signal_accuracy": "Độ chính xác",
+    "signal_accuracy_tooltip": "Độ chính xác được tính toán dựa trên các tín hiệu đã chạm điểm chốt lời của nhà môi giới này trong quá khứ",
+    "no_AI_summary": "Bản tóm tắt AI đang cập nhật."
   },
   "Interest": {
     "interest_title": "Bạn quan tâm đến điều gì?",
@@ -185,9 +189,26 @@
     "error_location": "Vui lòng chọn địa điểm.",
     "error_user_type": "VVui lòng chọn vai trò người dùng",
     "error_missing_nickname": "Please fill out a valid nickname",
+    "error_invalid_characters": "Biệt danh chỉ có thể chứa các chữ số (0-9) và dấu gạch dưới (_).",
     "error_invalid_nickname": "Biệt danh phải có từ 8 đến 20 ký tự",
     "error_missing_email": "Vui lòng điền một email hợp lệ",
-    "error_invalid_email": "Địa chỉ email không hợp lệ"
+    "error_invalid_email": "Địa chỉ email không hợp lệ",
+    "error_note": "Vui lòng điền ghi chú hợp lệ",
+    "error_missing_phone": "Vui lòng điền số điện thoại hợp lệ",
+    "Phone_number_is_not_valid": "Định dạng đúng +84 912 345 678 hoặc 0912 345 678",
+    "error_select_at_least_one": "Vui lòng chọn ít nhất một mạng xã hội",
+    "error_url_missing": "Vui lòng điền URL hợp lệ",
+    "error_url_type": "URL không đúng định dạng",
+    "Contact_Email": "Email liên hệ",
+    "Phone_number": "Số điện thoại",
+    "Select_your_group_platform": "Chọn nền tảng nhóm của bạn",
+    "Number_of_members": "Số thành viên",
+    "Your_company": "Công ty",
+    "Years_of_Experience": "Năm kinh nghiệm",
+    "Note": "Ghi chú",
+    "error_num_members": "Số lượng thành viên phải là số",
+    "create_profile_title_additional": "Chúng tôi cần thêm thông tin từ bạn.",
+    "create_profile_desc_additional": "Tất cả các nhà môi giới phải hoàn thành quá trình xác minh bởi đội ngũ của Acanet. Vui lòng cung cấp thông tin của bạn bên dưới, chúng tôi sẽ liên hệ với bạn trong vòng 24 giờ tới."
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",
@@ -315,7 +336,7 @@
     "error_missing_description": "Vui lòng thêm mô tả cộng đồng",
     "error_invalid_description": "Mô tả phải có từ 4 đến 350 ký tự",
     "error_missing_fee": "Vui lòng điền phí tham gia.",
-    "error_joining_fee": "Phí tham gia phải lớn hơn 0.0000000001",
+    "error_joining_fee": "Phí tham gia phải lớn hơn 0.00001",
     "joined": "Đã tham gia",
     "pending": "Chờ duyệt",
     "join": "Tham gia",
@@ -384,7 +405,7 @@
     "error_missing_rating": "Vui lòng điền điểm đánh giá",
     "review_success": "Đánh giá thành công",
     "reivew_fail": "Không thể gửi đánh giá",
-    "no_rating_found": "Không có đánh giá. Hãy là người đầu tiên đánh giá nhà môi giới này!",
+    "no_rating_found": "Không có đánh giá",
     "connect_wallet_error": "Hãy kết nối ví của bạn với Acanet"
   },
   "Wallet": {
@@ -415,7 +436,16 @@
     "luck_draw": "Lá bài may mắn",
     "claim_now": "Nhận ngay",
     "claimed": "Đã nhận",
-    "see_more": "Xem thêm"
+    "see_more": "Xem thêm",
+    "target": "Chốt lời",
+    "entry": "Giá vào",
+    "stop": "Cắt lỗ",
+    "expiring": "Hết hạn vào",
+    "accuracy": "Chính xác",
+    "track_signal": "Theo dõi",
+    "tracking_signal": "Theo dõi",
+    "track_sucess": "Thêm signal vào danh sách theo dõi",
+    "untrack_sucess": "Bỏ signal khỏi danh sách theo dõi"
   },
   "Notification": {
     "has_requested_to_join_your": "đã yêu cầu tham gia ",
@@ -435,7 +465,19 @@
     "sent_you_the_connection": "đã gửi cho bạn kết nối",
     "you": "Bạn",
     "confirm": "Đồng ý",
-    "delete": "Huỷ"
+    "delete": "Huỷ",
+    "verify_broker_accept": "Chúc mừng! Bạn đã hoàn thành quy trình xác minh và hiện là một nhà môi giới được chứng nhận trên Acanet.",
+    "verify_broker_reject": "Rất tiếc, bạn không vượt qua quy trình xác minh để trở thành nhà môi giới. Tuy nhiên, bạn vẫn có thể tận hưởng tất cả các tính năng của Acanet với tư cách là một nhà đầu tư.",
+    "had_tracked": "đã theo dõi",
+    "people_had_tracked": "người đã theo dõi",
+    "you_opened_has_hit_the_stoploss_level": "bạn mở đã chạm mốc cắt lỗ.",
+    "The_Signal": "Signal",
+    "you_opened_has_successfully_hit_the_takeprofit_target": "bạn mở đã chạm mốc chốt lãi.",
+    "create_signal_lose": "bạn tạo đã chạm mốc cắt lỗ. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
+    "create_signal_win": "bạn tạo đã chạm mốc chốt lãi. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
+    "Congratulations": "Chúc mừng",
+    "new_noti": "Thông báo mới",
+    "verify_broker_process": "Chúng tôi đã nhận được thông tin và sẽ xác nhận và trả lười trong vòng 24 giờ."
   },
   "Donate": {
     "confirm": "Xác nhận",

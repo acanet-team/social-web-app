@@ -1,3 +1,4 @@
+import { removePropertiesEmpty } from "@/utils/Helpers";
 import httpClient from "../index";
 import {
   GetRequestParams,
@@ -7,9 +8,10 @@ import {
   type Regions,
   type subcribeTopicsParam,
   type topicsResponse,
+  type BaseResponse,
 } from "../model";
 import type { IBrokers } from "../newsfeed/model";
-import type { IUser } from "./model";
+import type { InfoAdditionalBroker, IUser } from "./model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 export const createProfileRequest = (
@@ -23,15 +25,27 @@ export const createProfileRequest = (
   );
 };
 
+export const whiteListBrokerAdditionalData = (value: InfoAdditionalBroker) => {
+  return httpClient.post<
+    BaseResponse<InfoAdditionalBroker>,
+    InfoAdditionalBroker
+  >("/v1/user-profile/broker-onboard", value);
+};
+
 export const getRegionRequest = (
   headers: Headers = undefined as unknown as Headers,
 ) => {
   return httpClient.get<Regions>("/v1/master-data/regions", { headers });
 };
 
-export const createGetBrokersRequest = (page: number, take: number) => {
+export const createGetBrokersRequest = (
+  page: number,
+  take: number,
+  search: string,
+  interestTopicIds: string,
+) => {
   return httpClient.get<AllBrokersResponse<IBrokers>>(
-    `/v1/users?type=broker&page=${page}&take=${take}&sort={"orderBy":"followers_count","order":"DESC"}`,
+    `/v1/users?type=broker&page=${page}&take=${take}&sort={"orderBy":"followers_count","order":"DESC"}&search=${search}&interestTopicIds=${interestTopicIds}`,
   );
 };
 

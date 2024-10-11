@@ -79,7 +79,10 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
     setOpenModal(true);
   };
   const onCancelSellNFTHandler = async (tokenId: number) => {
-    const cancelSellNFT = await nftMarketContract.cancelListing(tokenId);
+    const cancelSellNFT = await nftMarketContract.cancelListing(tokenId, {
+      from: account?.address,
+      gasLimit: 2000000,
+    });
     cancelSellNFT.wait();
     onCancelSellNFT(connectedChain?.id === "0x780c" ? "MOVE" : "BSC", tokenId);
   };

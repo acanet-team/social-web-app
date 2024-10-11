@@ -7,6 +7,7 @@
     "likes": "Likes",
     "comment": "Comment",
     "comments": "Comments",
+    "follower_title": "Followers",
     "follower": "follower",
     "followers": "followers",
     "hour": "Hour",
@@ -15,7 +16,8 @@
     "view": "view",
     "views": "views",
     "seconds": "seconds",
-    "second": "second"
+    "second": "second",
+    "ratings": "Ratings"
   },
   "Action": {
     "delete": "Delete",
@@ -26,7 +28,8 @@
   },
   "Onboard": {
     "continue": "Continue",
-    "finish": "Finish"
+    "finish": "Finish",
+    "previous": "Previous"
   },
   "Time": {
     "now": "now",
@@ -114,7 +117,9 @@
   },
   "BrokerList": {
     "broker_title": "Broker List",
-    "broker_description": "Every request ID is meticulously recorded in this log. For more details, please review them carefully"
+    "signal_accuracy": "Signal Accuracy",
+    "signal_accuracy_tooltip": "The accuracy percentage is calculated based on the signals that reached the take-profit point of this broker in the past",
+    "no_AI_summary": "AI summary comming soon."
   },
   "Interest": {
     "interest_title": "What are you interested in?",
@@ -182,9 +187,26 @@
     "error_location": "Please choose a location",
     "error_user_type": "Please choose the user type",
     "error_missing_nickname": "Please fill out a valid nickname",
+    "error_invalid_characters": "Nickname can only contain digits (0-9) and underscores (_).",
     "error_invalid_nickname": "Nick name must be between 8 and 20 characters",
     "error_missing_email": "Please fill out a valid email",
-    "error_invalid_email": "Invalid email address"
+    "error_invalid_email": "Invalid email address",
+    "error_note": "Please fill out a valid note",
+    "error_missing_phone": "Please fill out a valid phone",
+    "Phone_number_is_not_valid": "The correct format is +84 912 345 678 of 0912 345 678",
+    "error_select_at_least_one": "Please select at least one social",
+    "error_url_missing": "Please fill out a valid url",
+    "error_url_type": "URL is not in the correct format",
+    "Contact_Email": "Contact Email",
+    "Phone_number": "Phone number",
+    "Select_your_group_platform": "Select your group platform",
+    "Number_of_members": "Number of members",
+    "Your_company": "Your company",
+    "Years_of_Experience": "Years of Experience",
+    "Note": "Note",
+    "error_num_members": "Number of members must be number characters",
+    "create_profile_title_additional": "We need additional information about you.",
+    "create_profile_desc_additional": "All brokers must complete a thorough verification process by our team. Please provide your details below, and we will reach out within 24 hours."
   },
   "NavBar": {
     "newsfeed": "Newsfeed",
@@ -220,7 +242,7 @@
     "error_missing_description": "Please fill out a community description",
     "error_invalid_description": "Description must be between 4 and 350 characters",
     "error_missing_fee": "Please fill out a joining fee",
-    "error_joining_fee": "Joining fee must be greater than 0.0000000001",
+    "error_joining_fee": "Joining fee must be greater than 0.00001",
     "joined": "Joined",
     "pending": "Pending",
     "join": "Join",
@@ -383,7 +405,7 @@
     "error_missing_rating": "Please rate the broker",
     "review_success": "Review sent",
     "reivew_fail": "Can't sent review",
-    "no_rating_found": "No rating found. Be the first to rate this broker!",
+    "no_rating_found": "No rating found",
     "connect_wallet_error": "Please connect your wallet to Acanet"
   },
   "Wallet": {
@@ -414,7 +436,16 @@
     "luck_draw": "Lucky Draw",
     "claim_now": "Claim Now",
     "claimed": "Claimed",
-    "see_more": "See More"
+    "see_more": "See More",
+    "target": "Target",
+    "entry": "Entry",
+    "stop": "Stop",
+    "expiring": "expiring on",
+    "accuracy": "Accuracy",
+    "track_signal": "Track",
+    "tracking_signal": "Tracking",
+    "track_sucess": "Added signal to the tracking list",
+    "untrack_sucess": "Remove signal from the tracking list"
   },
   "Notification": {
     "has_requested_to_join_your": "has requested to join your",
@@ -434,7 +465,19 @@
     "sent_you_the_connection": "sent you the connection",
     "you": "You",
     "confirm": "Confirm",
-    "delete": "Delete"
+    "delete": "Delete",
+    "verify_broker_accept": "Congratulations! You have successfully completed the verification process and are now a certified broker on Acanet.",
+    "verify_broker_reject": "Unfortunately, you didn’t pass the verification process to become a broker. However, you can still enjoy all the features of Acanet as an investor.",
+    "had_tracked": "had tracked",
+    "people_had_tracked": "people had tracked",
+    "you_opened_has_hit_the_stoploss_level": "you opened has hit the stop-loss level",
+    "The_Signal": "The Signal",
+    "you_opened_has_successfully_hit_the_takeprofit_target": "you opened has successfully hit the take-profit target",
+    "create_signal_lose": "you created has hit the stop-loss level. Your accuary rate has been adjusted accordingly",
+    "create_signal_win": "you created has successfully hit the take-profit target on date-time. Your accuary rate has been enhanced.",
+    "Congratulations": "Congratulations!",
+    "new_noti": "New Notification!",
+    "verify_broker_process": "We've received your information and will get back to you within 24 hours"
   },
   "Donate": {
     "confirm": "Confirm",
