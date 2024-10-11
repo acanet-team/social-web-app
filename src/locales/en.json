@@ -191,7 +191,7 @@
     "error_invalid_email": "Invalid email address",
     "error_note": "Please fill out a valid note",
     "error_missing_phone": "Please fill out a valid phone",
-    "Phone_number_is_not_valid": "Phone must be number characters",
+    "Phone_number_is_not_valid": "The correct format is +84 912 345 678 of 0912 345 678",
     "error_select_at_least_one": "Please select at least one social",
     "error_url_missing": "Please fill out a valid url",
     "error_url_type": "URL is not in the correct format",
@@ -202,7 +202,9 @@
     "Your_company": "Your company",
     "Years_of_Experience": "Years of Experience",
     "Note": "Note",
-    "error_num_members": "Number of members must be number characters"
+    "error_num_members": "Number of members must be number characters",
+    "create_profile_title_additional": "We need additional information about you.",
+    "create_profile_desc_additional": "All brokers must complete a thorough verification process by our team. Please provide your details below, and we will reach out within 24 hours."
   },
   "NavBar": {
     "newsfeed": "Newsfeed",
@@ -463,7 +465,16 @@
     "confirm": "Confirm",
     "delete": "Delete",
     "verify_broker_accept": "Congratulations! You have successfully completed the verification process and are now a certified broker on Acanet.",
-    "verify_broker_reject": "Unfortunately, you didn’t pass the verification process to become a broker. However, you can still enjoy all the features of Acanet as an investor."
+    "verify_broker_reject": "Unfortunately, you didn’t pass the verification process to become a broker. However, you can still enjoy all the features of Acanet as an investor.",
+    "had_tracked": "had tracked",
+    "people_had_tracked": "people had tracked",
+    "you_opened_has_hit_the_stoploss_level": "you opened has hit the stop-loss level",
+    "The_Signal": "The Signal",
+    "you_opened_has_successfully_hit_the_takeprofit_target": "you opened has successfully hit the take-profit target",
+    "create_signal_lose": "you created has hit the stop-loss level. Your accuary rate has been adjusted accordingly",
+    "create_signal_win": "you created has successfully hit the take-profit target on date-time. Your accuary rate has been enhanced.",
+    "Congratulations": "Congratulations!",
+    "new_noti": "New Notification!"
   },
   "Donate": {
     "confirm": "Confirm",
