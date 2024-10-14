@@ -21,6 +21,8 @@ import type { User } from "@/api/profile/model";
 import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
 import { onCancelSellNFT } from "@/api/nft";
+import { formatNumber } from "@/utils/format-number";
+import "dotenv/config";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -220,10 +222,8 @@ export default function PostCard(props: {
         return connectWallet();
       }
       setIsBuyingNFT(true);
-      console.log("data", additionalData);
-      console.log("log", additionalData.nftTokenId);
       const res = await nftMarketContract.buyNFT(additionalData.nftTokenId, {
-        gasLimit: 2000000,
+        gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
         value: ethers.utils.parseEther(additionalData.price.toString()),
       });
       res.wait();
@@ -246,6 +246,10 @@ export default function PostCard(props: {
   const onCancelSellNFTHandler = async () => {
     const cancelSellNFT = await nftMarketContract.cancelListing(
       additionalData.nftTokenId,
+      {
+        from: account?.address,
+        gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
+      },
     );
     cancelSellNFT.wait();
     onCancelSellNFT(
@@ -264,21 +268,33 @@ export default function PostCard(props: {
     );
 
     return userId !== authorId ? (
-      <button
-        className={buttonClass}
-        onClick={onBuyNFTHandler}
-        disabled={isBuyingNFT ? true : false}
-      >
-        {isBuyingNFT ? spinner : tNFT("buy_nft")}
-      </button>
+      <div className="position-relative">
+        <div className={`${styles["post-nft__price"]} text-current`}>
+          {/* {additionalData.price + " " + additionalData.currency} */}
+          {formatNumber(additionalData.price) + " MOVE"}
+        </div>
+        <button
+          className={buttonClass}
+          onClick={onBuyNFTHandler}
+          disabled={isBuyingNFT ? true : false}
+        >
+          {isBuyingNFT ? spinner : tNFT("buy_nft")}
+        </button>
+      </div>
     ) : (
-      <button
-        className={buttonClass}
-        onClick={onCancelSellNFTHandler}
-        disabled={isBuyingNFT ? true : false}
-      >
-        {isBuyingNFT ? spinner : tNFT("cancel_nft")}
-      </button>
+      <div className="position-relative">
+        <div className={`${styles["post-nft__price"]} text-current`}>
+          {/* {additionalData.price + " " + additionalData.currency} */}
+          {formatNumber(additionalData.price) + " MOVE"}
+        </div>
+        <button
+          className={buttonClass}
+          onClick={onCancelSellNFTHandler}
+          disabled={isBuyingNFT ? true : false}
+        >
+          {isBuyingNFT ? spinner : tNFT("cancel_nft")}
+        </button>
+      </div>
     );
   };
   const renderLikeAndCommentSection = () => (
@@ -435,8 +451,9 @@ export default function PostCard(props: {
         <Box
           sx={{
             width: "100%",
-            maxHeight: 500,
-            overflow: "hidden",
+            maxHeight: postType === "nft" ? "none" : 500,
+            height: "max-content",
+            overflow: postType === "nft" ? "none" : "hidden",
           }}
         >
           <p className="fw-500 lh-26 font-xss w-100 mb-2">
@@ -456,41 +473,62 @@ export default function PostCard(props: {
               ""
             )}
           </p>
-          <Masonry columns={columnsCount}>
-            {assets?.slice(0, 5).map(({ path, id }) =>
-              path ? (
-                <div key={id}>
-                  {/* <img
-                    srcSet={`${path}?w=162&auto=format&dpr=2 2x`}
-                    src={`${path}?w=162&auto=format`}
-                    alt={id}
-                    loading="lazy"
-                    style={{
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      display: "block",
-                      width: "100%",
-                    }}
-                  /> */}
-
-                  <Image
-                    src={path}
-                    alt={id}
-                    width={162}
-                    height={162}
-                    layout="responsive"
-                    objectFit="cover"
-                    style={{
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      display: "block",
-                      width: "100%",
-                    }}
-                    loading="lazy"
-                  />
+          {postType === "nft" && (
+            <div
+              className={`${styles["nft-card"]} d-flex justify-content-center mb-3`}
+            >
+              <div
+                className={`card p-0 border-0 h-100`}
+                style={{ borderRadius: "10px" }}
+              >
+                <div
+                  className={`${styles["nft-card_body"]} card-body p-3 position-relative d-flex flex-column`}
+                >
+                  <div className="card-image p-0">
+                    <Image
+                      src={assets[0]?.path || ""}
+                      alt="NFT"
+                      width={200}
+                      height={200}
+                      className={`${styles["ntf-image"]}`}
+                      loading="lazy"
+                    />
+                  </div>
+                  {/* <h5 className="fw-700 font-xss text-grey-900 mb-2 mt-3">
+                    {nft.name ?? "NFT"}
+                  </h5> */}
+                  {/* <p className="fw-500 font-xsss text-grey-500 m-0">
+                    {content.length > 50
+                      ? `${content.substring(0, 80)}...`
+                      : content}
+                  </p> */}
                 </div>
-              ) : null,
-            )}
+              </div>
+            </div>
+          )}
+          <Masonry columns={columnsCount}>
+            {postType !== "nft" &&
+              assets?.slice(0, 5).map(({ path, id }) =>
+                path ? (
+                  <div key={id}>
+                    <Image
+                      src={path}
+                      alt={id}
+                      width={162}
+                      height={162}
+                      layout="responsive"
+                      style={{
+                        borderBottomLeftRadius: 4,
+                        borderBottomRightRadius: 4,
+                        display: "block",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                      loading="lazy"
+                    />
+                  </div>
+                ) : null,
+              )}
           </Masonry>
         </Box>
       </div>

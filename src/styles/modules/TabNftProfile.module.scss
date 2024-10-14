@@ -3,7 +3,7 @@
   grid-template-columns: repeat(auto-fit, 320px);
   grid-template-rows: repeat(auto-fit, 450px);
   gap: 3rem;
-  justify-content: center;
+  justify-content: start;
   justify-items: center;
   align-items: center;
 }
@@ -14,6 +14,7 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
   border-radius: 10px;
 }
+
 .nft-card button {
  padding: 7px 0;
  font-weight: 600;

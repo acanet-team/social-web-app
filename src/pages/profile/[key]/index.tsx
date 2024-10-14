@@ -17,6 +17,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useMediaQuery } from "react-responsive";
+import { useSearchParams } from "next/navigation";
 
 const TAKE = 10;
 
@@ -33,6 +34,7 @@ export default function Profile({
   connectionStatus,
   logoRank,
   connectionRequestId,
+  signalAccuracy,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const t = useTranslations("MyProfile");
   const [dtBrokerProfile, setDtBrokerProfile] = useState(dataBrokerProfile);
@@ -52,6 +54,10 @@ export default function Profile({
   const [logoRanks, setLogoRanks] = useState(logoRank);
   const [connectRequestId, setConnectRequestId] = useState(connectionRequestId);
   const isQuery = useMediaQuery({ query: "(max-width: 768px" });
+  const params = useSearchParams();
+  const currentTab = params?.get("tab") || "about";
+  const [widthTab, setWidthTab] = useState("");
+  const [numSlideShow, setNumSlideShow] = useState(0);
 
   useEffect(() => {
     if (session) {
@@ -79,6 +85,30 @@ export default function Profile({
   // }, [curTab]);
 
   useEffect(() => {
+    if (dataUser.role.name === "broker" || dataUser.role.name === "admin") {
+      if (role !== true) {
+        setWidthTab("20%");
+        setNumSlideShow(5);
+      } else {
+        setWidthTab("16.66%");
+        setNumSlideShow(6);
+      }
+    } else if (
+      dataUser.role.name === "investor" ||
+      dataUser.role.name === "guest"
+    ) {
+      if (role !== true) {
+        setWidthTab("33.33%");
+        setNumSlideShow(3);
+      } else {
+        setWidthTab("25%");
+        setNumSlideShow(4);
+      }
+    }
+    console.log("test", widthTab, numSlideShow);
+  }, [dataUser, role]);
+
+  useEffect(() => {
     if (!initialFetch) {
       setInitialFetch(true);
     }
@@ -97,6 +127,7 @@ export default function Profile({
 
   const fetchProfileData = async () => {
     try {
+      console.log("ppppooo");
       const dtProfileRes = await getProfile(String(idUser));
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
@@ -113,6 +144,22 @@ export default function Profile({
       console.error("Error fetching profile data:", error);
     }
   };
+
+  useEffect(() => {
+    if (currentTab === "signal" && dtUser.role.name === "broker") {
+      setCurTab("signal");
+    } else if (currentTab === "posts") {
+      setCurTab("posts");
+    } else if (currentTab === "communities") {
+      setCurTab("communities");
+    } else if (currentTab === "rating" && dtUser.role.name === "broker") {
+      setCurTab("rating");
+    } else if (currentTab === "nft") {
+      setCurTab("nft");
+    } else {
+      setCurTab("about");
+    }
+  }, [currentTab]);
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;
@@ -131,23 +178,12 @@ export default function Profile({
     }
   };
 
-  const [tabClass, setTabClass] = useState<string>("");
-
-  // useEffect(() => {
-  //   const totalTabs = dataUser.role.name === "broker" ? 3 : 2;
-  //   if (totalTabs === 2) {
-  //     setTabClass(styles["two-tabs"] || "");
-  //   } else if (totalTabs === 3) {
-  //     setTabClass(styles["three-tabs"] || "");
-  //   }
-  // }, [dataUser.role.name]);
-
   const settingsilder = {
     arrows: false,
     dots: false,
     infinite: false,
     speed: 300,
-    slidesToShow: isQuery ? 2 : dataUser.role.name === "broker" ? 6 : 4,
+    slidesToShow: isQuery ? 2 : numSlideShow,
     slidesToScroll: 1,
     centerMode: false,
     variableWidth: true,
@@ -189,13 +225,14 @@ export default function Profile({
           connectStatus={connectStatus}
           logoRank={logoRanks}
           connectRequestId={connectRequestId}
+          signalAccuracy={signalAccuracy}
         />
         <div className="position-relative">
           <Slider ref={sliderRef} {...settingsilder}>
             <div
               className={`${curTab === TabPnum.Posts ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                width: widthTab,
               }}
             >
               <p
@@ -205,27 +242,23 @@ export default function Profile({
                 {t("Posts")}
               </p>
             </div>
-            {(dataUser.role.name === "broker" ||
-              dataUser.role.name === "guest" ||
-              dataUser.role.name === "investor") && (
-              <div
-                className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
-                style={{
-                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
-                }}
+            <div
+              className={`${curTab === TabPnum.About ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+              style={{
+                width: widthTab,
+              }}
+            >
+              <p
+                className="cursor-pointer"
+                onClick={(e) => onSelectTabHandler(e)}
               >
-                <p
-                  className="cursor-pointer"
-                  onClick={(e) => onSelectTabHandler(e)}
-                >
-                  {t("About")}
-                </p>
-              </div>
-            )}
+                {t("About")}
+              </p>
+            </div>
             <div
               className={`${curTab === TabPnum.Communities ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
               style={{
-                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                width: widthTab,
               }}
             >
               <p
@@ -235,11 +268,11 @@ export default function Profile({
                 {t("Communities")}
               </p>
             </div>
-            {dataUser.role.name === "broker" && (
+            {dtUser.role.name === "broker" && (
               <div
                 className={`${curTab === TabPnum.Rating ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: widthTab,
                 }}
               >
                 <p
@@ -250,11 +283,11 @@ export default function Profile({
                 </p>
               </div>
             )}
-            {dataUser.role.name === "broker" && (
+            {dtUser.role.name === "broker" && (
               <div
                 className={` ${curTab === TabPnum.Signal ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
                 style={{
-                  width: dataUser.role.name === "broker" ? "16.66%" : "25%",
+                  width: widthTab,
                 }}
               >
                 <p
@@ -265,19 +298,21 @@ export default function Profile({
                 </p>
               </div>
             )}
-            <div
-              className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
-              style={{
-                width: dataUser.role.name === "broker" ? "16.66%" : "25%",
-              }}
-            >
-              <p
-                className="cursor-pointer"
-                onClick={(e) => onSelectTabHandler(e)}
+            {role === true && (
+              <div
+                className={`${styles["button-tab"]} ${curTab === TabPnum.Nft ? styles["tab-active"] : ""} text-gray-follow d-flex justify-content-center fw-700`}
+                style={{
+                  width: widthTab,
+                }}
               >
-                {t("Nft")}
-              </p>
-            </div>
+                <p
+                  className="cursor-pointer"
+                  onClick={(e) => onSelectTabHandler(e)}
+                >
+                  {t("Nft")}
+                </p>
+              </div>
+            )}
           </Slider>
           {isQuery && (
             <i
@@ -307,29 +342,31 @@ export default function Profile({
           id={String(idUser)}
           take={TAKE}
           isConnected={connectStatus === "connected"}
-          isBroker={dataUser.role.name === "broker"}
+          isBroker={dtUser.role.name === "broker"}
           role={role}
         />
       )}
       {curTab === TabPnum.Communities && (
         <TabGroupProfile
-          isBroker={dataUser.role.name === "broker"}
+          isBroker={dtUser.role.name === "broker"}
           // communities={dataMyGroups}
-          communityType={
-            dataUser.role.name === "broker" ? "owned" : "following"
-          }
+          communityType={dtUser.role.name === "broker" ? "owned" : "following"}
           take={TAKE}
           id={Number(idUser)}
         />
       )}
-      {curTab === TabPnum.Nft && (
-        <TabNftProfile user={dtUser} idParam={String(idUser)} />
+      {id === dataUser.id && curTab === TabPnum.Nft && (
+        <TabNftProfile
+          user={dtUser}
+          idParam={String(idUser)}
+          updateUserWallet={fetchProfileData}
+        />
       )}
-      {dataUser.role.name === "broker" && curTab === TabPnum.Rating && (
-        <TabRating brokerData={dataUser} />
+      {dtUser.role.name === "broker" && curTab === TabPnum.Rating && (
+        <TabRating brokerData={dtUser} />
       )}
-      {dataUser.role.name === "broker" && curTab === TabPnum.Signal && (
-        <ProfileSignal brokerId={dataUser.id} userId={id} />
+      {dtUser.role.name === "broker" && curTab === TabPnum.Signal && (
+        <ProfileSignal brokerId={dtUser.id} userId={id} />
       )}
     </div>
   );
@@ -343,9 +380,9 @@ export async function getServerSideProps(context: NextPageContext) {
   }
   const profileRes = await getProfile(key as string);
   console.log("profileRes", profileRes?.data);
-  // console.log("profileRes", profileRes?.data?.brokerProfile?.rank?.logo);
   const idUser = profileRes?.data?.user?.id;
   const interestTopic: any = await createGetAllTopicsRequest(1, 100);
+  const signalAccuracy = profileRes?.data?.signalAccuracy;
   return {
     props: {
       messages: (await import(`@/locales/${context.locale}.json`)).default,
@@ -362,6 +399,7 @@ export async function getServerSideProps(context: NextPageContext) {
       userUsername: key || "",
       logoRank: profileRes?.data?.brokerProfile?.rank?.logo || null,
       connectionRequestId: profileRes?.data?.connectionRequestId || null,
+      signalAccuracy: signalAccuracy,
     },
   };
 }

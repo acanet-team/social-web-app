@@ -28,8 +28,10 @@ export interface getSignalCardResponse {
   target: string;
   expiryAt: number;
   createdAt: number;
+  isTracking: boolean;
   luckyAmount?: number | undefined;
   readsCount: number | null;
+  signalAccuracy: string | null;
   // These 2 are props
   brokerId?: number;
   curUserId?: number | undefined;
@@ -40,6 +42,7 @@ export interface ISignalDaily {
   signalPair: string;
   type: string;
   expiryAt: number;
+  signalAccuracy: string | null;
   owner: {
     uerId: number;
     firstName: string;
@@ -52,4 +55,34 @@ export interface ISignalDaily {
       path: string;
     };
   };
+}
+
+export interface symbolEntryPriceResponse {
+  data: {
+    price: number;
+  };
+  message: string;
+  statis: 200;
+}
+
+export interface createSignalParams {
+  signalPair: string;
+  type: string;
+  expiryAt: number;
+  entry: string;
+  target: string;
+  stop: string;
+  description: string;
+}
+
+export interface createSignalResponse {
+  id: string;
+  signal_pair: string;
+  expiry_at: number;
+  entry: number;
+  target: number;
+  stop: number;
+  owner_id: number;
+  desctiption: string | null;
+  createdAt: number;
 }

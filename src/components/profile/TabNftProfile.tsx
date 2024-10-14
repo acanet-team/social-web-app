@@ -9,10 +9,15 @@ import styles from "@/styles/modules/TabNftProfile.module.scss";
 import { useTranslations } from "next-intl";
 import SellNFTModal from "../nft/SellNFTModal";
 import { onCancelSellNFT } from "@/api/nft";
+import "dotenv/config";
 
-const TabNftProfile = (props: { user: User; idParam: string }) => {
+const TabNftProfile = (props: {
+  user: User;
+  idParam: string;
+  updateUserWallet: React.Dispatch<React.SetStateAction<void>>;
+}) => {
   const tNFT = useTranslations("NFT");
-  const { user, idParam } = props;
+  const { user, idParam, updateUserWallet } = props;
   const { data: session } = useSession() as any;
   const [id, setId] = useState<number>();
   const [role, setRole] = useState(false);
@@ -21,21 +26,14 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
   const [nftData, setNftData] = useState<any[]>([]);
   const [nftToSell, setNftToSell] = useState<any>();
   const [nftTokenIdSell, setNftTokenIdSell] = useState<any[]>([]);
-  const { nftContract, connectedChain, account, nftMarketContract } = useWeb3();
 
-  useEffect(() => {
-    setLoading(true);
-    if (session) {
-      setId(session?.user?.id);
-      setLoading(false);
-    }
-  }, [session]);
-
-  useEffect(() => {
-    if (Number(idParam) === id) {
-      setRole(true);
-    }
-  }, [idParam, id]);
+  const {
+    nftContract,
+    connectedChain,
+    account,
+    nftMarketContract,
+    connectWallet,
+  } = useWeb3();
 
   const getAllNFTs = async (address: string) => {
     setLoading(true);
@@ -52,9 +50,11 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
       setNftData(nftDataArray);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
   const getAllListedNFTs = async () => {
     setLoading(true);
     try {
@@ -63,9 +63,36 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
       setNftTokenIdSell(nftTokenIds);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
+  useEffect(() => {
+    setLoading(true);
+    if (session) {
+      setId(session?.user?.id);
+      setLoading(false);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (Number(idParam) === id) {
+      setRole(true);
+    }
+  }, [idParam, id]);
+
+  useEffect(() => {
+    if (!account) {
+      connectWallet();
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (account) {
+      updateUserWallet();
+    }
+  }, [account]);
 
   useEffect(() => {
     if (user.walletAddress) {
@@ -79,7 +106,10 @@ const TabNftProfile = (props: { user: User; idParam: string }) => {
     setOpenModal(true);
   };
   const onCancelSellNFTHandler = async (tokenId: number) => {
-    const cancelSellNFT = await nftMarketContract.cancelListing(tokenId);
+    const cancelSellNFT = await nftMarketContract.cancelListing(tokenId, {
+      from: account?.address,
+      gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
+    });
     cancelSellNFT.wait();
     onCancelSellNFT(connectedChain?.id === "0x780c" ? "MOVE" : "BSC", tokenId);
   };

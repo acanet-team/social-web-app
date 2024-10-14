@@ -6,6 +6,7 @@
 
 .follow-btn {
   background-color: var(--theme-color-main);
+  transition: all 0.2s ease-out;
 }
 
 .follow-btn:hover {
@@ -16,7 +17,9 @@
   background-color: var(--theme-color-text-secondary) !important;
   color: var(--light) !important;
   font-weight: 800;
+  transition: all 0.2s ease-out;
 }
+
 .broker-ava__effect {
   display: inline-block;
   padding: 6px;

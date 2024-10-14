@@ -26,6 +26,29 @@
   border-radius: 5px;
 }
 
+.form-control {
+  padding-left: 10px;
+  width: 100%;
+  line-height: 50px;
+  height: 50px;
+  font-size: 16px;
+  display: inline-block;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: 10px !important;
+  transition: border-color 0.1s ease; 
+}
+
+.form-control:hover {
+  border-color: #000000;
+  border-width: 1px;
+}
+
+.form-control:focus {
+  border-color: #1976d2; 
+  border-width: 2px;
+  // outline: none; 
+}
+
 #profile-radio label:before {
   content: "";
   height: 18px;
@@ -66,6 +89,10 @@
   #profile-radio input[type="radio"]:checked + label {
     box-shadow: 0 0 1px 2px var(--theme-color-shade);
   }
+
+  #create-profile input, #create-profile textarea, #create-profile__not-whitelist input, #create-profile__not-whitelist textarea {
+    background-color: var(--theme-dark-color-bg);
+    }
 }
 
 // MEDIA QUERIES
@@ -79,5 +106,11 @@
   #profile-radio {
     flex-direction: column;
     gap: 15px;
+  }
+}
+
+@media (max-width: 650) {
+  .form-control {
+    height: 45px;
   }
 }

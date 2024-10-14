@@ -102,11 +102,13 @@ export default function ProfileSignal(props: {
                 expiryAt={card.expiryAt}
                 readAt={card.readAt && card.readAt}
                 type={card.type}
+                isTracking={card.isTracking}
                 owner={card.owner}
                 createdAt={card.readAt}
                 brokerId={props.brokerId} // for signal section in profile only (this id means the current broker profile)
                 curUserId={props.userId}
                 readsCount={card.readsCount}
+                signalAccuracy={card.signalAccuracy}
               />
             </div>
           ))}

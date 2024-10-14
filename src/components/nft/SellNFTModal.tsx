@@ -1,6 +1,5 @@
 import { FormHelperText, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { ImageCropModal } from "../ImageCropModal";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/sellNFTModal.module.scss";
 import { useFormik } from "formik";
@@ -10,6 +9,7 @@ import { useWeb3 } from "@/context/wallet.context";
 import { onSellNFT } from "@/api/nft";
 import { throwToast } from "@/utils/throw-toast";
 import { ethers } from "ethers";
+import "dotenv/config";
 
 interface SellNFTModalProps {
   title: string;
@@ -62,11 +62,19 @@ const SellNFTModal: React.FC<SellNFTModalProps> = ({
         const sellNft = await nftMarketContract.listNFTForSale(
           nft.token_id,
           ethers.utils.parseEther(values.price).toString(),
+          {
+            from: account?.address,
+            gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
+          },
         );
         sellNft.wait();
         const approve = await nftContract.approve(
           nftMarketContract.address,
           nft.token_id,
+          {
+            from: account?.address,
+            gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
+          },
         );
         approve.wait();
         await onSellNFT({

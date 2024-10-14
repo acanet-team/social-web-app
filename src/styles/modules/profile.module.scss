@@ -1,3 +1,7 @@
+#user-profile {
+  margin-bottom: 100px;
+}
+
 #user-profile .tab-active {
   opacity: 1 !important;
   font-weight: 700;
@@ -5,6 +9,7 @@
   position: relative;
   color: #000000 !important;
 }
+
 .slick-prev {
   right: 10px;
   top: 0;
@@ -16,6 +21,7 @@
   opacity: 0.5;
   top: 0;
 }
+
 #user-profile .tab-active::before {
   content: "";
   width: 60%;
@@ -257,6 +263,22 @@
   display: flex;
   justify-content: center;
   align-items: "center";
+}
+
+.signal-green {
+  color: #019734 !important;
+}
+
+.signal-yellow {
+  color: #E8A600;
+}
+
+.signal-red {
+  color: #D93805;
+}
+
+.signal-none {
+  color: #111111C8 !important;
 }
 
 @media (max-width: 768px) {

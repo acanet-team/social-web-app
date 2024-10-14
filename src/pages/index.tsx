@@ -45,7 +45,7 @@ const Home = ({
 
   useEffect(() => {
     if (session) {
-      setIsBroker(session.user?.isBroker);
+      setIsBroker(session.user?.role?.name === "broker" ? true : false);
     }
   }, [session]);
 
@@ -169,7 +169,7 @@ export default React.memo(Home);
 export async function getServerSideProps(context: NextPageContext) {
   const postRes = await getPosts(1, TAKE, "suggestion");
   const brokerRes = await getTopBrokers(1, 20);
-  // console.log("Brokers: ", brokerRes?.data.docs);
+  console.log("Brokers: ", brokerRes?.data.docs);
   // const response = await getNotifications(1, 5);
   return {
     props: {

@@ -94,7 +94,11 @@ export default function Search({
 
             {/* Search results */}
             {curTab === "all" && (
-              <SearchAll switchTab={setCurTab} searchData={searchResults} />
+              <SearchAll
+                switchTab={setCurTab}
+                searchData={searchResults}
+                keyword={keyword}
+              />
             )}
             {curTab !== "all" && (
               <SearchFullByType tab={curTab} keyword={keyword} />

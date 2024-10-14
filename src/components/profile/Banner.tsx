@@ -6,16 +6,13 @@ import styles from "@/styles/modules/profile.module.scss";
 import { connectAInvestor, updateProfile } from "@/api/profile";
 import { throwToast } from "@/utils/throw-toast";
 import { ImageCropModal } from "@/components/ImageCropModal";
-import { createGetBrokersRequest, followABroker } from "@/api/onboard";
+import { followABroker } from "@/api/onboard";
 import Ratings from "@/components/Ratings";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "@mui/material/Tooltip";
 import DonateModal from "./DonateModal";
 import { useWeb3 } from "@/context/wallet.context";
 import { postConnectRequest, postConnectResponse } from "@/api/connect";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 
 interface TabBannerProps {
@@ -29,6 +26,7 @@ interface TabBannerProps {
   connectStatus: string;
   logoRank: string | null;
   connectRequestId: string | null;
+  signalAccuracy: string | null;
 }
 const Banner: React.FC<TabBannerProps> = ({
   role,
@@ -41,10 +39,12 @@ const Banner: React.FC<TabBannerProps> = ({
   connectStatus,
   logoRank,
   connectRequestId,
+  signalAccuracy,
 }) => {
   const t = useTranslations("MyProfile");
   const tRating = useTranslations("Rating");
   const tBase = useTranslations("Base");
+  const tBroker = useTranslations("BrokerList");
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
@@ -73,7 +73,6 @@ const Banner: React.FC<TabBannerProps> = ({
   const [selectedImage, setSelectedImage] = useState("");
   const [openImageCrop, setOpenImageCrop] = useState(false);
   const [imageType, setImageType] = useState<string | null>(null);
-  // const [brokers, setBrokers] = useState<any[]>([]);
   const [avarageRating, setAverageRating] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [isFollowing, setIsFollowing] = useState<boolean>(followed);
@@ -85,6 +84,14 @@ const Banner: React.FC<TabBannerProps> = ({
   const [connectionRequestId, setConnectionRequestId] = useState<string | null>(
     "",
   );
+  const accuracyColor =
+    signalAccuracy === null
+      ? styles["signal-none"]
+      : Number(signalAccuracy) >= 75
+        ? styles["signal-green"]
+        : Number(signalAccuracy) >= 50
+          ? styles["signal-yellow"]
+          : styles["signal-red"];
 
   useEffect(() => {
     setPreviewAvatar(dataUser?.photo?.path);
@@ -107,6 +114,7 @@ const Banner: React.FC<TabBannerProps> = ({
       const res = await rateContract.getAverageRating(dataUser.id.toString());
       const avgRating =
         res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
+      console.log("rate", res);
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -215,7 +223,6 @@ const Banner: React.FC<TabBannerProps> = ({
       }
       const dataUpdate = await updateProfile(formDt);
       setShow(false);
-      console.log("ahsfa", dataUpdate);
       throwToast("About updated successfully", "success");
     } catch (error) {
       throwToast("Error updating", "error");
@@ -223,21 +230,6 @@ const Banner: React.FC<TabBannerProps> = ({
       setIsLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   async function getBrokers() {
-  //     try {
-  //       setIsLoading(true);
-  //       const res = await createGetBrokersRequest(page, 20);
-  //       setBrokers(res.data.docs ? res.data.docs : res.data.data || []);
-  //     } catch (err) {
-  //       console.log(err);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   getBrokers();
-  // }, []);
 
   const onFollowBrokerHandler = async (e: any, brokerId: number) => {
     setIsFollowing(!isFollowing);
@@ -533,33 +525,81 @@ const Banner: React.FC<TabBannerProps> = ({
                         </button>
                       </>
                     )}
-                  {!isMobile ? (
-                    connectionStatus === "request_received" && (
-                      <div style={{ position: "relative" }}>
-                        <button
-                          ref={buttonRespondRef}
-                          onClick={() => setIsRespond(!isRespond)}
-                          className={`px-3 ${styles["profile-following__btn"]} ${styles["profile-banner__btn"]}`}
-                        >
-                          <h4 className="m-0">
-                            <i
-                              className={`bi bi-person ${styles["icon-profie-bg-blue"]} cursor-pointer`}
-                            ></i>
-                          </h4>
-                          <span className="font-xss fw-600">
-                            {t("Respond")}
-                          </span>
-                        </button>
-                        {isRespond && (
-                          <div
-                            ref={groupRespondRef}
-                            className={`card ${styles["group-buttons-banner-response"]}`}
-                            style={{
-                              display: isRespond ? "block" : "none",
-                            }}
+                  {!isMobile
+                    ? connectionStatus === "request_received" && (
+                        <div style={{ position: "relative" }}>
+                          <button
+                            ref={buttonRespondRef}
+                            onClick={() => setIsRespond(!isRespond)}
+                            className={`px-3 ${styles["profile-following__btn"]} ${styles["profile-banner__btn"]}`}
                           >
-                            <button
-                              className={`px-3 ${styles["button-banner-response"]}`}
+                            <h4 className="m-0">
+                              <i
+                                className={`bi bi-person ${styles["icon-profie-bg-blue"]} cursor-pointer`}
+                              ></i>
+                            </h4>
+                            <span className="font-xss fw-600">
+                              {t("Respond")}
+                            </span>
+                          </button>
+                          {isRespond && (
+                            <div
+                              ref={groupRespondRef}
+                              className={`card ${styles["group-buttons-banner-response"]}`}
+                              style={{
+                                display: isRespond ? "block" : "none",
+                              }}
+                            >
+                              <button
+                                className={`px-3 ${styles["button-banner-response"]}`}
+                                onClick={() => {
+                                  if (connectionRequestId) {
+                                    fetchConnectResponse(
+                                      connectionRequestId,
+                                      "reject",
+                                      String(idParam),
+                                    );
+                                  }
+                                  setConnectionStatus("connected");
+                                }}
+                              >
+                                <p className={`font-xss fw-600 m-0`}>
+                                  {t("confirm")}
+                                </p>
+                              </button>
+                              <button
+                                className={`px-3 ${styles["button-banner-response"]}`}
+                                onClick={() => {
+                                  if (connectionRequestId) {
+                                    fetchConnectResponse(
+                                      connectionRequestId,
+                                      "reject",
+                                      String(idParam),
+                                    );
+                                  }
+                                  setConnectionStatus("'not_connected");
+                                }}
+                              >
+                                <p className="font-xss fw-600 m-0">
+                                  {t("delete")}
+                                </p>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    : connectionStatus === "request_received" && (
+                        <>
+                          <button
+                            className={`px-3 ${styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
+                          >
+                            <h4 className="m-0">
+                              <i
+                                className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
+                              ></i>
+                            </h4>
+                            <p
+                              className={`font-xss fw-600 m-0`}
                               onClick={() => {
                                 if (connectionRequestId) {
                                   fetchConnectResponse(
@@ -571,12 +611,19 @@ const Banner: React.FC<TabBannerProps> = ({
                                 setConnectionStatus("connected");
                               }}
                             >
-                              <p className={`font-xss fw-600 m-0`}>
-                                {t("confirm")}
-                              </p>
-                            </button>
-                            <button
-                              className={`px-3 ${styles["button-banner-response"]}`}
+                              {t("confirm")}
+                            </p>
+                          </button>
+                          <button
+                            className={`px-3 ${styles["profile-following__btn"]} ${styles["profile-banner__btn"]}`}
+                          >
+                            <h4 className="m-0">
+                              <i
+                                className={`bi bi-x ${styles["icon-profie-bg-blue"]} cursor-pointer`}
+                              ></i>
+                            </h4>
+                            <p
+                              className="font-xss fw-600 m-0"
                               onClick={() => {
                                 if (connectionRequestId) {
                                   fetchConnectResponse(
@@ -588,66 +635,11 @@ const Banner: React.FC<TabBannerProps> = ({
                                 setConnectionStatus("'not_connected");
                               }}
                             >
-                              <p className="font-xss fw-600 m-0">
-                                {t("delete")}
-                              </p>
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  ) : (
-                    <>
-                      <button
-                        className={`px-3 ${styles["profile-follow__btn"]} ${styles["profile-banner__btn"]}`}
-                      >
-                        <h4 className="m-0">
-                          <i
-                            className={`bi bi-check ${styles["icon-profile"]} cursor-pointer`}
-                          ></i>
-                        </h4>
-                        <p
-                          className={`font-xss fw-600 m-0`}
-                          onClick={() => {
-                            if (connectionRequestId) {
-                              fetchConnectResponse(
-                                connectionRequestId,
-                                "reject",
-                                String(idParam),
-                              );
-                            }
-                            setConnectionStatus("connected");
-                          }}
-                        >
-                          {t("confirm")}
-                        </p>
-                      </button>
-                      <button
-                        className={`px-3 ${styles["profile-following__btn"]} ${styles["profile-banner__btn"]}`}
-                      >
-                        <h4 className="m-0">
-                          <i
-                            className={`bi bi-x ${styles["icon-profie-bg-blue"]} cursor-pointer`}
-                          ></i>
-                        </h4>
-                        <p
-                          className="font-xss fw-600 m-0"
-                          onClick={() => {
-                            if (connectionRequestId) {
-                              fetchConnectResponse(
-                                connectionRequestId,
-                                "reject",
-                                String(idParam),
-                              );
-                            }
-                            setConnectionStatus("'not_connected");
-                          }}
-                        >
-                          {t("delete")}
-                        </p>
-                      </button>
-                    </>
-                  )}
+                              {t("delete")}
+                            </p>
+                          </button>
+                        </>
+                      )}
                   {dataUser.role.name === "broker" &&
                     dataUser.walletAddress && (
                       <button
@@ -689,7 +681,34 @@ const Banner: React.FC<TabBannerProps> = ({
                 </>
               )}
               {/* Rank image */}
-              {/* <i className="bi bi-patch-check h1 m-0"></i> */}
+              <div
+                className="font-xsss fw-600 m-0 ms-1 mt-1 position-relative"
+                style={{ color: "rgb(107, 173, 97)" }}
+              >
+                <Tooltip title={tBroker("signal_accuracy_tooltip")}>
+                  <i
+                    className={`${accuracyColor} bi bi-info-circle position-absolute`}
+                    style={{
+                      right: "-15px",
+                      top: "-5px",
+                      borderRadius: "50%",
+                      fontSize: "12px",
+                    }}
+                  ></i>
+                </Tooltip>
+                <span className={accuracyColor}>
+                  {tBroker("signal_accuracy") + ": "}
+                </span>
+                {!Number.isNaN(signalAccuracy) && signalAccuracy ? (
+                  <span className={accuracyColor}>
+                    {+signalAccuracy % 1 !== 0
+                      ? (+signalAccuracy).toFixed(2) + "%"
+                      : +signalAccuracy + "%"}
+                  </span>
+                ) : (
+                  <span className={accuracyColor}>N/A</span>
+                )}
+              </div>
               <Ratings rating={avarageRating} size={18} />
               <div className={`fw-bold ${styles["profile-rating__average"]}`}>
                 Rating: {avarageRating.toFixed(1)}
@@ -699,12 +718,6 @@ const Banner: React.FC<TabBannerProps> = ({
                 className="text-grey-600 text-center"
               >
                 {tRating("rank_desc")}
-              </div>
-              <div
-                style={{ fontSize: "13px" }}
-                className="text-grey-600 text-center"
-              >
-                {tRating("rank_desc_guarantee")}
               </div>
             </div>
           )}

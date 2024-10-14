@@ -69,7 +69,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
         </h2>
       </Modal.Header>
       <Modal.Body className={styles["modal-content"]}>
-        {message}
+        <div className="text-center">{message}</div>
         {type === "alert" && (
           <div className="mt-2 font-xss">
             {tModal("close_after")} {remainingTime}{" "}

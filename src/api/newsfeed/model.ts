@@ -1,5 +1,5 @@
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
-import { Photo, Role, IUserInfo } from "../onboard/model";
+import { Role, IUserInfo } from "../onboard/model";
 import type { IPostCommunityInfo } from "../community/model";
 export interface likeParams {
   postId: string;
@@ -117,6 +117,11 @@ export interface CreatePostRequest {
   images: File[];
 }
 
+interface Photo {
+  id: string;
+  path: string;
+}
+
 export interface IBrokers {
   brokerProfileId: string;
   coursesEnrolledCount: number;
@@ -129,9 +134,12 @@ export interface IBrokers {
     id: string;
     path: string;
   };
-  rank: string;
+  rank: { id: string; name: string; path: string };
   rating: number;
   role: string;
+  signalAccuracy: string | null;
+  summary: string;
+  email: string;
   skills: { interestTopicId: string; topicName: string };
   userId: number;
 }

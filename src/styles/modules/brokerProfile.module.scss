@@ -1,10 +1,87 @@
+// Broker list
+#header-title {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 1.5rem;
+  min-width: 300px;
+  max-width: 1200px;
+}
+
+#header-title .page-title {
+  font-size: 25px;
+  letter-spacing: -3%;
+  width: 100%;
+  min-width: 120px;
+}
+
+#page-title__search {
+  background-color: var(--border-color-lighter);
+}
+
+.search-bar {
+  width: 350px;
+}
+
+.broker-stats {
+  width: 75px;
+  text-align: center;
+}
+
+.broker-stats__text {
+  text-align: center;
+  line-height: 130%;
+  font-weight: 400;
+}
+
+.broker-email,
+.broker-stats__text {
+  color: #adb5bd;
+  font-size: 14px;
+}
+
+.broker-email:hover {
+  background: none;
+}
+
+.broker-summary {
+  text-align: start;
+  line-height: 160%;
+  height: 270px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+
+.has-filter::before {
+  color: var(--theme-color-main);
+  font-weight: 800;
+}
+
+// Profile card
+#all-brokers {
+  display: grid;
+  // grid-template-columns: repeat(auto-fit, minmax(300px, 370px));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  justify-content: center;
+  padding: 0 !important;
+  gap: 20px;
+  max-width: 1200px;
+}
+
 #all-brokers .broker-profile {
-  width: 225px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
   background-color: var(--light);
   border: 1px solid var(--border-color-light);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
   border-radius: 5px;
-  padding: 8px;
+  padding: 30px;
 }
 
 #all-brokers .profile-data {
@@ -14,11 +91,6 @@
   border-radius: 5px;
   width: 100%;
   padding: 8px;
-}
-
-#all-brokers .broker-skill {
-  font-size: 14px;
-  font-weight: 300;
 }
 
 #all-brokers .profile-data div {
@@ -34,24 +106,20 @@
 }
 
 #all-brokers .broker-stats {
-  // color: var(--theme-color-text-secondary);
   font-weight: 700;
 }
 
 #all-brokers .broker-profile-img {
-  width: 100%;
-  height: 211px;
   object-fit: cover;
+  height: 100px !important;
 }
 
 #all-brokers .follow-btn {
   display: block !important;
-  margin: 8px auto 0 !important;
+  margin: auto auto 0 auto !important;
   padding: 8px 0;
   border-radius: 5px;
-  // background-color: #9e9e9e !important;
-  // color: var(--light) !important;
-  background-color: var(--theme-color-main) !important;
+  // background-color: var(--theme-color-main) !important;
   color: var(--light) !important;
 }
 
@@ -63,30 +131,75 @@
   background-color: var(--theme-color-text-secondary) !important;
   color: var(--light) !important;
   font-weight: 800;
+  margin: auto auto 0 auto !important;
+}
+
+.brokers-pagination {
+  margin-bottom: 40px;
 }
 
 // Dark theme
-:global(.theme-dark) #all-brokers .broker-profile {
-  background-color: #221f37;
-  border: 2px solid #38354b;
-}
+:global(.theme-dark) {
+  #all-brokers .broker-profile {
+    background-color: #221f37;
+    border: 2px solid #38354b;
+  }
 
-:global(.theme-dark) #all-brokers .profile-data {
-  background-color: #38364b;
-  color: #c4c3c9;
-}
+  #all-brokers .profile-data {
+    background-color: #38364b;
+    color: #c4c3c9;
+  }
 
-:global(.theme-dark) #all-brokers .broker-stats {
-  color: var(--light);
-}
+  #all-brokers .broker-stats {
+    color: var(--light);
+  }
 
-:global(.theme-dark) #all-brokers .broker-skill {
-  color: var(--light);
+  #all-brokers .broker-skill {
+    color: var(--light);
+  }
+
+  #header-title {
+    color: var(--light);
+    background-color: var(--theme-color-shade) !important;
+  }
+
+  .has-filter::before {
+    color: var(--theme-color-shade);
+  }
 }
 
 // MEDIA QUERIES
+@media (max-width: 1500px) {
+  #all-brokers {
+    justify-content: center !important;
+  }
+
+  .broker-summary {
+    height: 300px !important;
+  }
+}
+
+@media (max-width: 1414px) {
+  .broker-summary {
+    height: 280px !important;
+  }
+}
+
+@media (max-width: 1055px) {
+  .broker-summary {
+    height: 240px !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .broker-summary {
+    height: 280px !important;
+  }
+}
+
 @media (max-width: 768px) {
   .onboard-finish__btn {
+    width: 100vw !important;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -97,10 +210,32 @@
   }
 
   .brokers-pagination {
-    margin-bottom: 100px;
+    padding-bottom: 100px !important;
   }
-  
+
   .onboard-finish__btn button {
     margin: 1rem !important;
+  }
+
+  #header-title {
+    flex-direction: column !important;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  #all-brokers {
+    gap: 1rem;
+  }
+
+  .search-bar {
+    width: 80%;
+  }
+
+  .broker-summary {
+    // text-align: justify;
+    // text-justify: distribute;
+    // text-align-last: left;
+    // word-spacing: -2px;
+    height: 280px !important;
   }
 }

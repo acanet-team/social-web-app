@@ -8,10 +8,11 @@ import styles from "@/styles/modules/communities.module.scss";
 import { useSession } from "next-auth/react";
 import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
-import "dotenv/config";
 import { joinPaidCommunity } from "@/api/wallet";
 import { useRouter } from "next/router";
 import { throwToast } from "@/utils/throw-toast";
+import { formatNumber } from "@/utils/format-number";
+import "dotenv/config";
 
 export default function CommunityCard(props: {
   ownerId: number;
@@ -75,7 +76,7 @@ export default function CommunityCard(props: {
           curUser?.toString(),
           {
             from: account?.address,
-            gasLimit: 2000000,
+            gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
             value: ethers.utils.parseEther(fee.toString()),
           },
         );
@@ -181,7 +182,7 @@ export default function CommunityCard(props: {
                   alt="logo"
                 />
                 <span className="ms-2 fw-bolder text-dark">
-                  {fee?.toLocaleString("en-US")}
+                  {formatNumber(fee)}
                 </span>
               </div>
             )}

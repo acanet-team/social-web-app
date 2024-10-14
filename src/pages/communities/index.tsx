@@ -28,7 +28,7 @@ const Communities: NextPage = ({
 
   useEffect(() => {
     if (session) {
-      setIsBroker(session.user.isBroker);
+      setIsBroker(session.user?.role.name === "broker" ? true : false);
     }
   }, [session, isBroker]);
 
@@ -42,7 +42,6 @@ const Communities: NextPage = ({
       setCurTab("popular");
     }
   }, [currentTab]);
-  // <Link href='communities?tab=owned'>Go to owned tab</Link>
 
   const onSelectTabHandler = (e: any) => {
     const chosenTab = e.target.textContent;

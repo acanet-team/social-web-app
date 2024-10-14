@@ -94,6 +94,7 @@ const NotificationToast = () => {
       community_id: string | UUID;
       notificationCount: number;
       connection_id: string;
+      signal_pair: string;
     } | null,
     createdAt: number,
     notiAt: number | null,
@@ -107,17 +108,17 @@ const NotificationToast = () => {
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
-              className="w40 rounded-xl"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-gray-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -143,6 +144,11 @@ const NotificationToast = () => {
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {notiAt ? TimeSinceDate(notiAt) : ""}
               </p> */}
             </div>
@@ -154,18 +160,18 @@ const NotificationToast = () => {
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -191,6 +197,11 @@ const NotificationToast = () => {
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {notiAt ? TimeSinceDate(notiAt) : ""}
               </p> */}
             </div>
@@ -202,18 +213,18 @@ const NotificationToast = () => {
             <Image
               src={
                 community?.avatar?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl object-cover ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 `}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -223,7 +234,7 @@ const NotificationToast = () => {
                 >
                   {t("has_requested_to_join_your")}{" "}
                   <span
-                    className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                    className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 `}
                   >
                     {community?.name}{" "}
                   </span>
@@ -235,10 +246,10 @@ const NotificationToast = () => {
                 </span>
               </h5>
               {/* <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? TimeSinceDate(notiAt) : ""}
-              </p> */}
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? TimeSinceDate(notiAt) : ""}
+                </p> */}
             </div>
           </>
         );
@@ -248,18 +259,18 @@ const NotificationToast = () => {
             <Image
               src={
                 community?.avatar?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 `}
               >
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
@@ -276,6 +287,11 @@ const NotificationToast = () => {
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {notiAt ? TimeSinceDate(notiAt) : ""}
               </p> */}
             </div>
@@ -287,18 +303,18 @@ const NotificationToast = () => {
             <Image
               src={
                 community?.avatar?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {t("your_request_to_join")}{" "}
                 <span
@@ -308,6 +324,11 @@ const NotificationToast = () => {
                 </span>{" "}
                 {t("has_been_unsuccessful")}
               </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -322,18 +343,18 @@ const NotificationToast = () => {
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -344,6 +365,11 @@ const NotificationToast = () => {
                   {t("has followed you")}
                 </span>
               </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -358,18 +384,18 @@ const NotificationToast = () => {
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 <span
                   className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
@@ -388,6 +414,11 @@ const NotificationToast = () => {
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {notiAt ? TimeSinceDate(notiAt) : ""}
               </p> */}
             </div>
@@ -399,14 +430,14 @@ const NotificationToast = () => {
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <span
@@ -414,7 +445,11 @@ const NotificationToast = () => {
               >
                 {t("create_paid_group_failed")}
               </span>
-
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -429,18 +464,18 @@ const NotificationToast = () => {
             <Image
               src={
                 sourceUser?.photo?.path ||
-                `/assets/images/default-ava-not-bg.jpg`
+                `/assets/images/Acanet_Black_White.png`
               }
               width={40}
               height={40}
               alt="user"
               style={{ objectFit: "cover" }}
-              className="w40 rounded-xl object-cover"
-              onError={() => `/assets/images/default-ava-not-bg.jpg`}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
             />
             <div>
               <h5
-                className={`font-xsss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700 d-block`}
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
               >
                 {sourceUser?.nickName
                   ? sourceUser?.nickName
@@ -454,10 +489,15 @@ const NotificationToast = () => {
               {/* <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
                 {notiAt ? TimeSinceDate(notiAt) : ""}
               </p> */}
 
-              <div className="d-flex align-items-center pt-2 pb-2">
+              <div className="d-flex align-items-center pt-0 pb-2">
                 <div
                   onClick={
                     additionalData
@@ -493,6 +533,319 @@ const NotificationToast = () => {
             </div>
           </>
         );
+      case "tracking_signal_lose":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("The_Signal")}
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("you_opened_has_hit_the_stoploss_level")}
+                </span>
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "tracking_signal_win":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("The_Signal")}
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("you_opened_has_successfully_hit_the_takeprofit_target")}
+                </span>
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? TimeSinceDate(notiAt) : ""}
+                </p> */}
+            </div>
+          </>
+        );
+      case "created_signal_lose":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("The_Signal")}
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("create_signal_lose")}
+                </span>
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                    className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                  >
+                    {notiAt ? TimeSinceDate(notiAt) : ""}
+                  </p> */}
+            </div>
+          </>
+        );
+      case "created_signal_win":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("Congratulations")} {t("The_Signal")}
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {t("create_signal_win")}
+                </span>
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                    className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                  >
+                    {notiAt ? TimeSinceDate(notiAt) : ""}
+                  </p> */}
+            </div>
+          </>
+        );
+      case "signal_tracked":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {sourceUser?.nickName
+                  ? sourceUser?.nickName
+                  : sourceUser?.firstName + sourceUser?.lastName}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  {additionalData ? (
+                    Number(additionalData?.notificationCount) === 1 ? (
+                      t("had_tracked")
+                    ) : (
+                      <>
+                        {t("and")}{" "}
+                        {`${Number(additionalData?.notificationCount) - 1}`}{" "}
+                        {t("people_had_tracked")}
+                      </>
+                    )
+                  ) : (
+                    ""
+                  )}
+                </span>{" "}
+                {additionalData?.signal_pair}{" "}
+                <span
+                  className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
+                >
+                  signal
+                </span>
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "verify_broker_accept":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {t("verify_broker_accept")}
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "verify_broker_reject":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {t("verify_broker_reject")}
+              </h5>
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? getTimeDifference(notiAt) : ""}
+              </p> */}
+              {/* <p
+                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+              >
+                {notiAt ? TimeSinceDate(notiAt) : ""}
+              </p> */}
+            </div>
+          </>
+        );
+      case "verify_broker_process":
+        return (
+          <>
+            <Image
+              src={`/assets/images/Acanet_Black_White.png`}
+              width={40}
+              height={40}
+              alt="user"
+              style={{ objectFit: "cover" }}
+              className={`w40 rounded-xl ${styles["img-noti"]}`}
+              onError={() => `/assets/images/Acanet_Black_White.png`}
+            />
+            <div>
+              <h5
+                className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
+              >
+                {t("verify_broker_process")}
+              </h5>
+              {/* <p
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? getTimeDifference(notiAt) : ""}
+                </p> */}
+              {/* <p
+                  className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
+                >
+                  {notiAt ? TimeSinceDate(notiAt) : ""}
+                </p> */}
+            </div>
+          </>
+        );
       default:
         return null;
     }
@@ -509,24 +862,43 @@ const NotificationToast = () => {
     }
     if (
       notificationType === "like_post" ||
-      notificationType === "comment_post"
+      notificationType === "comment_post" ||
+      notificationType === "verify_broker_accept" ||
+      notificationType === "verify_broker_reject" ||
+      notificationType === "verify_broker_process"
     ) {
-    } else if (
-      notificationType === "community_join_request" ||
-      notificationType === "community_join_accept"
-    ) {
+    } else if (notificationType === "community_join_accept") {
       router.push(`/communities/detail/${idDetail}`);
+      // toggleisNoti(false);
+    } else if (notificationType === "community_join_request") {
+      router.push(`/communities/detail/${idDetail}?tab=requests`);
+      // toggleisNoti(false);
     } else if (notificationType === "follow") {
       router.push(`/profile/${idDetail}`);
+      // toggleisNoti(false);
     } else if (
       notificationType === "connection_accept"
       // || notificationType === "connection_request"
     ) {
       router.push(`/profile/${idDetail}`);
+      // toggleisNoti(false);
     } else if (notificationType === "community_join_reject") {
       router.push(`/communities`);
     } else if (notificationType === "community_creation_failed") {
       router.push(`/communities`);
+    } else if (
+      notificationType === "tracking_signal_lose" ||
+      notificationType === "tracking_signal_win"
+    ) {
+      router.push(`/signal?tab=history`);
+      // toggleisNoti(false);
+    } else if (
+      notificationType === "created_signal_lose" ||
+      notificationType === "created_signal_win" ||
+      notificationType === "signal_tracked"
+    ) {
+      router.push(`/profile/${idDetail}?tab=signal`);
+      // toggleisNoti(false);
     } else {
       console.log("");
     }
@@ -551,7 +923,7 @@ const NotificationToast = () => {
             aria-atomic="true"
           >
             <div className="toast-header">
-              <strong className="me-auto">Thông báo mới</strong>
+              <strong className="me-auto">{t("new_noti")}</strong>
               <button
                 type="button"
                 className="btn-close"
@@ -563,10 +935,14 @@ const NotificationToast = () => {
               <div
                 style={{
                   height:
-                    notification.type === "connection_request"
+                    notification.type === "connection_request" ||
+                    notification.type === "created_signal_lose" ||
+                    notification?.type === "created_signal_win" ||
+                    notification?.type === "community_creation_failed"
                       ? "75px"
-                      : notification.type === "community_creation_failed"
-                        ? "75px"
+                      : notification.type === "verify_broker_accept" ||
+                          notification.type === "verify_broker_reject"
+                        ? "85px"
                         : "70px",
                   padding: "4px",
                 }}
@@ -619,6 +995,38 @@ const NotificationToast = () => {
                         readNotis(
                           notification?.id,
                           "",
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "tracking_signal_lose" ||
+                        notification?.type === "tracking_signal_win"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          "",
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "created_signal_lose" ||
+                        notification?.type === "created_signal_win" ||
+                        notification?.type === "signal_tracked"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          String(notification?.user?.nickName),
+                          notification?.type,
+                          notification?.read_at,
+                        );
+                      } else if (
+                        notification?.type === "verify_broker_accept" ||
+                        notification?.type === "verify_broker_reject" ||
+                        notification?.type === "verify_broker_process"
+                      ) {
+                        readNotis(
+                          notification?.id,
+                          String(notification?.user?.nickName),
                           notification?.type,
                           notification?.read_at,
                         );

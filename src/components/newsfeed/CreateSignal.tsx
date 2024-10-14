@@ -12,14 +12,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
-import { donateBroker } from "@/api/wallet";
 import { throwToast } from "@/utils/throw-toast";
-import { getSignalPairs } from "@/api/signal";
+import { createSignal, getEntryPrice, getSignalPairs } from "@/api/signal";
 import _debounce from "lodash/debounce";
 import styles from "@/styles/modules/signal.module.scss";
-import DotWaveLoader from "../DotWaveLoader";
-import { blue } from "@mui/material/colors";
-import { root } from "postcss";
 export interface OptionType {
   description: string;
   exchange: string;
@@ -32,7 +28,7 @@ export default function CreateSignal() {
   const [options, setOptions] = useState<OptionType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [finishCreateSignal, setFinishCreateSignal] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState<string>("");
 
   const removeHtmlTags = (str: string) => {
     return str.replace(/<\/?[^>]+(>|$)/g, "");
@@ -45,7 +41,6 @@ export default function CreateSignal() {
         try {
           setIsLoading(true);
           const res: any = await getSignalPairs(inputValue);
-          console.log("create", res);
           setOptions(res.data);
         } catch (error) {
           console.error("Error fetching options:", error);
@@ -73,24 +68,6 @@ export default function CreateSignal() {
   useEffect(() => {
     fetchCurrencyPairs("");
   }, []);
-
-  // // Debounced fetch function
-  // const debouncedFetchOptions = useCallback(
-  //   _debounce(fetchCurrencyPairs, 500),
-  //   []
-  // );
-
-  // // Immediate fetch function
-  // const fetchOptions = useCallback(
-  //   async (inputValue: string) => {
-  //     if (inputValue) {
-  //       debouncedFetchOptions(inputValue);
-  //     } else {
-  //       fetchCurrencyPairs(inputValue);
-  //     }
-  //   },
-  //   [debouncedFetchOptions]
-  // );
 
   const renderOption = (
     props: React.HTMLAttributes<HTMLLIElement>,
@@ -198,11 +175,11 @@ export default function CreateSignal() {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        // console.log("values", values);
+        // console.log("expiry", values.expiry);
         setFinishCreateSignal(true);
         if (values.expiry) {
           const expiryAt = new Date(values.expiry).getTime();
-          await donateBroker({
+          await createSignal({
             signalPair: values.pairs,
             type: values.type,
             expiryAt: expiryAt,
@@ -226,6 +203,17 @@ export default function CreateSignal() {
   const handleBlur = (field: string) => (event: React.FocusEvent<any>) => {
     formik.setFieldTouched(field, true);
     formik.handleBlur(event);
+  };
+
+  const onInputCurrencyHandler = async (symbol: string) => {
+    try {
+      const res = await getEntryPrice(symbol);
+      if (res?.data?.price && res?.data?.price > 0) {
+        formik.setFieldValue("entry", res.data.price.toFixed(2));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -276,7 +264,6 @@ export default function CreateSignal() {
                 }
                 return options;
               }}
-              // filterOptions={filterOptions}
               value={
                 options.find(
                   (option) =>
@@ -285,7 +272,7 @@ export default function CreateSignal() {
                 ) || null
               }
               onChange={(
-                event: React.SyntheticEvent<Element, Event>,
+                event: React.ChangeEvent<HTMLInputElement>,
                 value: OptionType | null,
               ) => {
                 setInputValue(
@@ -295,7 +282,9 @@ export default function CreateSignal() {
                   "pairs",
                   value ? removeHtmlTags(value.symbol).toUpperCase() : "",
                 );
+                onInputCurrencyHandler(value ? value.symbol : "");
               }}
+              // Fetch currency pairs from server on input change
               onInputChange={(
                 e: React.ChangeEvent<HTMLInputElement>,
                 value: string,
@@ -304,7 +293,19 @@ export default function CreateSignal() {
                 fetchOptions(e?.target?.value);
               }}
               inputValue={inputValue}
-              // onBlur={formik.handleBlur}
+              // Clearing input on blur if user doesn't a value from the dropdown
+              onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                const isValidOption = options.some(
+                  (option) =>
+                    removeHtmlTags(option.symbol).toUpperCase() ===
+                    inputValue.toUpperCase(),
+                );
+                if (!isValidOption) {
+                  setInputValue("");
+                  formik.setFieldValue("pairs", "");
+                }
+                formik.handleBlur(event);
+              }}
               sx={{
                 "& fieldset": {
                   minWidth: "160px",
