@@ -281,13 +281,19 @@ export default function PostCard(props: {
         </button>
       </div>
     ) : (
-      <button
-        className={buttonClass}
-        onClick={onCancelSellNFTHandler}
-        disabled={isBuyingNFT ? true : false}
-      >
-        {isBuyingNFT ? spinner : tNFT("cancel_nft")}
-      </button>
+      <div className="position-relative">
+        <div className={`${styles["post-nft__price"]} text-current`}>
+          {/* {additionalData.price + " " + additionalData.currency} */}
+          {formatNumber(additionalData.price) + " MOVE"}
+        </div>
+        <button
+          className={buttonClass}
+          onClick={onCancelSellNFTHandler}
+          disabled={isBuyingNFT ? true : false}
+        >
+          {isBuyingNFT ? spinner : tNFT("cancel_nft")}
+        </button>
+      </div>
     );
   };
   const renderLikeAndCommentSection = () => (
