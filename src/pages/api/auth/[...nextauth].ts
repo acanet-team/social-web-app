@@ -37,20 +37,15 @@ const options: NextAuthOptions = {
         const validator = new AuthDataValidator({
           botToken: `${process.env.NEXT_PUBLIC_BOT_TOKEN}`,
         });
-        console.log("credentials", validator);
-
         const data = objectToAuthDataMap(req.query || {});
-        console.log("data", data);
-
         const user = await validator.validate(data);
-        console.log("user", user);
-
         if (user.id && user.first_name) {
           const returned = {
             id: user.id.toString(),
             email: user.id.toString(),
             name: [user.first_name, user.last_name || ""].join(" "),
             image: user.photo_url,
+            ...req.query,
           };
           return returned;
         }
@@ -71,7 +66,7 @@ const options: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, account, trigger }: any) {
+    async jwt({ token, account, trigger, user }: any) {
       if (account?.provider === "credentials") {
         const guestTokenRes: any = await guestLogin();
         const guestToken = guestTokenRes.token;
@@ -131,7 +126,10 @@ const options: NextAuthOptions = {
         data.accessToken = account.access_token;
         token.provider = "facebook";
       }
-
+      if (account?.provider === "telegram-login") {
+        Object.assign(data, user);
+        token.provider = "telegram";
+      }
       const res = await httpClient.post<any, any>(
         `/v1/auth/${token?.provider}/login`,
         removePropertiesEmpty(data),
