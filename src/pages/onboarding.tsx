@@ -22,7 +22,8 @@ const Onboarding: NextPageWithLayout = () => {
     await update();
     setCurStep((step) => step + 1);
     if (curstep > numSteps) {
-      setCurStep(1);
+      // setCurStep(1);
+      router.push("/");
     }
   }, [curstep]);
 

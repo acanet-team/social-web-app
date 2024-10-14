@@ -127,6 +127,7 @@ export default function Profile({
 
   const fetchProfileData = async () => {
     try {
+      console.log("ppppooo");
       const dtProfileRes = await getProfile(String(idUser));
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
@@ -355,7 +356,11 @@ export default function Profile({
         />
       )}
       {id === dataUser.id && curTab === TabPnum.Nft && (
-        <TabNftProfile user={dtUser} idParam={String(idUser)} />
+        <TabNftProfile
+          user={dtUser}
+          idParam={String(idUser)}
+          updateUserWallet={fetchProfileData}
+        />
       )}
       {dtUser.role.name === "broker" && curTab === TabPnum.Rating && (
         <TabRating brokerData={dtUser} />

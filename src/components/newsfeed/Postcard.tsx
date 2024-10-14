@@ -281,13 +281,19 @@ export default function PostCard(props: {
         </button>
       </div>
     ) : (
-      <button
-        className={buttonClass}
-        onClick={onCancelSellNFTHandler}
-        disabled={isBuyingNFT ? true : false}
-      >
-        {isBuyingNFT ? spinner : tNFT("cancel_nft")}
-      </button>
+      <div className="position-relative">
+        <div className={`${styles["post-nft__price"]} text-current`}>
+          {/* {additionalData.price + " " + additionalData.currency} */}
+          {formatNumber(additionalData.price) + " MOVE"}
+        </div>
+        <button
+          className={buttonClass}
+          onClick={onCancelSellNFTHandler}
+          disabled={isBuyingNFT ? true : false}
+        >
+          {isBuyingNFT ? spinner : tNFT("cancel_nft")}
+        </button>
+      </div>
     );
   };
   const renderLikeAndCommentSection = () => (
@@ -444,8 +450,9 @@ export default function PostCard(props: {
         <Box
           sx={{
             width: "100%",
-            maxHeight: 500,
-            overflow: "hidden",
+            maxHeight: postType === "nft" ? "none" : 500,
+            height: "max-content",
+            overflow: postType === "nft" ? "none" : "hidden",
           }}
         >
           <p className="fw-500 lh-26 font-xss w-100 mb-2">
@@ -467,14 +474,14 @@ export default function PostCard(props: {
           </p>
           {postType === "nft" && (
             <div
-              className={`${styles["nft-card"]} d-flex justify-content-center`}
+              className={`${styles["nft-card"]} d-flex justify-content-center mb-3`}
             >
               <div
-                className={`${styles["nft-card__container"]} card p-0 border-0 h-100`}
+                className={`card p-0 border-0 h-100`}
                 style={{ borderRadius: "10px" }}
               >
                 <div
-                  className={`${styles["nft-card_body"]} card-body p-3 position-relative d-flex justify-content-center mb-2`}
+                  className={`${styles["nft-card_body"]} card-body p-3 position-relative d-flex flex-column`}
                 >
                   <div className="card-image p-0">
                     <Image
@@ -490,9 +497,9 @@ export default function PostCard(props: {
                     {nft.name ?? "NFT"}
                   </h5> */}
                   {/* <p className="fw-500 font-xsss text-grey-500 m-0">
-                    {nft.description.length > 50
-                      ? `${nft.description.substring(0, 80)}...`
-                      : nft.description}
+                    {content.length > 50
+                      ? `${content.substring(0, 80)}...`
+                      : content}
                   </p> */}
                 </div>
               </div>
