@@ -55,7 +55,9 @@ export default function CreateProfileForm(props: {
     if (session) {
       setUserInfo({
         ...session.user,
-        fullName: `${session?.user?.lastName} ${session?.user?.firstName}`,
+        fullName: `${session?.user?.lastName || ""} ${
+          session?.user?.firstName || ""
+        }`,
         avatar: session.user.photo?.path || "/assets/images/user.png",
       });
       // setEmailIsWhiteList(session.user.isBroker)

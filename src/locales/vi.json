@@ -95,7 +95,9 @@
     "broker_title": "Danh sách môi giới",
     "signal_accuracy": "Độ chính xác",
     "signal_accuracy_tooltip": "Độ chính xác được tính toán dựa trên các tín hiệu đã chạm điểm chốt lời của nhà môi giới này trong quá khứ",
-    "no_AI_summary": "Bản tóm tắt AI đang cập nhật."
+    "no_AI_summary": "Bản tóm tắt AI đang cập nhật.",
+    "no_broker_found": "Không tìm thấy nhà môi giới.",
+    "AI_summary_disclaimer": "Bản tóm tắt được tạo bởi AI."
   },
   "Interest": {
     "interest_title": "Bạn quan tâm đến điều gì?",
@@ -392,7 +394,7 @@
     "filter_paid": "Trả phí"
   },
   "Comment": {
-    "no_comment": "Không có bình luận.",
+    "no_comment": "Hãy là người đầu tiên bình luận",
     "write_comment": "Viết bình luận",
     "error_post_comment": "Không gửi được bình luận"
   },
@@ -491,16 +493,19 @@
     "community_tab": "Cộng đồng",
     "people_tab": "Người dùng",
     "posts_tab": "Bài viết",
-    "search_placeholer": "Gõ để tìm kiếm...",
+    "communities": "Cộng đồng",
+    "search_placeholer": "Nhập để tìm kiếm...",
     "search_result_title": "Kết quả tìm kiếm cho",
+    "search_no_result": "Không có kết quả tìm kiếm cho",
+    "see_all": "Xem tất cả",
     "see_more_results": "Xem thêm kết quả"
   },
   "NFT": {
-    "nft_tab_title": "Hồ sơ NFT",
+    "nft_tab_title": "Quản lý NFT",
     "no_nft_found": "Không tìm thấy NFT nào",
-    "sell_nft": "Bán",
-    "buy_nft": "Mua",
-    "cancel_nft": "Huỷ",
+    "sell_nft": "Bán NFT",
+    "buy_nft": "Mua NFT",
+    "cancel_nft": "Huỷ bán",
     "sell_content": "Nội dung",
     "sell_price": "Giá",
     "sell_confirm": "Xác nhận",

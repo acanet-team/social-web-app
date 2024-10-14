@@ -12,14 +12,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useTranslations } from "next-intl";
-import { donateBroker } from "@/api/wallet";
 import { throwToast } from "@/utils/throw-toast";
-import { getEntryPrice, getSignalPairs } from "@/api/signal";
+import { createSignal, getEntryPrice, getSignalPairs } from "@/api/signal";
 import _debounce from "lodash/debounce";
 import styles from "@/styles/modules/signal.module.scss";
-import DotWaveLoader from "../DotWaveLoader";
-import { blue } from "@mui/material/colors";
-import { root } from "postcss";
 export interface OptionType {
   description: string;
   exchange: string;
@@ -183,7 +179,7 @@ export default function CreateSignal() {
         setFinishCreateSignal(true);
         if (values.expiry) {
           const expiryAt = new Date(values.expiry).getTime();
-          await donateBroker({
+          await createSignal({
             signalPair: values.pairs,
             type: values.type,
             expiryAt: expiryAt,
