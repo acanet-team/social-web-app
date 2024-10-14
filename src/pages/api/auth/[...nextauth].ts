@@ -9,7 +9,7 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { randomUUID } from "crypto";
 import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
-import console from "console";
+import axios from "axios";
 
 const options: NextAuthOptions = {
   providers: [
@@ -49,6 +49,51 @@ const options: NextAuthOptions = {
           };
           return returned;
         }
+        return null;
+      },
+    }),
+    CredentialsProvider({
+      id: "zalo-login",
+      name: "Zalo Login",
+      credentials: {},
+      async authorize(credentials, req) {
+        const { codeVerifier, code } = req.query ?? {};
+        const data = {
+          app_id: process.env.NEXT_APP_ID,
+          code: code,
+          code_verifier: codeVerifier || "",
+          grant_type: "authorization_code",
+        };
+        const res = await axios.post(
+          "https://oauth.zaloapp.com/v4/access_token",
+          data,
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              secret_key: process.env.NEXT_PUBLIC_ZALO_SECRET ?? "",
+            },
+          },
+        );
+        const json = res.data;
+        if (json.access_token) {
+          const userInfo = await axios.get(
+            `https://graph.zalo.me/v2.0/me?fields=id,name,picture`,
+            {
+              headers: {
+                access_token: `${json.access_token}`,
+              },
+            },
+          );
+          const { id, name, picture } = userInfo.data;
+          return {
+            id,
+            email: `${id}@zalo.com`,
+            name,
+            image: picture.data.url,
+            token: json.access_token,
+          };
+        }
+
         return null;
       },
     }),
@@ -129,6 +174,10 @@ const options: NextAuthOptions = {
       if (account?.provider === "telegram-login") {
         Object.assign(data, user);
         token.provider = "telegram";
+      }
+      if (account?.provider === "zalo-login") {
+        data.accessToken = user.token;
+        token.provider = "zalo";
       }
       const res = await httpClient.post<any, any>(
         `/v1/auth/${token?.provider}/login`,
