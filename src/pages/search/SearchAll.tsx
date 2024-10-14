@@ -5,11 +5,12 @@ import type { IQuickSearchResponse } from "@/api/search/model";
 import { useTranslations } from "next-intl";
 
 /* eslint-disable react/display-name */
-export default function (props: {
+export default function SearchAll(props: {
   searchData: IQuickSearchResponse;
   switchTab: React.Dispatch<React.SetStateAction<string>>;
+  keyword: string;
 }) {
-  const { searchData, switchTab } = props;
+  const { searchData, switchTab, keyword } = props;
   const tSearch = useTranslations("Search");
 
   return (
@@ -17,7 +18,7 @@ export default function (props: {
       {searchData?.users?.length === 0 &&
         searchData?.communities?.length === 0 && (
           <div className={`${styles["text-dark-mode"]} mt-5 text-center`}>
-            {tSearch("search_no_result")}
+            {`${tSearch("search_no_result")} ${keyword}`}
           </div>
         )}
       <div className="mb-5">

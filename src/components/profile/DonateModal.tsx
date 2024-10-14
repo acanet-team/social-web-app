@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { throwToast } from "@/utils/throw-toast";
 import { ethers } from "ethers";
 import type { IUserInfo } from "@/api/community/model";
+import "dotenv/config";
 
 function DonateModal(props: {
   show: boolean;
@@ -102,7 +103,7 @@ function DonateModal(props: {
             donateUser.toString(),
             {
               from: account?.address,
-              gasLimit: 2000000,
+              gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
               value: ethers.utils.parseEther(values.amount.toString()),
             },
           );

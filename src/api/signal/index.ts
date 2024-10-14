@@ -1,6 +1,8 @@
 import { removePropertiesEmpty } from "@/utils/Helpers";
 import httpClient from "..";
 import type {
+  createSignalParams,
+  createSignalResponse,
   getSignalCardParams,
   getSignalCardResponse,
   ISignalDaily,
@@ -53,4 +55,11 @@ export const getEntryPrice = (symbol: string) => {
   return httpClient.get<symbolEntryPriceResponse>(
     `/v1/signal/symbol?symbol=${symbol}&type=spot`,
   );
+};
+
+export const createSignal = (values: createSignalParams) => {
+  return httpClient.post<
+    createSignalParams,
+    BaseResponse<createSignalResponse>
+  >(`/v1/signal`, values);
 };

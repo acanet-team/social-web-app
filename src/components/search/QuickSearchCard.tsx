@@ -16,6 +16,7 @@ import { joinPaidCommunity } from "@/api/wallet";
 import { ethers } from "ethers";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import "dotenv/config";
 
 export default function QuickSearchCard(props: {
   type: "community" | "user";
@@ -151,7 +152,7 @@ export default function QuickSearchCard(props: {
           curUser?.toString(),
           {
             from: account?.address,
-            gasLimit: 2000000,
+            gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
             value: ethers.utils.parseEther(fee.toString()),
           },
         );
@@ -226,7 +227,7 @@ export default function QuickSearchCard(props: {
             onClick={() =>
               onClickCardHandler(
                 type === "user"
-                  ? (data as ISearchUserResponse).userId
+                  ? (data as ISearchUserResponse).nickName
                   : (data as ISearchCommunityResponse).communityStatus ===
                       "joined"
                     ? (data as ISearchCommunityResponse).id

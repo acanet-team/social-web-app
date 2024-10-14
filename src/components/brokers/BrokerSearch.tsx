@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "@/styles/modules/brokerProfile.module.scss";
 import { useTranslations } from "next-intl";
 import InputLabel from "@mui/material/InputLabel";
@@ -10,6 +10,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Checkbox from "@mui/material/Checkbox";
 import { createGetAllTopicsRequest } from "@/api/onboard";
 import { combineUniqueById } from "@/utils/combine-arrs";
+import _debounce from "lodash/debounce";
 
 interface Option {
   id: string;
@@ -47,16 +48,14 @@ export default function BrokerSearch(props: {
     }
   };
 
-  const onSearchHandler = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+  const onSearchHandler = useCallback(
+    _debounce((e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-      const inputElement = searchRef.current;
-      if (inputElement) {
-        console.log("sssss", inputElement.value);
-        setSearch(inputElement.value);
-      }
-    }
-  };
+      console.log("sssss", e.target.value);
+      setSearch(e.target.value);
+    }, 500),
+    [],
+  );
 
   useEffect(() => {
     if (curPage > 1) {
@@ -133,8 +132,7 @@ export default function BrokerSearch(props: {
               type="text"
               className={`${styles["page-title__search"]} form-control mb-0 bg-greylight theme-dark-bg border-0`}
               placeholder={tSearch("search_placeholer")}
-              ref={searchRef}
-              onKeyDown={(e) => onSearchHandler(e)}
+              onChange={(e) => onSearchHandler(e)}
             />
           </div>
         </form>

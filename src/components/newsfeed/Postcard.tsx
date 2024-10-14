@@ -22,6 +22,7 @@ import { useWeb3 } from "@/context/wallet.context";
 import { ethers } from "ethers";
 import { onCancelSellNFT } from "@/api/nft";
 import { formatNumber } from "@/utils/format-number";
+import "dotenv/config";
 
 export default function PostCard(props: {
   groupOwnerId: number | "";
@@ -222,7 +223,7 @@ export default function PostCard(props: {
       }
       setIsBuyingNFT(true);
       const res = await nftMarketContract.buyNFT(additionalData.nftTokenId, {
-        gasLimit: 2000000,
+        gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
         value: ethers.utils.parseEther(additionalData.price.toString()),
       });
       res.wait();
@@ -247,7 +248,7 @@ export default function PostCard(props: {
       additionalData.nftTokenId,
       {
         from: account?.address,
-        gasLimit: 2000000,
+        gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
       },
     );
     cancelSellNFT.wait();

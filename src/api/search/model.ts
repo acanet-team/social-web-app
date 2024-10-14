@@ -7,6 +7,7 @@ export interface ISearchUserResponse {
   userId: number;
   firstName: string;
   lastName: string;
+  nickName: string;
   photo: Photo;
   role: string;
   followersCount: number;

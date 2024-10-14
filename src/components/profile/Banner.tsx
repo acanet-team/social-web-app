@@ -84,6 +84,14 @@ const Banner: React.FC<TabBannerProps> = ({
   const [connectionRequestId, setConnectionRequestId] = useState<string | null>(
     "",
   );
+  const accuracyColor =
+    signalAccuracy === null
+      ? styles["signal-none"]
+      : Number(signalAccuracy) >= 75
+        ? styles["signal-green"]
+        : Number(signalAccuracy) >= 50
+          ? styles["signal-yellow"]
+          : styles["signal-red"];
 
   useEffect(() => {
     setPreviewAvatar(dataUser?.photo?.path);
@@ -679,15 +687,7 @@ const Banner: React.FC<TabBannerProps> = ({
               >
                 <Tooltip title={tBroker("signal_accuracy_tooltip")}>
                   <i
-                    className={`${
-                      signalAccuracy === null
-                        ? styles["signal-none"]
-                        : Number(signalAccuracy) >= 75
-                          ? styles["signal-green"]
-                          : Number(signalAccuracy) >= 50
-                            ? styles["signal-yellow"]
-                            : styles["signal-red"]
-                    } bi bi-info-circle position-absolute`}
+                    className={`${accuracyColor} bi bi-info-circle position-absolute`}
                     style={{
                       right: "-15px",
                       top: "-5px",
@@ -696,49 +696,17 @@ const Banner: React.FC<TabBannerProps> = ({
                     }}
                   ></i>
                 </Tooltip>
-                <span
-                  className={
-                    signalAccuracy === null
-                      ? styles["signal-none"]
-                      : Number(signalAccuracy) >= 75
-                        ? styles["signal-green"]
-                        : Number(signalAccuracy) >= 50
-                          ? styles["signal-yellow"]
-                          : styles["signal-red"]
-                  }
-                >
+                <span className={accuracyColor}>
                   {tBroker("signal_accuracy") + ": "}
                 </span>
                 {!Number.isNaN(signalAccuracy) && signalAccuracy ? (
-                  <span
-                    className={
-                      signalAccuracy === null
-                        ? styles["signal-none"]
-                        : Number(signalAccuracy) >= 75
-                          ? styles["signal-green"]
-                          : Number(signalAccuracy) >= 50
-                            ? styles["signal-yellow"]
-                            : styles["signal-red"]
-                    }
-                  >
+                  <span className={accuracyColor}>
                     {+signalAccuracy % 1 !== 0
                       ? (+signalAccuracy).toFixed(2) + "%"
                       : +signalAccuracy + "%"}
                   </span>
                 ) : (
-                  <span
-                    className={
-                      signalAccuracy === null
-                        ? styles["signal-none"]
-                        : Number(signalAccuracy) >= 75
-                          ? styles["signal-green"]
-                          : Number(signalAccuracy) >= 50
-                            ? styles["signal-yellow"]
-                            : styles["signal-red"]
-                    }
-                  >
-                    N/A
-                  </span>
+                  <span className={accuracyColor}>N/A</span>
                 )}
               </div>
               <Ratings rating={avarageRating} size={18} />
