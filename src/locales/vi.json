@@ -50,7 +50,8 @@
     "your_social_account": "tài khoản xã hội của bạn",
     "sign_in_with": "Đăng nhập bằng",
     "meta_description": "Đăng nhập liền mạch vào tài khoản của bạn bằng quy trình đăng nhập thân thiện với người dùng của chúng tôi",
-    "meta_title": "Đăng nhập"
+    "meta_title": "Đăng nhập",
+    "sign_in_with_zalo": "Đăng nhập bằng Zalo"
   },
   "CreatePost": {
     "live_Video": "Video trực tiếp",

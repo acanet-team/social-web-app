@@ -1,19 +1,15 @@
 import "dotenv/config";
-
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-
 import httpClient from "@/api";
 import { getMe, guestLogin, refreshToken } from "@/api/auth";
 import { removePropertiesEmpty } from "@/utils/Helpers";
-import type { NextAuthOptions, User } from "next-auth";
-import { setCookie } from "nookies";
-import { trigger } from "@spotlightjs/spotlight";
-import { useGuestToken } from "@/context/guestToken";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { randomUUID } from "crypto";
-import { truncate } from "fs/promises";
+import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
+import axios from "axios";
 
 const options: NextAuthOptions = {
   providers: [
@@ -33,6 +29,74 @@ const options: NextAuthOptions = {
         };
       },
     }),
+    CredentialsProvider({
+      id: "telegram-login",
+      name: "Telegram Login",
+      credentials: {},
+      async authorize(credentials, req) {
+        const validator = new AuthDataValidator({
+          botToken: `${process.env.NEXT_PUBLIC_BOT_TOKEN}`,
+        });
+        const data = objectToAuthDataMap(req.query || {});
+        const user = await validator.validate(data);
+        if (user.id && user.first_name) {
+          const returned = {
+            id: user.id.toString(),
+            email: user.id.toString(),
+            name: [user.first_name, user.last_name || ""].join(" "),
+            image: user.photo_url,
+            ...req.query,
+          };
+          return returned;
+        }
+        return null;
+      },
+    }),
+    CredentialsProvider({
+      id: "zalo-login",
+      name: "Zalo Login",
+      credentials: {},
+      async authorize(credentials, req) {
+        const { codeVerifier, code } = req.query ?? {};
+        const data = {
+          app_id: process.env.NEXT_APP_ID,
+          code: code,
+          code_verifier: codeVerifier || "",
+          grant_type: "authorization_code",
+        };
+        const res = await axios.post(
+          "https://oauth.zaloapp.com/v4/access_token",
+          data,
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              secret_key: process.env.NEXT_PUBLIC_ZALO_SECRET ?? "",
+            },
+          },
+        );
+        const json = res.data;
+        if (json.access_token) {
+          const userInfo = await axios.get(
+            `https://graph.zalo.me/v2.0/me?fields=id,name,picture`,
+            {
+              headers: {
+                access_token: `${json.access_token}`,
+              },
+            },
+          );
+          const { id, name, picture } = userInfo.data;
+          return {
+            id,
+            email: `${id}@zalo.com`,
+            name,
+            image: picture.data.url,
+            token: json.access_token,
+          };
+        }
+
+        return null;
+      },
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
@@ -47,7 +111,7 @@ const options: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, account, trigger }: any) {
+    async jwt({ token, account, trigger, user }: any) {
       if (account?.provider === "credentials") {
         const guestTokenRes: any = await guestLogin();
         const guestToken = guestTokenRes.token;
@@ -107,7 +171,14 @@ const options: NextAuthOptions = {
         data.accessToken = account.access_token;
         token.provider = "facebook";
       }
-
+      if (account?.provider === "telegram-login") {
+        Object.assign(data, user);
+        token.provider = "telegram";
+      }
+      if (account?.provider === "zalo-login") {
+        data.accessToken = user.token;
+        token.provider = "zalo";
+      }
       const res = await httpClient.post<any, any>(
         `/v1/auth/${token?.provider}/login`,
         removePropertiesEmpty(data),

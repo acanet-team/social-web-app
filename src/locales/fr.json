@@ -54,7 +54,8 @@
     "sign_in_with": "Se connecter avec",
     "your_social_account": "Votre compte social",
     "sign_in_with_google": "Connectez-vous avec Google",
-    "sign_in_with_facebook": "Connectez-vous avec Facebook"
+    "sign_in_with_facebook": "Connectez-vous avec Facebook",
+    "sign_in_with_zalo": "Connectez-vous avec Zalo"
   },
   "SignUp": {
     "meta_title": "S'inscrire",

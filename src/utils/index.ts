@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 const colorThemeBlue = {
   themeColorMain: "#1e74fd",
   themeColor: "#100c28",
@@ -23,3 +25,19 @@ export const toHex = (num: any) => {
   const val = Number(num);
   return "0x" + val.toString(16);
 };
+
+export function generateCodeChallenge(codeVerifier: string) {
+  // Bước 1: Hash chuỗi code_verifier bằng SHA-256
+  const sha256Hash = crypto.createHash("sha256").update(codeVerifier).digest();
+
+  // Bước 2: Mã hóa kết quả hash thành base64
+  const base64Encode = sha256Hash.toString("base64");
+
+  // Bước 3: Chuyển đổi base64 thành base64-url bằng cách thay thế các ký tự không hợp lệ trong URL
+  const base64url = base64Encode
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+
+  return base64url;
+}
