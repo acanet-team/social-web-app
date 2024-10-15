@@ -1,18 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "@/styles/modules/profile.module.scss";
-import type {
-  BrokerProfile,
-  FormDtLicense,
-  License,
-} from "@/api/profile/model";
+import type { BrokerProfile, License } from "@/api/profile/model";
 import { ModalLicense } from "./ModalLicense";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { deleteLicense } from "@/api/profile";
 import WaveLoader from "../WaveLoader";
 
-const License = ({
+export const LicensesCertificate = ({
   dataBrokerProfile,
   role,
 }: {
@@ -27,15 +23,15 @@ const License = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [formDt, setFormDt] = useState<FormDtLicense>({
+  const [formDt, setFormDt] = useState<License>({
     id: "",
     logo: "",
     licenseType: "",
     licenseIssuer: "",
     licenseState: "",
-    licenseIssueDate: "",
+    licenseIssueDate: null,
     licenseStatus: "",
-    licenseExpirationDate: "",
+    licenseExpirationDate: null,
     credentialID: "",
   });
   const [licenses, setLicenses] = useState<License[]>([]);
@@ -43,34 +39,35 @@ const License = ({
     setLicenses(dataBrokerProfile?.licenses ?? []);
   }, [dataBrokerProfile]);
 
+  // console.log("Licenses", licenses);
+
   const licenseToShow = showAllLicense ? licenses : licenses.slice(0, 2);
 
-  const handleAddModal = useCallback(() => {
+  const handleAddModal = () => {
     setIsEditing(false);
     setShow(true);
-  }, []);
-
-  const handleCancel = useCallback(() => {
+  };
+  const handleCancel = () => {
     setShow(false);
-  }, []);
+  };
 
-  const handleEditModal = useCallback((cer: FormDtLicense) => {
+  const handleEditModal = (cer: License) => {
     setIsEditing(true);
     setShow(true);
     setFormDt(cer);
-  }, []);
+  };
 
-  const handleOpenEdit = useCallback(() => {
+  const handleOpenEdit = () => {
     setShowIconEdit(true);
     setShowIconBack(true);
-  }, []);
+  };
 
-  const handleCloseEdit = useCallback(() => {
+  const handleCloseEdit = () => {
     setShowIconEdit(false);
     setShowIconBack(false);
-  }, []);
+  };
 
-  const delCertifications = useCallback(async (id: string) => {
+  const delCertifications = async (id: string) => {
     setIsLoading(true);
     try {
       if (id) {
@@ -82,7 +79,7 @@ const License = ({
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
   return (
     <>
@@ -231,5 +228,3 @@ const License = ({
     </>
   );
 };
-
-export default License;

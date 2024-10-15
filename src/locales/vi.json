@@ -316,7 +316,12 @@
     "confirm": "Đồng ý",
     "delete": "Huỷ",
     "Respond": "Phản hồi",
-    "View ranking scheme": "Xem cơ chế xếp hạng"
+    "View ranking scheme": "Xem cơ chế xếp hạng",
+    "error_missing_license_type": "Loại giấy phép là bắt buộc",
+    "error_missing_issue_date": "Ngày cấp là bắt buộc",
+    "error_missing_expiration_date": "Ngày hết hạn là bắt buộc",
+    "error_missing_status": "Trạng thái giấy phép là bắt buộc",
+    "error_expiration_before_issue_date": "Ngày hết hạn phải sau ngày cấp"
   },
   "Community": {
     "community": "Cộng đồng",
@@ -478,7 +483,10 @@
     "create_signal_win": "bạn tạo đã chạm mốc chốt lãi. Độ chính xác tín hiệu của bạn đã được điều chỉnh.",
     "Congratulations": "Chúc mừng",
     "new_noti": "Thông báo mới",
-    "verify_broker_process": "Chúng tôi đã nhận được thông tin và sẽ xác nhận và trả lười trong vòng 24 giờ."
+    "verify_broker_process": "Chúng tôi đã nhận được thông tin và sẽ xác nhận và trả lười trong vòng 24 giờ.",
+    "nft_buy_request": "gửi tới bạn yêu cầu mua nft.",
+    "nft_buy_success": "Bạn mua nft ",
+    "nft_buy_successful": "thành công"
   },
   "Donate": {
     "confirm": "Xác nhận",

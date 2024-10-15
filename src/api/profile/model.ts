@@ -108,13 +108,13 @@ export interface License {
   credentialID: string;
   logo: string;
   licenseType: string;
-  licenseState: string;
+  licenseState?: string;
   licenseIssuer: string;
   licenseStatus: string;
-  licenseIssueDate: string;
-  licenseExpirationDate: string;
-  shortDesc: string;
-  additionalData: {};
+  licenseIssueDate: string | null | Date;
+  licenseExpirationDate: string | null | Date;
+  shortDesc?: string;
+  additionalData?: {};
 }
 
 export interface Company {
@@ -185,17 +185,17 @@ export interface FormDtSchool {
   description: string;
 }
 
-export interface FormDtLicense {
-  id?: string;
-  logo: File | string;
-  licenseType: string;
-  licenseIssuer: string;
-  licenseState: string;
-  licenseIssueDate: string | Date;
-  licenseStatus: string;
-  licenseExpirationDate: string | Date;
-  credentialID: string;
-}
+// export interface FormDtLicense {
+//   id?: string;
+//   logo: File | string;
+//   licenseType: string;
+//   licenseIssuer: string;
+//   // licenseState: string;
+//   licenseIssueDate: number | Date;
+//   licenseStatus: string;
+//   licenseExpirationDate: number | Date;
+//   credentialID: string;
+// }
 
 export interface GetCommunitiesParams {
   page: number;

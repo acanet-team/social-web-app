@@ -356,7 +356,12 @@
     "delete": "Delete",
     "Respond": "Respond",
     "View ranking scheme": "View ranking scheme",
-    "No posts found": "No posts found."
+    "No posts found": "No posts found.",
+    "error_missing_license_type": "License type is required",
+    "error_missing_issue_date": "Issue Date is required",
+    "error_missing_expiration_date": "Expiration  Date is required",
+    "error_missing_status": "License Status is required",
+    "error_expiration_before_issue_date": "Expiration after issue date"
   },
   "FeedTabs": {
     "for_you": "For you",
@@ -478,7 +483,10 @@
     "create_signal_win": "you created has successfully hit the take-profit target on date-time. Your accuary rate has been enhanced.",
     "Congratulations": "Congratulations!",
     "new_noti": "New Notification!",
-    "verify_broker_process": "We've received your information and will get back to you within 24 hours"
+    "verify_broker_process": "We've received your information and will get back to you within 24 hours",
+    "nft_buy_request": "sent you the request to buy your nft",
+    "nft_buy_success": "You sell",
+    "nft_buy_successful": "'nft success"
   },
   "Donate": {
     "confirm": "Confirm",

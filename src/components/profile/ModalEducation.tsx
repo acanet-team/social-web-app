@@ -252,6 +252,14 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   logo: "",
                 });
               }}
+              sx={{
+                width: "100%",
+                height: "56px",
+                "& fieldset": {
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                },
+              }}
               renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
                 return (
@@ -292,6 +300,14 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   value={formData.degree}
                   onChange={handleSelectChange}
                   displayEmpty
+                  sx={{
+                    width: "100%",
+                    height: "56px",
+                    "& fieldset": {
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                    },
+                  }}
                   style={{ width: "100%", height: "56px" }}
                 >
                   <MenuItem value="" disabled>
@@ -385,6 +401,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
               >
                 <p className="m-0 py-1 fw-600 font-xs ">{t("start year")}</p>
                 <DatePicker
+                  disableFuture
                   className="w__100"
                   value={dayjs(formData.startDate)}
                   onChange={(date) => {
@@ -401,6 +418,14 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                       }));
                     }
                   }}
+                  sx={{
+                    width: "100%",
+                    height: "56px",
+                    "& fieldset": {
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                    },
+                  }}
                   views={["year"]}
                 />
                 {errors.startDate && (
@@ -411,6 +436,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 <div style={{ width: "48.5%" }}>
                   <p className="m-0 py-1 fw-600 font-xs">{t("end year")}</p>
                   <DatePicker
+                    disableFuture
                     className="w__100"
                     value={dayjs(formData.endDate)}
                     onChange={(date) =>
@@ -419,6 +445,14 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                         endDate: date ? dayjs(date).format("DD-MM-YYYY") : "",
                       })
                     }
+                    sx={{
+                      width: "100%",
+                      height: "56px",
+                      "& fieldset": {
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                      },
+                    }}
                     views={["year"]}
                   />
                 </div>
