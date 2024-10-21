@@ -191,7 +191,7 @@ const LoginPage: NextPageWithLayout = () => {
                     {t("sign_in_with_facebook")}
                   </button>
                 </div>
-                <div className="form-group mb-1">
+                {/**<div className="form-group mb-1">
                   <button
                     type="button"
                     aria-label="Sign in with Zalo"
@@ -208,7 +208,7 @@ const LoginPage: NextPageWithLayout = () => {
                     />{" "}
                     {t("sign_in_with_zalo")}
                   </button>
-                </div>
+                </div> */}
                 <div className="form-group mb-1">
                   {/* <button
                     type="button"
