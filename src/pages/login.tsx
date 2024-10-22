@@ -9,13 +9,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { NextPageWithLayout } from "./_app";
-import { guestLogin } from "@/api/auth";
 import { useGuestToken } from "@/context/guestToken";
+import { LoginButton } from "@telegram-auth/react";
+import { generate_pkce_codes, generate_state_param } from "@/utils/zaloOauth";
+import { generateCodeChallenge } from "@/utils";
 
 const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
   const t = useTranslations("SignIn");
   const [curTheme, setCurTheme] = useState("theme-light");
+  const [zaloCode, setZaloCode] = useState("");
   const { data: session, update } = useSession() as any;
   const { showLoading } = useLoading();
   // Zustand store
@@ -34,6 +37,47 @@ const LoginPage: NextPageWithLayout = () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
+
+  const handleZaloLogin = () => {
+    showLoading();
+    const state = generate_state_param();
+    const code = generate_pkce_codes();
+    const codeVerifier = code.verifier;
+    localStorage.setItem("zalo_code_verifier", codeVerifier);
+    let authUri =
+      `https://oauth.zaloapp.com/v4/permission` +
+      "?" +
+      new URLSearchParams({
+        app_id: process.env.NEXT_PUBLIC_APP_ID || "1424978791068098776",
+        redirect_uri: `${process.env.NEXT_PUBLIC_DOMAIN}`,
+        code_challenge: generateCodeChallenge(codeVerifier),
+        state: state,
+      }).toString();
+
+    // Chuyển người dùng tới trang Zalo để đăng nhập
+    window.location.replace(authUri);
+  };
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    setZaloCode(queryParams.get("code") || zaloCode);
+
+    if (zaloCode) {
+      // Thực hiện đăng nhập với mã zaloCode và codeVerifier
+      const codeVerifier = localStorage.getItem("zalo_code_verifier");
+      if (codeVerifier) {
+        signIn(
+          "zalo-login",
+          {
+            callbackUrl: "/",
+          },
+          {
+            code: zaloCode,
+            codeVerifier,
+          },
+        );
+      }
+    }
+  }, [zaloCode]);
 
   useEffect(() => {
     if (session) {
@@ -146,6 +190,58 @@ const LoginPage: NextPageWithLayout = () => {
                     />{" "}
                     {t("sign_in_with_facebook")}
                   </button>
+                </div>
+                {/**<div className="form-group mb-1">
+                  <button
+                    type="button"
+                    aria-label="Sign in with Zalo"
+                    title="Sign in with Zalo"
+                    className="form-control style2-input fw-600 bg-linkedin border-0 p-0 text-left text-white "
+                    onClick={handleZaloLogin}
+                  >
+                    <Image
+                      src="/assets/images/icons8-zalo-48.png"
+                      alt="icon"
+                      width={40}
+                      height={40}
+                      className="w40 mb-1 me-5 ms-2"
+                    />{" "}
+                    {t("sign_in_with_zalo")}
+                  </button>
+                </div> */}
+                <div className="form-group mb-1">
+                  {/* <button
+                    type="button"
+                    aria-label="Sign in with Telegram"
+                    title="Sign in with Telegram"
+                    className="form-control style2-input fw-600 bg-twiiter border-0 p-0 text-left text-white "
+                    onClick={() => {
+                      showLoading();
+                      signIn("telegram-login", { callbackUrl: "/" }, {});
+                    }}
+                  >
+                    <Image
+                      width={40}
+                      height={40}
+                      src="/assets/images/icon-1.png"
+                      alt="icon"
+                      className="w40 mb-1 me-5 ms-2"
+                    />{" "}
+                    {t("sign_in_with_telegram")}
+                  </button>
+                   */}
+                  <LoginButton
+                    botUsername={"pi_mob_bot"}
+                    showAvatar={false}
+                    requestAccess={null}
+                    onAuthCallback={(data) => {
+                      signIn(
+                        "telegram-login",
+                        { callbackUrl: "/" },
+                        data as any,
+                      );
+                    }}
+                  />
                 </div>
               </div>
               <div

@@ -52,12 +52,15 @@ export default function Header(props: { isOnboarding: boolean }) {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [styleCountNoti, setStyleCountNoti] = useState("");
   const [isShowAddNoti, setIsShowAddNoti] = useState(false);
-  // const [notiSocket, setNotiSocket] = useState<Notification[]>([]);
+  const asPath = router.asPath;
+  const searchTermFromPath = asPath.split("/")[2]?.split("?")[0];
 
   useEffect(() => {
-    // console.log("notifications-yy", notifications);
-    // console.log("ahdfh", countNotis);
-  }, [notifications]);
+    // Auto fill search term in search bar if user is in search page
+    if (asPath.split("/")[1]?.includes("search") && searchTermFromPath) {
+      setQuickSearchTerm(searchTermFromPath.replace("%20", " "));
+    }
+  }, [searchTermFromPath, asPath]);
 
   useEffect(() => {
     const formatCountNoti = () => {
@@ -152,7 +155,7 @@ export default function Header(props: { isOnboarding: boolean }) {
 
   const onSearchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerms = e.target.value;
-    setQuickSearchTerm(e.target.value);
+    setQuickSearchTerm(searchTerms);
     if (!searchTerms) {
       return setQuickSearchTerm("");
     }
@@ -173,15 +176,20 @@ export default function Header(props: { isOnboarding: boolean }) {
     if (e.key === "Enter" && e.shiftKey == false) {
       e.preventDefault();
       const keyword = e.target.value;
+      setQuickSearchTerm(keyword);
       if (!keyword) return;
       router.push(`/search/${keyword}?tab=all`);
-      resetSearchInput();
+      // resetSearchInput();
+      setQuickSearchResults({ communities: [], users: [] });
+      toggleActive(false);
     }
   };
 
   const onFullSearchHandler = () => {
     router.push(`/search/${quickSearchTerm}`);
-    resetSearchInput();
+    // resetSearchInput();
+    setQuickSearchResults({ communities: [], users: [] });
+    toggleActive(false);
   };
 
   return (
@@ -317,7 +325,7 @@ export default function Header(props: { isOnboarding: boolean }) {
                   <div
                     className={`mb-4 text-center font-xsss ${styles["text-dark-mode"]}`}
                   >
-                    {tSearch("search_no_result")}
+                    {`${tSearch("search_no_result")} ${quickSearchTerm}`}
                   </div>
                 </div>
               )}

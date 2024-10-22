@@ -878,7 +878,7 @@ const Notifications: React.FC<NotificationProps> = ({
             </div>
           </>
         );
-      case "nft_buy_request":
+      case "nft_sold_out":
         return (
           <>
             <Image
@@ -906,50 +906,6 @@ const Notifications: React.FC<NotificationProps> = ({
                   {t("nft_buy_request")}
                 </span>
               </h5>
-              <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? getTimeDifference(notiAt) : ""}
-              </p>
-              {/* <p
-                className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
-              >
-                {notiAt ? TimeSinceDate(notiAt) : ""}
-              </p> */}
-            </div>
-          </>
-        );
-      case "nft_buy_success":
-        return (
-          <>
-            <Image
-              src={
-                sourceUser?.photo?.path ||
-                `/assets/images/Acanet_Black_White.png`
-              }
-              width={40}
-              height={40}
-              alt="user"
-              style={{ objectFit: "cover" }}
-              className={`w40 rounded-xl ${styles["img-noti"]}`}
-              onError={() => `/assets/images/Acanet_Black_White.png`}
-            />
-            <div>
-              <span
-                className={`${!read_at ? "text-grey-600" : "text-grey-500"} fw-500 font-xssss lh-4 m-0`}
-              >
-                {t("nft_buy_success")}
-                <h5
-                  className={`font-xssss ${!read_at ? "text-grey-900" : "text-grey-600"}  mb-0 mt-0 fw-700`}
-                >
-                  {" "}
-                  {sourceUser?.nickName
-                    ? sourceUser?.nickName
-                    : sourceUser?.firstName + sourceUser?.lastName}{" "}
-                </h5>
-                {t("nft_buy_successful")}
-              </span>
-
               <p
                 className={`font-xssss fw-600 m-0  ${!read_at ? "text-primary" : "text-grey-500"}`}
               >
@@ -1150,10 +1106,7 @@ const Notifications: React.FC<NotificationProps> = ({
       notificationType === "verify_broker_process"
     ) {
       toggleisNoti(false);
-    } else if (
-      notificationType === "nft_buy_request" ||
-      notificationType === "nft_buy_success"
-    ) {
+    } else if (notificationType === "nft_sold_out") {
       toggleisNoti(false);
       router.push(`/communities/detail/${idDetail}?tab=nft`);
     } else {
@@ -1278,14 +1231,7 @@ const Notifications: React.FC<NotificationProps> = ({
                           notification?.type,
                           notification?.read_at,
                         );
-                      } else if (notification?.type === "nft_buy_request") {
-                        readNotis(
-                          notification?.id,
-                          String(notification?.user?.nickName),
-                          notification?.type,
-                          notification?.read_at,
-                        );
-                      } else if (notification?.type === "nft_buy_success") {
+                      } else if (notification?.type === "nft_sold_out") {
                         readNotis(
                           notification?.id,
                           String(notification?.user?.nickName),

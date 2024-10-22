@@ -20,7 +20,7 @@ export type NotificationType =
   | "verify_broker_accept"
   | "verify_broker_reject"
   | "verify_broker_process"
-  | "nft_buy_request"
+  | "nft_sold_out"
   | "nft_buy_success";
 export type Notification = {
   id: string;

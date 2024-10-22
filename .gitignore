@@ -54,3 +54,4 @@ local
 .sentryclirc
 package-lock.json
 yarn.lock
+.idea

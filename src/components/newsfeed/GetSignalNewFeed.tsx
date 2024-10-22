@@ -82,7 +82,7 @@ const GetSignalNewFeed = () => {
                     className="rounded-circle"
                   />
                 </div>
-                <span className="m-0 fw-700 font-xssss">
+                <span className="m-0 fw-700 font-xsss text-align">
                   {signal?.owner?.nickName}
                 </span>
                 <div
@@ -91,8 +91,10 @@ const GetSignalNewFeed = () => {
                   {!Number.isNaN(signal?.signalAccuracy) &&
                   signal?.signalAccuracy
                     ? +signal?.signalAccuracy % 1 !== 0
-                      ? (+signal?.signalAccuracy).toFixed(2) + "% "
-                      : +signal?.signalAccuracy + "%" + t("accuracy")
+                      ? (+signal?.signalAccuracy).toFixed(2) +
+                        "% " +
+                        t("accuracy")
+                      : +signal?.signalAccuracy + "% " + t("accuracy")
                     : ""}
                 </div>
               </div>
@@ -117,7 +119,7 @@ const GetSignalNewFeed = () => {
                   <p className="m-0 fw-700 font-xsss text-white">
                     {signal?.signalPair}
                   </p>
-                  <p className="m-0 fw-100 font-xsssss text-white">
+                  <p className="m-0 fw-100 font-xssss text-white">
                     Expiring on{" "}
                     <span>{dayjs(signal?.expiryAt).format("DD/MM/YY")}</span>
                   </p>

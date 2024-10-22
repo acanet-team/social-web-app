@@ -97,7 +97,9 @@
     "sign_in_with": "Sign in with",
     "your_social_account": "Your social account",
     "sign_in_with_google": "Sign in with Google",
-    "sign_in_with_facebook": "Sign in with Facebook"
+    "sign_in_with_telegram": "Sign in with Telegram",
+    "sign_in_with_facebook": "Sign in with Facebook",
+    "sign_in_with_zalo": "Sign in with Zalo"
   },
   "SignUp": {
     "meta_title": "Sign up",
@@ -119,7 +121,9 @@
     "broker_title": "Broker List",
     "signal_accuracy": "Signal Accuracy",
     "signal_accuracy_tooltip": "The accuracy percentage is calculated based on the signals that reached the take-profit point of this broker in the past",
-    "no_AI_summary": "AI summary comming soon."
+    "no_AI_summary": "AI summary comming soon.",
+    "no_broker_found": "No broker found.",
+    "AI_summary_disclaimer": "This summary is generated using AI"
   },
   "Interest": {
     "interest_title": "What are you interested in?",
@@ -396,7 +400,7 @@
     "filter_paid": "Paid"
   },
   "Comment": {
-    "no_comment": "No comment found.",
+    "no_comment": "Be the first one to comment",
     "write_comment": "Write a comment",
     "error_post_comment": "Failed to send the message"
   },
@@ -502,18 +506,18 @@
     "communities": "Communities",
     "search_placeholer": "Type to search...",
     "search_result_title": "Search result for",
-    "search_no_result": "No results found.",
+    "search_no_result": "No results found for",
     "see_all": "See all",
     "see_more_results": "Show me more results"
   },
   "NFT": {
-    "nft_tab_title": "NFT Profile",
+    "nft_tab_title": "Manage your NFTs",
     "no_nft_found": "No NFTs found",
     "sell_nft": "Sell",
     "buy_nft": "Buy NFT",
     "sell_content": "Content",
     "sell_price": "Price",
-    "cancel_nft": "Cancel NFT",
+    "cancel_nft": "Cancel Sale",
     "sell_confirm": "Confirm",
     "error_content_missing": "Please enter the content for your sell post.",
     "error_price_missing": "Please enter the price",

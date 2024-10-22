@@ -91,7 +91,7 @@ export default function SearchFullByType(props: {
   return (
     <div className="mt-5">
       {!isLoading && searchResults.length === 0 && (
-        <div className="mt-5 text-center">{tSearch("search_no_result")}</div>
+        <div className="mt-5 text-center">{`${tSearch("search_no_result")} ${keyword}`}</div>
       )}
       {isLoading && <DotWaveLoader />}
       {searchResults?.length > 0 &&

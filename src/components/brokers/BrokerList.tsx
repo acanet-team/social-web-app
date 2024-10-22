@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import CircleLoader from "@/components/CircleLoader";
 import Pagination from "@/components/Pagination";
 import BrokerProfile from "@/components/onboard/BrokerProfile";
+import { useTranslations } from "next-intl";
 
 export default function BrokerList(props: {
   searchTerm: string;
   interestTopicIds: string[];
 }) {
+  const t = useTranslations("BrokerList");
   const { searchTerm, interestTopicIds } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [brokers, setBrokers] = useState<any[]>([]);
@@ -47,6 +49,11 @@ export default function BrokerList(props: {
         </div>
       )}
       <div id={styles["all-brokers"]}>
+        {!isLoading && brokers?.length === 0 && (
+          <div className="mx-auto mt-4 text-grey-600">
+            {t("no_broker_found")}
+          </div>
+        )}
         {!isLoading &&
           brokers?.length > 0 &&
           brokers.map((b) => (
@@ -69,14 +76,16 @@ export default function BrokerList(props: {
             </div>
           ))}
       </div>
-      <div className={styles["brokers-pagination"]}>
-        <Pagination
-          pageUpdateFn={setPage}
-          page={page}
-          totalPage={totalPage}
-          isTable={false}
-        />
-      </div>
+      {!isLoading && brokers?.length > 0 && (
+        <div className={styles["brokers-pagination"]}>
+          <Pagination
+            pageUpdateFn={setPage}
+            page={page}
+            totalPage={totalPage}
+            isTable={false}
+          />
+        </div>
+      )}
     </>
   );
 }

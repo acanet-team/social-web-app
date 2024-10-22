@@ -49,7 +49,6 @@ export default function BrokerProfile(props: {
       const res = await rateContract.getAverageRating(brokerId.toString());
       const avgRating =
         res.brokerTotalScore.toNumber() / res.brokerRatingCount.toNumber() || 0;
-      console.log("rrrr", avgRating);
       setAverageRating(Number(avgRating));
     } catch (err) {
       console.log(err);
@@ -155,6 +154,11 @@ export default function BrokerProfile(props: {
             {summary?.length > 370
               ? summary.substring(0, 370) + "..."
               : summary}
+            {summary && (
+              <div className="font-xsss text-grey-500 text-center">
+                {tBroker("AI_summary_disclaimer")}
+              </div>
+            )}
           </div>
 
           <button

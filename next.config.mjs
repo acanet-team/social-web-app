@@ -71,6 +71,8 @@ export default bundleAnalyzer(
         "via.placeholder.com",
         "lh3.googleusercontent.com",
         "acanet-v1-public-test.s3.amazonaws.com",
+        "t.me",
+        "s120-ava-talk.zadn.vn",
       ],
       remotePatterns: [
         {

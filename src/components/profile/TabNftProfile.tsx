@@ -9,6 +9,7 @@ import styles from "@/styles/modules/TabNftProfile.module.scss";
 import { useTranslations } from "next-intl";
 import SellNFTModal from "../nft/SellNFTModal";
 import { onCancelSellNFT } from "@/api/nft";
+import "dotenv/config";
 
 const TabNftProfile = (props: {
   user: User;
@@ -107,7 +108,7 @@ const TabNftProfile = (props: {
   const onCancelSellNFTHandler = async (tokenId: number) => {
     const cancelSellNFT = await nftMarketContract.cancelListing(tokenId, {
       from: account?.address,
-      gasLimit: 2000000,
+      gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
     });
     cancelSellNFT.wait();
     onCancelSellNFT(connectedChain?.id === "0x780c" ? "MOVE" : "BSC", tokenId);
