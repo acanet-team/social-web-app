@@ -200,7 +200,7 @@ export type licenseParams = {
     logo: string;
     licenseType: string;
     licenseIssuer: string;
-    licenseState: string;
+    // licenseState: string;
     licenseIssueDate: Date;
     licenseStatus: string;
     licenseExpirationDate: Date;

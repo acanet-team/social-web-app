@@ -19,7 +19,9 @@ export type NotificationType =
   | "signal_tracked"
   | "verify_broker_accept"
   | "verify_broker_reject"
-  | "verify_broker_process";
+  | "verify_broker_process"
+  | "nft_sold_out"
+  | "nft_buy_success";
 export type Notification = {
   id: string;
   type: NotificationType;

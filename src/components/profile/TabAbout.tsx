@@ -10,10 +10,10 @@ import SocialMedia from "./SocialMedia";
 import { About } from "./About";
 import { Experience } from "./Experience";
 import Education from "./Education";
-import License from "./License";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import DotWaveLoader from "../DotWaveLoader";
+import { LicensesCertificate } from "./Licenses";
 
 const TabAbout = (props: {
   ssi: SSI | null;
@@ -104,7 +104,10 @@ const TabAbout = (props: {
             id={props.idParam as string}
           />
           <Education role={role} dataBrokerProfile={dataBrokerProfile} />
-          <License role={role} dataBrokerProfile={dataBrokerProfile} />
+          <LicensesCertificate
+            role={role}
+            dataBrokerProfile={dataBrokerProfile}
+          />
         </div>
       </div>
       {isLoading && <DotWaveLoader />}

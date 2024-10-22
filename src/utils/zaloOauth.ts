@@ -30,8 +30,6 @@ export function generate_pkce_codes(): PKCECodes {
   };
 }
 
-///// More export functions /////
-
 function rightRotate(value: number, amount: number): number {
   return (value >>> amount) | (value << (32 - amount));
 }
@@ -66,6 +64,7 @@ const sha256 = function (ascii: string): string {
   for (let i = 0; i < ascii[lengthProperty]; i++) {
     const j = ascii.charCodeAt(i);
     if (j >> 8) return ""; // ASCII check: only accept characters in range 0-255
+    // @ts-ignore
     words[i >> 2] |= j << (((3 - i) % 4) * 8);
     // words[i >> 2] = (words[i >> 2] || 0) | (j << (((3 - i) % 4) * 8));
   }
@@ -86,35 +85,39 @@ const sha256 = function (ascii: string): string {
       const a = truncatedHash[0],
         e = truncatedHash[4];
       const temp1 =
-        truncatedHash[7] +
+        // @ts-ignore
+        truncatedHash[7] + // @ts-ignore
         (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) + // S1
-        ((e & truncatedHash[5]) ^ (~e & truncatedHash[6])) + // ch
-        k[i] +
-        (w[i] =
+        // @ts-ignore
+        ((e & truncatedHash[5]) ^ (~e & truncatedHash[6])) + // @ts-ignore
+        k[i] + // @ts-ignore
+        (w[i] = // @ts-ignore
           i < 16
-            ? w[i]
-            : (w[i - 16] +
-                (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) + // s0
-                w[i - 7] +
-                (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) | // s1
+            ? w[i] // @ts-ignore
+            : (w[i - 16] + // @ts-ignore
+                (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) + // @ts-ignore
+                w[i - 7] + // @ts-ignore
+                (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) | // @ts-ignore
               0);
-      const temp2 =
-        (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) + // S0
-        ((a & truncatedHash[1]) ^
-          (a & truncatedHash[2]) ^
+      const temp2 = // @ts-ignore
+        (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) + // @ts-ignore // S0
+        ((a & truncatedHash[1]) ^ // @ts-ignore
+          (a & truncatedHash[2]) ^ // @ts-ignore
           (truncatedHash[1] & truncatedHash[2])); // maj
 
-      truncatedHash.unshift((temp1 + temp2) | 0);
+      truncatedHash.unshift((temp1 + temp2) | 0); // @ts-ignore
       truncatedHash[4] = (truncatedHash[4] + temp1) | 0;
     }
 
     for (let i = 0; i < 8; i++) {
+      // @ts-ignore
       hash[i] = (truncatedHash[i] + oldHash[i]) | 0;
     }
   }
 
   for (let i = 0; i < 8; i++) {
     for (let j = 3; j + 1; j--) {
+      // @ts-ignore
       const b = (hash[i] >> (j * 8)) & 255;
       result += (b < 16 ? "0" : "") + b.toString(16);
     }

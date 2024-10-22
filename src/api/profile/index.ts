@@ -18,9 +18,10 @@ import type { GetCommunityResponse, ICommunity } from "../community/model";
 import { removePropertiesEmpty } from "@/utils/Helpers";
 import type {
   FormDtCompany,
-  FormDtLicense,
+  // FormDtLicense,
   FormDtSchool,
   GetCommunitiesParams,
+  License,
 } from "./model";
 
 export const getProfile = (id: string) => {
@@ -100,7 +101,7 @@ export const deleteEducation = (id: string) => {
 };
 
 export const createNewLicense = (license: licenseParams) => {
-  return httpClient.post<licenseParams, BaseArrayResponse<FormDtLicense>>(
+  return httpClient.post<licenseParams, BaseArrayResponse<License>>(
     `/v1/user-profile/add-license`,
     license,
   );

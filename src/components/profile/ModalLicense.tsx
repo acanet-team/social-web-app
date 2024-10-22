@@ -2,9 +2,13 @@ import React, { useCallback, useEffect, useState, type FC } from "react";
 import Modal from "react-bootstrap/Modal";
 import styles from "@/styles/modules/modalTemplate.module.scss";
 import Button from "react-bootstrap/Button";
-import { MenuItem, Select, type SelectChangeEvent } from "@mui/material";
+import {
+  FormHelperText,
+  MenuItem,
+  Select,
+  type SelectChangeEvent,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import type { FormDtLicense } from "@/api/profile/model";
 import ImageUpload from "@/components/ImageUpload";
 import dayjs from "dayjs";
 import { throwToast } from "@/utils/throw-toast";
@@ -12,14 +16,17 @@ import { createNewLicense, updateLicense } from "@/api/profile";
 import WaveLoader from "../WaveLoader";
 import type { BaseArrayResponse, BaseResponse } from "@/api/model";
 import { useTranslations } from "next-intl";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import type { License } from "@/api/profile/model";
 
 interface ModalLisenceProp {
   title: string;
   show: boolean;
   handleClose: () => void;
   isEditing: boolean;
-  formDt: FormDtLicense;
-  setLicenses: React.Dispatch<React.SetStateAction<FormDtLicense[]>>;
+  formDt: License;
+  setLicenses: React.Dispatch<React.SetStateAction<License[]>>;
 }
 
 export const ModalLicense: React.FC<ModalLisenceProp> = ({
@@ -46,127 +53,94 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const t = useTranslations("MyProfile");
-  const [formData, setFormData] = useState(formDt);
+  // const [formData, setFormData] = useState(formDt);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-    if (!formData.licenseIssueDate)
-      newErrors.licenseIssueDate = "License Issue Date is required";
-    if (!formData.licenseType)
-      newErrors.licenseType = "License type is required";
-    if (!formData.licenseStatus)
-      newErrors.licenseStatus = "License Status is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleBlur = (field: string) => (event: React.FocusEvent<any>) => {
+    formik.handleBlur(event);
   };
 
-  const handleImageChange = (file: File) => {
-    setUploadedImage(file);
-    console.log("Uploaded Image: ", file);
-    setFormData((prev) => ({ ...prev, logo: file }));
-  };
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const { name, value } = e.target;
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "",
-      }));
+  const formik = useFormik({
+    initialValues: {
+      licenseType: isEditing ? formDt.licenseType : "",
+      licenseIssuer: isEditing ? formDt.licenseIssuer : "",
+      licenseIssueDate: isEditing
+        ? formDt.licenseIssueDate
+          ? dayjs(formDt.licenseIssueDate)
+          : null
+        : null,
+      licenseExpirationDate: isEditing
+        ? formDt.licenseExpirationDate
+          ? dayjs(formDt.licenseExpirationDate)
+          : null
+        : null,
+      licenseStatus: isEditing ? formDt.licenseStatus : "",
+      credentialID: isEditing ? formDt.credentialID : "",
     },
-    [formData],
-  );
-
-  const handleSelectChange = useCallback(
-    (event: SelectChangeEvent<string>) => {
-      setFormData({
-        ...formData,
-        licenseStatus: event.target.value,
-      });
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        licenseStatus: "",
-      }));
-    },
-    [formData],
-  );
-
-  const submitAddLicense = async () => {
-    setIsLoading(true);
-    try {
-      if (validateForm()) {
-        const license = {
-          licenseType: formData.licenseType,
-          logo: "",
-          licenseIssuer: formData.licenseIssuer,
-          licenseState: formData.licenseState,
-          licenseIssueDate: new Date(formData.licenseIssueDate),
-          licenseStatus: formData.licenseStatus,
-          licenseExpirationDate: formData.licenseExpirationDate
-            ? new Date("")
-            : new Date(formData.licenseExpirationDate),
-          credentialID: formData.credentialID,
-        };
-        const newLicense = {
-          licenses: [license],
-        };
-        const res: BaseArrayResponse<FormDtLicense> =
-          await createNewLicense(newLicense);
-        if (res.data) {
-          setLicenses((prev) => {
-            const newLicense: FormDtLicense = res.data[0] as FormDtLicense;
-            return [newLicense, ...prev];
-          });
+    enableReinitialize: true,
+    validationSchema: Yup.object({
+      licenseType: Yup.string().required(t("error_missing_license_type")),
+      licenseIssueDate: Yup.date().required(t("error_missing_issue_date")),
+      licenseExpirationDate: Yup.date()
+        .nullable()
+        .required(t("error_missing_expiration_date"))
+        .when("licenseIssueDate", (licenseIssueDate, schema) => {
+          return licenseIssueDate
+            ? schema.min(
+                licenseIssueDate,
+                t("error_expiration_before_issue_date"),
+              )
+            : schema;
+        }),
+      licenseStatus: Yup.string().required(t("error_missing_status")),
+    }),
+    onSubmit: async (values) => {
+      const license = {
+        ...(isEditing && { id: formDt.id }),
+        licenseType: values.licenseType,
+        logo: "",
+        licenseIssuer: values.licenseIssuer,
+        licenseIssueDate: new Date(String(values.licenseIssueDate)),
+        licenseStatus: values.licenseStatus,
+        licenseExpirationDate: values.licenseExpirationDate
+          ? new Date(String(values.licenseExpirationDate))
+          : new Date(""),
+        credentialID: values.credentialID,
+      };
+      const newLicense = {
+        licenses: [license],
+      };
+      console.log("New License", newLicense);
+      try {
+        setIsLoading(true);
+        if (isEditing) {
+          await updateLicense(newLicense);
+          setLicenses((prev) =>
+            prev.map((cer) =>
+              cer.id === license.id ? { newLicense, ...cer } : cer,
+            ),
+          );
+        } else {
+          const res: BaseArrayResponse<License> =
+            await createNewLicense(newLicense);
+          if (res.data) {
+            setLicenses((prev) => {
+              const createdLicense: License = res.data[0] as License;
+              return [createdLicense, ...prev];
+            });
+          }
         }
-        // setLicenses((prev) => [license, ...prev]);
-        handleClose();
-      }
-    } catch (error) {
-      throwToast("Error creating license", "error");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  const submitEditLicense = async () => {
-    setIsLoading(true);
-    try {
-      if (validateForm()) {
-        const license = {
-          id: formData.id,
-          licenseType: formData.licenseType,
-          logo: "",
-          licenseIssuer: formData.licenseIssuer,
-          licenseState: formData.licenseState,
-          licenseIssueDate: new Date(formData.licenseIssueDate),
-          licenseStatus: formData.licenseStatus,
-          licenseExpirationDate: formData.licenseExpirationDate
-            ? new Date("")
-            : new Date(formData.licenseExpirationDate),
-          credentialID: formData.credentialID,
-        };
-        const newLicense = {
-          licenses: [license],
-        };
-        await updateLicense(newLicense);
-        setLicenses((prev) =>
-          prev.map((cer) => (cer.id === formDt.id ? license : cer)),
-        );
         handleClose();
+      } catch (error) {
+        throwToast("Error creating/updating license", "error");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      throwToast("Error updating license", "error");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   return (
     <>
@@ -193,7 +167,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={styles["modal-content"]}>
-          <form className="p-1">
+          <form className="p-1" onSubmit={formik.handleSubmit}>
             {/* <ImageUpload
               folderUpload={""}
               onChange={handleImageChange}
@@ -214,14 +188,20 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     borderRadius: "4px",
                     height: "56px",
                   }}
-                  value={formData.licenseType}
+                  value={formik.values.licenseType}
                   name="licenseType"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    formik.setFieldValue("licenseType", e.target.value);
+                  }}
+                  onBlur={formik.handleBlur}
                   placeholder="Please enter your license or certification name"
                 />
-                {errors.licenseType && (
-                  <p className="text-red font-xsss ">{errors.licenseType}</p>
-                )}
+
+                {formik.touched.licenseType && formik.errors.licenseType ? (
+                  <FormHelperText sx={{ color: "error.main" }}>
+                    {formik.errors.licenseType}
+                  </FormHelperText>
+                ) : null}
               </div>
 
               <div style={{ width: "50%" }}>
@@ -236,9 +216,13 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     borderRadius: "4px",
                     height: "56px",
                   }}
-                  value={formData.licenseIssuer}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.licenseIssuer}
                   name="licenseIssuer"
-                  onChange={handleChange}
+                  // onChange={handleChange}
+                  onChange={(e) => {
+                    formik.setFieldValue("licenseIssuer", e.target.value);
+                  }}
                   placeholder="Please enter your issuing organization"
                 />
               </div>
@@ -247,28 +231,34 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
               <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xs ">{t("Issued year")}</p>
                 <DatePicker
+                  disableFuture
                   className="w__100"
-                  value={dayjs(formData.licenseIssueDate)}
+                  value={formik.values.licenseIssueDate}
                   onChange={(date) => {
-                    const formattedDate = date ? dayjs(date).toISOString() : "";
-                    setFormData({
-                      ...formData,
-                      licenseIssueDate: formattedDate,
-                    });
-                    if (formattedDate) {
-                      setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        licenseIssueDate: "",
-                      }));
-                    }
+                    formik.setFieldValue("licenseIssueDate", dayjs(date));
+                  }}
+                  slotProps={{
+                    textField: {
+                      onBlur: handleBlur("licenseIssueDate"),
+                    },
+                  }}
+                  sx={{
+                    width: "100%",
+                    height: "56px",
+                    "& fieldset": {
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                    },
                   }}
                   views={["day", "month", "year"]}
                 />
-                {errors.licenseIssueDate && (
-                  <p className="text-red font-xsss ">
-                    {errors.licenseIssueDate}
-                  </p>
-                )}
+
+                {formik.touched.licenseIssueDate &&
+                formik.errors.licenseIssueDate ? (
+                  <FormHelperText sx={{ color: "error.main" }}>
+                    {formik.errors.licenseIssueDate}
+                  </FormHelperText>
+                ) : null}
               </div>
               <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xs ">
@@ -276,43 +266,46 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                 </p>
                 <DatePicker
                   className="w__100"
-                  value={dayjs(formData.licenseExpirationDate)}
-                  onChange={(date) =>
-                    setFormData({
-                      ...formData,
-                      licenseExpirationDate: date
-                        ? dayjs(date).toISOString()
-                        : "",
-                    })
-                  }
+                  value={formik.values.licenseExpirationDate}
+                  onChange={(date) => {
+                    formik.setFieldValue("licenseExpirationDate", dayjs(date));
+                  }}
+                  sx={{
+                    width: "100%",
+                    height: "56px",
+                    "& fieldset": {
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                    },
+                  }}
                   views={["day", "month", "year"]}
                 />
+                {formik.touched.licenseExpirationDate &&
+                formik.errors.licenseExpirationDate ? (
+                  <FormHelperText sx={{ color: "error.main" }}>
+                    {formik.errors.licenseExpirationDate}
+                  </FormHelperText>
+                ) : null}
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
               <div style={{ width: "50%" }}>
-                <p className="m-0 py-1 fw-600 font-xs">{t("Credential ID")}</p>
-                <input
-                  className="px-2"
-                  style={{
-                    width: "100%",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    height: "56px",
-                  }}
-                  value={formData.credentialID}
-                  name="credentialID"
-                  onChange={handleChange}
-                  placeholder="Please enter your credential id"
-                />
-              </div>
-              <div style={{ width: "50%" }}>
                 <p className="m-0 py-1 fw-600 font-xs">{t("License Status")}</p>
                 <Select
-                  value={formData.licenseStatus}
-                  onChange={handleSelectChange}
+                  value={formik.values.licenseStatus}
+                  onChange={(e) => {
+                    formik.setFieldValue("licenseStatus", e.target.value);
+                  }}
+                  onBlur={formik.handleBlur}
                   displayEmpty
-                  style={{ width: "100%", height: "56px" }}
+                  sx={{
+                    width: "100%",
+                    height: "56px",
+                    "& fieldset": {
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                    },
+                  }}
                 >
                   <MenuItem value="" disabled>
                     {t("select")} {t("License Status")}
@@ -324,24 +317,48 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                   <MenuItem value="REVOKED">REVOKED</MenuItem>
                   <MenuItem value="EXPIRED">EXPIRED</MenuItem>
                 </Select>
-                {errors.licenseStatus && (
+                {/* {errors.licenseStatus && (
                   <p className="text-red font-xsss ">{errors.licenseStatus}</p>
-                )}
+                )} */}
+                {formik.touched.licenseStatus && formik.errors.licenseStatus ? (
+                  <FormHelperText sx={{ color: "error.main" }}>
+                    {formik.errors.licenseStatus}
+                  </FormHelperText>
+                ) : null}
+              </div>
+              <div style={{ width: "50%" }}>
+                <p className="m-0 py-1 fw-600 font-xs">{t("Credential ID")}</p>
+                <input
+                  className="px-2"
+                  style={{
+                    width: "100%",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    height: "56px",
+                  }}
+                  value={formik.values.credentialID}
+                  name="credentialID"
+                  onChange={(e) => {
+                    formik.setFieldValue("credentialID", e.target.value);
+                  }}
+                  onBlur={formik.handleBlur}
+                  placeholder="Please enter your credential id"
+                />
               </div>
             </div>
+            <Button
+              type="submit"
+              variant="primary"
+              // onClick={
+              //   isEditing ? () => submitEditLicense() : () => submitAddLicense()
+              // }
+              className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
+            >
+              {t("save")}
+            </Button>
           </form>
         </Modal.Body>
-        <Modal.Footer className={styles["modal-footer"]}>
-          <Button
-            variant="primary"
-            onClick={
-              isEditing ? () => submitEditLicense() : () => submitAddLicense()
-            }
-            className="main-btn bg-current text-center text-white fw-600 rounded-xxl p-3 w175 border-0 my-3 mx-auto"
-          >
-            {t("save")}
-          </Button>
-        </Modal.Footer>
+        <Modal.Footer className={styles["modal-footer"]}></Modal.Footer>
       </Modal>
       {isLoading && <WaveLoader />}
     </>
