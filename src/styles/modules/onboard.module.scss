@@ -1,5 +1,5 @@
 $border-color: #d9e2ec;
-$text-color:  #352f36;
+$text-color: #352f36;
 $text-color-inactive: #829ab1;
 $text-color-optional: #9fb3c8;
 
@@ -37,7 +37,7 @@ $text-color-optional: #9fb3c8;
       .step-circle {
         background-color: var(--theme-color-main);
         border: 3px solid var(--theme-color-main);
-        color: var(--light)fff;
+        color: var(--light) fff;
 
         &:before {
           font-family: "Bootstrap-icons";
@@ -57,7 +57,7 @@ $text-color-optional: #9fb3c8;
 
     &.editing {
       .step-circle {
-        background: var(--light)fff;
+        background: var(--light) fff;
         border-color: var(--theme-color-main);
         color: var(--theme-color-main);
       }
@@ -127,6 +127,31 @@ $text-color-optional: #9fb3c8;
   display: block;
 }
 
+// Verification
+.onboard-verify {
+  margin: 100px 0 50px 0;
+}
+
+.onboard-verify img {
+  display: block;
+  margin: 0 auto;
+}
+
+.onboard-btn {
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border-radius: 10px !important;
+}
+
+.onboard-verify .onboard-resend {
+  color: #1F74FD !important;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.onboard-resend:hover {
+  text-decoration: underline;
+}
+
 :global(.theme-dark) {
   .step {
     .step-circle {
@@ -147,7 +172,7 @@ $text-color-optional: #9fb3c8;
       .step-circle {
         background-color: var(--theme-color);
         border-color: var(--theme-color-shade);
-        color: var(--light); 
+        color: var(--light);
       }
       .step-title {
         color: var(--light);
@@ -181,9 +206,4 @@ $text-color-optional: #9fb3c8;
   .step {
     padding: 1.5rem 0 !important;
   }
-
-  // .interest-tab-content__container {
-  //   height: calc(100vh - 102px - 160px) !important;
-  //   overflow: hidden;
-  // }
 }

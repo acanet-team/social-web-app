@@ -23,9 +23,6 @@ export default function Appfooter() {
 
   return (
     <div className="app-footer border-0 shadow-lg bg-primary-gradiant">
-      {/* <Link href={`/profile/${nickName}`} className="nav-content-bttn nav-center">
-        <i className="feather-user"></i>
-      </Link> */}
       <Link href="/" className="nav-content-bttn nav-center">
         <i className="feather-home"></i>
       </Link>
