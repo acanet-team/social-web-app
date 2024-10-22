@@ -1,0 +1,15 @@
+.card-claim {
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  // object-fit: cover;
+}
+.button-claim {
+  cursor: pointer;
+  background-color: rgba(31, 116, 253, 1);
+  border-radius: 10px;
+  border: 0;
+}
+.card-claim::-webkit-scrollbar {
+  width: 0; /* Ẩn thanh cuộn dọc */
+  background: transparent; /* Không có nền */
+}
