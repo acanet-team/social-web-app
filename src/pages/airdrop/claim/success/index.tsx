@@ -1,7 +1,7 @@
 import React from "react";
 
-function ClaimSuccessful() {
+function ClaimSuccess() {
   return <div>ClaimSuccessful</div>;
 }
 
-export default ClaimSuccessful;
+export default ClaimSuccess;

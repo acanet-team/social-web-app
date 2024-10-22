@@ -31,7 +31,16 @@
   },
   "Onboard": {
     "continue": "Tiếp tục",
-    "finish": "Hoàn thành"
+    "finish": "Hoàn thành",
+    "previous": "Quay lại",
+    "next": "Tiếp tục",
+    "otp_verify": "Xác thực OTP",
+    "enter_otp": "Điền mã OTP được gửi tới Telegram của bạn",
+    "attempt_begin": "Bạn còn",
+    "attemp_end_singular": "lần thử",
+    "attemp_end_plural": "lần thử",
+    "retry_text": "Không nhận được mã OTP?",
+    "retry_send_code": "GỬI LẠI"
   },
   "Time": {
     "now": "bây giờ",
