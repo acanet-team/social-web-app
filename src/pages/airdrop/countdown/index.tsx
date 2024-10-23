@@ -5,34 +5,33 @@ import { useRouter } from "next/router";
 import CountdownDate from "@/components/CountDownDate";
 import Header from "@/components/Header";
 
-function Claim() {
+function CountDown() {
   const router = useRouter();
-  const handleClaimNow = () => {
-    router.push(`/airdrop/claim/success`);
-  };
-  // const [timeCountdown, setTimeCountdown] = useState(500000);
+  const airdrop_expiry_date = new Date("2024-11-11T23:59:59").getTime();
   return (
     <div className={`pb-5 ${styles["card-claim"]}`}>
       <PaymentSuccess />
       <div className={`text-center`}>
-        <p className="font-lg fw-700 mt-3 text-center">10,000 ACN</p>
+        <p className="font-lg fw-700 mt-3 text-center">You are all set up!</p>
+        <p className="font-md mt-5 text-center">You can claim your token in:</p>
+        <CountdownDate time={airdrop_expiry_date} />
         <p className="font-md mt-5 mb-5 text-center">
-          Your ACN are ready to claim
+          Meanwhile, you can enjoy all the feature of our product
         </p>
         <button
           className={`${styles["button-claim"]} py-1 px-5 text-white font-md mt-5`}
-          onClick={handleClaimNow}
+          onClick={() => router.push(`/`)}
         >
-          Claim now
+          Ok, got it
         </button>
       </div>
     </div>
   );
 }
 
-export default Claim;
+export default CountDown;
 
-Claim.getLayout = function getLayout(page: any) {
+CountDown.getLayout = function getLayout(page: any) {
   return (
     <div className="container-fluid px-lg-5 px-sm-3">
       <Header isOnboarding={true} />
