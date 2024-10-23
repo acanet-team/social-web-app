@@ -1176,7 +1176,7 @@ const Notifications: React.FC<NotificationProps> = ({
                       } else if (notification?.type === "follow") {
                         readNotis(
                           notification?.id,
-                          String(notification?.user?.nickName),
+                          String(notification?.sourceUser?.nickName),
                           notification?.type,
                           notification?.read_at,
                         );
