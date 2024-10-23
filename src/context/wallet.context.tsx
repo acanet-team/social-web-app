@@ -15,8 +15,10 @@ import communityAbi from "@/web3/abi/community.json";
 import donateAbi from "@/web3/abi/donate.json";
 import nftAbi from "@/web3/abi/nft.json";
 import nftMarketAbi from "@/web3/abi/nft-market.json";
+import airdrop from "@/web3/abi/airDrop.json";
 import { useSession } from "next-auth/react";
 import { updateWalletAddress } from "@/api/wallet";
+import { set } from "zod";
 
 interface WalletContextType {
   chains: Chain[];
@@ -38,6 +40,7 @@ interface WalletContextType {
   donateContract: any;
   nftContract: any;
   nftMarketContract: any;
+  airDropContract: any;
 }
 
 export interface Account {
@@ -123,6 +126,14 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     ),
   );
 
+  const [airDropContract, setAirDropContract] = useState<any>(
+    new ethers.Contract(
+      contracts.Airdrop["0x61"] as string,
+      airdrop as any,
+      provider,
+    ),
+  );
+
   const updateUserWalletAddress = (address: string) => {
     // Update address in DB
     updateWalletAddress(address);
@@ -171,6 +182,13 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         signer || provider,
       );
       setNftMarketContract(nftMarket);
+
+      const airDrop = new ethers.Contract(
+        contracts.Airdrop[connectedChain?.id] as string,
+        airdrop as any,
+        signer || provider,
+      );
+      setAirDropContract(airDrop);
     }
   }, [provider, signer, connectedChain]);
 
@@ -262,6 +280,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
         donateContract,
         nftContract,
         nftMarketContract,
+        airDropContract,
       }}
     >
       {children}
