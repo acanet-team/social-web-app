@@ -1,6 +1,7 @@
 .card-claim {
-  height: calc(100vh - 56px);
+  height: calc(100vh );
   overflow-y: auto;
+  padding-top: 150px;
   // object-fit: cover;
 }
 .button-claim {
@@ -8,8 +9,20 @@
   background-color: rgba(31, 116, 253, 1);
   border-radius: 10px;
   border: 0;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 .card-claim::-webkit-scrollbar {
-  width: 0; /* Ẩn thanh cuộn dọc */
-  background: transparent; /* Không có nền */
+  width: 0; 
+  background: transparent;
 }
+.bg-image-switch-miniapp {
+  // width: 60vw;
+  // height: auto;
+  background-image: url('/assets/images/bg-mesh-111.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; 
+  border-radius: 10px;
+  border: 10px solid rgba(255, 255, 255, 1)
+}
+

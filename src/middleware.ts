@@ -31,5 +31,11 @@ export const config = {
     "/profile/:key*",
     "/communities/detail/:id*",
     "/signal",
+    "/airdrop",
+    "/airdrop/:id*",
+    "/airdrop/verification",
+    "/airdrop/countdown",
+    "/airdrop/claim",
+    "/airdrop/claim/success",
   ],
 };

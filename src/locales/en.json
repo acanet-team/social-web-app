@@ -29,7 +29,15 @@
   "Onboard": {
     "continue": "Continue",
     "finish": "Finish",
-    "previous": "Previous"
+    "previous": "Previous",
+    "next": "Next",
+    "otp_verify": "OTP Verification",
+    "enter_otp": "Enter the OTP sent to your Telegram",
+    "attempt_begin": "You have",
+    "attemp_end_singular": "attempt left",
+    "attemp_end_plural": "attempts left",
+    "retry_text": "Didn't receive any code?",
+    "retry_send_code": "RESEND"
   },
   "Time": {
     "now": "now",

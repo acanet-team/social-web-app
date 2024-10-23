@@ -3,6 +3,7 @@ import styles from "@/styles/modules/claim.module.scss";
 import PaymentSuccess from "@/components/PaymentSuccess";
 import { useRouter } from "next/router";
 import CountdownDate from "@/components/CountDownDate";
+import Header from "@/components/Header";
 
 function Claim() {
   const router = useRouter();
@@ -11,12 +12,14 @@ function Claim() {
   };
   const [timeCountdown, setTimeCountdown] = useState(500000);
   return (
-    <div className={`pt-3 pb-5 ${styles["card-claim"]}`}>
+    <div className={`pb-5 ${styles["card-claim"]}`}>
       <PaymentSuccess />
       {timeCountdown === 0 ? (
         <div className={`text-center`}>
-          <p className="font-md fw-700 mt-3">10,000 ACN</p>
-          <p className="font-md mt-5 mb-5">Your ACN are ready to claim</p>
+          <p className="font-lg fw-700 mt-3 text-center">10,000 ACN</p>
+          <p className="font-md mt-5 mb-5 text-center">
+            Your ACN are ready to claim
+          </p>
           <button
             className={`${styles["button-claim"]} py-1 px-5 text-white font-md mt-5`}
             onClick={handleClaimNow}
@@ -26,11 +29,12 @@ function Claim() {
         </div>
       ) : (
         <div className={`text-center`}>
-          <p className="font-md fw-700 mt-3">You are all set up!</p>
-          <p className="font-md mt-5">You can claim your token in:</p>
-          {/* <CountdownTimer time={1200000} onFinish={() => setIsFlipped(false)} /> */}
+          <p className="font-lg fw-700 mt-3 text-center">You are all set up!</p>
+          <p className="font-md mt-5 text-center">
+            You can claim your token in:
+          </p>
           <CountdownDate time={timeCountdown} />
-          <p className="font-md mt-5 mb-5">
+          <p className="font-md mt-5 mb-5 text-center">
             Meanwhile, you can enjoy all the feature of our product
           </p>
           <button
@@ -46,3 +50,12 @@ function Claim() {
 }
 
 export default Claim;
+
+Claim.getLayout = function getLayout(page: any) {
+  return (
+    <div className="container-fluid px-lg-5 px-sm-3">
+      <Header isOnboarding={true} />
+      {page}
+    </div>
+  );
+};
