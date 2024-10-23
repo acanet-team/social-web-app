@@ -36,10 +36,6 @@ export default function CountdownDate(props: { time: number }) {
   };
 
   return (
-    <Countdown
-      date={Date.now() + props.time}
-      renderer={renderer}
-      daysInHours={false}
-    />
+    <Countdown date={props.time} renderer={renderer} daysInHours={false} />
   );
 }
