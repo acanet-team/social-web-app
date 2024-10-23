@@ -16,6 +16,7 @@ export interface IUser {
   isProfile: boolean;
   socialId: string;
   photoUrl: string;
+  telegram_id: string | null;
   brokerProfileId: string;
   followersCount: number;
   followingsCount: number;

@@ -128,13 +128,16 @@ $text-color-optional: #9fb3c8;
 }
 
 // Verification
-.onboard-verify {
-  margin: 100px 0 50px 0;
+.onboard-verify, .on-board-wallet {
+  margin: 150px auto 50px auto;
 }
 
-.onboard-verify img {
+.onboard-verify img, .on-board-wallet img {
   display: block;
   margin: 0 auto;
+  width: 200px;
+  height: auto;
+  object-fit: cover;
 }
 
 .onboard-btn {

@@ -32,7 +32,7 @@ export const config = {
     "/communities/detail/:id*",
     "/signal",
     "/airdrop",
-    "/airdrop/:id*",
+    "/airdrop/wallet",
     "/airdrop/verification",
     "/airdrop/countdown",
     "/airdrop/claim",

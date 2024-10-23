@@ -105,7 +105,7 @@ export default function Profile({
         setNumSlideShow(4);
       }
     }
-    console.log("test", widthTab, numSlideShow);
+    // console.log("test", widthTab, numSlideShow);
   }, [dataUser, role]);
 
   useEffect(() => {
@@ -127,7 +127,6 @@ export default function Profile({
 
   const fetchProfileData = async () => {
     try {
-      console.log("ppppooo");
       const dtProfileRes = await getProfile(String(idUser));
       const interestTopicRes: any = await createGetAllTopicsRequest(1, 100);
       setDtBrokerProfile(dtProfileRes?.data?.brokerProfile || []);
@@ -372,34 +371,40 @@ export default function Profile({
   );
 }
 export async function getServerSideProps(context: NextPageContext) {
-  const { key } = context.query;
-  if (!key) {
+  try {
+    const { key } = context.query;
+    if (!key) {
+      return {
+        notFound: true,
+      };
+    }
+    const profileRes = await getProfile(key as string);
+    const idUser = profileRes?.data?.user?.id;
+    const interestTopic: any = await createGetAllTopicsRequest(1, 100);
+    const signalAccuracy = profileRes?.data?.signalAccuracy;
+    return {
+      props: {
+        messages: (await import(`@/locales/${context.locale}.json`)).default,
+        dataBrokerProfile: profileRes?.data?.brokerProfile || [],
+        dataUserProfile: profileRes?.data?.userProfile || [],
+        dataUser: profileRes?.data?.user || [],
+        followersCount: profileRes?.data?.followersCount,
+        followed: profileRes?.data?.followed,
+        connectionCount: profileRes?.data?.connectionsCount,
+        connectionStatus: profileRes?.data?.connectionStatus,
+        ssi: profileRes?.data?.ssi || null,
+        idUser: idUser,
+        interestTopic: interestTopic?.data.docs || [],
+        userUsername: key || "",
+        logoRank: profileRes?.data?.brokerProfile?.rank?.logo || null,
+        connectionRequestId: profileRes?.data?.connectionRequestId || null,
+        signalAccuracy: signalAccuracy,
+      },
+    };
+  } catch (error) {
+    console.error("API call failed:", error);
     return {
       notFound: true,
     };
   }
-  const profileRes = await getProfile(key as string);
-  console.log("profileRes", profileRes?.data);
-  const idUser = profileRes?.data?.user?.id;
-  const interestTopic: any = await createGetAllTopicsRequest(1, 100);
-  const signalAccuracy = profileRes?.data?.signalAccuracy;
-  return {
-    props: {
-      messages: (await import(`@/locales/${context.locale}.json`)).default,
-      dataBrokerProfile: profileRes?.data?.brokerProfile || [],
-      dataUserProfile: profileRes?.data?.userProfile || [],
-      dataUser: profileRes?.data?.user || [],
-      followersCount: profileRes?.data?.followersCount,
-      followed: profileRes?.data?.followed,
-      connectionCount: profileRes?.data?.connectionsCount,
-      connectionStatus: profileRes?.data?.connectionStatus,
-      ssi: profileRes?.data?.ssi || null,
-      idUser: idUser,
-      interestTopic: interestTopic?.data.docs || [],
-      userUsername: key || "",
-      logoRank: profileRes?.data?.brokerProfile?.rank?.logo || null,
-      connectionRequestId: profileRes?.data?.connectionRequestId || null,
-      signalAccuracy: signalAccuracy,
-    },
-  };
 }

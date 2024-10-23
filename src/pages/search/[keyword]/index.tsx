@@ -60,7 +60,10 @@ export default function Search({
     <div>
       <div className="middle-sidebar-left">
         <div className="row feed-body">
-          <div className={`col-xl-8 col-xxl-9 col-lg-8`}>
+          <div
+            className={`col-xl-8 col-xxl-9 col-lg-8`}
+            style={{ marginBottom: "100px" }}
+          >
             <div className="fw-bold">
               {tSearch("search_result_title")} &quot;{keyword}&quot;
             </div>
