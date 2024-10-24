@@ -26,6 +26,7 @@ export interface IUser {
   role: Role;
   status: Role;
   onboarding_data: OnboardingData;
+  telegram_id: string | null;
   createdAt: string;
   updatedAt: string;
   deletedAt: null;

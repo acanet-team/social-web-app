@@ -40,7 +40,11 @@
     "attemp_end_singular": "lần thử",
     "attemp_end_plural": "lần thử",
     "retry_text": "Không nhận được mã OTP?",
-    "retry_send_code": "GỬI LẠI"
+    "retry_send_code": "GỬI LẠI",
+    "connect_wallet_title": "Chỉ còn 1 bước nữa",
+    "connect_wallet_subtitle": "Kết nối ví của bạn để nhận airdrop",
+    "connect_wallet_button": "Kết nối ví",
+    "error_sending_otp": "Gửi OTP thất bại"
   },
   "Time": {
     "now": "bây giờ",
@@ -333,7 +337,8 @@
     "error_missing_issue_date": "Ngày cấp là bắt buộc",
     "error_missing_expiration_date": "Ngày hết hạn là bắt buộc",
     "error_missing_status": "Trạng thái giấy phép là bắt buộc",
-    "error_expiration_before_issue_date": "Ngày hết hạn phải sau ngày cấp"
+    "error_expiration_before_issue_date": "Ngày hết hạn phải sau ngày cấp",
+    "user_not_found": "Không tìm thấy người dùng"
   },
   "Community": {
     "community": "Cộng đồng",

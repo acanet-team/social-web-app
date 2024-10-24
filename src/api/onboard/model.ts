@@ -16,6 +16,7 @@ export interface IUser {
   isProfile: boolean;
   socialId: string;
   photoUrl: string;
+  telegram_id: string | null;
   brokerProfileId: string;
   followersCount: number;
   followingsCount: number;
@@ -112,4 +113,12 @@ export interface InfoAdditionalBroker {
   note: string;
   companyName: string;
   experience: string;
+}
+
+export interface OTPResponse {
+  status: number;
+  message: string;
+  data: {
+    telegram_id: string;
+  };
 }

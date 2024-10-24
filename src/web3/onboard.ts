@@ -26,13 +26,13 @@ export const initWeb3Onboard = () =>
     wallets: modules,
     // An array of Chains that your app supports
     chains: [
-      // {
-      //   id: 97,
-      //   token: "TBNB",
-      //   namespace: "evm",
-      //   label: "TBNB",
-      //   rpcUrl: BNB_TESTNET,
-      // },
+      {
+        id: 97,
+        token: "TBNB",
+        namespace: "evm",
+        label: "TBNB",
+        rpcUrl: BNB_TESTNET,
+      },
       {
         id: 30732,
         token: "MOVE",
