@@ -6,12 +6,35 @@ import CountdownDate from "@/components/CountDownDate";
 import Header from "@/components/Header";
 import type { NextPageContext } from "next";
 import { useTranslations } from "next-intl";
+import { useWeb3 } from "@/context/wallet.context";
+import { useLoading } from "@/context/Loading/context";
 
 function Claim() {
   const t = useTranslations("Claims");
   const router = useRouter();
-  const handleClaimNow = () => {
-    router.push(`/airdrop/claim/success`);
+  const { connectWallet, airDropContract, account } = useWeb3();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleClaimNow = async () => {
+    if (!account) {
+      return connectWallet();
+    }
+    try {
+      setIsLoading(true);
+      const res = await airDropContract.withdraw({
+        from: account.address,
+        gasLimit: process.env.NEXT_PUBLIC_NFT_GAS_LIMIT,
+      });
+      res.wait();
+      console.log("res", res);
+      router.push(`/airdrop/claim/success`);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
   // const [timeCountdown, setTimeCountdown] = useState(500000);
   return (
@@ -23,6 +46,7 @@ function Claim() {
         <button
           className={`${styles["button-claim"]} py-1 px-5 text-white font-md mt-5`}
           onClick={handleClaimNow}
+          disabled={isLoading}
         >
           {t("claim_now")}
         </button>
