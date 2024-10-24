@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import type { NextPageContext } from "next";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/onboard.module.scss";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -12,22 +12,49 @@ export default function ConnectWallet() {
   const router = useRouter();
   const tOnboard = useTranslations("Onboard");
   const { data: session } = useSession();
-  const { connectWallet } = useWeb3();
+  const { airDropContract, connectWallet } = useWeb3();
+  const [airDropTime, setAirDropTime] = useState<number>();
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(false);
+
+  const getAirDropStartTime = async () => {
+    try {
+      if (!airDropContract) {
+        throw new Error("Airdrop contract is not initialized");
+      }
+      const startTime = await airDropContract.startTime();
+      console.log("start time", startTime.toNumber());
+      setAirDropTime(startTime.toNumber());
+    } catch (error) {
+      console.error("Failed to fetch airdrop start time:", error);
+    }
+  };
+
+  const connectWalletHandler = () => {
+    connectWallet();
+  };
+
+  useEffect(() => {
+    if (isFirstRender) {
+      getAirDropStartTime();
+    }
+  }, [isFirstRender]);
 
   useEffect(() => {
     if (session && session.user?.walletAddress) {
-      const airdrop_expiry_date = new Date("2024-11-11T23:59:59").getTime();
       const now = new Date().getTime();
-      if (now < airdrop_expiry_date) {
+      if (airDropTime && now < airDropTime) {
         return router.push("/airdrop/countdown");
       }
       return router.push("/airdrop/claim");
     }
   }, [session]);
 
-  const connectWalletHandler = () => {
-    connectWallet();
-  };
+  useEffect(() => {
+    if (!isFirstRender) {
+      setIsFirstRender(true);
+    }
+  }, []);
+
   return (
     <div className={styles["on-board-wallet"]}>
       <Image

@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  // min-height: 100vh;
+  flex-direction: column;
+}
+
+.titleActive {
+  animation: 0.8s title ease-in-out;
+  animation-delay: 1.2s;
+  animation-fill-mode: forwards;
+}
+
+.circle {
+  stroke-dasharray: 1194;
+  stroke-dashoffset: 1194;
+}
+
+.circleActive {
+  animation: circle 1s ease-in-out forwards;
+}
+
+.tick {
+  stroke-dasharray: 350;
+  stroke-dashoffset: 350;
+}
+
+.tickActive {
+  animation: tick 1s ease-out forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes circle {
+  from {
+    stroke-dashoffset: 1194;
+  }
+  to {
+    stroke-dashoffset: 2388;
+  }
+}
+
+@keyframes tick {
+  from {
+    stroke-dashoffset: 350;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes title {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

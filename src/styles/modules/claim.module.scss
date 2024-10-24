@@ -1,0 +1,74 @@
+.card-claim {
+  // height: calc(100vh);
+  // overflow-y: auto;
+  padding-top: 150px;
+  // object-fit: cover;
+}
+.button-claim {
+  cursor: pointer;
+  background-color: rgba(31, 116, 253, 1);
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.card-claim::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+.bg-image-switch-miniapp {
+  width: 100%;
+  height: auto;
+  background-image: url("/assets/images/bg-mesh-111.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  // border-radius: 10px;
+  // border: 10px solid rgba(255, 255, 255, 1)
+}
+
+.image-switch-miniapp {
+  width: 400px;
+  height: 180px;
+}
+.group-text {
+  top: 35px;
+  // width: 100%;
+}
+
+.group {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  width: 400px;
+  height: 180px;
+  // align-items: center;
+}  
+.group-text {
+  font-size: 18px
+}
+@media (max-width:420px) {
+  .image-switch-miniapp {
+    width: 95vw;
+    height: auto;
+  }
+  .group-text {
+    width: 85vw;
+    top: 20px
+    // width: 100%;
+  }
+  .group-text {
+    font-size: 16px
+  }
+}
+@media (max-width:370px) {
+  .group-text {
+    width: 85vw;
+    top: 20px
+    // width: 100%;
+  }
+  .group-text {
+    font-size: 14px
+  }
+}
+
+

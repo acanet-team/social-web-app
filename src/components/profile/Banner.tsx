@@ -438,14 +438,16 @@ const Banner: React.FC<TabBannerProps> = ({
               {dataUser?.role?.name === "broker"
                 ? numbersFollowers
                 : (dataUser?.role?.name === "investor" ||
-                    dataUser.role.name === "guest") &&
+                    dataUser.role.name === "guest" ||
+                    dataUser.role.name === "user") &&
                   formatNumber(connectCount)}{" "}
               {dataUser?.role?.name === "broker"
                 ? Number(numbersFollowers) > 1
                   ? t("followers")
                   : tBase("follower")
                 : (dataUser?.role?.name === "investor" ||
-                    dataUser.role.name === "guest") &&
+                    dataUser.role.name === "guest" ||
+                    dataUser.role.name === "user") &&
                   (Number(connectCount) < 1 ? t("connect") : t("connects"))}
             </div>
             {!role && (
@@ -482,7 +484,8 @@ const Banner: React.FC<TabBannerProps> = ({
 
                   {(dataUser.role.name === "investor" ||
                     connectionStatus === "connected" ||
-                    dataUser.role.name === "guest") &&
+                    dataUser.role.name === "guest" ||
+                    dataUser.role.name === "user") &&
                     connectionStatus !== "request_received" && (
                       <>
                         <button

@@ -155,6 +155,10 @@ $text-color-optional: #9fb3c8;
   text-decoration: underline;
 }
 
+.onboard-verify button:disabled {
+  background-color: #868e96 !important;
+}
+
 :global(.theme-dark) {
   .step {
     .step-circle {

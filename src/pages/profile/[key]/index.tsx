@@ -95,7 +95,8 @@ export default function Profile({
       }
     } else if (
       dataUser.role.name === "investor" ||
-      dataUser.role.name === "guest"
+      dataUser.role.name === "guest" ||
+      dataUser.role.name === "user"
     ) {
       if (role !== true) {
         setWidthTab("33.33%");

@@ -114,3 +114,11 @@ export interface InfoAdditionalBroker {
   companyName: string;
   experience: string;
 }
+
+export interface OTPResponse {
+  status: number;
+  message: string;
+  data: {
+    telegram_id: string;
+  };
+}

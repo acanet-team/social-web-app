@@ -4,6 +4,7 @@ interface Contracts {
   Donate: { [key: string]: string };
   Nft: { [key: string]: string };
   NftMarket: { [key: string]: string };
+  Airdrop: { [key: string]: string };
 }
 
 //0x780c move
@@ -28,6 +29,10 @@ const contracts: Contracts = {
   NftMarket: {
     "0x780c": "0x9A3eFa11833d2079f35a7d49C7cbb93b62d327B4",
     "0x61": "0xE36855F853c44EcC7f9374c353eB2d9C73284cC5",
+  },
+  Airdrop: {
+    "0x780c": "0x676325B1cF504184F282EE212578993B3CB8feFF",
+    "0x61": "0x62d7b85a2CD628F9838eE94f3aF5fb6a11c0977D",
   },
 };
 
