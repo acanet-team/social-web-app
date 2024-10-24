@@ -17,7 +17,11 @@
     "views": "views",
     "seconds": "seconds",
     "second": "second",
-    "ratings": "Ratings"
+    "ratings": "Ratings",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "secs": "Seconds"
   },
   "Action": {
     "delete": "Delete",
@@ -41,7 +45,8 @@
     "connect_wallet_title": "You’re almost there",
     "connect_wallet_subtitle": "Connect your wallet to receive airdrop",
     "connect_wallet_button": "Connect my wallet",
-    "error_sending_otp": "Sending OTP failed"
+    "error_sending_otp": "Sending OTP failed",
+    "create_account": "Create Account"
   },
   "Time": {
     "now": "now",
@@ -111,7 +116,10 @@
     "sign_in_with_google": "Sign in with Google",
     "sign_in_with_telegram": "Sign in with Telegram",
     "sign_in_with_facebook": "Sign in with Facebook",
-    "sign_in_with_zalo": "Sign in with Zalo"
+    "sign_in_with_zalo": "Sign in with Zalo",
+    "privacy_policy": "Privacy Policy",
+    "term_of_use": "Term of Use",
+    "href_policy": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/Acanet-Privacy+Policy-EN.pdf"
   },
   "SignUp": {
     "meta_title": "Sign up",
@@ -223,7 +231,9 @@
     "error_num_members": "Number of members must be number characters",
     "create_profile_title_additional": "We need additional information about you.",
     "create_profile_desc_additional": "All brokers must complete a thorough verification process by our team. Please provide your details below, and we will reach out within 24 hours.",
-    "error_email_whitelist": "Please choose another email. This email is used by another broker"
+    "error_email_whitelist": "Please choose another email. This email is used by another broker",
+    "error_policy": "Please agree to the Term of Use and Privacy Policy",
+    "href_policy": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/Acanet-Privacy+Policy-EN.pdf"
   },
   "NavBar": {
     "newsfeed": "Newsfeed",
@@ -539,5 +549,18 @@
     "sell_nft_error": "Error listing NFT for sale",
     "buy_nft_success": "Successfully bought NFT",
     "buy_not_enough_token": "You don't have enough token to buy this NFT"
+  },
+  "Claims": {
+    "oke_got_it": "Ok, got it",
+    "thanks_you_participate_program": "Thank you for participating in our Airdrop program",
+    "des_claim_success": "Start your exciting financial journey with Acanet today and watch your success grow!",
+    "claim_now": "Claim Now",
+    "des_claim": "Your ACN are ready to claim",
+    "title_countdown": "You are all set up!",
+    "des_countdown": "Meanwhile, you can enjoy all the feature of our product",
+    "claim_token_countdown": "You can claim your token in:",
+    "title_switch_miniapp": "Acanet Airdrop Program",
+    "des_switch_miniapp": "Looks like you haven’t connected with our Telegram Mini app",
+    "title_button_switch_miniapp": "Visit Telegram Miniapp"
   }
 }

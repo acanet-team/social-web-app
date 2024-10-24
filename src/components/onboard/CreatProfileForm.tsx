@@ -25,6 +25,7 @@ import { throwToast } from "@/utils/throw-toast";
 import { useTranslations } from "next-intl";
 import type { InfoAdditionalBroker } from "@/api/onboard/model";
 import { useMediaQuery } from "react-responsive";
+import Link from "next/link";
 
 export default function CreateProfileForm(props: {
   regions: any[];
@@ -329,6 +330,7 @@ export default function CreateProfileForm(props: {
       location: userInfo.location,
       isBroker: userInfo.isBroker,
       email: userInfo.email,
+      policy: false,
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
@@ -342,6 +344,9 @@ export default function CreateProfileForm(props: {
       email: Yup.string()
         .required(t("error_missing_email"))
         .email(t("error_invalid_email")),
+      policy: Yup.bool()
+        .oneOf([true], t("error_policy"))
+        .required(t("error_policy")),
     }),
     onSubmit: async (values, { setFieldError }) => {
       const profileValues = {
@@ -654,13 +659,32 @@ export default function CreateProfileForm(props: {
                 {JSON.stringify(formik.errors.isBroker).replace(/^"|"$/g, "")}
               </FormHelperText>
             ) : null}
-
+            <div className="mt-4 d-flex align-items-center">
+              <input
+                type="checkbox"
+                className={`me-2 ${styles["custom-checkbox"]}`}
+                name="policy"
+                checked={formik.values.policy}
+                onChange={formik.handleChange}
+              />
+              <div
+                className={`${styles["url_policy"]} fw-400 cursor-pointer text-light-gray`}
+                onClick={() => window.open(t("href_policy"), "_blank")}
+              >
+                I accept and agree to the Term of Use and Privacy Policy
+              </div>
+            </div>
+            {formik.errors.policy ? (
+              <FormHelperText sx={{ color: "error.main" }}>
+                {JSON.stringify(formik.errors.policy).replace(/^"|"$/g, "")}
+              </FormHelperText>
+            ) : null}
             <button
               type="submit"
               id={styles["profile-btn"]}
-              className="main-btn bg-current text-center text-white fw-600 p-3 w175 border-0 d-inline-block mt-5"
+              className={`${styles[""]} rounded-24 ${!formik.errors.policy && "bg-current text-white"} text-center text-light-gray  fw-600 p-3 w175 border-0 d-inline-block mt-5`}
             >
-              {tOnboard("continue")}
+              {tOnboard("create_account")}
             </button>
           </form>
         </div>

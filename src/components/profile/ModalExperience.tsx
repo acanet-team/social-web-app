@@ -289,7 +289,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                 <>
                   <TextField
                     {...params}
-                    label="Enter the company name"
+                    // label="Enter the company name"
                     value={formData.name}
                     onChange={(e) => {
                       findCompany(e.target.value);
@@ -323,7 +323,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
                   value={formData.position}
                   name="position"
                   onChange={handleChange}
-                  placeholder="Please enter your industry name"
+                  // placeholder="Please enter your industry name"
                 />
               </div>
               <div style={{ width: "100%" }}>
@@ -478,7 +478,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               value={formData.location}
               name="location"
               onChange={handleChange}
-              placeholder="Please enter your location"
+              // placeholder="Please enter your location"
             />
 
             <p className="m-0 py-1 fw-600 font-xs">{t("description")}</p>
@@ -487,7 +487,7 @@ export const ModalExperience: FC<ModalExperienceProp> = ({
               value={formData.description}
               name="description"
               onChange={handleChange}
-              placeholder="Please enter your description"
+              // placeholder="Please enter your description"
               maxLength={1000}
               style={{
                 width: "100%",

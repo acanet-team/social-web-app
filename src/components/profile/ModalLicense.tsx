@@ -85,6 +85,9 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
       licenseIssueDate: Yup.date().required(t("error_missing_issue_date")),
       licenseExpirationDate: Yup.date()
         .nullable()
+        .transform((value, originalValue) =>
+          originalValue === "null" ? null : value,
+        )
         .required(t("error_missing_expiration_date"))
         .when("licenseIssueDate", (licenseIssueDate, schema) => {
           return licenseIssueDate
@@ -194,7 +197,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     formik.setFieldValue("licenseType", e.target.value);
                   }}
                   onBlur={formik.handleBlur}
-                  placeholder="Please enter your license or certification name"
+                  // placeholder="Please enter your license or certification name"
                 />
 
                 {formik.touched.licenseType && formik.errors.licenseType ? (
@@ -223,7 +226,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                   onChange={(e) => {
                     formik.setFieldValue("licenseIssuer", e.target.value);
                   }}
-                  placeholder="Please enter your issuing organization"
+                  // placeholder="Please enter your issuing organization"
                 />
               </div>
             </div>
@@ -342,7 +345,7 @@ export const ModalLicense: React.FC<ModalLisenceProp> = ({
                     formik.setFieldValue("credentialID", e.target.value);
                   }}
                   onBlur={formik.handleBlur}
-                  placeholder="Please enter your credential id"
+                  // placeholder="Please enter your credential id"
                 />
               </div>
             </div>

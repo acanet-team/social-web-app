@@ -380,6 +380,7 @@ export async function getServerSideProps(context: NextPageContext) {
       };
     }
     const profileRes = await getProfile(key as string);
+    console.log("profile", profileRes);
     const idUser = profileRes?.data?.user?.id;
     const interestTopic: any = await createGetAllTopicsRequest(1, 100);
     const signalAccuracy = profileRes?.data?.signalAccuracy;

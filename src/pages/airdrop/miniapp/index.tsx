@@ -2,7 +2,10 @@ import React from "react";
 import styles from "@/styles/modules/claim.module.scss";
 import Image from "next/image";
 import Header from "@/components/Header";
+import type { NextPageContext } from "next";
+import { useTranslations } from "next-intl";
 function SwitchMiniapp() {
+  const t = useTranslations("Claims");
   return (
     <div className={`pb-5 ${styles["card-claim"]}`}>
       <div
@@ -15,10 +18,10 @@ function SwitchMiniapp() {
           alt="img-switch-miniapp"
         />
         <p className="font-lg fw-700 mt-2 text-center">
-          Acanet Airdrop Program
+          {t("title_switch_miniapp")}
         </p>
         <p className="font-md mt-3 mb-3 fw-400 text-center px-2">
-          Looks like you haven’t connected with our Telegram Mini app
+          {t("des_switch_miniapp")}
         </p>
         <div className={`position-relative ${styles["group"]}`}>
           <Image
@@ -105,7 +108,7 @@ function SwitchMiniapp() {
           onClick={() => ""}
           className={`${styles["button-claim"]} py-1 px-5 text-white font-md mt-5`}
         >
-          Visit Telegram Miniapp
+          {t("title_button_switch_miniapp")}
         </button>
       </div>
     </div>
@@ -113,6 +116,14 @@ function SwitchMiniapp() {
 }
 
 export default SwitchMiniapp;
+
+export async function getServerSideProps(context: NextPageContext) {
+  return {
+    props: {
+      messages: (await import(`@/locales/${context.locale}.json`)).default,
+    },
+  };
+}
 
 SwitchMiniapp.getLayout = function getLayout(page: any) {
   return (
