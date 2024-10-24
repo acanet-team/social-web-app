@@ -20,7 +20,11 @@
     "views": "Lượt xem",
     "seconds": "giây",
     "second": "giây",
-    "ratings": "Đánh giá"
+    "ratings": "Đánh giá",
+    "days": "Ngày",
+    "hours": "Giò",
+    "minutes": "Phút",
+    "secs": "Giây"
   },
   "Action": {
     "delete": "Xoá",
@@ -296,7 +300,7 @@
     "See more": "Xem thêm",
     "New report is coming soon": "Bản Tóm Tắt Mới Sắp Ra Mắt",
     "Activities and societies": "Hoạt Động và Cộng Đồng",
-    "educations": "giáo dục",
+    "educations": "học vấn",
     "Show all": "Xem thêm",
     "experiences": "kinh nghiệm",
     "Issued": "Được Cấp",
@@ -532,5 +536,18 @@
     "sell_nft_success": "NFT của bạn đã được đăng bán thành công.",
     "sell_nft_title": "Tạo một bài viết để bán NFT",
     "sell_nft_error": "Không thể đăng bán NFT của bạn."
+  },
+  "Claims": {
+    "oke_got_it": "Ok, đã hiểu",
+    "thanks_you_participate_program": "Cảm ơn bạn đã tham gia chương trình Airdrop của chúng tôi",
+    "des_claim_success": "Bắt đầu hành trình tài chính thú vị của bạn với Acanet ngay hôm nay và chứng kiến sự thành công của bạn phát triển!",
+    "claim_now": "Nhận Ngay",
+    "des_claim": "ACN của bạn đã sẵn sàng để nhận",
+    "title_countdown": "Bạn đã sẵn sàng!",
+    "des_countdown": "Trong khi chờ đợi, bạn có thể tận hưởng tất cả các tính năng của sản phẩm của chúng tôi",
+    "claim_token_countdown": "Bạn có thể nhận token của mình sau:",
+    "title_switch_miniapp": "Chương Trình Airdrop Acanet",
+    "des_switch_miniapp": "Có vẻ như bạn chưa kết nối với ứng dụng Mini Telegram của chúng tôi",
+    "title_button_switch_miniapp": "Truy cập Miniapp Telegram"
   }
 }

@@ -278,7 +278,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                 <>
                   <TextField
                     {...params}
-                    label="Enter the school name"
+                    // label="Enter the school name"
                     value={formData.name}
                     onChange={(e) => {
                       findEducation(e.target.value);
@@ -346,7 +346,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
                   value={formData.major}
                   onChange={handleChange}
                   name="major"
-                  placeholder="Please enter your major name"
+                  // placeholder="Please enter your major name"
                 />
               </div>
             </div>
@@ -464,7 +464,7 @@ export const ModalEducation: React.FC<ModalEducationProp> = ({
               value={formData.description}
               name="description"
               onChange={handleChange}
-              placeholder="Please enter your description"
+              // placeholder="Please enter your description"
               maxLength={1000}
               style={{
                 width: "100%",

@@ -4,8 +4,11 @@ import PaymentSuccess from "@/components/PaymentSuccess";
 import { useRouter } from "next/router";
 import CountdownDate from "@/components/CountDownDate";
 import Header from "@/components/Header";
+import type { NextPageContext } from "next";
+import { useTranslations } from "next-intl";
 
 function Claim() {
+  const t = useTranslations("Claims");
   const router = useRouter();
   const handleClaimNow = () => {
     router.push(`/airdrop/claim/success`);
@@ -16,14 +19,12 @@ function Claim() {
       <PaymentSuccess />
       <div className={`text-center`}>
         <p className="font-lg fw-700 mt-3 text-center">10,000 ACN</p>
-        <p className="font-md mt-5 mb-5 text-center">
-          Your ACN are ready to claim
-        </p>
+        <p className="font-md mt-5 mb-5 text-center">{t("des_claim")}</p>
         <button
           className={`${styles["button-claim"]} py-1 px-5 text-white font-md mt-5`}
           onClick={handleClaimNow}
         >
-          Claim now
+          {t("claim_now")}
         </button>
       </div>
     </div>
@@ -31,6 +32,14 @@ function Claim() {
 }
 
 export default Claim;
+
+export async function getServerSideProps(context: NextPageContext) {
+  return {
+    props: {
+      messages: (await import(`@/locales/${context.locale}.json`)).default,
+    },
+  };
+}
 
 Claim.getLayout = function getLayout(page: any) {
   return (
