@@ -40,6 +40,12 @@ export default function QuickSearchCard(props: {
   const [memberNum, setMemeberNum] = useState<number>(
     Number((data as ISearchCommunityResponse).membersCount || 0),
   );
+  const [photoURL, setPhotoURL] = useState<string>(
+    type === "user"
+      ? (data as ISearchUserResponse)?.photo?.path || "/assets/images/user.png"
+      : (data as ISearchCommunityResponse)?.avatar?.path ||
+          "/assets/images/user.png",
+  );
   const [isFollowing, setIsFollowing] = useState<string>(
     (data as ISearchUserResponse).followStatus || "",
   );
@@ -194,6 +200,9 @@ export default function QuickSearchCard(props: {
     if (type === "community" && id === "") {
       return throwToast(tCommunity("error_access_community"), "info");
     }
+    if (!id) {
+      return throwToast(t("user_not_found"), "error");
+    }
     if (type === "user") {
       router.push(`/profile/${id}`);
     } else if (type === "community") {
@@ -208,18 +217,13 @@ export default function QuickSearchCard(props: {
       {/* Avatar + Name */}
       <div className="d-flex gap-3 align-items-center">
         <Image
-          src={
-            type === "user"
-              ? (data as ISearchUserResponse)?.photo?.path ||
-                "/assets/images/user.png"
-              : (data as ISearchCommunityResponse)?.avatar?.path ||
-                "/assets/images/user.png"
-          }
+          src={photoURL}
           width={50}
           height={50}
           alt="search avatar"
           className={type === "user" ? "rounded-circle" : "rounded-3"}
           style={{ objectFit: "cover" }}
+          onError={() => setPhotoURL("/assets/images/user.png")}
         />
         <div className="d-flex flex-column gap-0">
           <div
@@ -286,7 +290,8 @@ export default function QuickSearchCard(props: {
           </button>
         )}
         {type === "user" &&
-          (data as ISearchUserResponse).role === "investor" && (
+          ((data as ISearchUserResponse).role === "investor" ||
+            (data as ISearchUserResponse).role === "user") && (
             <button
               className={`${isConnecting !== "not_connected" ? styles["follow-broker"] : styles["follow-btn"]} main-btn border-0 font-xsss h30 w90 mb-1 cursor-pointer px-2 py-0 m-0 position-relative`}
               onClick={(e) =>

@@ -41,7 +41,11 @@
     "attemp_end_singular": "attempt left",
     "attemp_end_plural": "attempts left",
     "retry_text": "Didn't receive any code?",
-    "retry_send_code": "RESEND"
+    "retry_send_code": "RESEND",
+    "connect_wallet_title": "You’re almost there",
+    "connect_wallet_subtitle": "Connect your wallet to receive airdrop",
+    "connect_wallet_button": "Connect my wallet",
+    "error_sending_otp": "Sending OTP failed"
   },
   "Time": {
     "now": "now",
@@ -377,7 +381,8 @@
     "error_missing_issue_date": "Issue Date is required",
     "error_missing_expiration_date": "Expiration  Date is required",
     "error_missing_status": "License Status is required",
-    "error_expiration_before_issue_date": "Expiration after issue date"
+    "error_expiration_before_issue_date": "Expiration after issue date",
+    "user_not_found": "User not found"
   },
   "FeedTabs": {
     "for_you": "For you",

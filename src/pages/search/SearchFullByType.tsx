@@ -29,6 +29,8 @@ export default function SearchFullByType(props: {
         page,
       );
       setSearchResults((prev) => [...prev, ...res.data.docs]);
+      console.log("full search", res.data.docs);
+
       setTotalPage(res.data.meta.totalPage);
     } catch (err) {
       console.log(err);
@@ -89,7 +91,7 @@ export default function SearchFullByType(props: {
   }, []);
 
   return (
-    <div className="mt-5">
+    <div className="my-5">
       {!isLoading && searchResults.length === 0 && (
         <div className="mt-5 text-center">{`${tSearch("search_no_result")} ${keyword}`}</div>
       )}

@@ -11,7 +11,7 @@ import {
   type BaseResponse,
 } from "../model";
 import type { IBrokers } from "../newsfeed/model";
-import type { InfoAdditionalBroker, IUser } from "./model";
+import type { InfoAdditionalBroker, IUser, OTPResponse } from "./model";
 import type { T } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 export const createProfileRequest = (
@@ -86,4 +86,18 @@ export const followABroker = (
   headers: Headers = undefined as unknown as Headers,
 ) => {
   return httpClient.post("/v1/users/follow", values, { headers });
+};
+
+export const sendTelegramOTP = (token: string) => {
+  return httpClient.post<{ token: string }, OTPResponse>(
+    `/v1/mini-app/otp/send`,
+    { token: token },
+  );
+};
+
+export const verifyTelegramOTP = (token: string, otp: string) => {
+  return httpClient.post<{ token: string }, OTPResponse>(
+    `/v1/mini-app/otp/verify`,
+    { token: token, otp: otp },
+  );
 };
