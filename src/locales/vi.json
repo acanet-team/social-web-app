@@ -48,7 +48,8 @@
     "connect_wallet_title": "Chỉ còn 1 bước nữa",
     "connect_wallet_subtitle": "Kết nối ví của bạn để nhận airdrop",
     "connect_wallet_button": "Kết nối ví",
-    "error_sending_otp": "Gửi OTP thất bại"
+    "error_sending_otp": "Gửi OTP thất bại",
+    "create_account": "Tạo tài khoản"
   },
   "Time": {
     "now": "bây giờ",
@@ -68,7 +69,10 @@
     "sign_in_with": "Đăng nhập bằng",
     "meta_description": "Đăng nhập liền mạch vào tài khoản của bạn bằng quy trình đăng nhập thân thiện với người dùng của chúng tôi",
     "meta_title": "Đăng nhập",
-    "sign_in_with_zalo": "Đăng nhập bằng Zalo"
+    "sign_in_with_zalo": "Đăng nhập bằng Zalo",
+    "privacy_policy": "Chính sách Bảo mật",
+    "term_of_use": "Điều khoản Sử dụng",
+    "href_policy": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/Acanet-Privacy+Policy-VI.pdf"
   },
   "CreatePost": {
     "live_Video": "Video trực tiếp",
@@ -229,7 +233,9 @@
     "error_num_members": "Số lượng thành viên phải là số",
     "create_profile_title_additional": "Chúng tôi cần thêm thông tin từ bạn.",
     "create_profile_desc_additional": "Tất cả các nhà môi giới phải hoàn thành quá trình xác minh bởi đội ngũ của Acanet. Vui lòng cung cấp thông tin của bạn bên dưới, chúng tôi sẽ liên hệ với bạn trong vòng 24 giờ tới.",
-    "error_email_whitelist": "Vui lòng chọn email khác. Email này đã được sử dụng."
+    "error_email_whitelist": "Vui lòng chọn email khác. Email này đã được sử dụng.",
+    "error_policy": "Vui lòng đồng ý với Điều khoản sử dụng và Chính sách quyền riêng tư",
+    "href_policy": "https://d27elu6zaas5lg.cloudfront.net/docs/guidelines/Acanet-Privacy+Policy-VI.pdf"
   },
   "NavBar": {
     "my profile": "Hồ sơ của tôi",

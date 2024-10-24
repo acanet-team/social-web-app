@@ -13,6 +13,8 @@ import { useGuestToken } from "@/context/guestToken";
 import { LoginButton } from "@telegram-auth/react";
 import { generate_pkce_codes, generate_state_param } from "@/utils/zaloOauth";
 import { generateCodeChallenge } from "@/utils";
+import styles from "@/styles/modules/login.module.scss";
+import { useMediaQuery } from "react-responsive";
 
 const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -20,6 +22,8 @@ const LoginPage: NextPageWithLayout = () => {
   const [curTheme, setCurTheme] = useState("theme-light");
   const [zaloCode, setZaloCode] = useState("");
   const { data: session, update } = useSession() as any;
+  const isQuery = useMediaQuery({ query: "(max-width: 1200px)" });
+
   const { showLoading } = useLoading();
   // Zustand store
   const { createProfile, login, checkOnboarding } = useAuthStore(
@@ -104,7 +108,7 @@ const LoginPage: NextPageWithLayout = () => {
     }
   };
   return (
-    <div className="main-wrap">
+    <div className="main-wrap position-relative">
       {/* <Session /> */}
       <div className="nav-header border-0 bg-transparent shadow-none">
         <div className="nav-top w-100">
@@ -134,14 +138,14 @@ const LoginPage: NextPageWithLayout = () => {
           />
         </div>
       </div>
-      <div className="row">
+      <div className="row ">
         <div
           className="col-xl-5 d-none d-xl-block vh-100 bg-image-cover bg-no-repeat p-0"
           style={{
             backgroundImage: `url("../assets/images/login-bg.jpg")`,
           }}
         />
-        <div className="col-xl-7 vh-100 align-items-center d-flex rounded-3 overflow-hidden bg-white">
+        <div className="col-xl-7 vh-100 align-items-center d-flex rounded-3 overflow-hidden bg-white  ">
           <div className="card login-card me-auto ms-auto border-0 shadow-none">
             <div className="card-body rounded-0 text-left">
               <h2 className="fw-700 display1-size display2-md-size mb-3">
@@ -251,6 +255,26 @@ const LoginPage: NextPageWithLayout = () => {
                 Sign in as guest
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className={`d-flex ${isQuery ? "justify-content-center" : "justify-content-end"}`}
+      >
+        <div
+          className={`bottom-0 ${!isQuery && "me-2"} mb-2 d-flex position-absolute`}
+        >
+          <div
+            className={`${styles["text-bottom"]} text-light-gray text-center font-xsss mb-0 cursor-pointer me-2`}
+            onClick={() => window.open(t("href_policy"), "_blank")}
+          >
+            {t("privacy_policy")}
+          </div>
+          <div
+            className={`${styles["text-bottom"]} text-light-gray text-center font-xsss mb-0 cursor-pointer`}
+            onClick={() => window.open("URL của điều khoản sử dụng", "_blank")}
+          >
+            {t("term_of_use")}
           </div>
         </div>
       </div>

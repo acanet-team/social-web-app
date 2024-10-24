@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/modules/claim.module.scss";
 import PaymentSuccess from "@/components/PaymentSuccess";
 import { useRouter } from "next/router";
@@ -6,11 +6,28 @@ import CountdownDate from "@/components/CountDownDate";
 import Header from "@/components/Header";
 import type { NextPageContext } from "next";
 import { useTranslations } from "next-intl";
+import { useWeb3 } from "@/context/wallet.context";
 
 function CountDown() {
   const t = useTranslations("Claims");
   const router = useRouter();
-  const airdrop_expiry_date = new Date("2024-11-11T23:59:59").getTime();
+  const { airDropContract, connectWallet } = useWeb3();
+  const [airDropTime, setAirDropTime] = useState<number>(0);
+  // const airdrop_expiry_date = new Date("2024-11-11T23:59:59").getTime();
+
+  const getAirDropStartTime = async () => {
+    try {
+      const startTime = await airDropContract.startTime();
+      console.log("start time", startTime.toNumber());
+      setAirDropTime(startTime.toNumber());
+    } catch (error) {
+      console.error("Failed to fetch airdrop start time:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAirDropStartTime();
+  }, []);
   return (
     <div className={`pb-5 ${styles["card-claim"]}`}>
       <PaymentSuccess />
@@ -19,7 +36,7 @@ function CountDown() {
           {t("title_countdown")}
         </p>
         <p className="font-md mt-5 text-center">{t("claim_token_countdown")}</p>
-        <CountdownDate time={airdrop_expiry_date} />
+        <CountdownDate time={Number(airDropTime * 1000)} />
         <p className="font-md mt-5 mb-5 text-center">{t("des_countdown")}</p>
         <button
           className={`${styles["button-claim"]} py-1 px-5 text-white font-md mt-5`}
